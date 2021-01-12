@@ -1,0 +1,33 @@
+.style-chooser {
+    margin-top: 17px;
+}
+
+.style-chooser .vs__search::placeholder, .style-chooser .vs__dropdown-toggle, .style-chooser .vs__dropdown-menu, .style-chooser .vs__selected {
+    border: none;
+    color: rgb(140, 135, 135);
+    font-size: 1.07em;
+    padding-left: 0px;
+}
+
+.style-chooser .vs__dropdown-option--highlight {
+    background: #10949e;
+    color: #fff
+}
+
+.style-chooser .vs__search, .vs__search:focus {
+    padding: 0px 0px !important;
+}
+
+.style-chooser .vs__dropdown-toggle {
+    border-bottom: 1px solid rgb(140, 135, 135);
+    border-radius: 0px;
+}
+
+@media only screen and (max-width: 599px) {
+    .style-chooser .vs__dropdown-toggle {
+        border: none;
+        border-bottom: 1px solid rgb(140, 135, 135);
+        border-radius: 0px;
+        margin-bottom: 20px;
+    }
+}

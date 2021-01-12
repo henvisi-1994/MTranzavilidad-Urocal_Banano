@@ -1,0 +1,39 @@
+{
+  "name": "urocal",
+  "version": "1.0.0",
+  "description": "Repositorio remoto para el proyecto UROCAL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon bin/www.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@awaitjs/express": "^0.6.3",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.10",
+    "pg": "^8.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "bin": {
+    "urocal": "www.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/urocalgroup/urocalbackend.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/urocalgroup/urocalbackend/issues"
+  },
+  "homepage": "https://gitlab.com/urocalgroup/urocalbackend#readme"
+}
