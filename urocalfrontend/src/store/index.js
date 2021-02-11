@@ -23,6 +23,7 @@ import ModuloMonitoreoRoedorCentroAcopio from './modules/ModuloMonitoreoRoedorCe
 import ModuloMonitoreoRoedorFinca from './modules/ModuloMonitoreoRoedorFinca';
 import ModuloLimpiezaVehiculo from './modules/ModuloLimpiezaVehiculo';
 import ModuloVehiculo from './modules/ModuloVehiculo';
+import ModuloReporteEmbarque from './modules/ModuloReporteEmbarque';
 import ModuloPoda from './modules/ModuloPoda';
 import ModuloFertilizante from './modules/ModuloFertilizante';
 import ModuloFitosanitario from './modules/ModuloFitosanitario';
@@ -82,6 +83,7 @@ export default new Vuex.Store({
     moduloMonitoreoRoedorFinca: ModuloMonitoreoRoedorFinca,                 // Instancia al modulo ModuloMonitoreoRoedorFinca
     moduloLimpiezaVehiculo: ModuloLimpiezaVehiculo,                         // Instancia al ModuloLimpiezaVehiculo
     moduloVehiculo: ModuloVehiculo,                                         // Instancia al ModuloVehiculo
+    moduloReporteEmbarque: ModuloReporteEmbarque,
     moduloPoda: ModuloPoda,                                                 // Instancia al ModuloPoda
     moduloFertilizante: ModuloFertilizante,                                 // Instancia al ModuloFertilizante
     moduloFitosanitario: ModuloFitosanitario,                               // Instancia al ModuloFitosanitario
