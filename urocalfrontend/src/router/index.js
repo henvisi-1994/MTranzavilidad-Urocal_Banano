@@ -4,7 +4,6 @@ import Login from '../views/BaseLogin.vue'
 import BaseMalezaControl from '../views/BaseMalezaControl.vue'
 import BaseMonitoreoRoedorCentroAcopio from '../views/BaseMonitoreoRoedorCentroAcopio.vue'
 import BaseVehiculo from '../views/BaseVehiculo.vue'
-import BaseReporteEmbarque from '../views/BaseReporteEmbarque.vue'
 
 Vue.use(VueRouter)
 
@@ -92,13 +91,6 @@ const routes = [
     component: BaseMonitoreoRoedorCentroAcopio
   },
   // ------------- EXPORTADOR - BANANO --------------------
-
-  {
-    path: '/ReporteEmbarque',
-    name: 'BaseReporteEmbarque',
-    component: BaseReporteEmbarque
-  },
-
   // ------------- EXPORTADOR - CACAO ---------------------
 
   // ---------------------

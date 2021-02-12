@@ -26,8 +26,6 @@ export default {
         dialogEditarLimpiezaVehiculo: false,                // Indica si se abre o cierra el dialogEditarLimpiezaVehiculo
         dialogNuevoVehiculo: false,                         // Indica si se abre o cierra el dialogNuevoVehiculo
         dialogEditarVehiculo: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
-        dialogNuevoReporteEmbarque: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
-        dialogEditarReporteEmbarque: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
         dialogNuevoPoda: false,                             // Indica si se abre o cierra el dialogNuevoPoda
         dialogMostrarPoda: false,                           // Indica si se abre o cierra el dialogMostrarPoda
         dialogNuevoFertilizante: false,                     // Indica si se abre o cierra el dialogNuevoFertilizante
@@ -157,14 +155,6 @@ export default {
             state.dialogEditarVehiculo = newState;
         },
 
-        /*  REPORTE EMBARQUE*/
-        toggleDialogNuevoReporteEmbarque(state, newState) {
-            state.dialogNuevoReporteEmbarque = newState;
-        },
-
-        toggleDialogEditarReporteEmbarque(state, newState) {
-            state.dialogEditarReporteEmbarque = newState;
-        },
         /* Poda */
         toggleDialogNuevoPoda(state, newState) {
             state.dialogNuevoPoda = newState;
@@ -227,8 +217,6 @@ export default {
         dialogEditarLimpiezaVehiculo: (state) => state.dialogEditarLimpiezaVehiculo,                            // Devuelve la variable dialogEditarLimpiezaVehiculo
         dialogNuevoVehiculo: (state) => state.dialogNuevoVehiculo,                                              // Devuelve la variable dialogNuevoVehiculo
         dialogEditarVehiculo: (state) => state.dialogEditarVehiculo,                                            // Devuelve la variable dialogEditarVehiculo
-        dialogNuevoReporteEmbarque: (state) => state.dialogNuevoReporteEmbarque,                                              // Devuelve la variable dialogNuevoVehiculo
-        dialogEditarReporteEmbarque: (state) => state.dialogEditarReporteEmbarque,                                            // Devuelve la variable dialogEditarVehiculo
         dialogNuevoPoda: (state) => state.dialogNuevoPoda,                                                      // Devuelve la variable dialogNuevoPoda
         dialogMostrarPoda: (state) => state.dialogMostrarPoda,                                                  // Devuelve la variable dialogMostrarPoda
         dialogNuevoFertilizante: (state) => state.dialogNuevoFertilizante,                                      // Devuelve la variable dialogNuevoFertilizante
