@@ -1,43 +1,29 @@
 <template>
-  <v-dialog
-    v-model="dialogoNuevaSiembra"
-    scrollable
-    :fullscreen="$vuetify.breakpoint.xs ? true : false"
-    max-width="800px"
-    transition="dialog-transition"
-    eager
-  >
-    <v-card class="rounded-0" height="480px">
+  <v-dialog v-model="dialogoNuevaSiembra" scrollable max-width="800px" transition="dialog-transition" :fullscreen="$vuetify.breakpoint.xs ? true : false" >
+    <v-card tile>
       <!-- Barra de titulo -->
-      <v-card-title class="primary white--text">
-        <h5>
-          {{ $vuetify.breakpoint.xs ? tituloDialog() : "Registrar nueva Siembra" }}
-        </h5>
+      <v-card-title class="justify-center primary--text">
+        <h5 class="pl-3">Registrar nueva Siembra</h5>
         <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogoNuevaSiembra()"
-            >mdi-close</v-icon
-          >
+        <v-btn icon><v-icon class="primary--text" @click="cerrarDialogoNuevaSiembra()" >mdi-close</v-icon>
         </v-btn>
       </v-card-title>
 
-      <v-card-text>
-        <v-container>
+      <v-card-text  class="py-top">
           <!-- Formulario para registrar una Siembra -->
           <FormSiembra ref="componenteFormularioSiembra"></FormSiembra>
-        </v-container>
       </v-card-text>
 
-      <v-card-actions class="justify-center pb-3">
+      <v-card-actions class="justify-center">
         <!-- Botón para agregar nueva Siembra -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px"
+          width="300px" large elevation="0"
           color="primary"
           :disabled="validarBtnAgregarSiembra()"
-          @click="registrar()"
-          >{{ btn_nombre_step }}</v-btn
-        >
+          @click="registrar()">
+          Registrar 
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -46,18 +32,17 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 import FormSiembra from "@/components/FormSiembra";
+import servicioSiembra from "../services/ServicioSiembra";
 
 export default {
-  name: "StepperNuevaSiembra",
+  name: "DialogoNuevaSiembra",
 
   components: {
     FormSiembra,
   },
 
   data() {
-    return {
-      btn_nombre_step: "Registrar", // Nombre del botón de paso a paso
-    };
+    return {};
   },
 
   computed: {
@@ -72,34 +57,64 @@ export default {
     },
 
     // Obtiene es estado de la variable formSiembraValido y el modelo siembra
-    ...mapState("moduloSiembra", ["formSiembraValido", "siembra"]),
+    ...mapState("moduloSiembra", ["formSiembraValido", "siembra", "listaSiembra"]),
+
   },
 
   methods: {
     // Vacia el modelo siembra
-    ...mapMutations("moduloSiembra", ["vaciarSiembra"]),
+    ...mapMutations("moduloSiembra", ["vaciarSiembra", "asignarListaSiembra"]),
 
-    // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      console.log(this.siembra);
-      this.btn_nombre_step = "Registrar";
-      this.cerrarDialogoNuevaSiembra();
+
+    // INSERT: Agrega una Nueva Maleza
+    async registrar() {
+      try {
+        console.log(this.siembra);
+        let respuestaServicioSiembra = await servicioSiembra.crearSiembra(this.siembra);
+        if(respuestaServicioSiembra.status == 201){
+          this.cerrarDialogoNuevaSiembra();
+          this.obtenerTodosSiembra();
+          this.vaciarSiembra();
+          this.$toast.success(respuestaServicioSiembra.data.message);
+        }else{
+          console.log(error.response.data.message);
+        }
+      } catch (error) {
+        //console.log(error.response.data.message);
+        this.$toast.error(error.response.data.message);
+      }
     },
 
+    // Cierra DialogoNuevaSiembra
     cerrarDialogoNuevaSiembra() {
-      this.dialogoNuevaSiembra = !this.dialogoNuevaSiembra; // Cierra el DialogoNuevaSiembra
-      this.$refs.componenteFormularioSiembra.$refs.formSiembra.resetValidation(); // Reinicia las validaciones del formSiembra
-      this.vaciarSiembra(); // Reinicia el modelo Siembra
+      this.dialogoNuevaSiembra = false; // Cierra el DialogoNuevaSiembra
     },
 
-    // Cambia el titulo del dialogo
-    tituloDialog() {
-      return "Siembra";
-    },
 
     // Valida que el boton este activo si el formulario correspondiente a la seccion es valido
     validarBtnAgregarSiembra() {
       let validSelect = this.siembra.cultivoid == "" || this.siembra.cultivoid == null;
+      return this.formSiembraValido && !validSelect ? false : true;
+    },
+
+
+    // Llena la listaSemilla con datos del servidor backend
+    async obtenerTodosSiembra() {
+      let resultado = await servicioSiembra.obtenerTodosSiembra();
+      this.asignarListaSiembra(resultado.data);
+      //console.log(this.listaMalezaControl);
+    },
+  },
+
+
+  watch: {
+    // Cada vez que se abre el dialog, se resetean las validaciones del formulario
+    dialogoNuevaSiembra() {
+      if (this.dialogoNuevaSiembra) {
+        setTimeout(() => {
+          this.$refs.componenteFormularioSiembra.$refs.formSiembra.resetValidation();
+        }, 100);
+      }
     },
   },
 };

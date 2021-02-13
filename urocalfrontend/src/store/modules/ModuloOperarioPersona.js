@@ -1,10 +1,12 @@
-import OperarioPersona from '@/models/ModeloOperarioPersona';
+import ModeloOperarioPersona from '../../models/ModeloOperarioPersona';
 
 export default {
     namespaced: true,
 
     state: {
-        operario_persona: new OperarioPersona('', '', '', '', '', '', '', '', '', '', '', ''), // Modelo lote
+        listaCiudadStore: [],
+        listaOperarioPersonaStore: [],
+        modeloOperarioPersonaStore: new ModeloOperarioPersona('', '', '', '', '', '', '', '', '', '', '', '', ''), 
         formOperarioPersonaValido: false, // Indica si el formulario de lote es valido
     },
 
@@ -13,22 +15,37 @@ export default {
     },
 
     mutations: {
-        // Coloca un nuevo lot
-        setLot(state, nuevaPersona) {
-            state.operario_persona = nuevaPersona
+
+        // SETTERS
+        establecerModeloOperarioPersonaStore(state, nuevaPersona) {
+            state.modeloOperarioPersonaStore = nuevaPersona;
         },
 
-        // Vacia el modelo Persona
-        vaciarOperarioPersona(state) {
-            state.operario_persona = new OperarioPersona('', '', '', '', '', '', '', '', '', '', '', '')
+        establecerListaCiudadStore(state, newState) {
+            state.listaCiudadStore = newState;
         },
 
+        establecerListaOperarioPersonaStore(state, newState) {
+            state.listaOperarioPersonaStore = newState;
+        },
+
+
+        // LIMPIADORES
+        vaciarModeloOperarioPersonaStore(state) {
+            state.modeloOperarioPersonaStore = new ModeloOperarioPersona('', '', '', '', '', '', '', '', '', '', '', '', '');
+        },
+
+
+        // VALIDATORS
         cambiarEstadoFormOperarioPersonaValido(state, nuevoEstado) {
             state.formOperarioPersonaValido = nuevoEstado
         },
     },
 
     getters: {
-        formOperarioPersonaValido: (state) => state.formOperarioPersonaValido, // Devuelve la variable formOperarioValido
+        formOperarioPersonaValido: (state) => state.formOperarioPersonaValido, // Devuelve la variable formUsuarioValido
+        modeloOperarioPersonaStore: (state) => state.modeloOperarioPersonaStore,
+        listaCiudadStore: (state) => state.listaCiudadStore,
+        listaOperarioPersonaStore: (state) => state.listaOperarioPersonaStore,
     },
 }

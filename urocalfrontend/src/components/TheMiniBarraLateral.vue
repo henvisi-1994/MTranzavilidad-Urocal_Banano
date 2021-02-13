@@ -8,10 +8,10 @@
   >
     <!-- Si es mini -->
     <div v-if="miniBarraLateral">
-      <v-list dense color="primary" dark :height="CabeceraListaResponsiva()">
+      <v-list dense color="primary" elevation="2" :height="CabeceraListaResponsiva()">
         <v-list-item>
           <v-list-item-action>
-            <v-icon @click.stop="miniBarraLateral = !miniBarraLateral"
+            <v-icon color="white" @click.stop="miniBarraLateral = !miniBarraLateral"
               >mdi-chevron-right</v-icon
             >
           </v-list-item-action>
@@ -19,37 +19,40 @@
       </v-list>
 
       <v-list-item-avatar class="mx-2">
-        <v-img src="../assets/logo.png"></v-img>
+        <v-img
+          src="https://cecjecuador.org.ec/wp-content/uploads/2020/02/urocal.jpg"
+        ></v-img>
       </v-list-item-avatar>
     </div>
+
     <!-- Si es normal -->
     <div v-else>
-      <v-list dense color="primary" dark :height="CabeceraListaResponsiva()">
+      <v-list dense color="primary" elevation="2" :height="CabeceraListaResponsiva()">
         <v-list-item>
           <v-list-item-action>
-            <v-icon @click.stop="miniBarraLateral = !miniBarraLateral"
+            <v-icon @click.stop="miniBarraLateral = !miniBarraLateral" color="white"
               >mdi-chevron-left</v-icon
             >
           </v-list-item-action>
+
           <v-list-item-content>
             <v-list-item-title>
-              <h3 class="font-weight-thin">Sistema de trazabilidad</h3>
+              <h3 class="white--text">Sistema de trazabilidad</h3>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
 
       <v-list-item class="justify-center mt-3" disabled>
-        <v-list-item-avatar size="80" class="mx-0">
-          <img alt="Vue logo" src="../assets/logo.png" />
+        <v-list-item-avatar size="100" class="mx-0 my-5">
+          <img
+            alt="Vue logo"
+            src="https://cecjecuador.org.ec/wp-content/uploads/2020/02/urocal.jpg"
+          />
         </v-list-item-avatar>
-      </v-list-item>
-      <v-list-item class="text-center">
-        <v-list-item-title>Nombre usuario</v-list-item-title>
       </v-list-item>
     </div>
 
-    <v-divider></v-divider>
     <!-- Lista de opciones -->
     <v-list dense>
       <!-- Hace un recorrido a la lista de opciones -->
@@ -137,9 +140,9 @@
     <!-- Salir -->
     <template v-slot:append>
       <div>
-        <v-btn tile block>
-          <v-icon class="mr-2">mdi-exit-to-app</v-icon>
+        <v-btn tile block class="py-5" height="60" @click="cerrarSesion">
           {{ miniBarraLateral ? "" : "Salir" }}
+          <v-icon :class="miniBarraLateral ? '' : 'ml-2'">mdi-exit-to-app</v-icon>
         </v-btn>
       </div>
     </template>
@@ -190,6 +193,12 @@ export default {
         default:
           return "auto";
       }
+    },
+
+    // Cierra sesion
+    cerrarSesion() {
+      this.$store.dispatch("moduloAutenticacion/cerrarSesion");
+      this.$router.push({ name: "Login" });
     },
   },
 };

@@ -3,7 +3,8 @@
 // *Pendiente: Añadir capa de validación a todos los controladores
 
 const rodentMonitoringGatheringCenterModel = require('./rodent-monitoring-gathering-center.model');
-
+const rodentMonitoringGatheringCenterDto = require('./rodent-monitoring-gathering-center.dto');
+const validation = require('../../utils/validations');
 
 module.exports = {
 
@@ -12,24 +13,34 @@ module.exports = {
 
         // Añadir capa de validación
 
-        const { monitoreoroedorid, centroacopioid } = req.body;
-
-        try {
-            await rodentMonitoringGatheringCenterModel.createRodentMonitoringGatheringCenter({
-                monitoreoroedorid: monitoreoroedorid,
-                centroacopioid: centroacopioid
-            });
-        } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
-         }
-
-        return res.status(201).send({ message: "Registro exitoso" });
+        const { monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, centroacopioid } = req.body;
+        if(validation.emptyField(monfechatrampeo) ||validation.emptyField(montipotrampa) ||validation.emptyField(monnumerotrampas) ||validation.emptyField(monceboutilizado) ||validation.emptyField(monroedoresmuertos) || 
+            validation.emptyField(monaccionestomadas) ||validation.emptyField(monoperario) ||validation.emptyField(moninspector) ||validation.emptyField(centroacopioid)){
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }else{
+            try {
+                let result = await rodentMonitoringGatheringCenterModel.createRodentMonitoringGatheringCenter({
+                    monfechatrampeo: monfechatrampeo,
+                    montipotrampa: montipotrampa,
+                    monnumerotrampas: monnumerotrampas,
+                    monceboutilizado: monceboutilizado,
+                    monroedoresmuertos: monroedoresmuertos,
+                    monaccionestomadas: monaccionestomadas,
+                    monoperario: monoperario,
+                    moninspector: moninspector,
+                    centroacopioid: centroacopioid});
+                return res.status(201).send({ message: 'Monitoreo roedor registrado', monitoreoroedorid: result.monitoreoroedorid });
+            } catch (error) {
+                console.log(error)
+                return res.status(500).send({ message: "Registro fallido" });
+            }
+        }
     },
 
     // Obtener todos los registros de monitoreo roedor centro acopio
     async getRodentMonitoringGatheringCenters(req, res) {
         const rodentMonitoringGatheringCenter = await rodentMonitoringGatheringCenterModel.getRodentMonitoringGatheringCenters()
-        return res.status(200).send(rodentMonitoringGatheringCenter); // <--
+        return res.status(200).send(rodentMonitoringGatheringCenterDto.multipleMonitoreoRoedor(rodentMonitoringGatheringCenter)); //<--
     },
 
     //  Obtener registro de monitoreo roedor centro acopio por id
@@ -42,15 +53,24 @@ module.exports = {
     // Actualiza informacion de un registro de monitoreo roedor centro acopio
     async updateRodentMonitoringGatheringCenter(req, res) {
         const { id } = req.params;
-        const { monitoreoroedorid, centroacopioid } = req.body;
+        const { monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, monitoreoroedor } = req.body;
 
-        const rowCount = await rodentMonitoringGatheringCenterModel.updateRodentMonitoringGatheringCenter(id, {
-                monitoreoroedorid: monitoreoroedorid,
-                centroacopioid: centroacopioid
-        });
-        
-        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
-
+        if(validation.emptyField(monfechatrampeo) ||validation.emptyField(montipotrampa) ||validation.emptyField(monnumerotrampas) ||validation.emptyField(monceboutilizado) ||validation.emptyField(monroedoresmuertos) || 
+            validation.emptyField(monaccionestomadas) ||validation.emptyField(monoperario) ||validation.emptyField(moninspector) ||validation.emptyField(monitoreoroedor.centroacopioid)){
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }else{
+            const rowCount = await rodentMonitoringGatheringCenterModel.updateRodentMonitoringGatheringCenter(id, {
+                monfechatrampeo: monfechatrampeo,
+                montipotrampa: montipotrampa,
+                monnumerotrampas: monnumerotrampas,
+                monceboutilizado: monceboutilizado,
+                monroedoresmuertos: monroedoresmuertos,
+                monaccionestomadas: monaccionestomadas,
+                monoperario: monoperario,
+                moninspector: moninspector,
+                centroacopioid: monitoreoroedor.centroacopioid})
+            return rowCount == 1 ? res.status(200).send({ message: "Monitoreo roedor actualizado" }) : res.status(400).send({ message: "Error al actualizar monitoreo roedor" });
+        }
     },
 
     // Elimina un registro de monitoreo roedor centro acopio
@@ -59,10 +79,17 @@ module.exports = {
 
         try {
             let rowCount = await rodentMonitoringGatheringCenterModel.deleteRodentMonitoringGatheringCenter(id);
-            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "No registrado", tipo: "error" });
-            
+            if (rowCount == 1) {
+                return res.status(200).send({ message: "Eliminado exitosamente" });
+            } else {
+                return res.status(400).send({ message: "Monitoreo roedor no registrado" });
+            }               
         } catch (err) {
-            return res.json({ message: "Error al tratar de eliminar registro", tipo: "error" });
+            if (err.code == '23503') {
+                res.status(400).send({ message: "Monitoreo roedor  a eliminar tiene relaciones con otros registros en la base de datos" });
+            } else {
+                return res.status(400).send({ message: "Error al eliminar Monitoreo roedor" });
+            }
         }
     }
 }

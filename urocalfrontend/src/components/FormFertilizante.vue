@@ -6,7 +6,7 @@
         justify-md="space-around"
         :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
       >
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fertilizante.fincaid"
             placeholder="Finca"
@@ -24,7 +24,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fertilizante.loteid"
             placeholder="Lote"
@@ -45,7 +45,7 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fertilizante.cultivoid"
             placeholder="Cultivo"
@@ -63,8 +63,8 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Ciclo"
             v-model="fertilizante.ferciclo"
             :rules="[reglas.campoVacio(fertilizante.ferciclo)]"
@@ -73,7 +73,7 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -82,7 +82,7 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field
+              <v-text-field class="custom px-2" filled 
                 label="Fecha"
                 v-model="fertilizante.ferfecha"
                 :rules="[reglas.campoVacio(fertilizante.ferfecha)]"
@@ -99,8 +99,8 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Nombre comercial"
             v-model="fertilizante.fernombrecomercial"
             :rules="[reglas.campoVacio(fertilizante.fernombrecomercial)]"
@@ -109,15 +109,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Elementos"
             v-model="fertilizante.ferelementos"
             :rules="[reglas.campoVacio(fertilizante.ferelementos)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Concentración"
             v-model="fertilizante.ferconcentracion"
             :rules="[reglas.campoVacio(fertilizante.ferconcentracion)]"
@@ -126,15 +126,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Área aplicada (HA)"
             v-model="fertilizante.ferareaaplicada"
             :rules="[reglas.campoVacio(fertilizante.ferareaaplicada)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Cantidad aplicada"
             v-model="fertilizante.fercantidadaplicada"
             :rules="[reglas.campoVacio(fertilizante.fercantidadaplicada)]"
@@ -143,15 +143,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Unidad de medida"
             v-model="fertilizante.ferunidadmedida"
             :rules="[reglas.campoVacio(fertilizante.ferunidadmedida)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Equipo de aplicación"
             v-model="fertilizante.ferequipoaplicacion"
             :rules="[reglas.campoVacio(fertilizante.ferequipoaplicacion)]"
@@ -160,14 +160,14 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Método de aplicación"
             v-model="fertilizante.fermetodoaplicacion"
             :rules="[reglas.campoVacio(fertilizante.fermetodoaplicacion)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fertilizante.feroperario"
             placeholder="Operario"

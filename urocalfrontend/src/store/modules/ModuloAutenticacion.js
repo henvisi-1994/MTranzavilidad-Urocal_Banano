@@ -28,7 +28,12 @@ export default {
                     return Promise.reject(error);
                 }
             )
-        }
+        },
+
+        cerrarSesion({ commit }) {
+            ServicioAutenticacion.cerrarSesion();
+            commit('cerrarSesion');
+        },
     },
 
     mutations: {

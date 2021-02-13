@@ -1,41 +1,48 @@
-// Une varias capas
-// Se comunica con el modelo
-// *Pendiente: Añadir capa de validación a todos los controladores
-//const userDto = require('./users.dto');
-
 const malezaModel = require('./maleza.model');
+const validation = require('../../utils/validations');
+const malezaDto = require('./maleza.dto');
 
-
+// CRUD: Create (Insert) - Read (Select) - Update (Update) - Delete (Delete)
 module.exports = {
 
     // Crear un nuevo Control de Maleza
     async createMaleza(req, res) {
-
-        // Añadir capa de validación
-
+        console.log(req.body);
         const { confecha, conhectareas, conmetodo, conoperario, cultivoid } = req.body;
 
-        try {
-            await malezaModel.createMaleza({
-                confecha: confecha,
-                conhectareas: conhectareas,
-                conmetodo: conmetodo,
-                conoperario: conoperario, 
-                cultivoid: cultivoid
-            });
-        } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
-         }
-
-        return res.status(201).send({ message: "Registro exitoso" });
+        // Valida que las variables no esten vacias
+        if (validation.emptyField(confecha) || validation.emptyField(conhectareas) || validation.emptyField(conmetodo) || validation.emptyField(cultivoid)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        } else {
+            try {
+                await malezaModel.createMaleza({
+                    confecha: confecha,
+                    conhectareas: conhectareas,
+                    conmetodo: conmetodo,
+                    conoperario: conoperario,
+                    cultivoid: cultivoid
+                });
+            } catch (error) {
+                return res.status(500).send({ message: "Registro fallido" });
+            }
+            return res.status(201).send({ message: "Registro exitoso" });
+        }   
     },
 
 
+    // SELECT: Devuelve todos los registros
     // Obtener todos los Controles de Maleza
     async getMaleza(req, res) {
         const malezacontrol = await malezaModel.getMaleza()
-        //return res.status(200).send(userDto.multiple(users, req.user)); //<--
         return res.status(200).send(malezacontrol); // <--
+        //return res.status(200).send(malezaDto.multipleMalezaControl(malezacontrol));
+    },
+
+
+    //Obtener datos adicionales para mostrar en el select de Maleza
+    async getDatosAdicionalesMaleza(req, res) {
+        const result = await malezaModel.getDatosAdicionalesMaleza()
+        return res.status(200).send(result); // <--
     },
 
 
@@ -47,24 +54,30 @@ module.exports = {
     },
 
 
+    // UPDATE: Actualiza un registro
     // Actualiza informacion de un Control de Maleza
     async updateMaleza(req, res) {
         const { id } = req.params;
+        //const { confecha, conhectareas, conmetodo, conoperario, centroacopiolista } = req.body;
         const { confecha, conhectareas, conmetodo, conoperario, cultivoid } = req.body;
 
-        const rowCount = await malezaModel.updateMaleza(id, {
-            confecha: confecha,
-            conhectareas: conhectareas,
-            conmetodo: conmetodo,
-            conoperario: conoperario, 
-            cultivoid: cultivoid
-        });
-        
-        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
-
+        if (validation.emptyField(confecha) || validation.emptyField(conhectareas) || validation.emptyField(conmetodo) || validation.emptyField(cultivoid)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        } else {
+            const rowCount = await malezaModel.updateMaleza(id, {
+                confecha: confecha,
+                conhectareas: conhectareas,
+                conmetodo: conmetodo,
+                conoperario: conoperario, 
+                //cultivoid: cultivolista.cultivoid
+                cultivoid: cultivoid
+            });     
+            return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });    
+        }
     },
 
-    
+
+    // DELETE: Elimina un registro
     // Elimina informacion de un Control de Maleza
     async deleteMaleza(req, res) {
         const { id } = req.params;

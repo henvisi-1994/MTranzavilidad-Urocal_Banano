@@ -1,27 +1,27 @@
 <template>
   <v-dialog v-model="dialogEditarLimpiezaVehiculo" scrollable max-width="500px" transition="dialog-transition" :fullscreen="$vuetify.breakpoint.xs ? true : false">
     <v-card tile>
-      <v-card-title class="justify-center primary white--text">
-        <v-spacer></v-spacer>
+      <v-card-title class="justify-center white primary--text">
+        
         <h5>Editar Limpieza Vehiculo</h5>
         <v-spacer></v-spacer>
-        <v-btn icon><v-icon class="white--text" @click="cerrarDialogo()">mdi-close</v-icon></v-btn>
+        <v-btn icon><v-icon class="primary--text" @click="cerrarDialogo()">mdi-close</v-icon></v-btn>
       </v-card-title>
-      <v-divider></v-divider>
+      
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            <v-text-field label="Producto utilizado"></v-text-field>
-            <v-text-field label="Escobillon"></v-text-field>
-            <v-text-field label="Escoba"></v-text-field>
-            <v-text-field label="Agua"></v-text-field>
-            <v-text-field label="Aspiradora"></v-text-field>
-            <v-text-field label="Vehiculoid"></v-text-field>
+            <v-text-field label="Producto utilizado" class="custom px-2" filled dense></v-text-field>
+            <v-text-field label="Escobillon" class="custom px-2" filled dense></v-text-field>
+            <v-text-field label="Escoba" class="custom px-2" filled dense></v-text-field>
+            <v-text-field label="Agua" class="custom px-2" filled dense></v-text-field>
+            <v-text-field label="Aspiradora" class="custom px-2" filled dense></v-text-field>
+            <v-text-field label="Vehiculoid" class="custom px-2" filled dense></v-text-field>
             <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   label="Fecha" 
-                  v-model="limpieza_vehiculo.limvehfecha" 
+                  v-model="limpieza_vehiculo.limvehfecha" class="custom px-2" filled dense 
                   :rules="[reglas.campoVacio(limpieza_vehiculo.limvehfecha)]"
                   readonly
                   v-bind="attrs"

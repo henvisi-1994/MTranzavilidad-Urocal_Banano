@@ -1,25 +1,21 @@
 <template>
   <v-navigation-drawer v-model="barraLateral" app floating>
-    <v-list dense color="primary" dark :height="CabeceraListaResponsiva()">
+    <v-list dense color="white" :height="CabeceraListaResponsiva()">
+
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="text-center">
-            <h3 class="font-weight-thin">Sistema de trazabilidad</h3>
+          <v-list-item-title class="text-center primary--text">
+            <h3>Sistema de trazabilidad</h3>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
 
     <v-list-item class="justify-center mt-3" disabled>
-      <v-list-item-avatar size="80" class="mx-0">
-        <img alt="Vue logo" src="../assets/logo.png" />
+      <v-list-item-avatar size="80" class="mx-0 my-5">
+        <img alt="Vue logo" src="https://cecjecuador.org.ec/wp-content/uploads/2020/02/urocal.jpg" />
       </v-list-item-avatar>
     </v-list-item>
-    <v-list-item class="text-center">
-      <v-list-item-title>Nombre usuario</v-list-item-title>
-    </v-list-item>
-
-    <v-divider></v-divider>
 
     <!-- Lista de opciones -->
     <v-list dense>
@@ -108,8 +104,8 @@
     <!-- Salir -->
     <template v-slot:append>
       <div>
-        <v-btn tile block>
-          <v-icon class="mr-2">mdi-exit-to-app</v-icon>
+        <v-btn tile block @click="cerrarSesion">
+          <v-icon class="pr-2">mdi-exit-to-app</v-icon>
           Salir
         </v-btn>
       </div>
@@ -159,6 +155,12 @@ export default {
         default:
           return "auto";
       }
+    },
+
+    // Cierra sesion
+    cerrarSesion() {
+      this.$store.dispatch("moduloAutenticacion/cerrarSesion");
+      this.$router.push({ name: "Login" });
     },
   },
 };

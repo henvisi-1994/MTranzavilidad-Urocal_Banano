@@ -223,6 +223,15 @@ create sequence "public"."persona_personaid_seq"
   cache 1
 ;
 
+create sequence "public"."egresoinsumo_egresoinsumosid_seq"
+  as integer
+  increment by 1
+  start with 1
+  maxvalue 2147483647
+  no minvalue
+  cache 1
+;
+
 create sequence "public"."poda_podaid_seq"
   as integer
   increment by 1
@@ -1202,12 +1211,12 @@ alter table "public"."detalledespacho" add constraint "pk_detalledespacho" prima
 
 create table "public"."egresoinsumo"
 (
-  "egresoinsumosid" serial not null,
+  "egresoinsumosid" integer default nextval('"egresoinsumo_egresoinsumosid_seq"'::regclass) not null,
   "egrinsfechaegreso" date,
   "egrinsparacontrolar" text,
   "egrinsdosis" text,
   "egrinscantidadentregada" numeric,
-  "egrencargado" text,
+  "egrinsencargado" text,
   "ingresoinsumosid" integer not null,
   "fincaid" integer default nextval('"finca_fincaid_seq"'::regclass)
 )

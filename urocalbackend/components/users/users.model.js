@@ -14,7 +14,7 @@ module.exports = {
     },
 
     async getPersona(id){
-        return userDao.getUser(id);
+        return userDao.getPersona(id);
     },
     
     async getUserByPk(id){
@@ -33,7 +33,8 @@ module.exports = {
         return userDao.updatePasswd(id, oldpasswd, newpasswd);
     },
 
-    async deleteUser(id){
+    // Esto está funcional pero no se lo implementará para los usuarios
+    /*async deleteUser(id){
         return userDao.deleteUser(id);
-    },
+    },*/
 }

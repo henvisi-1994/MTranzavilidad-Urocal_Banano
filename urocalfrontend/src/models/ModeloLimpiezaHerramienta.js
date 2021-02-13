@@ -1,5 +1,5 @@
 export default class LimpiezaHerramienta {
-    constructor(limpiezaherramientaid, limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoid) {
+    constructor(limpiezaherramientaid, limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoproducto) {
         this.limpiezaherramientaid = limpiezaherramientaid;
         this.limfecha = limfecha;
         this.limproducto = limproducto;
@@ -9,6 +9,10 @@ export default class LimpiezaHerramienta {
         this.limcajones = limcajones;
         this.limtendales = limtendales;
         this.limoperario = limoperario;
-        this.cultivoid = cultivoid;
+        this.cultivoproducto = {
+            cultivoid: cultivoproducto.cultivoid,
+            productoid: cultivoproducto.productoid,
+            pronombre: cultivoproducto.pronombre
+        }
     }
 }

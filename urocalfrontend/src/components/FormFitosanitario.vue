@@ -6,7 +6,7 @@
         justify-md="space-around"
         :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
       >
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fitosanitario.fincaid"
             placeholder="Finca"
@@ -24,7 +24,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fitosanitario.loteid"
             placeholder="Lote"
@@ -44,8 +44,8 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+      <v-row no-gutters >
+        <v-col cols="12" md="6">
           <v-select
             v-model="fitosanitario.cultivoid"
             placeholder="Cultivo"
@@ -63,8 +63,8 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field  class="custom px-2" filled 
             placeholder="Ciclo"
             v-model="fitosanitario.fitciclo"
             :rules="[reglas.campoVacio(fitosanitario.fitciclo)]"
@@ -72,8 +72,8 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -82,7 +82,7 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field
+              <v-text-field class="custom px-2" filled 
                 label="Fecha"
                 v-model="fitosanitario.fitfecha"
                 :rules="[reglas.campoVacio(fitosanitario.fitfecha)]"
@@ -99,8 +99,8 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Nombre comercial"
             v-model="fitosanitario.fitnombrecomercial"
             :rules="[reglas.campoVacio(fitosanitario.fitnombrecomercial)]"
@@ -108,16 +108,16 @@
         ></v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+      <v-row no-gutters >
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Ingrediente activo"
             v-model="fitosanitario.fitingredienteactivo"
             :rules="[reglas.campoVacio(fitosanitario.fitingredienteactivo)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Autorización Técnica"
             v-model="fitosanitario.fitautorizaciontecnica"
             :rules="[reglas.campoVacio(fitosanitario.fitautorizaciontecnica)]"
@@ -126,15 +126,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Nombre común"
             v-model="fitosanitario.fitnombrecomun"
             :rules="[reglas.campoVacio(fitosanitario.fitnombrecomun)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Dosis"
             v-model="fitosanitario.fitdosis"
             :rules="[reglas.campoVacio(fitosanitario.fitdosis)]"
@@ -143,15 +143,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Cantidad total (Kg)"
             v-model="fitosanitario.fitcantidadtotal"
             :rules="[reglas.campoVacio(fitosanitario.fitcantidadtotal)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Área aplicada"
             v-model="fitosanitario.fitareaaplicda"
             :rules="[reglas.campoVacio(fitosanitario.fitareaaplicda)]"
@@ -160,15 +160,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Equipo de aplicación"
             v-model="fitosanitario.fitequipoaplicacion"
             :rules="[reglas.campoVacio(fitosanitario.fitequipoaplicacion)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled
             placeholder="Método de aplicación"
             v-model="fitosanitario.fitmetodo"
             :rules="[reglas.campoVacio(fitosanitario.fitmetodo)]"
@@ -176,15 +176,15 @@
         ></v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Plazo de seguridad"
             v-model="fitosanitario.fitplazoseguridad"
             :rules="[reglas.campoVacio(fitosanitario.fitplazoseguridad)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="fitosanitario.fitoperario"
             placeholder="Operario"

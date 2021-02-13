@@ -1,34 +1,33 @@
-// Une varias capas
-// Se comunica con el modelo
-// *Pendiente: Añadir capa de validación a todos los controladores
-//const userDto = require('./users.dto');
-
 const sowingModel = require('./sowing.model');
+const validation = require('../../utils/validations');
 
 
 module.exports = {
 
     // Crear una nueva Siembra
     async createSowing(req, res) {
-
+        console.log(req.body);
         // Añadir capa de validación
-
         const { siefechacomprasemilla, sieproveedorsemilla, siefechasiembra, siecantidadplantas, siehectareas, sieoperario, cultivoid } = req.body;
-
-        try {
-            await sowingModel.createSowing({
-                siefechacomprasemilla: siefechacomprasemilla, 
-                sieproveedorsemilla: sieproveedorsemilla, 
-                siefechasiembra: siefechasiembra, 
-                siecantidadplantas: siecantidadplantas, 
-                siehectareas: siehectareas, 
-                sieoperario: sieoperario, 
-                cultivoid: cultivoid
-            });
-        } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
+        if (validation.emptyField(siefechacomprasemilla) || validation.emptyField(sieproveedorsemilla) || validation.emptyField(siefechasiembra)
+        || validation.emptyField(siecantidadplantas) || validation.emptyField(siehectareas) || validation.emptyField(sieoperario) || validation.emptyField(cultivoid)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        } else {
+            try {
+                await sowingModel.createSowing({
+                    siefechacomprasemilla: siefechacomprasemilla, 
+                    sieproveedorsemilla: sieproveedorsemilla, 
+                    siefechasiembra: siefechasiembra, 
+                    siecantidadplantas: siecantidadplantas, 
+                    siehectareas: siehectareas, 
+                    sieoperario: sieoperario, 
+                    cultivoid: cultivoid
+                });
+            } catch (error) {
+                return res.status(500).send({ message: "Registro fallido" });
+            }
+            return res.status(201).send({ message: "Registro exitoso" });
         }
-        return res.status(201).send({ message: "Registro exitoso" });
     },
 
 
@@ -46,23 +45,31 @@ module.exports = {
         return rows != null ? res.status(200).send(rows) : res.status(404).send({ message: "Registro de Siembra no encontrado" });
     },
 
+    //Obtener datos adicionales para mostrar en el select de Maleza
+    async getDatosDetalleSowing(req, res) {
+        const result = await sowingModel.getDatosDetalleSowing()
+        return res.status(200).send(result); // <--
+    },
+
     // Actualiza informacion de una Siembra
     async updateSowing(req, res) {
         const { id } = req.params;
         const { siefechacomprasemilla, sieproveedorsemilla, siefechasiembra, siecantidadplantas, siehectareas, sieoperario, cultivoid } = req.body;
-
-        const rowCount = await sowingModel.updateSowing(id, {
-            siefechacomprasemilla: siefechacomprasemilla, 
-            sieproveedorsemilla: sieproveedorsemilla, 
-            siefechasiembra: siefechasiembra, 
-            siecantidadplantas: siecantidadplantas, 
-            siehectareas: siehectareas, 
-            sieoperario: sieoperario, 
-            cultivoid: cultivoid
-        });
-        
-        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
-
+        if (validation.emptyField(siefechacomprasemilla) || validation.emptyField(sieproveedorsemilla) || validation.emptyField(siefechasiembra)
+        || validation.emptyField(siecantidadplantas) || validation.emptyField(siehectareas) || validation.emptyField(sieoperario) || validation.emptyField(cultivoid)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        } else {
+            const rowCount = await sowingModel.updateSowing(id, {
+                siefechacomprasemilla: siefechacomprasemilla, 
+                sieproveedorsemilla: sieproveedorsemilla, 
+                siefechasiembra: siefechasiembra, 
+                siecantidadplantas: siecantidadplantas, 
+                siehectareas: siehectareas, 
+                sieoperario: sieoperario, 
+                cultivoid: cultivoid
+            });
+            return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
+        }
     },
 
 

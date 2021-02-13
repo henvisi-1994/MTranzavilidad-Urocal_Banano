@@ -23,7 +23,7 @@ import BarraLateral from "../TheBarraLateral"; // Intancia de TheBarraLateral
 import MiniBarraLateral from "../TheMiniBarraLateral"; // Intancia de TheMiniBarraLateral
 
 export default {
-  name: "LayoutProductor",
+  name: "LayoutCentroAcopio",
 
   components: {
     BarraNavegacion,
