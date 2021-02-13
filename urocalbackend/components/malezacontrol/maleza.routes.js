@@ -5,6 +5,7 @@ const controller = require('./maleza.controller');
 const router = express.Router();
 
 router.get('/', controller.getMaleza);                                   // Coleccion (plural)
+router.get('/malezainformacion', controller.getDatosAdicionalesMaleza);    
 router.get('/:id', controller.getIdMaleza);                                 // Documento (singular)        
 router.post('/', controller.createMaleza);                                 
 router.put('/:id', controller.updateMaleza);        

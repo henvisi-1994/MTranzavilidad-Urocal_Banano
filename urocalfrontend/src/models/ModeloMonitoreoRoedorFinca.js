@@ -1,5 +1,5 @@
 export default class MonitoreoRoedorFinca {
-    constructor(monitoreoroedorid, monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, fincaid) {
+    constructor(monitoreoroedorid, monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, monitoreoroedor) {
         this.monitoreoroedorid = monitoreoroedorid;
         this.monfechatrampeo = monfechatrampeo;
         this.montipotrampa = montipotrampa;
@@ -9,6 +9,9 @@ export default class MonitoreoRoedorFinca {
         this.monaccionestomadas = monaccionestomadas;
         this.monoperario = monoperario;
         this.moninspector = moninspector;
-        this.fincaid = fincaid;
+        this.monitoreoroedor = {
+            fincaid: monitoreoroedor.fincaid,
+            finnombrefinca: monitoreoroedor.finnombrefinca
+        }
     }
 }

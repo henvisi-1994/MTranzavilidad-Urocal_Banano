@@ -4,15 +4,25 @@
     <DialogNuevoRiego ref="componentDialogNuevoRiego"></DialogNuevoRiego>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0">
-      <v-card-title class="py-0">
-        <v-row no-gutters>
-          <v-col cols="12" md="4">
+    <v-card elevation="0" class="mt-5">
+      <v-card-title class="py-2">
+        <v-row no-gutters justify-md="space-between">
+          <v-col cols="12" md="6">
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
+          </v-col>
+          <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarRiego"
               append-icon="mdi-magnify"
               label="Buscar"
+              class="custom"
+              filled
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -27,7 +37,6 @@
           :items="listaRiego"
           :search="buscarRiego"
           class="elevation-1"
-          dense
         >
           <template v-slot:top>
             <!-- Dialog que muestra el formulario con toda la informacion de Riego -->
@@ -44,7 +53,8 @@
         <!-- Botón para agregar nuevo Riego -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px"
+          width="300px" elevation="0"
+          large
           color="primary"
           @click="cargarDialogNuevoRiego()"
           >Nuevo</v-btn
@@ -59,6 +69,7 @@ import { mapMutations } from "vuex";
 
 import DialogNuevoRiego from "@/components/DialogNuevoRiego";
 import DialogMostrarRiego from "@/components/DialogMostrarRiego";
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
   name: "BaseRiego",
@@ -70,6 +81,7 @@ export default {
 
   data() {
     return {
+      nombre: "Gestión de Riego",
       buscarRiego: "", // Guarda el texto de búsqueda
       cabeceraTablaRiego: [
         // Detalla las cabeceras de la tabla
@@ -178,48 +190,6 @@ export default {
   },
 
   methods: {
-    tablaResponsiva() {
-      // Ajusta el tamaño de la tabla para pantallas pequeñas
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          if (
-            this.$vuetify.breakpoint.height >= 500 &&
-            this.$vuetify.breakpoint.height <= 550
-          ) {
-            return "41vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 551 &&
-            this.$vuetify.breakpoint.height <= 599
-          ) {
-            return "44vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 600 &&
-            this.$vuetify.breakpoint.height <= 650
-          ) {
-            return "51vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 651 &&
-            this.$vuetify.breakpoint.height <= 699
-          ) {
-            return "53vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 700 &&
-            this.$vuetify.breakpoint.height <= 799
-          ) {
-            return "57vh";
-          }
-          if (this.$vuetify.breakpoint.height >= 800) {
-            return "61vh";
-          }
-        default:
-          return "auto";
-      }
-    },
-
     // Carga el DialogMostrarRiego
     abrirMostrarRiego() {
       this.dialogMostrarRiego = !this.dialogMostrarRiego; // Abre el DialogMostrarRiego
@@ -238,8 +208,14 @@ export default {
     },
   },
 
+  mixins: [autenticacionMixin, myMixin],
+
   created() {
-    this.$store.commit("colocarLayout", "LayoutProductor");
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario.rol === "Administrador")
+      this.$store.commit("colocarLayout", "LayoutAdministrador");
+    if (usuario.rol === "Productor")
+      this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };
 </script>

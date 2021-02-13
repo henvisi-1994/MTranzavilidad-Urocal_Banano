@@ -6,16 +6,17 @@
     max-width="800px"
     transition="dialog-transition"
     eager
+    persistent
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="primary white--text">
+      <v-card-title class="white primary--text">
         <h5>
           Registrar nuevo monitoreo roedor
         </h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarNuevoMonitoreoRoedorCentroAcopio()"
+          <v-icon class="primary--text" @click="cerrarNuevoMonitoreoRoedorCentroAcopio()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -32,9 +33,9 @@
         <!-- Botón para agregar nuevo MonitoreoRoedorCentroAcopio -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px"
+          width="300px" large elevation="0"
           color="primary"
-          @click="registrar()"
+          @click="guardarMonitoreoRoedorFinca()"
           >Registrar</v-btn>
       </v-card-actions>
     </v-card>
@@ -45,6 +46,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormMonitoreoRoedorCentroAcopio from "@/components/FormMonitoreoRoedorCentroAcopio";
+import ServicioMonitoreoRoedorCentroAcopio from '../services/ServicioMonitoreoRoedorCentroAcopio';
 
 export default {
   name: "DialogNuevoMonitoreoRoedorCentroAcopio",
@@ -69,18 +71,55 @@ export default {
       },
     },
 
+    listaMonitoreoRoedorCentroAcopioStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloMonitoreoRoedorCentroAcopio/listaMonitoreoRoedorCentroAcopioStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloMonitoreoRoedorCentroAcopio/establecerListaMonitoreoRoedorCentroAcopioStore", v);
+      },
+    },
+
+    modeloMonitoreoRoedorCentroAcopioStore: {
+      get() {
+        return this.$store.getters["moduloMonitoreoRoedorCentroAcopio/monitoreoRoedorCentroAcopio"];
+      },
+      set(v) {
+        return this.$store.commit("moduloMonitoreoRoedorCentroAcopio/nuevoMonitoreoRoedorCentroAcopio", v);
+      },
+    },
+
     // Obtiene es estado de la variable validFormMonitoreoRoedorCentroAcopio y el modelo MonitoreoRoedorCentroAcopio
     ...mapState("moduloMonitoreoRoedorCentroAcopio", ["formMonitoreoRoedorCentroAcopioValido", "monitoreoRoedorCentroAcopio"]),
   },
 
   methods: {
+
+    // #  MANIPULACIÓN DE DATOS  #
+    async guardarMonitoreoRoedorFinca() { 
+      try {
+          let respuesta = await ServicioMonitoreoRoedorCentroAcopio.agregarMonitoreoRoedorCentroAcopio(this.modeloMonitoreoRoedorCentroAcopioStore);
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaMonitoreoRoedorCentroAcopio();
+          this.cerrarNuevoMonitoreoRoedorCentroAcopio();
+        } catch (error) {
+          this.$toast.error(error.response.data.message);
+      }
+    },
+
+    async cargarListaMonitoreoRoedorCentroAcopio() { 
+      let listaMonitoreoRoedorCentroAcopio = [];                                               // Limpiar la 'lista de datos'
+      let respuesta = await ServicioMonitoreoRoedorCentroAcopio.obtenerTodosMonitoreoRoedorCentroAcopio();  // Obtener respuesta de backend
+      let datosMonitoreoRoedorCentroAcopio = await respuesta.data;                                    // Rescatar datos de la respuesta
+      datosMonitoreoRoedorCentroAcopio.forEach((CentroAcopio) => {                                  // Guardar cada registro en la 'lista de datos' 
+        listaMonitoreoRoedorCentroAcopio.push(CentroAcopio);
+      });
+      this.listaMonitoreoRoedorCentroAcopioStore = listaMonitoreoRoedorCentroAcopio;
+    },
+    
+    ...mapMutations("moduloMonitoreoRoedorCentroAcopio", ["establecerListaMonitoreoRoedorCentroAcopioStore"]), 
     // Vacia el modelo MonitoreoRoedorCentroAcopio
     ...mapMutations("moduloMonitoreoRoedorCentroAcopio", ["vaciarMonitoreoRoedorCentroAcopio"]),
-
-    // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      //console.log(this.lote);
-    },
 
     cerrarNuevoMonitoreoRoedorCentroAcopio() {
       this.dialogNuevoMonitoreoRoedorCentroAcopio = !this.dialogNuevoMonitoreoRoedorCentroAcopio; // Cierra el dialogNuevoMonitoreoRoedorCentroAcopio

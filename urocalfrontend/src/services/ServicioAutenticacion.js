@@ -4,7 +4,7 @@ import axios from 'axios';
 const URL_API = 'http://localhost:3000/v1';
 
 class ServicioAutenticacion {
-    /* Envia solicitud POST a la ruta localhost:3000/login para iniciar sesion
+    /* Envia solicitud POST a la ruta /login para iniciar sesion
         envia un objeto {percedula, usuaclave}
     */
     login(usuario) {
@@ -12,13 +12,17 @@ class ServicioAutenticacion {
             percedula: usuario.percedula,
             usuclave: usuario.usuclave
         }).then(respuesta => {
-            if (respuesta.data.accessToken) {
+            if (respuesta.data.hasOwnProperty('accessToken')) {
                 localStorage.setItem('usuario', JSON.stringify(respuesta.data));
             }
             return Promise.resolve(respuesta.data);
         }, error => {
             return Promise.reject(error.response.data);
         })
+    }
+
+    cerrarSesion() {
+        localStorage.removeItem('usuario');
     }
 }
 

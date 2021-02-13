@@ -6,15 +6,25 @@
     ></DialogNuevoLimpiezaHerramienta>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0">
-      <v-card-title class="py-0">
-        <v-row no-gutters>
-          <v-col cols="12" md="4">
+    <v-card elevation="0" class="mt-5">
+      <v-card-title class="py-2">
+        <v-row no-gutters justify-md="space-between">
+          <v-col cols="12" md="6">
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
+          </v-col>
+          <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarLimpiezaHerramienta"
               append-icon="mdi-magnify"
               label="Buscar"
+              class="custom"
+              filled
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -26,10 +36,9 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaLimpiezaHerramienta"
           sort-by="cultivoid"
-          :items="listaLimpiezaHerramienta"
+          :items="listaLimpiezaHerramientaStore"
           :search="buscarLimpiezaHerramienta"
           class="elevation-1"
-          dense
         >
           <template v-slot:top>
             <!-- Tabs que muestra la informacion detallada de LimpiezaHerramienta -->
@@ -39,7 +48,7 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarLimpiezaHerramienta()">
+            <v-icon color="primary" @click="abrirMostrarLimpiezaHerramienta(item)">
               mdi-eye
             </v-icon>
           </template>
@@ -50,7 +59,8 @@
         <!-- Botón para agregar nuevo LimpiezaHerramienta -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px"
+          width="300px"
+          large elevation="0"
           color="primary"
           @click="cargarDialogNuevoLimpiezaHerramienta()"
           >Nuevo</v-btn
@@ -64,6 +74,8 @@ import { mapMutations } from "vuex";
 
 import DialogNuevoLimpiezaHerramienta from "../components/DialogNuevoLimpiezaHerramienta";
 import DialogMostrarLimpiezaHerramienta from "../components/DialogMostrarLimpiezaHerramienta";
+import ServicioLimpiezaHerramienta from "../services/ServicioLimpiezaHerramienta";
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
   name: "BaseLimpiezaHerramienta",
@@ -73,14 +85,20 @@ export default {
     DialogMostrarLimpiezaHerramienta,
   },
 
+  mounted() {
+    this.cargarListaLimpiezaHerramienta();
+    this.cargarListaCultivos();
+  },
+
   data() {
     return {
+      nombre: "Limpieza de Herramientas",
       buscarLimpiezaHerramienta: "", // Guarda el texto de búsqueda
       cabeceraTablaLimpiezaHerramienta: [
         // Detalla las cabeceras de la tabla
         {
           text: "Cultivo",
-          value: "cultivoid",
+          value: "cultivoproducto.pronombre",
           align: "center",
           class: "grey lighten-3",
         },
@@ -133,118 +151,18 @@ export default {
           class: "grey lighten-3",
         },
         {
+          text: "Operario",
+          value: "limoperario",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
           text: "Detalles",
           value: "actions",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
-        },
-      ],
-      listaLimpiezaHerramienta: [
-        // Almacena una lista de LimpiezaHerramienta, la misma se muestra en tabla
-        {
-          cultivoid: 1,
-          limfecha: "2021-01-01",
-          limproducto: "Desinfectante Amonio Cuaternario 0.5% – Clean Armor – 500ml",
-          limequipos: "pinzas",
-          limmaquinaria: "tractor",
-          limherramientas: "azada",
-          limcajones: "cajon-c2",
-          limtendales: "tendal-t1",
-        },
-        {
-          cultivoid: 2,
-          limfecha: "2021-01-02",
-          limproducto: "Cloro Líquido. Hipoclorito de sodio 5% – Cloro Protect – 500ml",
-          limequipos: "termómetros",
-          limmaquinaria: "sembradora",
-          limherramientas: "plantador",
-          limcajones: "cajon-c3",
-          limtendales: "tendal-t3",
-        },
-        {
-          cultivoid: 1,
-          limfecha: "2021-01-03",
-          limproducto:
-            "HIDROLIMPIADORA Kärcher K 5 Premium Full Control Limpiadora de alta presión – 2100W – 145bar – 1.324.600.0",
-          limequipos: "jeringas",
-          limmaquinaria: "arados",
-          limherramientas: "horca",
-          limcajones: "cajon-c2",
-          limtendales: "tendal-t4",
-        },
-        {
-          cultivoid: 3,
-          limfecha: "2021-01-04",
-          limproducto: "Desinfectante Amonio Cuaternario 0.5% – Clean Armor – 500ml",
-          limequipos: "pipetas",
-          limmaquinaria: "hilerador",
-          limherramientas: "pala",
-          limcajones: "cajon-c1",
-          limtendales: "tendal-t3",
-        },
-        {
-          cultivoid: 2,
-          limfecha: "2021-01-05",
-          limproducto:
-            "HIDROLIMPIADORA Kärcher K 5 Premium Full Control Limpiadora de alta presión – 2100W – 145bar – 1.324.600.0",
-          limequipos: "pinzas",
-          limmaquinaria: "cultivador",
-          limherramientas: "horca",
-          limcajones: "cajon-c4",
-          limtendales: "tendal-t1",
-        },
-        {
-          cultivoid: 4,
-          limfecha: "2021-01-01",
-          limproducto: "Cloro Líquido. Hipoclorito de sodio 5% – Cloro Protect – 500ml",
-          limequipos: "termómetros",
-          limmaquinaria: "arados",
-          limherramientas: "rastrillo",
-          limcajones: "cajon-c1",
-          limtendales: "tendal-t3",
-        },
-        {
-          cultivoid: 2,
-          limfecha: "2021-01-02",
-          limproducto:
-            "HIDROLIMPIADORA Kärcher K 5 Premium Full Control Limpiadora de alta presión – 2100W – 145bar – 1.324.600.0",
-          limequipos: "jeringas",
-          limmaquinaria: "cultivador",
-          limherramientas: "plantador",
-          limcajones: "cajon-c5",
-          limtendales: "tendal-t3",
-        },
-        {
-          cultivoid: 2,
-          limfecha: "2021-01-03",
-          limproducto: "Desinfectante Amonio Cuaternario 0.5% – Clean Armor – 500ml",
-          limequipos: "navajas",
-          limmaquinaria: "sembradora",
-          limherramientas: "rastillo",
-          limcajones: "cajon-c2",
-          limtendales: "tendal-t2",
-        },
-        {
-          cultivoid: 4,
-          limfecha: "2021-01-01",
-          limproducto:
-            "HIDROLIMPIADORA Kärcher K 5 Premium Full Control Limpiadora de alta presión – 2100W – 145bar – 1.324.600.0",
-          limequipos: "pipetas",
-          limmaquinaria: "tractor",
-          limherramientas: "pala",
-          limcajones: "cajon-c2",
-          limtendales: "tendal-t0",
-        },
-        {
-          cultivoid: 3,
-          limfecha: "2021-01-02",
-          limproducto: "Cloro Líquido. Hipoclorito de sodio 5% – Cloro Protect – 500ml",
-          limequipos: "termómetros",
-          limmaquinaria: "hilerador",
-          limherramientas: "azada",
-          limcajones: "cajon-c0",
-          limtendales: "tendal-t3",
         },
       ],
     };
@@ -276,51 +194,73 @@ export default {
         );
       },
     },
+
+    listaLimpiezaHerramientaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerListaLimpiezaHerramientaStore",
+          v
+        );
+      },
+    },
+
+    listaCultivoStore: {
+      get() {
+        return this.$store.getters["moduloLimpiezaHerramienta/listaCultivoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerListaCultivoStore",
+          v
+        );
+      },
+    },
+
+    modeloLimpiezaHerramientaStore: {
+      get() {
+        return this.$store.getters["moduloLimpiezaHerramienta/limpiezaHerramienta"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/nuevoLimpiezaHerramienta",
+          v
+        );
+      },
+    },
   },
 
   methods: {
-    tablaResponsiva() {
-      // Ajusta el tamaño de la tabla para pantallas pequeñas
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          if (
-            this.$vuetify.breakpoint.height >= 500 &&
-            this.$vuetify.breakpoint.height <= 550
-          ) {
-            return "41vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 551 &&
-            this.$vuetify.breakpoint.height <= 599
-          ) {
-            return "44vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 600 &&
-            this.$vuetify.breakpoint.height <= 650
-          ) {
-            return "51vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 651 &&
-            this.$vuetify.breakpoint.height <= 699
-          ) {
-            return "53vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 700 &&
-            this.$vuetify.breakpoint.height <= 799
-          ) {
-            return "57vh";
-          }
-          if (this.$vuetify.breakpoint.height >= 800) {
-            return "61vh";
-          }
-        default:
-          return "auto";
-      }
+    // #  MANIPULACIÓN DE DATOS  #
+    async cargarListaLimpiezaHerramienta() {
+      let listaLimpiezaHerramienta = []; // Limpiar la 'lista de datos'
+      let respuesta = await ServicioLimpiezaHerramienta.obtenerTodosLimpiezaHerramienta(); // Obtener respuesta de backend
+      let datosLimpiezaHerramienta = await respuesta.data; // Rescatar datos de la respuesta
+      datosLimpiezaHerramienta.forEach((LimpiezaHerramienta) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaLimpiezaHerramienta.push(LimpiezaHerramienta);
+      });
+      this.listaLimpiezaHerramientaStore = listaLimpiezaHerramienta;
     },
 
+    async cargarListaCultivos() {
+      let listaCultivo = []; // Limpiar la 'lista de ciudades'
+      let respuesta = await ServicioLimpiezaHerramienta.obtenerTodosCultivos(); // Obtener respuesta de backend
+      let datosCultivo = await respuesta.data; // Rescatar datos de la respuesta
+      datosCultivo.forEach((Cultivo) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaCultivo.push(Cultivo);
+      });
+      this.listaCultivoStore = listaCultivo;
+    },
+
+    ...mapMutations("moduloLimpiezaHerramienta", ["establecerListaCultivoStore"]),
     // Vacia el modelo LimpiezaHerramienta
     ...mapMutations("moduloLimpiezaHerramienta", ["vaciarLimpiezaHerramienta"]),
 
@@ -331,15 +271,22 @@ export default {
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
     },
 
-    abrirMostrarLimpiezaHerramienta() {
+    abrirMostrarLimpiezaHerramienta(item) {
       this.dialogMostrarLimpiezaHerramienta = !this.dialogMostrarLimpiezaHerramienta;
-      this.$refs.DialogMostrarLimpiezaHerramienta.$refs.componentFormLimpiezaHerramienta.$refs.formLimpiezaHerramienta.resetValidation(); // Reinicia las validaciones de formLimpiezaHerramienta
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
+      const indiceEditar = this.listaLimpiezaHerramientaStore.indexOf(item);
+      this.modeloLimpiezaHerramientaStore = item;
     },
   },
 
+  mixins: [autenticacionMixin, myMixin],
+
   created() {
-    this.$store.commit("colocarLayout", "LayoutProductor");
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario.rol === "Administrador")
+      this.$store.commit("colocarLayout", "LayoutAdministrador");
+    if (usuario.rol === "Productor")
+      this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };
 </script>

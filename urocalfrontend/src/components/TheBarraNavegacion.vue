@@ -3,30 +3,30 @@
     <!-- DialogCambioPassword -->
     <DialogCambioPassword></DialogCambioPassword>
 
-    <v-app-bar app dark color="primary" elevation="0">
+    <v-app-bar app color="primary" class="white--text" elevation="2">
       <!-- Presenta icono hamburguesa si es movil -->
       <v-app-bar-nav-icon
+        color="white"
         v-if="this.$vuetify.breakpoint.xs"
         @click.stop="barraLateral = !barraLateral"
       ></v-app-bar-nav-icon>
 
-      <!-- Logo -->
-      <v-avatar size="40" tile class="mr-3">
-        <img
-          alt="Vue logo"
-          src="https://cecjecuador.org.ec/wp-content/uploads/2020/02/urocal.jpg"
-        />
-      </v-avatar>
       <v-spacer></v-spacer>
 
+      <!-- Logo -->
+      <v-avatar size="40" tile class="mr-3">
+        <!--img alt="Vue logo" src="https://i.pinimg.com/originals/57/43/47/574347ddf6be999e0027de121104f2ff.png"/-->
+
+      </v-avatar>
+
       <!-- Nombre de usuario -->
-      <span class="overline mr-2">{{ nombreCompleto }}</span>
+      <!--h4 class="mr-2">{{ nombreCompleto }}</h4-->
 
       <!-- Menú de opciones -->
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon small v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
+            <v-icon color="white">mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -56,8 +56,8 @@ export default {
   data() {
     return {
       usuario: {
-        nombre: "Nombre",
-        apellido: "usuario",
+        nombre: "Bruno",
+        apellido: "Díaz",
       },
     };
   },

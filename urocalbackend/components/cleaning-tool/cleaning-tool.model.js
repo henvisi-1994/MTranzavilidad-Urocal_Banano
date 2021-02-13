@@ -8,8 +8,8 @@ module.exports = {
         return cleaningToolDao.getCleaningTools();
     },
 
-    async getCleaningTool(id){
-        return cleaningToolDao.getCleaningTool(id);
+    async getProduct(){
+        return cleaningToolDao.getProduct();
     },
 
     async createCleaningTool(cleaningTool){
