@@ -1,4 +1,4 @@
-import Siembra from '@/models/ModeloSiembra';
+import Siembra from '../../models/ModeloSiembra';
 
 export default {
     namespaced: true,
@@ -6,6 +6,8 @@ export default {
     state: {
         siembra: new Siembra('', '', '', '', '', '', '', ''), // Modelo siembra
         formSiembraValido: false, // Indica si el formulario de siembra es valido
+        listaSiembra: [], // Lista de Controles de Siembra
+        bloquearCamposFormSiembra: false, // Determina si se bloquean los campos del formulario
     },
 
     actions: {
@@ -14,7 +16,7 @@ export default {
 
     mutations: {
         // Coloca un nuevo siembra
-        setSiembra(state, nuevaSiembra) {
+        agregarSiembra(state, nuevaSiembra) {
             state.siembra = nuevaSiembra
         },
 
@@ -26,9 +28,26 @@ export default {
         cambiarEstadoFormSiembraValido(state, nuevoEstado) {
             state.formSiembraValido = nuevoEstado
         },
+
+        // listaSiembra
+        eliminarSiembraLista(state, siembraID) {
+            let indice = state.listaSiembra.indexOf(siembraID); // Obtiene la posicion del elemento
+            state.listaSiembra.splice(indice, 1); // Elimina el elemento
+        },
+
+        asignarListaSiembra(state, nuevaListaSiembra) {
+            state.listaSiembra = nuevaListaSiembra;
+        },
+
+        // Cambia el estado de la variable bloquearCamposFormSiembra
+        cambiarBloquearCamposFormSiembra(state, nuevoEstado) {
+            state.bloquearCamposFormSiembra = nuevoEstado
+        },
     },
 
     getters: {
-        formSiembraValido: (state) => state.formSiembraValido, // Devuelve la variable formSiembraValido
+        formSiembraValido: (state) => state.formSiembraValido,                        // Devuelve la variable formSiembraValido
+        siembra: (state) => state.siembra,                                            // Devuelve el modelo siembra
+        bloquearCamposFormSiembra: (state) => state.bloquearCamposFormSiembra,        // Devuelve bloquearCamposFormSiembra
     },
 }

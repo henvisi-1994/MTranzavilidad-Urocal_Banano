@@ -1,0 +1,39 @@
+import axios from 'axios';
+
+// Ruta al servidor backend
+const API_URL = 'http://localhost:3000/v1';
+
+class ServicioRevisionHumedad {
+
+    // SELECT: Devuelve revisionHumedad por Almacenamiento
+    obtenerRevisionHumedadPorAlmacenamiento(almacenamientoid) {
+        return axios.get(`${API_URL}/revisionHumedad/almacenamiento/${almacenamientoid}`);
+    }
+
+    /*// SELECT: Devuelve un lote
+    obtenerLote(id) {
+        return axios.get(`${API_URL}/lote/${id}`);
+    }*/
+
+    // INSERT: Agrega una revisionHumedad
+    crearRevisionHumedad(revisionHumedad) {
+        return axios.post(`${API_URL}/revisionHumedad`, revisionHumedad);
+    }
+
+    /*// INSERT: Agrega un mix
+    crearMix(mix) {
+        return axios.post(`${API_URL}/mix`, mix);
+    }*/
+
+    // UPDATE: Actualiza una revisionHumedad
+    actualizarRevisionHumedad(revisionHumedad) {
+        return axios.put(`${API_URL}/revisionHumedad/${revisionHumedad.revisionhumedadid}`, revisionHumedad);
+    }
+
+    // DELETE: Eliminar una revisionHumedad
+    eliminarRevisionHumedad(revisionhumedadid) {
+        return axios.delete(`${API_URL}/revisionHumedad/${revisionhumedadid}`);
+    }
+}
+
+export default new ServicioRevisionHumedad();

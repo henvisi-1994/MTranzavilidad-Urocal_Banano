@@ -6,15 +6,25 @@
     ></DialogNuevoMonitoreoRoedorFinca>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0">
-      <v-card-title class="py-0">
-        <v-row no-gutters>
-          <v-col cols="12" md="4">
+    <v-card elevation="0" class="mt-5">
+      <v-card-title class="py-2">
+        <v-row no-gutters justify-md="space-between">
+          <v-col cols="12" md="6">
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
+          </v-col>
+          <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarMonitoreoRoedor"
               append-icon="mdi-magnify"
               label="Buscar"
+              class="custom"
+              filled
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -26,10 +36,9 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaMonitoreoRoedor"
           sort-by="fincaid"
-          :items="listaMonitoreoRoedor"
+          :items="listaMonitoreoRoedorFincaStore"
           :search="buscarMonitoreoRoedor"
           class="elevation-1"
-          dense
         >
           <template v-slot:top>
             <!-- Tabs que muestra la informacion detallada de MonitoreoRoedorFinca -->
@@ -39,7 +48,7 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarMonitoreoRoedorFinca()">
+            <v-icon color="primary" @click="abrirMostrarMonitoreoRoedorFinca(item)">
               mdi-eye
             </v-icon>
           </template>
@@ -51,6 +60,7 @@
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
           width="200px"
+          large
           color="primary"
           @click="cargarDialogNuevoMonitoreoRoedorFinca()"
           >Nuevo</v-btn
@@ -64,6 +74,8 @@ import { mapMutations } from "vuex";
 
 import DialogNuevoMonitoreoRoedorFinca from "../components/DialogNuevoMonitoreoRoedorFinca";
 import DialogMostrarMonitoreoRoedorFinca from "../components/DialogMostrarMonitoreoRoedorFinca";
+import ServicioMonitoreoRoedorFinca from "../services/ServicioMonitoreoRoedorFinca";
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
   name: "BaseMonitoreoRoedorFinca",
@@ -73,14 +85,20 @@ export default {
     DialogMostrarMonitoreoRoedorFinca,
   },
 
+  mounted() {
+    this.cargarListaMonitoreoRoedorFinca();
+    this.cargarListaFincas();
+  },
+
   data() {
     return {
+      nombre: "Monitoreo de Roedores",
       buscarMonitoreoRoedor: "", // Guarda el texto de búsqueda
       cabeceraTablaMonitoreoRoedor: [
         // Detalla las cabeceras de la tabla
         {
           text: "Finca",
-          value: "fincaid",
+          value: "monitoreoroedor.finnombrefinca",
           align: "center",
           class: "grey lighten-3",
         },
@@ -133,99 +151,6 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaMonitoreoRoedor: [
-        // Almacena una lista de MonitoreoRoedorCentroAcopio, la misma se muestra en tabla
-        {
-          fincaid: 1,
-          monfechatrampeo: "2021-01-02",
-          montipotrampa: "Ratonera madera grande",
-          monnumerotrampas: 2,
-          monceboutilizado: "Rat-in Cebo Raticida 50gr",
-          monroedoresmuertos: 20,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 2,
-          monfechatrampeo: "2021-01-01",
-          montipotrampa: "Ratonera ecológica",
-          monnumerotrampas: 5,
-          monceboutilizado: "Raticida Criborat Bdf Cebo 150gr",
-          monroedoresmuertos: 11,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 1,
-          monfechatrampeo: "2021-01-03",
-          montipotrampa: "Ratonera dos agujeros pequeña",
-          monnumerotrampas: 3,
-          monceboutilizado: "Veneno Ratas Criborat Br.005 Cebo Barra 150 Gr.",
-          monroedoresmuertos: 14,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 3,
-          monfechatrampeo: "2021-01-04",
-          montipotrampa: "Ratonera madera grande",
-          monnumerotrampas: 1,
-          monceboutilizado: "Semilla Cebada 4.5 Kg Forrajera Pastos Alimento Consum",
-          monroedoresmuertos: 10,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 2,
-          monfechatrampeo: "2021-01-05",
-          montipotrampa: "Ratonera dos agujeros grande",
-          monnumerotrampas: 6,
-          monceboutilizado: "Veneno Ratas Criborat Br.005 Cebo Barra 150 Gr.",
-          monroedoresmuertos: 32,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 1,
-          monfechatrampeo: "2021-01-04",
-          montipotrampa: "Ratonera dos agujeros pequeña",
-          monnumerotrampas: 2,
-          monceboutilizado: "Raticida Criborat Bdf Cebo 150gr",
-          monroedoresmuertos: 20,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 2,
-          monfechatrampeo: "2021-01-03",
-          montipotrampa: "Ratonera madera grande",
-          monnumerotrampas: 1,
-          monceboutilizado: "Rat-in Cebo Raticida 50gr",
-          monroedoresmuertos: 4,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 3,
-          monfechatrampeo: "2021-01-02",
-          montipotrampa: "Ratonera ecológica",
-          monnumerotrampas: 4,
-          monceboutilizado: "Semilla Cebada 4.5 Kg Forrajera Pastos Alimento Consum",
-          monroedoresmuertos: 55,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 1,
-          monfechatrampeo: "2021-01-01",
-          montipotrampa: "Ratonera dos agujeros grande",
-          monnumerotrampas: 1,
-          monceboutilizado: "Veneno Ratas Criborat Br.005 Cebo Barra 150 Gr.",
-          monroedoresmuertos: 7,
-          monaccionestomadas: "Limpieza",
-        },
-        {
-          fincaid: 4,
-          monfechatrampeo: "2021-01-04",
-          montipotrampa: "Ratonera dos agujeros pequeña",
-          monnumerotrampas: 2,
-          monceboutilizado: "Raticida Criborat Bdf Cebo 150gr",
-          monroedoresmuertos: 1,
-          monaccionestomadas: "Limpieza",
-        },
-      ],
     };
   },
 
@@ -255,51 +180,75 @@ export default {
         );
       },
     },
+
+    listaMonitoreoRoedorFincaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters[
+              "moduloMonitoreoRoedorFinca/listaMonitoreoRoedorFincaStore"
+            ]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloMonitoreoRoedorFinca/establecerListaMonitoreoRoedorFincaStore",
+          v
+        );
+      },
+    },
+
+    listaFincaStore: {
+      get() {
+        return this.$store.getters["moduloMonitoreoRoedorFinca/listaFincaStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloMonitoreoRoedorFinca/establecerListaFincaStore",
+          v
+        );
+      },
+    },
+
+    modeloMonitoreoRoedorFincaStore: {
+      get() {
+        return this.$store.getters["moduloMonitoreoRoedorFinca/monitoreoRoedorFinca"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloMonitoreoRoedorFinca/nuevoMonitoreoRoedorFinca",
+          v
+        );
+      },
+    },
   },
 
   methods: {
-    tablaResponsiva() {
-      // Ajusta el tamaño de la tabla para pantallas pequeñas
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          if (
-            this.$vuetify.breakpoint.height >= 500 &&
-            this.$vuetify.breakpoint.height <= 550
-          ) {
-            return "41vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 551 &&
-            this.$vuetify.breakpoint.height <= 599
-          ) {
-            return "44vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 600 &&
-            this.$vuetify.breakpoint.height <= 650
-          ) {
-            return "51vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 651 &&
-            this.$vuetify.breakpoint.height <= 699
-          ) {
-            return "53vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 700 &&
-            this.$vuetify.breakpoint.height <= 799
-          ) {
-            return "57vh";
-          }
-          if (this.$vuetify.breakpoint.height >= 800) {
-            return "61vh";
-          }
-        default:
-          return "auto";
-      }
+    // #  MANIPULACIÓN DE DATOS  #
+    async cargarListaMonitoreoRoedorFinca() {
+      let listaMonitoreoRoedorFinca = []; // Limpiar la 'lista de datos'
+      let respuesta = await ServicioMonitoreoRoedorFinca.obtenerTodosMonitoreoRoedorFinca(); // Obtener respuesta de backend
+      let datosMonitoreoRoedorFinca = await respuesta.data; // Rescatar datos de la respuesta
+      datosMonitoreoRoedorFinca.forEach((MonitoreoRoedorFinca) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaMonitoreoRoedorFinca.push(MonitoreoRoedorFinca);
+      });
+      this.listaMonitoreoRoedorFincaStore = listaMonitoreoRoedorFinca;
     },
 
+    async cargarListaFincas() {
+      let listaFinca = []; // Limpiar la 'lista de ciudades'
+      let respuesta = await ServicioMonitoreoRoedorFinca.obtenerTodosFinca(); // Obtener respuesta de backend
+      let datosFinca = await respuesta.data; // Rescatar datos de la respuesta
+      datosFinca.forEach((Finca) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaFinca.push(Finca);
+      });
+      this.listaFincaStore = listaFinca;
+    },
+
+    ...mapMutations("moduloMonitoreoRoedorFinca", ["establecerListaFincaStore"]),
     // Vacia el modelo MonitoreoRoedorFinca
     ...mapMutations("moduloMonitoreoRoedorFinca", ["vaciarMonitoreoRoedorFinca"]),
 
@@ -310,15 +259,22 @@ export default {
       this.vaciarMonitoreoRoedorFinca(); // Vacia el modelo MonitoreoRoedorFinca
     },
 
-    abrirMostrarMonitoreoRoedorFinca() {
+    abrirMostrarMonitoreoRoedorFinca(item) {
       this.dialogMostrarMonitoreoRoedorFinca = !this.dialogMostrarMonitoreoRoedorFinca;
-      this.$refs.DialogMostrarMonitoreoRoedorFinca.$refs.componentFormMonitoreoRoedorFinca.$refs.formMonitoreoRoedorFinca.resetValidation(); // Reinicia las validaciones de formMonitoreoRoedorFinca
       this.vaciarMonitoreoRoedorFinca(); // Vacia el modelo MonitoreoRoedorFinca
+      const indiceEditar = this.listaMonitoreoRoedorFincaStore.indexOf(item);
+      this.modeloMonitoreoRoedorFincaStore = item;
     },
   },
 
+  mixins: [autenticacionMixin, myMixin],
+
   created() {
-    this.$store.commit("colocarLayout", "LayoutProductor");
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario.rol === "Administrador")
+      this.$store.commit("colocarLayout", "LayoutAdministrador");
+    if (usuario.rol === "Productor")
+      this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };
 </script>

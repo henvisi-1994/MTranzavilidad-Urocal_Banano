@@ -42,14 +42,16 @@ module.exports = {
     },
 
     async getUsers() {
-        let query = `SELECT * FROM persona`;
+        let query = `SELECT p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre, u.usutipo, u.usuactivo FROM persona p, ciudad c, usuario u WHERE p.ciudadnacimientoid = c.ciudadid AND p.personaid = u.personaid;`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
     },
 
     async getPersona(id) {
-        let query = `SELECT * FROM persona WHERE personaid = ${id}`;
+        //let query = `SELECT * FROM persona WHERE personaid = ${id}`;
+        let query = `SELECT p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, p.ciudadnacimientoid, c.ciudadnombre FROM persona p, ciudad c WHERE p.personaid = ${id} AND p.ciudadnacimientoid = c.ciudadid;`;
         let result = await pool.query(query);
+        console.log(result);
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },
 
@@ -59,15 +61,16 @@ module.exports = {
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },
 
-    async deleteUser(id) {
-        //Borrado logico
-        let query = `DELETE FROM usuario WHERE personaid = '${id}'`;
+    // Esto está funcional pero no se lo implementará para los usuarios
+    /*async deleteUser(id) {
+        
+        let query = `UPDATE usuario SET usuactivo = 'false' WHERE personaid = '${id}'`;
         let result = await pool.query(query);
 
         query = `DELETE FROM persona WHERE personaid = '${id}'`;
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
-    },
+    },*/
 
     async updateUser(id, user) {
         let query = `UPDATE persona SET pernombres = '${user.pernombres}', perapellidos = '${user.perapellidos}', 
@@ -75,6 +78,9 @@ module.exports = {
         perwhatsapp = '${user.perwhatsapp}', peremail = '${user.peremail}', ciudadnacimientoid = '${user.ciudadnacimientoid}', 
         perfechanacimiento = '${user.perfechanacimiento}' WHERE personaid = ${id}`;
         let result = await pool.query(query);
+
+        query = `UPDATE usuario SET usutipo = '${user.usutipo}', usuactivo = ${user.usuactivo} WHERE personaid = ${id}`;
+        result = await pool.query(query);
 
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó al usuario y 0 sino lo hizo.
     },

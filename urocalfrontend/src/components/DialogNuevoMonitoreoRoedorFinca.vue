@@ -6,16 +6,17 @@
     max-width="800px"
     transition="dialog-transition"
     eager
+    persistent
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="primary white--text">
+      <v-card-title class="white primary--text">
         <h5>
           Registrar nuevo monitoreo roedor
         </h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarNuevoMonitoreoRoedorFinca()"
+          <v-icon class="primary--text" @click="cerrarNuevoMonitoreoRoedorFinca()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -32,9 +33,9 @@
         <!-- Botón para agregar nuevo MonitoreoRoedorFinca -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px"
+          width="300px" large elevation="0"
           color="primary"
-          @click="registrar()"
+          @click="guardarMonitoreoRoedorFinca()"
           >Registrar</v-btn>
       </v-card-actions>
     </v-card>
@@ -45,6 +46,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormMonitoreoRoedorFinca from "@/components/FormMonitoreoRoedorFinca";
+import ServicioMonitoreoRoedorFinca from '../services/ServicioMonitoreoRoedorFinca';
 
 export default {
   name: "DialogNuevoMonitoreoRoedorFinca",
@@ -69,18 +71,55 @@ export default {
       },
     },
 
+    listaMonitoreoRoedorFincaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloMonitoreoRoedorFinca/listaMonitoreoRoedorFincaStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloMonitoreoRoedorFinca/establecerListaMonitoreoRoedorFincaStore", v);
+      },
+    },
+
+    modeloMonitoreoRoedorFincaStore: {
+      get() {
+        return this.$store.getters["moduloMonitoreoRoedorFinca/monitoreoRoedorFinca"];
+      },
+      set(v) {
+        return this.$store.commit("moduloMonitoreoRoedorFinca/nuevoMonitoreoRoedorFinca", v);
+      },
+    },
     // Obtiene es estado de la variable validFormMonitoreoRoedorFinca y el modelo MonitoreoRoedoFinca
     ...mapState("moduloMonitoreoRoedorFinca", ["formMonitoreoRoedorFincaValido", "monitoreoRoedorFinca"]),
   },
 
   methods: {
+
+    // #  MANIPULACIÓN DE DATOS  #
+    async guardarMonitoreoRoedorFinca() { 
+      try {
+          let respuesta = await ServicioMonitoreoRoedorFinca.agregarMonitoreoRoedorFinca(this.modeloMonitoreoRoedorFincaStore);
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaMonitoreoRoedorFinca();
+          this.cerrarNuevoMonitoreoRoedorFinca();
+        } catch (error) {
+          this.$toast.error(error.response.data.message);
+      }
+    },
+
+    // #  MANIPULACIÓN DE DATOS  #
+    async cargarListaMonitoreoRoedorFinca () { 
+      let listaMonitoreoRoedorFinca = [];                                               // Limpiar la 'lista de datos'
+      let respuesta = await ServicioMonitoreoRoedorFinca.obtenerTodosMonitoreoRoedorFinca();  // Obtener respuesta de backend
+      let datosMonitoreoRoedorFinca = await respuesta.data;                                    // Rescatar datos de la respuesta
+      datosMonitoreoRoedorFinca.forEach((MonitoreoRoedorFinca) => {                                  // Guardar cada registro en la 'lista de datos' 
+        listaMonitoreoRoedorFinca.push(MonitoreoRoedorFinca);
+      });
+      this.listaMonitoreoRoedorFincaStore = listaMonitoreoRoedorFinca;
+    },
+
+    ...mapMutations("moduloMonitoreoRoedorFinca", ["establecerListaMonitoreoRoedorFincaStore"]), 
     // Vacia el modelo MonitoreoRoedorFinca
     ...mapMutations("moduloMonitoreoRoedorFinca", ["vaciarMonitoreoRoedorFinca"]),
-
-    // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      //console.log(this.lote);
-    },
 
     cerrarNuevoMonitoreoRoedorFinca() {
       this.dialogNuevoMonitoreoRoedorFinca = !this.dialogNuevoMonitoreoRoedorFinca; // Cierra el dialogNuevoMonitoreoRoedorFinca

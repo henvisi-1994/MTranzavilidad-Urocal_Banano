@@ -23,6 +23,7 @@ module.exports = {
                 responsableacopioid: responsableacopioid
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
          }
 
@@ -63,7 +64,8 @@ module.exports = {
 
         try {
             let rowCount = await collectioncenterModel.deleteCollectioncenter(id);
-            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Centro de acopio no registrado", tipo: "error" });
+            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Centro de acopio no registrado", 
+            tipo: "error" });
             
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar un centro de acopio", tipo: "error" });

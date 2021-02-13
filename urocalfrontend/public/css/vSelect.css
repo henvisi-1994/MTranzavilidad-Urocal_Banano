@@ -1,10 +1,14 @@
 .style-chooser {
-    margin-top: 17px;
+    background-color: #e9e9e9;
+    height: 52px;
+    padding-top: 12px;
+    margin: 0px 8px 17px 8px;
+    border-radius: 4px;
 }
 
 .style-chooser .vs__search::placeholder, .style-chooser .vs__dropdown-toggle, .style-chooser .vs__dropdown-menu, .style-chooser .vs__selected {
     border: none;
-    color: rgb(140, 135, 135);
+    color: rgb(93, 93, 93);
     font-size: 1.07em;
     padding-left: 0px;
 }
@@ -19,15 +23,23 @@
 }
 
 .style-chooser .vs__dropdown-toggle {
-    border-bottom: 1px solid rgb(140, 135, 135);
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
     border-radius: 0px;
 }
 
 @media only screen and (max-width: 599px) {
     .style-chooser .vs__dropdown-toggle {
         border: none;
-        border-bottom: 1px solid rgb(140, 135, 135);
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
         border-radius: 0px;
         margin-bottom: 20px;
     }
 }
+
+/*.custom.v-text-field>.v-input__control>.v-input__slot:before { 
+    border-style: none; 
+} 
+  
+.custom.v-text-field>.v-input__control>.v-input__slot:after { 
+    border-style: none; 
+}*/

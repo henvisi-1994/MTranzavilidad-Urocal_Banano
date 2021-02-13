@@ -1,5 +1,5 @@
 export default class MonitoreoRoedorCentroAcopio {
-    constructor(monitoreoroedorid, monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, centroacopioid) {
+    constructor(monitoreoroedorid, monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, monitoreoroedor) {
         this.monitoreoroedorid = monitoreoroedorid;
         this.monfechatrampeo = monfechatrampeo;
         this.montipotrampa = montipotrampa;
@@ -9,6 +9,9 @@ export default class MonitoreoRoedorCentroAcopio {
         this.monaccionestomadas = monaccionestomadas;
         this.monoperario = monoperario;
         this.moninspector = moninspector;
-        this.centroacopioid = centroacopioid;
+        this.monitoreoroedor = {
+            centroacopioid: monitoreoroedor.centroacopioid,
+            centroacopionombre: monitoreoroedor.centroacopionombre
+        }
     }
 }

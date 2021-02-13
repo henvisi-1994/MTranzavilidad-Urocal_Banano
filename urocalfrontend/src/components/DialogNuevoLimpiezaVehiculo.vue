@@ -1,25 +1,25 @@
 <template>
   <v-dialog v-model="dialogNuevoLimpiezaVehiculo" scrollable max-width="500px" transition="dialog-transition" :fullscreen="$vuetify.breakpoint.xs ? true : false">
     <v-card tile>
-      <v-card-title class="justify-center primary white--text">
+      <v-card-title class="justify-center white primary--text">
         <v-spacer></v-spacer>
         <h5>Nuevo Limpieza Vehiculo</h5>
         <v-spacer></v-spacer>
-        <v-btn icon><v-icon class="white--text" @click="cerrarDialogo()">mdi-close</v-icon></v-btn>
+        <v-btn icon><v-icon class="primary--text" @click="cerrarDialogo()">mdi-close</v-icon></v-btn>
       </v-card-title>
-      <v-divider></v-divider>
+      
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            <v-text-field label="Producto utilizado"></v-text-field>
-            <v-text-field label="Escobillon"></v-text-field>
-            <v-text-field label="Escoba"></v-text-field>
-            <v-text-field label="Agua"></v-text-field>
-            <v-text-field label="Aspiradora"></v-text-field>
-            <v-text-field label="Vehiculoid"></v-text-field>
+            <v-text-field class="custom px-2" filled dense label="Producto utilizado"></v-text-field>
+            <v-text-field class="custom px-2" filled dense label="Escobillon"></v-text-field>
+            <v-text-field class="custom px-2" filled dense label="Escoba"></v-text-field>
+            <v-text-field class="custom px-2" filled dense label="Agua"></v-text-field>
+            <v-text-field class="custom px-2" filled dense label="Aspiradora"></v-text-field>
+            <v-text-field class="custom px-2" filled dense label="Vehiculoid"></v-text-field>
             <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
               <template v-slot:activator="{ on, attrs }">
-                <v-text-field
+                <v-text-field class="custom px-2" filled dense
                   label="Fecha" 
                   v-model="limpieza_vehiculo.limvehfecha" 
                   :rules="[reglas.campoVacio(limpieza_vehiculo.limvehfecha)]"
@@ -36,7 +36,7 @@
       <v-card-actions>
         <v-col>
         <!--<v-btn color="error" block @click="dialogNuevoLimpiezaVehiculo = !dialogNuevoLimpiezaVehiculo" >Cancelar</v-btn>-->
-        <v-btn color="primary" large block class="mt-2">Guardar</v-btn>
+        <v-btn color="primary" large elevation="0" width="300px" block class="mt-2">Guardar</v-btn>
         </v-col>
       </v-card-actions>
     </v-card>

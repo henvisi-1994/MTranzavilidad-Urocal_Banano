@@ -2,58 +2,82 @@
   <v-form ref="formSuelo" v-model="formSueloValido">
     <v-container>
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-text-field
             label="Clase"
             v-model="suelo.sueclase"
-            :rules="[reglas.campoVacio(suelo.medtopografia)]"
+            class="custom px-2"
+            filled
+            dense
+            :rules="[reglas.campoVacio(suelo.sueclase)]"
+            :disabled="bloquearCamposFormSuelo"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-text-field
             label="Color"
             v-model="suelo.suecolor"
+            class="custom px-2"
+            filled
+            dense
             :rules="[reglas.campoVacio(suelo.suecolor)]"
+            :disabled="bloquearCamposFormSuelo"
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-text-field
             label="Textura"
             v-model="suelo.suetextura"
+            class="custom px-2"
+            filled
+            dense
             :rules="[reglas.campoVacio(suelo.suetextura)]"
+            :disabled="bloquearCamposFormSuelo"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-text-field
             label="Ph"
             v-model="suelo.sueph"
+            class="custom px-2"
+            filled
+            dense
             :rules="[reglas.campoVacio(suelo.sueph)]"
+            :disabled="bloquearCamposFormSuelo"
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-text-field
             label="Tipo de análisis"
             v-model="suelo.suetipoanalisis"
+            class="custom px-2"
+            filled
+            dense
             :rules="[reglas.campoVacio(suelo.suetipoanalisis)]"
+            :disabled="bloquearCamposFormSuelo"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-text-field
             label="Resultados"
             v-model="suelo.sueresultados"
+            class="custom px-2"
+            filled
+            dense
             :rules="[reglas.campoVacio(suelo.sueresultados)]"
+            :disabled="bloquearCamposFormSuelo"
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -64,21 +88,26 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="suelo.suetomamuestra"
+                class="custom px-2"
+                filled
+                dense
                 label="Fecha toma muestra"
                 readonly
+                :rules="[reglas.campoVacio(suelo.suetomamuestras)]"
                 v-bind="attrs"
                 v-on="on"
+                :disabled="bloquearCamposFormSuelo"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="suelo.suetomamuestra"
+              v-model="suelo.suetomamuestras"
               @input="menuMostrarCalendario = false"
               :show-current="fechaActual"
               locale="es-419"
             ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="5"> </v-col>
+        <v-col cols="12" md="6"> </v-col>
       </v-row>
     </v-container>
   </v-form>
@@ -99,7 +128,14 @@ export default {
 
   computed: {
     // Obtiene el modelo suelo
-    ...mapState("moduloSuelo", ["suelo"]),
+    suelo: {
+      get() {
+        return this.$store.getters["moduloSuelo/suelo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloSuelo/agregarSuelo", v);
+      },
+    },
 
     // Obtiene la variable que indica si el formulario es valido
     formSueloValido: {
@@ -111,10 +147,32 @@ export default {
       },
     },
 
+    // Obtiene la variable bloquearCamposFormSuelo
+    bloquearCamposFormSuelo: {
+      get() {
+        return this.$store.getters["moduloSuelo/bloquearCamposFormSuelo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloSuelo/cambiarBloquearCamposFormSuelo", v);
+      },
+    },
+
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
 
   methods: {},
+
+  mounted() {
+    /*this.suelo = {
+      sueclase: "Clase X",
+      suecolor: "Color X",
+      suetextura: "Textura X",
+      sueph: "PH X",
+      suetipoanalisis: "Analisis X",
+      suetomamuestras: "2020-12-17",
+      sueresultados: "Resultados X"
+    };*/
+  },
 };
 </script>

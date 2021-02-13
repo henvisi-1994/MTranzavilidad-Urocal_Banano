@@ -4,7 +4,9 @@ export default {
     namespaced: true,
 
     state: {
-        limpiezaHerramienta: new LimpiezaHerramienta('', '', '', '', '', '', '', '', '', ''), // Modelo LimpiezaHerramienta
+        listaLimpiezaHerramientaStore: [],
+        listaCultivoStore: [],
+        limpiezaHerramienta: new LimpiezaHerramienta('', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo LimpiezaHerramienta
         formLimpiezaHerramientaValido: false, // Indica si el formulario de LimpiezaHerramienta es valido
     },
 
@@ -16,16 +18,31 @@ export default {
 
         // Vacia el modelo LimpiezaHerramienta
         vaciarLimpiezaHerramienta(state) {
-            state.limpiezaHerramienta = new LimpiezaHerramienta('', '', '', '', '', '', '', '', '', '')
+            state.limpiezaHerramienta = new LimpiezaHerramienta('', '', '', '', '', '', '', '', '', '', '', '', '')
         },
 
         // Cambia  el estado del Formulario LimpiezaHerramienta
         cambiarEstadoValidoFormLimpiezaHerramienta(state, nuevoEstado) {
             state.formLimpiezaHerramientaValido = nuevoEstado
         },
+
+        establecerListaCultivoStore(state, newState) {
+            state.listaCultivoStore = newState;
+        },
+
+        limpiarListaCultivoStore(state) {
+            state.listaCultivoStore = [];
+        },
+
+        establecerListaLimpiezaHerramientaStore(state, newState) {
+            state.listaLimpiezaHerramientaStore = newState;
+        },
     },
 
     getters: {
         formLimpiezaHerramientaValido: (state) => state.formLimpiezaHerramientaValido, // Devuelve la variable validarFormularioLimpiezaHerramienta
+        limpiezaHerramienta: (state) => state.limpiezaHerramienta,
+        listaLimpiezaHerramientaStore: (state) => state.listaLimpiezaHerramientaStore,
+        listaCultivoStore: (state) => state.listaCultivoStore,
     },
 }

@@ -3,7 +3,8 @@
 // *Pendiente: Añadir capa de validación a todos los controladores
 
 const rodentFarmMonitoringModel = require('./rodent-farm-monitoring.model');
-
+const rodentFarmMonitoringDto = require('./rodent-farm-monitoring.dto');
+const validation = require('../../utils/validations');
 
 module.exports = {
 
@@ -12,24 +13,34 @@ module.exports = {
 
         // Añadir capa de validación
 
-        const { monitoreoroedorid, fincaid } = req.body;
+        const { monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, fincaid } = req.body;
 
-        try {
-            await rodentFarmMonitoringModel.createRodentFarmMonitoring({
-                monitoreoroedorid: monitoreoroedorid,
-                fincaid: fincaid
-            });
-        } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
-         }
-
-        return res.status(201).send({ message: "Registro exitoso" });
+        if(validation.emptyField(monfechatrampeo) || validation.emptyField(montipotrampa) || validation.emptyField(monnumerotrampas) || validation.emptyField(monceboutilizado) || validation.emptyField(monroedoresmuertos) || 
+            validation.emptyField(monaccionestomadas) || validation.emptyField(monoperario) || validation.emptyField(moninspector) || validation.emptyField(fincaid)){
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }else{
+            try {
+                let result =  await rodentFarmMonitoringModel.createRodentFarmMonitoring({
+                    monfechatrampeo: monfechatrampeo,
+                    montipotrampa: montipotrampa,
+                    monnumerotrampas: monnumerotrampas,
+                    monceboutilizado: monceboutilizado,
+                    monroedoresmuertos: monroedoresmuertos,
+                    monaccionestomadas: monaccionestomadas,
+                    monoperario: monoperario,
+                    moninspector: moninspector,
+                    fincaid: fincaid})
+                return res.status(201).send({ message: 'Monitoreo roedor registrado', monitoreoroedorid: result.monitoreoroedorid });
+            } catch (error) {
+                return res.status(500).send({ message: "Error al registrar monitoreo roedor" });
+            }
+        }
     },
 
     // Obtener todos los registros de monitoreo roedor finca
     async getRodentFarmMonitorings(req, res) {
         const rodentFarmMonitoring = await rodentFarmMonitoringModel.getRodentFarmMonitorings()
-        return res.status(200).send(rodentFarmMonitoring); // <--
+        return res.status(200).send(rodentFarmMonitoringDto.multipleMonitoreoRoedor(rodentFarmMonitoring)); //<--
     },
 
     //  Obtener registro de monitoreo roedor finca por id
@@ -42,15 +53,24 @@ module.exports = {
     // Actualiza informacion de un registro de monitoreo roedor finca
     async updateRodentFarmMonitoring(req, res) {
         const { id } = req.params;
-        const { monitoreoroedorid, fincaid } = req.body;
-
-        const rowCount = await rodentFarmMonitoringModel.updateRodentFarmMonitoring(id, {
-            monitoreoroedorid: monitoreoroedorid,
-            fincaid: fincaid
-        });
+        const { monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector, monitoreoroedor } = req.body;
         
-        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
-
+        if(validation.emptyField(monfechatrampeo) ||validation.emptyField(montipotrampa) ||validation.emptyField(monnumerotrampas) ||validation.emptyField(monceboutilizado) ||validation.emptyField(monroedoresmuertos) || 
+            validation.emptyField(monaccionestomadas) ||validation.emptyField(monoperario) ||validation.emptyField(moninspector) ||validation.emptyField(monitoreoroedor.fincaid)){
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }else{
+            const rowCount = await rodentFarmMonitoringModel.updateRodentFarmMonitoring(id, {
+                monfechatrampeo: monfechatrampeo,
+                montipotrampa: montipotrampa,
+                monnumerotrampas: monnumerotrampas,
+                monceboutilizado: monceboutilizado,
+                monroedoresmuertos: monroedoresmuertos,
+                monaccionestomadas: monaccionestomadas,
+                monoperario: monoperario,
+                moninspector: moninspector,
+                fincaid: monitoreoroedor.fincaid});
+            return rowCount == 1 ? res.status(200).send({ message: "Monitoreo roedor actualizado" }) : res.status(400).send({ message: "Error al actualizar monitoreo roedor" });
+        }
     },
 
     // Elimina un registro de monitoreo roedor finca
@@ -59,10 +79,17 @@ module.exports = {
 
         try {
             let rowCount = await rodentFarmMonitoringModel.deleteRodentFarmMonitoring(id);
-            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "No registrado", tipo: "error" });
-            
+            if (rowCount == 1) {
+                return res.status(200).send({ message: "Eliminado exitosamente" });
+            } else {
+                return res.status(400).send({ message: "Monitoreo roedor no registrado" });
+            }             
         } catch (err) {
-            return res.json({ message: "Error al tratar de eliminar registro", tipo: "error" });
+            if (err.code == '23503') {
+                res.status(400).send({ message: "Monitoreo roedor  a eliminar tiene relaciones con otros registros en la base de datos" });
+            } else {
+                return res.status(400).send({ message: "Error al eliminar Monitoreo roedor" });
+            }
         }
     }
 }
