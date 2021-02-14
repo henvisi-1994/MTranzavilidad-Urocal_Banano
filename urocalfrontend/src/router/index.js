@@ -1,38 +1,105 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+<<<<<<< HEAD
+=======
 import Login from '../views/BaseLogin.vue'
 import BaseMalezaControl from '../views/BaseMalezaControl.vue'
 import BaseMonitoreoRoedorCentroAcopio from '../views/BaseMonitoreoRoedorCentroAcopio.vue'
 import BaseVehiculo from '../views/BaseVehiculo.vue'
+import BaseReporteEmbarque from '../views/BaseReporteEmbarque.vue'
+>>>>>>> parent of 478b03b... Recuperacion de Archivos
 
 Vue.use(VueRouter)
 
 const routes = [
+  // ------------------------------------- AUTENTICACION -------------------------------------
   {
     path: '/',
     name: 'Login',
-    component: Login
+    component: () => import('@/views/BaseLogin.vue'),
   },
-  // ------------- ADMINISTRADOR
+  // -----------------------------------------------------------------------------------------
+
+  // ------------------------------------- ADMINISTRADOR -------------------------------------
+  // ------------------------------ ADMINISTRADOR - CONFIGURACION ----------------------------
   {
-    path: '/usuario',
+    path: '/configuracion/usuario',
     name: 'BaseUsuarioPersona',
     component: () => import('@/views/BaseUsuarioPersona.vue'),
   },
   {
-    path: '/operario',
+    path: '/configuracion/asociacion',
+    name: 'BaseAsociacion',
+    component: () => import('@/views/BaseAsociacion.vue'),
+  },
+  {
+    path: '/configuracion/finca',
+    name: 'BaseFinca',
+    component: () => import('@/views/BaseFinca.vue'),
+  },
+  {
+    path: '/configuracion/centroacopio',
+    name: 'BaseCentroacopio',
+    component: () => import('@/views/BaseCentroacopio.vue'),
+  },
+  {
+    path: '/configuracion/conductor',
+    name: 'BaseConductorPersona',
+    component: () => import('@/views/BaseConductorPersona.vue'),
+  },
+  {
+    path: '/configuracion/inspector',
+    name: 'BaseInspectorPersona',
+    component: () => import('@/views/BaseInspectorPersona.vue'),
+  },
+  {
+    path: '/configuracion/exportador',
+    name: 'BaseExportadorPersona',
+    component: () => import('@/views/BaseExportadorPersona.vue'),
+  },
+  {
+    path: '/configuracion/operario',
     name: 'BaseOperarioPersona',
     component: () => import('@/views/BaseOperarioPersona.vue'),
   },
   {
-    path: '/productor',
+    path: '/configuracion/productor',
     name: 'BaseProductorPersona',
     component: () => import('@/views/BaseProductorPersona.vue'),
   },
-  // ------------- PRODUCTOR - BANANO -------------
-  // ------------- PRODUCTOR - CACAO --------------  
   {
-    path: '/cacao/siembra',    //OJO, Siembra tambien se encuentra en Banano.
+    path: '/configuracion/respcentroacopio',
+    name: 'BaseRespacopio',
+    component: () => import('@/views/BaseRespacopio.vue'),
+  },
+  {
+    path: '/configuracion/pais',
+    name: 'BasePais',
+    component: () => import('@/views/BasePais.vue'),
+  },
+  {
+    path: '/configuracion/provincia',
+    name: 'BaseProvincia',
+    component: () => import('@/views/BaseProvincia.vue'),
+  },
+  {
+    path: '/configuracion/ciudad',
+    name: 'BaseCiudad',
+    component: () => import('@/views/BaseCiudad.vue'),
+  },
+  {
+    path: '/configuracion/sitio',
+    name: 'BaseSitio',
+    component: () => import('@/views/BaseSitio.vue'),
+  },
+  // -----------------------------------------------------------------------------------------
+
+  // ------------------------------------- PRODUCTOR -----------------------------------------
+  // -------------------------------- PRODUCTOR - BANANO ------------------------------------- 
+
+  // -------------------------------- PRODUCTOR - CACAO -------------------------------------- 
+  {
+    path: '/cacao/siembra',
     name: 'BaseSiembra',
     component: () => import('@/views/BaseSiembra.vue'),
   },
@@ -52,9 +119,9 @@ const routes = [
     component: () => import('@/views/BaseFertilizacion.vue')
   },
   {
-    path: '/cacao/maleza',    //OJO, controlMaleza tambien se encuentra en Cacao.
+    path: '/cacao/maleza',
     name: 'BaseMalezaControl',
-    component: BaseMalezaControl
+    component: () => import('@/views/BaseMalezaControl.vue')
   },
   {
     path: '/cacao/fitosanitario',
@@ -66,7 +133,17 @@ const routes = [
     name: 'BaseRiego',
     component: () => import('@/views/BaseRiego.vue')
   },
-  // ------------- PRODUCTOR - FINCA -------------- 
+  {
+    path: '/cacao/cosecha',
+    name: 'BaseCosecha',
+    component: () => import('@/views/BaseCosecha.vue'),
+  },
+  {
+    path: '/cacao/remision',
+    name: 'BaseGuiaRemision',
+    component: () => import('@/views/BaseGuiaRemision.vue'),
+  },
+  // -------------------------------- PRODUCTOR - FINCA ------------------------------------  
   {
     path: '/finca/lote',
     name: 'BaseLote',
@@ -78,27 +155,86 @@ const routes = [
     component: () => import('@/views/BaseMonitoreoRoedorFinca.vue'),
   },
   {
-    path: '/finca/limpiezavehiculo', // OJO esta tambien esta en centro de acopio
-    name: 'BaseLimpiezaVehiculo',
+    path: '/finca/limpiezavehiculo',
+    name: 'BaseFincaLimpiezaVehiculo',
     component: () => import('@/views/BaseLimpiezaVehiculo.vue'),
   },
-  // ------------- CENTRO ACOPIO - BANANO --------------------
-  // ------------- CENTRO ACOPIO - CACAO ---------------------
-  // ------------- CENTRO ACOPIO - CENTRO ACOPIO ------------- 
+  // ---------------------------------------------------------------------------------------
+
+  // -------------------------------- CENTRO ACOPIO ----------------------------------------
+  // --------------------------- CENTRO ACOPIO - BANANO ------------------------------------
+  // --------------------------- CENTRO ACOPIO - CACAO -------------------------------------
+  {
+    path: '/centroacopio/compra',
+    name: 'BaseCompra',
+    component: () => import('@/views/BaseCompra.vue'),
+  },
+  {
+    path: '/centroacopio/almacenamiento',
+    name: 'BaseAlmacenamiento',
+    component: () => import('@/views/BaseAlmacenamiento.vue'),
+  },
+  {
+    path: '/centroacopio/despacho',
+    name: 'BaseDespacho',
+    component: () => import('@/views/BaseDespacho.vue')
+  },
+  // --------------------------- CENTRO ACOPIO - CENTRO ACOPIO -----------------------------
   {
     path: '/centroacopio/monitoreoroedor',
     name: 'MonitoreoRoedorCentroAcopio',
-    component: BaseMonitoreoRoedorCentroAcopio
+    component: () => import('@/views/BaseMonitoreoRoedorCentroAcopio.vue'),
   },
+<<<<<<< HEAD
+=======
   // ------------- EXPORTADOR - BANANO --------------------
+
+  {
+    path: '/ReporteEmbarque',
+    name: 'BaseReporteEmbarque',
+    component: BaseReporteEmbarque
+  },
+
   // ------------- EXPORTADOR - CACAO ---------------------
 
   // ---------------------
+>>>>>>> parent of 478b03b... Recuperacion de Archivos
   {
-    path: '/vehiculo',
+    path: '/centroacopio/vehiculo',
     name: 'BaseVehiculo',
-    component: BaseVehiculo
+    component: () => import('@/views/BaseVehiculo.vue'),
   },
+  {
+    path: '/centroacopio/limpiezavehiculo',
+    name: 'BaseCentroAcopioLimpiezaVehiculo',
+    component: () => import('@/views/BaseLimpiezaVehiculo.vue'),
+  },
+  {
+    path: '/centroacopio/limpiezacentroacopio',
+    name: 'BaseLimpiezaCentroAcopio',
+    component: () => import('@/views/BaseLimpiezaCentroAcopio.vue')
+  },
+  {
+    path: '/centroacopio/insumosEgresos',
+    name: 'BaseEgresoInsumo',
+    component: () => import('@/views/BaseEgresoInsumo.vue'),
+  },
+  {
+    path: '/centroacopio/insumosIngresos',
+    name: 'BaseIngresoInsumo',
+    component: () => import('@/views/BaseIngresoInsumo.vue'),
+  },
+  // -----------------------------------------------------------------------------------------
+
+  // ------------------------------------- EXPORTADOR ----------------------------------------
+  // -------------------------------- EXPORTADOR - BANANO ------------------------------------
+  // -------------------------------- EXPORTADOR - CACAO -------------------------------------
+  {
+    path: '/cacao/registroEnvio',
+    name: 'BaseRegistroEnvio',
+    component: () => import('@/views/BaseRegistroEnvio.vue'),
+  },
+  // -----------------------------------------------------------------------------------------
 ]
 
 const router = new VueRouter({

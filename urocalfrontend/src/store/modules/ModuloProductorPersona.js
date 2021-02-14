@@ -1,10 +1,12 @@
-import ProductorPersona from '@/models/ModeloProductorPersona';
+import ModeloProductorPersona from '../../models/ModeloProductorPersona';
 
 export default {
     namespaced: true,
 
     state: {
-        productor_persona: new ProductorPersona('', '', '', '', '', '', '', '', '', '', '', ''), // Modelo lote
+        listaCiudadStore: [],
+        listaProductorPersonaStore: [],
+        modeloProductorPersonaStore: new ModeloProductorPersona('', '', '', '', '', '', '', '', '', '', '', ''), 
         formProductorPersonaValido: false, // Indica si el formulario de lote es valido
     },
 
@@ -13,22 +15,37 @@ export default {
     },
 
     mutations: {
-        // Coloca un nuevo lot
-        setLot(state, nuevaPersona) {
-            state.productor_persona = nuevaPersona
+
+        // SETTERS
+        establecerModeloProductorPersonaStore(state, nuevaPersona) {
+            state.modeloProductorPersonaStore = nuevaPersona;
         },
 
-        // Vacia el modelo Persona
-        vaciarProductorPersona(state) {
-            state.productor_persona = new ProductorPersona('', '', '', '', '', '', '', '', '', '', '', '')
+        establecerListaCiudadStore(state, newState) {
+            state.listaCiudadStore = newState;
         },
 
+        establecerListaProductorPersonaStore(state, newState) {
+            state.listaProductorPersonaStore = newState;
+        },
+
+
+        // LIMPIADORES
+        vaciarModeloProductorPersonaStore(state) {
+            state.modeloProductorPersonaStore = new ModeloProductorPersona('', '', '', '', '', '', '', '', '', '', '', '');
+        },
+
+
+        // VALIDATORS
         cambiarEstadoFormProductorPersonaValido(state, nuevoEstado) {
             state.formProductorPersonaValido = nuevoEstado
         },
     },
 
     getters: {
-        formProductorPersonaValido: (state) => state.formProductorPersonaValido, // Devuelve la variable formProductorValido
+        formProductorPersonaValido: (state) => state.formProductorPersonaValido, // Devuelve la variable formUsuarioValido
+        modeloProductorPersonaStore: (state) => state.modeloProductorPersonaStore,
+        listaCiudadStore: (state) => state.listaCiudadStore,
+        listaProductorPersonaStore: (state) => state.listaProductorPersonaStore,
     },
 }

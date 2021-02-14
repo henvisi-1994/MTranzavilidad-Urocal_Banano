@@ -2,6 +2,7 @@
 // No saben cómo funciona la base de datos
 // Realiza llamadas a la base de datos
 //const { updatePasswd } = require('./collectioncenter.controller');
+const { createCollectioncenter } = require('./collectioncenter.dao');
 const collectioncenterDao = require('./collectioncenter.dao');
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
         return collectioncenterDao.getCollectioncenter(id);
     },
 
-    async createUser(user){
+    async createCollectioncenter(user){
         return collectioncenterDao.createCollectioncenter(user);
     },
 
@@ -25,7 +26,7 @@ module.exports = {
         return collectioncenterDao.updateCollectioncenter(id, user);
     },
 
-    async deleteUser(id){
+    async deleteCollectioncenter(id){
         return collectioncenterDao.deleteCollectioncenter(id);
     },
 }

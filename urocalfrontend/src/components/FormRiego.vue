@@ -6,7 +6,7 @@
         justify-md="space-around"
         :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
       >
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="riego.fincaid"
             placeholder="Finca"
@@ -24,7 +24,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="riego.loteid"
             placeholder="Lote"
@@ -45,7 +45,7 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="riego.cultivoid"
             placeholder="Cultivo"
@@ -63,8 +63,8 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Superficie"
             v-model="riego.riesuperficie"
             :rules="[reglas.campoVacio(riego.riesuperficie)]"
@@ -73,15 +73,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Módulos"
             v-model="riego.riemodulos"
             :rules="[reglas.campoVacio(riego.riemodulos)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Semana"
             v-model="riego.riesemana"
             :rules="[reglas.campoVacio(riego.riesemana)]"
@@ -90,15 +90,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Año"
             v-model="riego.rieanio"
             :rules="[reglas.campoVacio(riego.rieanio)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Horas regadas"
             v-model="riego.riehorasregadas"
             :rules="[reglas.campoVacio(riego.riehorasregadas)]"
@@ -107,15 +107,15 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Porcentaje de eficiencia"
             v-model="riego.rieporcentajeeficiencia"
             :rules="[reglas.campoVacio(riego.rieporcentajeeficiencia)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             placeholder="Volumen de agua utilizado"
             v-model="riego.rievolumenutilizado"
             :rules="[reglas.campoVacio(riego.rievolumenutilizado)]"

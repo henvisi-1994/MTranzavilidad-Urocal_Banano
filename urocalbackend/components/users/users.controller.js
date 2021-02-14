@@ -3,6 +3,8 @@
 // *Pendiente: Añadir capa de validación a todos los controladores
 const nodemailer = require("nodemailer");
 const usersModel = require('./users.model');
+const ciudadModel = require('../ciudad/ciudad.model');
+const usersDto = require('./users.dto');
 const config = require('config');
 
 
@@ -12,8 +14,8 @@ module.exports = {
     async createUser(req, res) {
 
         // Añadir capa de validación
-
-        const { percedula, perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimientoid, usutipo } = req.body;
+        console.log(req.body);
+        const { percedula, perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimiento, usutipo } = req.body;
 
         try {
             await usersModel.createUser({
@@ -26,10 +28,11 @@ module.exports = {
                 peremail: peremail,
                 pergenero: pergenero,
                 perfechanacimiento: perfechanacimiento,
-                ciudadnacimientoid: ciudadnacimientoid,
+                ciudadnacimientoid: ciudadnacimiento.ciudadid,
                 usutipo: usutipo
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 
@@ -39,23 +42,25 @@ module.exports = {
 
     // Obtener todos los usuarios
     async getUsers(req, res) {
-        const users = await usersModel.getUsers()
-        //return res.status(200).send(userDto.multiple(users, req.user)); //<--
-        return res.status(200).send(users); // <--
+        const rowsUsuarioPersonas = await usersModel.getUsers();         // Todas las personas
+        return res.status(200).send(usersDto.multipleUsuarioPersona(rowsUsuarioPersonas)); //<--
     },
 
     //  Obtener usuario por id
     async getPersona(req, res) {
         const { id } = req.params;
-        const rows = await usersModel.getPersona(id);
+        const rows = await usersModel.getPersona(id);           // Un usuario_persona
+        
+        //return rowsUsuarioPersona != null ? res.status(200).send(usersDto.unicoUsuarioPersona(rowsUsuarioPersona, rowsCiudades)) : res.status(404).send({ message: "Usuario no encontrado" });
         return rows != null ? res.status(200).send(rows) : res.status(404).send({ message: "Usuario no encontrado" });
     },
 
     // Actualiza informacion de un usuario
     async updateUser(req, res) {
         const { id } = req.params;
-        const { perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimientoid } = req.body;
+        const { perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimiento, usutipo, usuactivo } = req.body;
 
+        console.log("Este es el ID: " + id);
         const rowCount = await usersModel.updateUser(id, {
             perapellidos: perapellidos,
             pernombres: pernombres,
@@ -65,7 +70,9 @@ module.exports = {
             peremail: peremail,
             pergenero: pergenero,
             perfechanacimiento: perfechanacimiento,
-            ciudadnacimientoid: ciudadnacimientoid
+            ciudadnacimientoid: ciudadnacimiento.ciudadid,
+            usutipo: usutipo,
+            usuactivo: usuactivo
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
@@ -88,8 +95,8 @@ module.exports = {
         }
     },
 
-    // Elimina un usuario
-    async deleteUser(req, res) {
+    // Esto está funcional pero no se lo implementará para los usuarios
+    /*async deleteUser(req, res) {
         const { id } = req.params;
 
         try {
@@ -99,7 +106,7 @@ module.exports = {
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar usuario", tipo: "error" });
         }
-    },
+    },*/
 
 
 

@@ -6,7 +6,7 @@ const indexRouter = require('./routes/index');
 //const {} = require('./middlewares');
 
 const app = express();
- 
+
 app.use(cors({ origin: '*', optionsSuccessStatus: 200 }));                              
 app.use(express.urlencoded({ extended: true }));         
 app.use(express.json());  

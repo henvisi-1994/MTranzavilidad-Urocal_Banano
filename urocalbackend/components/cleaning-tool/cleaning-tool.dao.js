@@ -19,15 +19,17 @@ module.exports = {
     },
 
     async getCleaningTools() {
-        let query = `SELECT * FROM limpiezaherramienta`;
+        let query = `SELECT lim.limpiezaherramientaid, TO_CHAR(lim.limfecha, 'YYYY-MM-DD') as limfecha, lim.limproducto, lim.limequipos, lim.limmaquinaria,
+        lim.limherramientas, lim.limcajones, lim.limtendales, lim.limoperario, lim.cultivoid, c.productoid, p.pronombre FROM limpiezaherramienta lim, cultivo c, producto p
+         WHERE c.cultivoid = lim.cultivoid AND c.productoid = p.productoid`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene la tabla limpieza herramienta
     },
 
-    async getCleaningTool(id) {
-        let query = `SELECT * FROM limpiezaherramienta WHERE limpiezaherramientaid = ${id}`;
+    async getProduct() {
+        let query = `SELECT  p.pronombre, c.cultivoid, c.productoid FROM producto p, cultivo c WHERE c.productoid = p.productoid`;
         let result = await pool.query(query);
-        return result.rows[0]; // Devuelve el json del usuario encontrado
+        return result.rows; // Devuelve el json del usuario encontrado
     },
 
     async deleteCleaningTool(id) {

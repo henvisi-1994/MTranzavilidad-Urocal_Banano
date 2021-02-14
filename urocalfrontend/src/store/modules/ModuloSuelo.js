@@ -6,6 +6,7 @@ export default {
     state: {
         suelo: new Suelo('', '', '', '', '', '', '', '', ''), // Modelo Suelo
         formSueloValido: false, // Indica si el formulario de suelo es valido
+        bloquearCamposFormSuelo: false, // Determina si se bloquean los campos del formulario
     },
 
     actions: {
@@ -27,9 +28,16 @@ export default {
         cambiarEstadoFormSueloValido(state, nuevoEstado) {
             state.formSueloValido = nuevoEstado;
         },
+
+        // Cambia el estado de la variable bloquearCamposFormSuelo
+        cambiarBloquearCamposFormSuelo(state, nuevoEstado) {
+            state.bloquearCamposFormSuelo = nuevoEstado
+        },
     },
 
     getters: {
-        formSueloValido: (state) => state.formSueloValido, // Devuelve la variable formSueloValido
+        formSueloValido: (state) => state.formSueloValido,                      // Devuelve la variable formSueloValido
+        suelo: (state) => state.suelo,                                          // Devuelve el modelo suelo
+        bloquearCamposFormSuelo: (state) => state.bloquearCamposFormSuelo,      // Devuelve bloquearCamposFormSuelo
     },
 }
