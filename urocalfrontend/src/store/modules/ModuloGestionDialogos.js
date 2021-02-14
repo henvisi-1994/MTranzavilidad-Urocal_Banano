@@ -49,7 +49,12 @@ export default {
         // Vehiculo
         dialogNuevoVehiculo: false,                         // Indica si se abre o cierra el dialogNuevoVehiculo
         dialogEditarVehiculo: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
+<<<<<<< HEAD
         // Poda
+=======
+        dialogNuevoReporteEmbarque: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
+        dialogEditarReporteEmbarque: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
+>>>>>>> parent of 478b03b... Recuperacion de Archivos
         dialogNuevoPoda: false,                             // Indica si se abre o cierra el dialogNuevoPoda
         dialogMostrarPoda: false,                           // Indica si se abre o cierra el dialogMostrarPoda
         // Fertilizante
@@ -255,6 +260,14 @@ export default {
             state.dialogEditarVehiculo = newState;
         },
 
+        /*  REPORTE EMBARQUE*/
+        toggleDialogNuevoReporteEmbarque(state, newState) {
+            state.dialogNuevoReporteEmbarque = newState;
+        },
+
+        toggleDialogEditarReporteEmbarque(state, newState) {
+            state.dialogEditarReporteEmbarque = newState;
+        },
         /* Poda */
         toggleDialogNuevoPoda(state, newState) {
             state.dialogNuevoPoda = newState;
@@ -521,7 +534,12 @@ export default {
         // Vehiculo
         dialogNuevoVehiculo: (state) => state.dialogNuevoVehiculo,                                              // Devuelve la variable dialogNuevoVehiculo
         dialogEditarVehiculo: (state) => state.dialogEditarVehiculo,                                            // Devuelve la variable dialogEditarVehiculo
+<<<<<<< HEAD
         // Poda
+=======
+        dialogNuevoReporteEmbarque: (state) => state.dialogNuevoReporteEmbarque,                                              // Devuelve la variable dialogNuevoVehiculo
+        dialogEditarReporteEmbarque: (state) => state.dialogEditarReporteEmbarque,                                            // Devuelve la variable dialogEditarVehiculo
+>>>>>>> parent of 478b03b... Recuperacion de Archivos
         dialogNuevoPoda: (state) => state.dialogNuevoPoda,                                                      // Devuelve la variable dialogNuevoPoda
         dialogMostrarPoda: (state) => state.dialogMostrarPoda,                                                  // Devuelve la variable dialogMostrarPoda
         // CentroAcopio
