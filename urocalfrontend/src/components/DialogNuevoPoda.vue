@@ -9,13 +9,13 @@
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="primary white--text">
+      <v-card-title class="white primary--text">
         <h5>
           Registrar poda
         </h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogNuevoPoda()"
+          <v-icon class="primary--text" @click="cerrarDialogNuevoPoda()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -32,7 +32,7 @@
         <!-- Botón para agregar nuevo Poda -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px"
+          width="300px" large elevation="0"
           color="primary"
           @click="registrar()"
           >Registrar</v-btn>

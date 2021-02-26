@@ -1,5 +1,5 @@
-export default class Persona {
-    constructor(personaid, percedula, perapellidos, pernombres, perdireccion, pertelefono, perwhatsapp, peremail, pergenero, perfechanacimiento, ciudadnacimientoid) {
+export default class ModeloUsuarioPersona {
+    constructor(personaid, percedula, perapellidos, pernombres, perdireccion, pertelefono, perwhatsapp, peremail, pergenero, perfechanacimiento, ciudadnacimiento, usutipo, usuactivo) {
         this.personaid = personaid;
         this.percedula = percedula;
         this.perapellidos = perapellidos;
@@ -10,6 +10,11 @@ export default class Persona {
         this.peremail = peremail;
         this.pergenero = pergenero;
         this.perfechanacimiento = perfechanacimiento;
-        this.ciudadnacimientoid = ciudadnacimientoid;
+        this.usutipo = usutipo;
+        this.usuactivo = usuactivo;
+        this.ciudadnacimiento = {
+            ciudadid: ciudadnacimiento.ciudadid,
+            ciudadnombre: ciudadnacimiento.ciudadnombre  
+        } 
     }
 }

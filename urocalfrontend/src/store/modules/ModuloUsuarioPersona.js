@@ -1,10 +1,12 @@
-import UsuarioPersona from '@/models/ModeloUsuarioPersona';
+import ModeloUsuarioPersona from '../../models/ModeloUsuarioPersona';
 
 export default {
     namespaced: true,
 
     state: {
-        usuario_persona: new UsuarioPersona('', '', '', '', '', '', '', '', '', '', ''), // Modelo lote
+        listaCiudadStore: [],
+        listaUsuarioPersonaStore: [],
+        modeloUsuarioPersonaStore: new ModeloUsuarioPersona('', '', '', '', '', '', '', '', '', '', '', '', ''), 
         formUsuarioPersonaValido: false, // Indica si el formulario de lote es valido
     },
 
@@ -13,16 +15,32 @@ export default {
     },
 
     mutations: {
-        // Coloca un nuevo lot
-        setLot(state, nuevaPersona) {
-            state.usuario_persona = nuevaPersona
+
+        // SETTERS
+        establecerModeloUsuarioPersonaStore(state, nuevaPersona) {
+            state.modeloUsuarioPersonaStore = nuevaPersona;
         },
 
-        // Vacia el modelo Persona
-        vaciarUsuarioPersona(state) {
-            state.usuario_persona = new UsuarioPersona('', '', '', '', '', '', '', '', '', '', '')
+        establecerListaCiudadStore(state, newState) {
+            state.listaCiudadStore = newState;
         },
 
+        establecerListaUsuarioPersonaStore(state, newState) {
+            state.listaUsuarioPersonaStore = newState;
+        },
+
+
+        // CLEANERS
+        vaciarModeloUsuarioPersona(state) {
+            state.modeloUsuarioPersonaStore = new ModeloUsuarioPersona('', '', '', '', '', '', '', '', '', '', '', '', '')
+        },
+
+        limpiarListaCiudadStore(state) {
+            state.listaCiudadStore = [];
+        },
+
+
+        // VALIDATORS
         cambiarEstadoFormUsuarioPersonaValido(state, nuevoEstado) {
             state.formUsuarioPersonaValido = nuevoEstado
         },
@@ -30,5 +48,8 @@ export default {
 
     getters: {
         formUsuarioPersonaValido: (state) => state.formUsuarioPersonaValido, // Devuelve la variable formUsuarioValido
+        modeloUsuarioPersonaStore: (state) => state.modeloUsuarioPersonaStore,
+        listaCiudadStore: (state) => state.listaCiudadStore,
+        listaUsuarioPersonaStore: (state) => state.listaUsuarioPersonaStore,
     },
 }

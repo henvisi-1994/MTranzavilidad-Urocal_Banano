@@ -1,42 +1,50 @@
 <template>
   <v-container fluid>
-    <!-- Dialog para registrar nuevo Operario -->
-    <DialogNuevoOperarioPersona ref="DialogNuevoOperarioPersona"></DialogNuevoOperarioPersona>
+    <!-- Dialog para registrar nuevo usuario -->
+    <DialogNuevoOperarioPersona ref="DialogNuevoOperario"></DialogNuevoOperarioPersona>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0">
-      <v-card-title class="py-0">
-        <v-row no-gutters>
-          <v-col cols="12" md="4">
-            <v-text-field v-model="buscarOperario" append-icon="mdi-magnify" label="Buscar" ></v-text-field>
+    <v-card elevation="0" class="mt-5">
+      <v-card-title class="py-2">
+
+        <v-row no-gutters justify-md="space-between">
+          <v-col cols="12" md="6">
+            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
           </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field class="custom" filled v-model="buscarOperarioPersona" append-icon="mdi-magnify" label="Buscar" dense></v-text-field>
+          </v-col>          
         </v-row>
+
       </v-card-title>
 
-      <v-card-text>
-        <v-data-table :height="tablaResponsiva()" :headers="cabeceraTablaOperarios" sort-by="id_lote" :items="listaOperarios" :search="buscarOperario" class="elevation-1" dense>
+      <v-card-text elevation="0">
+        <v-data-table :headers="cabeceraTablaUsuarios" :items="listaOperarioPersonaStore" :search="buscarOperarioPersona" sort-by="id_lote" :height="tablaResponsiva()" class="elevation-1" >
           <template v-slot:top>
             <DialogEditarOperarioPersona ref="DialogEditarOperarioPersona" ></DialogEditarOperarioPersona>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="cargarDialogEditarOperarioPersona()">mdi-eye</v-icon>
+            <v-icon color="primary" @click="cargarDialogEditarOperarioPersona(item)">mdi-eye</v-icon>
           </template>
         </v-data-table>
       </v-card-text>
 
       <v-card-actions class="justify-center">
-        <v-btn large :block="$vuetify.breakpoint.xs ? true : false" width="200px" color="primary" @click="cargarDialogNuevoOperarioPersona()" >Nuevo Operario</v-btn>
+        <v-btn elevation="0" large :block="$vuetify.breakpoint.xs ? true : false" width="300px" color="primary" @click="cargarDialogNuevoOperarioPersona()" >Nuevo</v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 
-import DialogNuevoOperarioPersona from "../components/DialogNuevoOperarioPersona";
-import DialogEditarOperarioPersona from "../components/DialogEditarOperarioPersona";
+import { mapMutations, mapState } from "vuex";                                          // Trabajar con la tienda de Vue (Store)
+import DialogNuevoOperarioPersona from "../components/DialogNuevoOperarioPersona";    // Dialogo para agregar usuario
+import DialogEditarOperarioPersona from "../components/DialogEditarOperarioPersona";  // Dialogo para editar usuario
+import ServicioOperarioPersona from "../services/ServicioOperarioPersona";            // Interactuar con el Backend
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+
 
 export default {
   name: "BaseOperarioPersona",
@@ -46,10 +54,20 @@ export default {
     DialogEditarOperarioPersona,
   },
 
+  created() {
+    this.$store.commit("colocarLayout", "LayoutAdministrador");
+  },
+
+  mounted() {
+    this.cargarListaOperarioPersona();
+    this.cargarListaCiudad();
+  },
+
   data() {
     return {
-      buscarOperario: "",        // Guarda el texto de búsqueda
-      cabeceraTablaOperarios: [  // Detalla las cabeceras de la tabla (Los campos más relevantes)
+      nombre: "Gestión de Operarios",
+      buscarOperarioPersona: "",   // Guarda el texto de búsqueda
+      cabeceraTablaUsuarios: [      // Cabeceras de la tabla (Los campos más relevantes)
         {text: "Cedula",value: "percedula", align: "center", class: "grey lighten-3", },
         {text: "Apellidos",value: "perapellidos", align: "center", sortable: false, class: "grey lighten-3",},
         {text: "Nombres",value: "pernombres", sortable: false, align: "center", class: "grey lighten-3",},
@@ -58,19 +76,37 @@ export default {
         {text: "Whatsapp",value: "perwhatsapp", sortable: false, align: "center", class: "grey lighten-3",},
         {text: "Email",value: "peremail", sortable: false, align: "center", class: "grey lighten-3",},
         {text: "Detalles",value: "actions", sortable: false, align: "center", class: "grey lighten-3",},
-      ],
-      listaOperarios: [          // Almacena una lista de Lotes, la misma se muestra en tabla
-        { percedula: '0704411223', perapellidos: 'Keys' , pernombres: 'Alicia', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'},
-        { percedula: '0704411224', perapellidos: 'Smith' , pernombres: 'Beth', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'},
-        { percedula: '0704411225', perapellidos: 'Bouvier' , pernombres: 'Marge', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'},
-        { percedula: '0704411223', perapellidos: 'Simpson' , pernombres: 'Homero', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'}
-      ], 
+      ],                  
     };
   },
 
+
   computed: {
-    /* Obtiene y establece el estado de la variable dialogNuevoOperarioPersona
-    que muestra u oculta el dialogo*/
+
+    // ###########################
+    // #  MANIPULACIÓN DE DATOS  #
+    // ###########################
+    listaOperarioPersonaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloOperarioPersona/listaOperarioPersonaStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloOperarioPersona/establecerListaOperarioPersonaStore", v);
+      },
+    },
+
+    listaCiudadStore: {
+      get() {
+        return this.$store.getters["moduloOperarioPersona/listaCiudadStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloOperarioPersona/establecerListaCiudadStore", v);
+      },
+    },
+
+    // ##############
+    // #  DIALOGOS  #
+    // ##############
     dialogNuevoOperarioPersona: {
       get() {
         return this.$store.getters["gestionDialogos/dialogNuevoOperarioPersona"];
@@ -80,8 +116,6 @@ export default {
       },
     },
 
-    /* Obtiene y modifica el estado de la variable dialogTabMostrarLote
-    que muestra u oculta el dialogo*/
     dialogEditarOperarioPersona: {
       get() {
         return this.$store.getters["gestionDialogos/dialogEditarOperarioPersona"];
@@ -90,69 +124,67 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogEditarOperarioPersona", v);
       },
     },
+
+    // #############
+    // #  MODELOS  #
+    // #############
+    modeloOperarioPersonaStore: {
+      get() {
+        return this.$store.getters["moduloOperarioPersona/modeloOperarioPersonaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloOperarioPersona/establecerModeloOperarioPersonaStore", v);
+      },
+    },
   },
 
   methods: {
-    tablaResponsiva() {
-      // Ajusta el tamaño de la tabla para pantallas pequeñas (No modificar)
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          if (
-            this.$vuetify.breakpoint.height >= 500 &&
-            this.$vuetify.breakpoint.height <= 550
-          ) {
-            return "41vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 551 &&
-            this.$vuetify.breakpoint.height <= 599
-          ) {
-            return "44vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 600 &&
-            this.$vuetify.breakpoint.height <= 650
-          ) {
-            return "51vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 651 &&
-            this.$vuetify.breakpoint.height <= 699
-          ) {
-            return "53vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 700 &&
-            this.$vuetify.breakpoint.height <= 799
-          ) {
-            return "57vh";
-          }
-          if (this.$vuetify.breakpoint.height >= 800) {
-            return "61vh";
-          }
-        default:
-          return "auto";
-      }
+
+    // ###########################
+    // #  MANIPULACIÓN DE DATOS  #
+    // ###########################
+    async cargarListaOperarioPersona () { 
+      let listaOperarioPersona = [];                                               // Limpiar la 'lista de datos'
+      let respuesta = await ServicioOperarioPersona.obtenerTodosOperarioPersona();  // Obtener respuesta de backend
+      let datosUsuario = await respuesta.data;                                    // Rescatar datos de la respuesta
+      datosUsuario.forEach((dd) => {                                  // Guardar cada registro en la 'lista de datos' 
+        listaOperarioPersona.push(dd);
+      });
+      this.listaOperarioPersonaStore = listaOperarioPersona;
     },
 
-    // Vacia el modelo OperarioPersona
-    ...mapMutations("moduloOperarioPersona", ["vaciarOperarioPersona"]),
+    async cargarListaCiudad () { 
+      let listaCiudad = [];                                                       // Limpiar la 'lista de ciudades'
+      let respuesta = await ServicioOperarioPersona.obtenerTodosCiudad();          // Obtener respuesta de backend
+      let datosCiudad = await respuesta.data;                                     // Rescatar datos de la respuesta
+      datosCiudad.forEach((ciudad) => {                                           // Guardar cada registro en la 'lista de datos' 
+        listaCiudad.push(ciudad);
+      });
+      this.listaCiudadStore = listaCiudad;
+    },
 
-    // Dialogo Nuevo Operario
+    // ##############
+    // #  DIALOGOS  #
+    // ##############
     cargarDialogNuevoOperarioPersona() {
-      this.dialogNuevoOperarioPersona = !this.dialogNuevoOperarioPersona; // Abre el DialogNuevoOperario
-      this.vaciarOperarioPersona(); 
+      this.dialogNuevoOperarioPersona = !this.dialogNuevoOperarioPersona;  
+      this.vaciarModeloOperarioPersonaStore(); 
+      //this.$refs.DialogNuevoOperario.$refs.formNuevoOperario.resetValidation();     
     },
 
-    // Dialogo Editar Operario
-    cargarDialogEditarOperarioPersona() {
+    cargarDialogEditarOperarioPersona(item) {
       this.dialogEditarOperarioPersona = !this.dialogEditarOperarioPersona;
-      this.vaciarOperarioPersona(); 
-    },
-  },
+      this.vaciarModeloOperarioPersonaStore(); 
+      this.modeloOperarioPersonaStore = item;
+    }, 
 
-  created() {
-    this.$store.commit("colocarLayout", "LayoutProductor");
+    // ###################
+    // #  TIENDA DE VUE  #
+    // ###################
+    ...mapMutations("moduloOperarioPersona", ["establecerListaCiudadStore"]),  
+    ...mapMutations("moduloOperarioPersona", ["vaciarModeloOperarioPersonaStore"]),     
   },
+  
+  mixins: [autenticacionMixin, myMixin],
 };
 </script>

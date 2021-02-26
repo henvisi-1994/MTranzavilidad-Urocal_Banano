@@ -11,8 +11,9 @@ import LayoutLogin from "./components/layouts/LayoutLogin";
 import LayoutProductor from "./components/layouts/LayoutProductor";
 import LayoutExportador from "./components/layouts/LayoutExportador";
 import LayoutCentroAcopio from "./components/layouts/LayoutCentroAcopio";
+import LayoutAdministrador from "./components/layouts/LayoutAdministrador";
 
-import '../public/css/vSelect.css'
+import "../public/css/vSelect.css";
 
 import { mapState } from "vuex";
 
@@ -24,6 +25,7 @@ export default {
     LayoutProductor,
     LayoutExportador,
     LayoutCentroAcopio,
+    LayoutAdministrador,
   },
 
   // Cuando cambie la variable, renderiza la nueva vista
@@ -39,5 +41,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.centrar-vertical {
+  margin: auto !important;
 }
 </style>

@@ -1,20 +1,15 @@
 <template>
   <v-form>
-    <v-container>
+    <v-container :class="$vuetify.breakpoint.xs ? '' : 'pl-10'">
       <!-- Presenta de forma dinamica checkboxes por cada producto -->
       <v-layout wrap>
-        <v-flex
-          v-for="producto in lista_productos"
-          :key="producto.id"
-          md4
-          xs6
-          class="center-col-vh"
-        >
+        <v-flex v-for="producto in listaProductos" :key="producto.productoid" md4 xs6>
           <v-checkbox
             v-model="listaIDsProductos"
             input-value="true"
-            :value="producto.id"
-            :label="producto.nombre"
+            :value="producto.productoid"
+            :label="producto.pronombre"
+            :disabled="bloquearCamposFormCultivo"
           ></v-checkbox>
         </v-flex>
       </v-layout>
@@ -23,34 +18,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import servicioProducto from "../services/ServicioProducto";
+
 export default {
   name: "FormCultivo",
 
   data() {
     return {
-      lista_productos: [
-        {
-          id: 1,
-          nombre: "Producto 1",
-        },
-        {
-          id: 2,
-          nombre: "Producto 2",
-        },
-        {
-          id: 3,
-          nombre: "Producto 3",
-        },
-        {
-          id: 4,
-          nombre: "Producto 4",
-        },
-        {
-          id: 5,
-          nombre: "Producto 5",
-        },
-      ],
+      // Almacena listaProductos
+      listaProductos: [],
     };
   },
 
@@ -64,8 +40,29 @@ export default {
         return this.$store.commit("moduloProducto/agregarListaIDsProductos", v);
       },
     },
+
+    // Obtiene la variable bloquearCamposFormCultivo
+    bloquearCamposFormCultivo: {
+      get() {
+        return this.$store.getters["moduloCultivo/bloquearCamposFormCultivo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCultivo/cambiarBloquearCamposFormCultivo", v);
+      },
+    },
   },
 
-  methods: {},
+  methods: {
+    // // Llena la listaProductos con datos del servidor backend
+    async cargarListaProductos() {
+      let resultado = await servicioProducto.obtenerTodosProducto();
+      this.listaProductos = resultado.data;
+    },
+  },
+
+  mounted() {
+    // Llama al metodo cargarListaProductos
+    this.cargarListaProductos();
+  },
 };
 </script>

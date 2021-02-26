@@ -24,7 +24,7 @@ import BarraLateral from "../TheBarraLateral"; // Intancia de TheNavigationDrawe
 import MiniBarraLateral from "../TheMiniBarraLateral"; // Intancia de TheMiniNavigationDrawer
 
 export default {
-  name: "LayoutProductor",
+  name: "LayoutExportador",
 
   components: {
     BarraNavegacion,

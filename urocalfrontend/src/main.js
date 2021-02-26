@@ -3,33 +3,33 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-// Notificaciones
-import VueNotifications from 'vue-notifications'
-import iziToast from 'izitoast'
-import 'izitoast/dist/css/iziToast.min.css'
 
-Vue.config.productionTip = false
-
-// Configuracion notificaciones
-iziToast.settings({
-  close: false,
-  displayMode: 1
-})
-
-function toast({ title, message, type, timeout, cb, mode }) {
-  if (type === VueNotifications.types.warn) type = 'warning'
-  if (mode == 'override') timeout = 0;
-  return iziToast[type]({ title, message, timeout })
-}
+// notificaciones
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
 
 const options = {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
-}
+  // You can set your default options here
+  position: "bottom-right",
+  timeout: 3000,
+  closeOnClick: false,
+  pauseOnFocusLoss: false,
+  pauseOnHover: false,
+  draggable: false,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: false,
+  icon: true,
+  rtl: false,
+  transition: 'Vue-Toastification__fade'
+};
 
-Vue.use(VueNotifications, options)
+
+Vue.use(Toast, options);
+
+Vue.config.productionTip = false
 
 new Vue({
   router,

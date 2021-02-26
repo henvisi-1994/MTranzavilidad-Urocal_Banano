@@ -6,6 +6,7 @@ export default {
     state: {
         medAmbiente: new MedioAmbiente('', '', '', '', '', '', '', '', ''), // Modelo MedioAmbiente
         formMedioAmbienteValido: false, // Indica si el formulario de medio ambiente es valido
+        bloquearCamposFormMedioAmbiente: false, // Determina si se bloquean los campos del formulario
     },
 
     actions: {
@@ -13,12 +14,11 @@ export default {
     },
 
     mutations: {
-        // Agrega un nuevo medio ambiente
+        // medaMBIENTE
         agregarMedioAmbiente(state, nuevoMedioAmbiente) {
             state.medAmbiente = nuevoMedioAmbiente
         },
 
-        // Vacia el modelo medio ambiente
         vaciarMedioAmbiente(state) {
             state.medAmbiente = new MedioAmbiente('', '', '', '', '', '', '', '', '')
         },
@@ -27,9 +27,16 @@ export default {
         cambiarEstadoFormMedioAmbienteValido(state, nuevoEstado) {
             state.formMedioAmbienteValido = nuevoEstado
         },
+
+        // Cambia el estado de la variable bloquearCamposFormMedioAmbiente
+        cambiarBloquearCamposFormMedioAmbiente(state, nuevoEstado) {
+            state.bloquearCamposFormMedioAmbiente = nuevoEstado
+        },
     },
 
     getters: {
-        formMedioAmbienteValido: (state) => state.formMedioAmbienteValido, // Devuelve la variable formMedioAmbienteValido
+        formMedioAmbienteValido: (state) => state.formMedioAmbienteValido,                      // Devuelve la variable formMedioAmbienteValido
+        medAmbiente: (state) => state.medAmbiente,                                              // Devuelve el modelo medAmbiente
+        bloquearCamposFormMedioAmbiente: (state) => state.bloquearCamposFormMedioAmbiente,      // Devuelve bloquearCamposFormMedioAmbiente
     },
 }

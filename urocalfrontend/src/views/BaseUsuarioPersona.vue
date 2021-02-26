@@ -1,42 +1,78 @@
 <template>
   <v-container fluid>
     <!-- Dialog para registrar nuevo usuario -->
-    <DialogNuevoUsuarioPersona ref="DialogNuevoUsuarioPersona"></DialogNuevoUsuarioPersona>
+    <DialogNuevoUsuarioPersona
+      ref="DialogNuevoUsuarioPersona"
+    ></DialogNuevoUsuarioPersona>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0">
-      <v-card-title class="py-0">
-        <v-row no-gutters>
-          <v-col cols="12" md="4">
-            <v-text-field v-model="buscarUsuario" append-icon="mdi-magnify" label="Buscar" ></v-text-field>
+    <v-card elevation="0" class="mt-5">
+      <v-card-title class="py-2">
+        <v-row no-gutters justify-md="space-between">
+          <v-col cols="12" md="6">
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              class="custom"
+              filled
+              v-model="buscarUsuarioPersona"
+              append-icon="mdi-magnify"
+              label="Buscar"
+              dense
+            ></v-text-field>
           </v-col>
         </v-row>
       </v-card-title>
 
       <v-card-text>
-        <v-data-table :height="tablaResponsiva()" :headers="cabeceraTablaUsuarios" sort-by="id_lote" :items="listaUsuarios" :search="buscarUsuario" class="elevation-1" dense>
+        <v-data-table
+          :headers="cabeceraTablaUsuarios"
+          :items="listaUsuarioPersonaStore"
+          :search="buscarUsuarioPersona"
+          sort-by="id_lote"
+          :height="tablaResponsiva()"
+          class="elevation-1"
+        >
           <template v-slot:top>
-            <DialogEditarUsuarioPersona ref="DialogEditarUsuarioPersona" ></DialogEditarUsuarioPersona>
+            <DialogEditarUsuarioPersona
+              ref="DialogEditarUsuarioPersona"
+            ></DialogEditarUsuarioPersona>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="cargarDialogEditarUsuarioPersona()">mdi-eye</v-icon>
+            <v-icon color="primary" @click="cargarDialogEditarUsuarioPersona(item)"
+              >mdi-eye</v-icon
+            >
           </template>
         </v-data-table>
       </v-card-text>
 
       <v-card-actions class="justify-center">
-        <v-btn large :block="$vuetify.breakpoint.xs ? true : false" width="200px" color="primary" @click="cargarDialogNuevoUsuarioPersona()" >Nuevo</v-btn>
+        <v-btn
+          elevation="0"
+          large
+          :block="$vuetify.breakpoint.xs ? true : false"
+          width="300px"
+          color="primary"
+          @click="cargarDialogNuevoUsuarioPersona()"
+          >Nuevo</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
-import DialogNuevoUsuarioPersona from "../components/DialogNuevoUsuarioPersona";
-import DialogEditarUsuarioPersona from "../components/DialogEditarUsuarioPersona";
+import { mapMutations, mapState } from "vuex"; // Trabajar con la tienda de Vue (Store)
+import DialogNuevoUsuarioPersona from "../components/DialogNuevoUsuarioPersona"; // Dialogo para agregar usuario
+import DialogEditarUsuarioPersona from "../components/DialogEditarUsuarioPersona"; // Dialogo para editar usuario
+import ServicioUsuarioPersona from "../services/ServicioUsuarioPersona"; // Interactuar con el Backend
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
   name: "BaseUsuarioPersona",
@@ -46,31 +82,107 @@ export default {
     DialogEditarUsuarioPersona,
   },
 
+  created() {
+    this.$store.commit("colocarLayout", "LayoutAdministrador");
+  },
+
+  mounted() {
+    this.cargarListaUsuarioPersona();
+    this.cargarListaCiudad();
+  },
+
   data() {
     return {
-      buscarUsuario: "",        // Guarda el texto de búsqueda
-      cabeceraTablaUsuarios: [  // Detalla las cabeceras de la tabla (Los campos más relevantes)
-        {text: "Cedula",value: "percedula", align: "center", class: "grey lighten-3", },
-        {text: "Apellidos",value: "perapellidos", align: "center", sortable: false, class: "grey lighten-3",},
-        {text: "Nombres",value: "pernombres", sortable: false, align: "center", class: "grey lighten-3",},
-        {text: "Dirección",value: "perdireccion", sortable: false, align: "center", class: "grey lighten-3",},
-        {text: "Teléfono",value: "pertelefono", sortable: false, align: "center", class: "grey lighten-3",},
-        {text: "Whatsapp",value: "perwhatsapp", sortable: false, align: "center", class: "grey lighten-3",},
-        {text: "Email",value: "peremail", sortable: false, align: "center", class: "grey lighten-3",},
-        {text: "Detalles",value: "actions", sortable: false, align: "center", class: "grey lighten-3",},
+      nombre: "Gestión de Usuarios",
+      buscarUsuarioPersona: "", // Guarda el texto de búsqueda
+      cabeceraTablaUsuarios: [
+        // Cabeceras de la tabla (Los campos más relevantes)
+        { text: "Cedula", value: "percedula", align: "center", class: "grey lighten-3" },
+        {
+          text: "Apellidos",
+          value: "perapellidos",
+          align: "center",
+          sortable: false,
+          class: "grey lighten-3",
+        },
+        {
+          text: "Nombres",
+          value: "pernombres",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Dirección",
+          value: "perdireccion",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Teléfono",
+          value: "pertelefono",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Whatsapp",
+          value: "perwhatsapp",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Email",
+          value: "peremail",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Detalles",
+          value: "actions",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
       ],
-      listaUsuarios: [          // Almacena una lista de Lotes, la misma se muestra en tabla
-        { percedula: '0704411223', perapellidos: 'Keys' , pernombres: 'Alicia', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'},
-        { percedula: '0704411224', perapellidos: 'Smith' , pernombres: 'Beth', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'},
-        { percedula: '0704411225', perapellidos: 'Bouvier' , pernombres: 'Marge', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'},
-        { percedula: '0704411223', perapellidos: 'Simpson' , pernombres: 'Homero', perdireccion: 'Av. Kays', pertelefono: '08975421', perwhatsapp: '0897654321', peremail: 'alicia@gmail.com', pergenero: 'Femenino', perfechanacimiento: '20/04/1993', ciudadnacimiento: 'Machala'}
-      ], 
     };
   },
 
   computed: {
-    /* Obtiene y establece el estado de la variable dialogNuevoUsuarioPersona
-    que muestra u oculta el dialogo*/
+    // ###########################
+    // #  MANIPULACIÓN DE DATOS  #
+    // ###########################
+    listaUsuarioPersonaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloUsuarioPersona/listaUsuarioPersonaStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloUsuarioPersona/establecerListaUsuarioPersonaStore",
+          v
+        );
+      },
+    },
+
+    listaCiudadStore: {
+      get() {
+        return this.$store.getters["moduloUsuarioPersona/listaCiudadStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloUsuarioPersona/establecerListaCiudadStore", v);
+      },
+    },
+
+    // ##############
+    // #  DIALOGOS  #
+    // ##############
     dialogNuevoUsuarioPersona: {
       get() {
         return this.$store.getters["gestionDialogos/dialogNuevoUsuarioPersona"];
@@ -80,8 +192,6 @@ export default {
       },
     },
 
-    /* Obtiene y modifica el estado de la variable dialogTabMostrarLote
-    que muestra u oculta el dialogo*/
     dialogEditarUsuarioPersona: {
       get() {
         return this.$store.getters["gestionDialogos/dialogEditarUsuarioPersona"];
@@ -90,69 +200,74 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogEditarUsuarioPersona", v);
       },
     },
+
+    // #############
+    // #  MODELOS  #
+    // #############
+    modeloUsuarioPersonaStore: {
+      get() {
+        return this.$store.getters["moduloUsuarioPersona/modeloUsuarioPersonaStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloUsuarioPersona/establecerModeloUsuarioPersonaStore",
+          v
+        );
+      },
+    },
   },
 
   methods: {
-    tablaResponsiva() {
-      // Ajusta el tamaño de la tabla para pantallas pequeñas (No modificar)
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          if (
-            this.$vuetify.breakpoint.height >= 500 &&
-            this.$vuetify.breakpoint.height <= 550
-          ) {
-            return "41vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 551 &&
-            this.$vuetify.breakpoint.height <= 599
-          ) {
-            return "44vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 600 &&
-            this.$vuetify.breakpoint.height <= 650
-          ) {
-            return "51vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 651 &&
-            this.$vuetify.breakpoint.height <= 699
-          ) {
-            return "53vh";
-          }
-          if (
-            this.$vuetify.breakpoint.height >= 700 &&
-            this.$vuetify.breakpoint.height <= 799
-          ) {
-            return "57vh";
-          }
-          if (this.$vuetify.breakpoint.height >= 800) {
-            return "61vh";
-          }
-        default:
-          return "auto";
-      }
+    // ###########################
+    // #  MANIPULACIÓN DE DATOS  #
+    // ###########################
+    async cargarListaUsuarioPersona() {
+      let listaUsuarioPersona = []; // Limpiar la 'lista de datos'
+      let respuesta = await ServicioUsuarioPersona.obtenerTodosUsuarioPersona(); // Obtener respuesta de backend
+      let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
+      datosUsuario.forEach((usuariopersona) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaUsuarioPersona.push(usuariopersona);
+      });
+      this.listaUsuarioPersonaStore = listaUsuarioPersona;
+      //console.log(this.listaUsuarioPersonaStore);
     },
 
-    // Vacia el modelo UsuarioPersona
-    ...mapMutations("moduloUsuarioPersona", ["vaciarUsuarioPersona"]),
+    async cargarListaCiudad() {
+      let listaCiudad = [];
+      let respuesta = await ServicioUsuarioPersona.obtenerTodosCiudad(); // Obtener respuesta de backend
+      let datosCiudad = await respuesta.data; // Rescatar datos de la respuesta
+      datosCiudad.forEach((ciudad) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaCiudad.push(ciudad);
+      });
+      this.listaCiudadStore = listaCiudad;
+      //console.log(this.listaCiudadStore);
+    },
 
-    // Dialogo Nuevo usuario
+    // ##############
+    // #  DIALOGOS  #
+    // ##############
     cargarDialogNuevoUsuarioPersona() {
-      this.dialogNuevoUsuarioPersona = !this.dialogNuevoUsuarioPersona; // Abre el DialogNuevoUsuario
-      this.vaciarUsuarioPersona(); 
+      this.dialogNuevoUsuarioPersona = !this.dialogNuevoUsuarioPersona;
+      this.vaciarModeloUsuarioPersona();
     },
 
-    // Dialogo Editar usuario
-    cargarDialogEditarUsuarioPersona() {
+    cargarDialogEditarUsuarioPersona(item) {
       this.dialogEditarUsuarioPersona = !this.dialogEditarUsuarioPersona;
-      this.vaciarUsuarioPersona(); 
+      this.vaciarModeloUsuarioPersona();
+      const indiceEditar = this.listaUsuarioPersonaStore.indexOf(item);
+      this.modeloUsuarioPersonaStore = item;
     },
+
+    // ###################
+    // #  TIENDA DE VUE  #
+    // ###################
+    //...mapMutations("moduloUsuarioPersona", ["vaciarModeloUsuarioPersona"]),          // Vacia el modelo UsuarioPersona
+    ...mapMutations("moduloUsuarioPersona", ["establecerListaCiudadStore"]),
+    ...mapMutations("moduloUsuarioPersona", ["vaciarModeloUsuarioPersona"]), // Vacia el modelo modeloUsuarioPersonaStore
   },
 
-  created() {
-    this.$store.commit("colocarLayout", "LayoutProductor");
-  },
+  mixins: [autenticacionMixin, myMixin],
 };
 </script>

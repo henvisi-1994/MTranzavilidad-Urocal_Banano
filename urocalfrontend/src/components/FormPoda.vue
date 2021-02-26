@@ -2,7 +2,7 @@
   <v-form ref="formPoda" v-model="formPodaValido">
     <v-container>
       <v-row no-gutters justify-md="space-around" :class="$vuetify.breakpoint.xs ? '' : 'mb-5'">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="poda.fincaid"
             placeholder="Finca"
@@ -20,7 +20,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-select
             v-model="poda.loteid"
             placeholder="Lote"
@@ -40,8 +40,8 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
           <v-select
             v-model="poda.cultivoid"
             placeholder="Cultivo"
@@ -59,7 +59,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -68,7 +68,7 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field
+              <v-text-field class="custom px-2" filled dense
                 label="Fecha de poda"
                 v-model="poda.podfecha"
                 :rules="[reglas.campoVacio(poda.podfecha)]"
@@ -87,8 +87,8 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
           <v-select
             v-model="poda.podtipo"
             placeholder="Tipo de poda"
@@ -106,8 +106,8 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Hectáreas"
             v-model="poda.podhectareas"
             :rules="[reglas.campoVacio(poda.podhectareas)]"
@@ -115,16 +115,16 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+      <v-row no-gutters>
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Cantidad de plantas"
             v-model="poda.podcantidadplantas"
             :rules="[reglas.campoVacio(poda.podcantidadplantas)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled 
             placeholder="Herramienta"
             v-model="poda.podherramienta"
             :rules="[reglas.campoVacio(poda.podherramienta)]"

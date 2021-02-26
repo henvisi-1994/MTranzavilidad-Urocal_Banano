@@ -1,5 +1,5 @@
-export default class ProductorPersona {
-    constructor(personaid, percedula, perapellidos, pernombres, perdireccion, pertelefono, perwhatsapp, peremail, pergenero, perfechanacimiento, ciudadnacimientoid, productoridioma) {
+export default class ModeloProductorPersona {
+    constructor(personaid, percedula, perapellidos, pernombres, perdireccion, pertelefono, perwhatsapp, peremail, pergenero, perfechanacimiento, productoridioma, ciudadnacimiento) {
         this.personaid = personaid;
         this.percedula = percedula;
         this.perapellidos = perapellidos;
@@ -10,7 +10,10 @@ export default class ProductorPersona {
         this.peremail = peremail;
         this.pergenero = pergenero;
         this.perfechanacimiento = perfechanacimiento;
-        this.ciudadnacimientoid = ciudadnacimientoid;
         this.productoridioma = productoridioma;
+        this.ciudadnacimiento = {
+            ciudadid: ciudadnacimiento.ciudadid,
+            ciudadnombre: ciudadnacimiento.ciudadnombre  
+        } 
     }
 }

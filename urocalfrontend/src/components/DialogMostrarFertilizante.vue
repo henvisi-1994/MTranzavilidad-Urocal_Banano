@@ -9,17 +9,17 @@
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="primary white--text">
+      <v-card-title class="white primary--text">
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text">mdi-pencil</v-icon>
+          <v-icon class="primary--text">mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text">mdi-trash-can</v-icon>
+          <v-icon class="primary--text">mdi-trash-can</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogMostrarFertilizante()"
+          <v-icon class="primary--text" @click="cerrarDialogMostrarFertilizante()"
             >mdi-close</v-icon
           >
         </v-btn>

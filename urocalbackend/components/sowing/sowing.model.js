@@ -9,8 +9,13 @@ module.exports = {
         return sowingDao.getSowings();
     },
 
-    async getSowings(page, limit){
+    /*async getSowings(page, limit){
         return sowingDao.getSowings(page, limit);
+    },*/
+
+    //SELECT PARA DETALLES
+    async getDatosDetalleSowing(){
+        return sowingDao.getDatosDetalleSowing();
     },
 
     async getSowing(id){
@@ -25,6 +30,7 @@ module.exports = {
         return sowingDao.updateSowing(id, sowing);
     },
 
+    // DELETE: Elimina un registro
     async deleteSowing(id){
         return sowingDao.deleteSowing(id);
     },
