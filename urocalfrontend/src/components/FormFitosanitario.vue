@@ -6,9 +6,9 @@
         justify-md="space-around"
         :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
       >
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fitosanitario.fincaid"
+            v-model="modeloFitosanitarioStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="fincanombre"
@@ -24,9 +24,9 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fitosanitario.loteid"
+            v-model="modeloFitosanitarioStore.loteid"
             placeholder="Lote"
             class="style-chooser"
             label="lotenombre"
@@ -44,10 +44,10 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters >
-        <v-col cols="12" md="6">
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fitosanitario.cultivoid"
+            v-model="modeloFitosanitarioStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
             label="cultivonombre"
@@ -63,17 +63,17 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field  class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Ciclo"
-            v-model="fitosanitario.fitciclo"
-            :rules="[reglas.campoVacio(fitosanitario.fitciclo)]"
+            v-model="modeloFitosanitarioStore.fitciclo"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitciclo)]"
           ></v-text-field>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -82,111 +82,111 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field class="custom px-2" filled 
+              <v-text-field
                 label="Fecha"
-                v-model="fitosanitario.fitfecha"
-                :rules="[reglas.campoVacio(fitosanitario.fitfecha)]"
+                v-model="modeloFitosanitarioStore.fitfecha"
+                :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitfecha)]"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="fitosanitario.fitfecha"
+              v-model="modeloFitosanitarioStore.fitfecha"
               @input="menuMostrarCalendario = false"
               :show-current="fechaActual"
               locale="es-419"
             ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Nombre comercial"
-            v-model="fitosanitario.fitnombrecomercial"
-            :rules="[reglas.campoVacio(fitosanitario.fitnombrecomercial)]"
+            v-model="modeloFitosanitarioStore.fitnombrecomercial"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitnombrecomercial)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
-      <v-row no-gutters >
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Ingrediente activo"
-            v-model="fitosanitario.fitingredienteactivo"
-            :rules="[reglas.campoVacio(fitosanitario.fitingredienteactivo)]"
+            v-model="modeloFitosanitarioStore.fitingredienteactivo"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitingredienteactivo)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Autorización Técnica"
-            v-model="fitosanitario.fitautorizaciontecnica"
-            :rules="[reglas.campoVacio(fitosanitario.fitautorizaciontecnica)]"
+            v-model="modeloFitosanitarioStore.fitautorizaciontecnica"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitautorizaciontecnica)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Nombre común"
-            v-model="fitosanitario.fitnombrecomun"
-            :rules="[reglas.campoVacio(fitosanitario.fitnombrecomun)]"
+            v-model="modeloFitosanitarioStore.fitnombrecomun"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitnombrecomun)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Dosis"
-            v-model="fitosanitario.fitdosis"
-            :rules="[reglas.campoVacio(fitosanitario.fitdosis)]"
+            v-model="modeloFitosanitarioStore.fitdosis"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitdosis)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Cantidad total (Kg)"
-            v-model="fitosanitario.fitcantidadtotal"
-            :rules="[reglas.campoVacio(fitosanitario.fitcantidadtotal)]"
+            v-model="modeloFitosanitarioStore.fitcantidadtotal"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitcantidadtotal)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Área aplicada"
-            v-model="fitosanitario.fitareaaplicda"
-            :rules="[reglas.campoVacio(fitosanitario.fitareaaplicda)]"
+            v-model="modeloFitosanitarioStore.fitareaaplicda"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitareaaplicda)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Equipo de aplicación"
-            v-model="fitosanitario.fitequipoaplicacion"
-            :rules="[reglas.campoVacio(fitosanitario.fitequipoaplicacion)]"
+            v-model="modeloFitosanitarioStore.fitequipoaplicacion"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitequipoaplicacion)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Método de aplicación"
-            v-model="fitosanitario.fitmetodo"
-            :rules="[reglas.campoVacio(fitosanitario.fitmetodo)]"
+            v-model="modeloFitosanitarioStore.fitmetodo"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitmetodo)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Plazo de seguridad"
-            v-model="fitosanitario.fitplazoseguridad"
-            :rules="[reglas.campoVacio(fitosanitario.fitplazoseguridad)]"
+            v-model="modeloFitosanitarioStore.fitplazoseguridad"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitplazoseguridad)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fitosanitario.fitoperario"
+            v-model="modeloFitosanitarioStore.fitoperario"
             placeholder="Operario"
             class="style-chooser"
             label="operarionombre"
@@ -284,8 +284,17 @@ export default {
   },
 
   computed: {
-    // Obtiene el modelo fitosanitario
-    ...mapState("moduloFitosanitario", ["fitosanitario"]),
+    // Obtiene el modelo modeloFitosanitarioStore
+    ...mapState("moduloFitosanitario", ["modeloFitosanitarioStore"]),
+
+    modeloFitosanitarioStore: {
+      get() {
+        return this.$store.getters["moduloFitosanitario/modeloFitosanitarioStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFitosanitario/establecerModeloFitosanitariosStore", v);
+      },
+    },
 
     // Obtiene la variable que indica si el formulario es valido
     formFitosanitarioValido: {
@@ -293,10 +302,7 @@ export default {
         return this.$store.getters["moduloFitosanitario/formFitosanitarioValido"];
       },
       set(v) {
-        return this.$store.commit(
-          "moduloFitosanitario/cambiarEstadoValidoFormFitosanitario",
-          v
-        );
+        return this.$store.commit("moduloFitosanitario/cambiarEstadoValidoFormFitosanitario", v);
       },
     },
 

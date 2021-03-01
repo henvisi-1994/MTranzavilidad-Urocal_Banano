@@ -2,9 +2,11 @@
 const pool = require('../../services/postgresql/index');
 
 module.exports = {
-
     async getRiegos() {
-        let query = `SELECT * FROM riego`;
+        let query = `SELECT riego.*, lotecultivado.lotnumero, lotecultivado.lotecultivadoid, finca.fincaid, finca.fincodigo
+        FROM riego INNER JOIN cultivo ON riego.cultivoid = cultivo.cultivoid
+        INNER JOIN lotecultivado ON cultivo.lotecultivadoid = lotecultivado.lotecultivadoid
+        INNER JOIN finca ON lotecultivado.fincaid = finca.fincaid;`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
     },

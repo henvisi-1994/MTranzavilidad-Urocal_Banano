@@ -24,7 +24,6 @@ import ModuloMonitoreoRoedorCentroAcopio from './modules/ModuloMonitoreoRoedorCe
 import ModuloMonitoreoRoedorFinca from './modules/ModuloMonitoreoRoedorFinca';
 import ModuloLimpiezaVehiculo from './modules/ModuloLimpiezaVehiculo';
 import ModuloVehiculo from './modules/ModuloVehiculo';
-import ModuloReporteEmbarque from './modules/ModuloReporteEmbarque';
 import ModuloPoda from './modules/ModuloPoda';
 import ModuloFertilizante from './modules/ModuloFertilizante';
 import ModuloFitosanitario from './modules/ModuloFitosanitario';
@@ -50,6 +49,7 @@ import ModuloDespacho from './modules/ModuloDespacho';
 import ModuloDetalleDespacho from './modules/ModuloDetalleDespacho';
 import ModuloInspectorPersona from './modules/ModuloInspectorPersona';
 import ModuloExportadorPersona from './modules/ModuloExportadorPersona';
+import ModuloGuiaRemision from './modules/ModuloGuiaRemision';
 
 import ModuloCultivo from './modules/ModuloCultivo';
 
@@ -109,7 +109,6 @@ export default new Vuex.Store({
     moduloMonitoreoRoedorFinca: ModuloMonitoreoRoedorFinca,                 // Instancia al ModuloMonitoreoRoedorFinca
     moduloLimpiezaVehiculo: ModuloLimpiezaVehiculo,                         // Instancia al ModuloLimpiezaVehiculo
     moduloVehiculo: ModuloVehiculo,                                         // Instancia al ModuloVehiculo
-    moduloReporteEmbarque: ModuloReporteEmbarque,
     moduloPoda: ModuloPoda,                                                 // Instancia al ModuloPoda
     moduloFertilizante: ModuloFertilizante,                                 // Instancia al ModuloFertilizante
     moduloFitosanitario: ModuloFitosanitario,                               // Instancia al ModuloFitosanitario
@@ -135,5 +134,6 @@ export default new Vuex.Store({
     moduloInspectorPersona: ModuloInspectorPersona,                         // Instancia al ModuloInspectorPersona
     moduloCultivo: ModuloCultivo,                                           // Instancia al ModuloCultivo
     moduloExportadorPersona: ModuloExportadorPersona,                       // Instancia al ModuloExportadorPersona
+    moduloGuiaRemision: ModuloGuiaRemision
   }
 })

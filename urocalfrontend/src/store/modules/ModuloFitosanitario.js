@@ -4,19 +4,24 @@ export default {
     namespaced: true,
 
     state: {
-        fitosanitario: new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fitosanitario
+        listaFitosanitariosStore: [],
+        modeloFitosanitarioStore: new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fitosanitario
         formFitosanitarioValido: false, // Indica si el formulario de Fitosanitario es valido
     },
 
     mutations: {
         // Coloca un nuevo Fitosanitario
-        nuevoFitosanitario(state, nuevoFitosanitario) {
-            state.fitosanitario = nuevoFitosanitario
+        establecerModeloFitosanitariosStore(state, nuevoFitosanitario) {
+            state.modeloFitosanitarioStore = nuevoFitosanitario
+        },
+
+        establecerListaFitosanitariosStore(state, newState) {
+            state.listaFertilizantesStore = newState;
         },
 
         // Vacia el modelo Fitosanitario
-        vaciarFitosanitario(state) {
-            state.fitosanitario = new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
+        vaciarModeloFitosanitarioStore(state) {
+            state.modeloFitosanitarioStore = new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
         },
 
         // Cambia  el estado del Formulario Fitosanitario
@@ -27,5 +32,7 @@ export default {
 
     getters: {
         formFitosanitarioValido: (state) => state.formFitosanitarioValido, // Devuelve la variable formFitosanitarioValido
+        listaFitosanitariosStore: (state) => state.listaFitosanitariosStore,
+        modeloFitosanitarioStore: (state) => state.modeloFitosanitarioStore,
     },
 }

@@ -1,220 +1,7 @@
 <template>
   <v-container fluid>
-    <v-dialog
-      v-model="dialog"
-      scrollable
-      :fullscreen="$vuetify.breakpoint.xs ? true : false"
-      max-width="800px"
-      transition="dialog-transition"
-      eager
-    >
-      <v-card class="rounded-0">
-        <v-card-title class="white primary--text">
-          <h5>Registrar Guia</h5>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = false">
-            <v-icon class="primary--text">mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-card-text style="padding: 0px">
-          <v-container>
-            <v-row no-gutters justify-md="space-around">
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Serie"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Número"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around">
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Número del comprobante de venta"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-menu
-                  v-model="menuFechaEmision"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field class="custom px-2" dense filled
-                      label="Fecha de emisión"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    @input="menuFechaEmision = false"
-                    :show-current="fechaActual"
-                    locale="es-419"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around">
-              <v-col cols="12" md="6">
-                <v-menu
-                  v-model="menuFechaInicioTraslado"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field class="custom px-2" dense filled
-                      label="Fecha de inicio de traslado"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    @input="menuFechaInicioTraslado = false"
-                    :show-current="fechaActual"
-                    locale="es-419"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Hora de inicio del traslado"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around">
-              <v-col cols="12" md="6">
-                <v-menu
-                  v-model="menuFechaFinTraslado"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field class="custom px-2" dense filled
-                      label="Fecha de fin de traslado"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    @input="menuFechaFinTraslado = false"
-                    :show-current="fechaActual"
-                    locale="es-419"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Hora de fin del traslado"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around">
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Punto de inicio"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Punto de fin"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around">
-              <v-col cols="12" md="6">
-                <v-select class="style-chooser custom px-2" :items="motivos" label="Motivo"></v-select>
-              </v-col>
-              <v-col cols="12" md="6">
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around" class="mt-5">
-              <v-col cols="12">
-                <p class="text-center overline primary--text">Destinatario</p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Nombre o Razón Social"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="RUC o CI"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around" class="mt-5">
-              <v-col cols="12">
-                <p class="text-center overline primary--text">
-                  Persona encargada del transporte
-                </p>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Nombre o Razón Social"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="RUC o CI"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Placa del vehículo"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-              </v-col>
-            </v-row>
-            <v-row no-gutters justify-md="space-around" class="mt-5">
-              <v-col cols="12">
-                <p class="text-center overline primary--text">Bienes transportados</p>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Cantidad"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Unidad"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Código de cosecha"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Descripción"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col cols="12" md="6">
-                <v-text-field class="custom px-2" dense filled label="Estado"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-              </v-col>
-            </v-row>
-            <v-row class="justify-center">              
-              <v-btn elevation="0" large :block="$vuetify.breakpoint.xs ? true : false" width="300px" color="primary">Agregar bienes transportados</v-btn>
-            </v-row>
-            <v-row no-gutters justify-md="space-around" class="mt-10">
-              <v-col cols="11">
-                <v-data-table
-                  :headers="cabeceraTablaBienes"
-                  :items="listaBienes"
-                  class="elevation-1"
-                >
-                </v-data-table>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions class="justify-center pb-3">
-          <v-btn
-            :block="$vuetify.breakpoint.xs ? true : false"
-            width="300px"
-            large
-            elevation="0"
-            color="primary"
-            >Registrar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <DialogNuevoGuiaRemision ref="componentDialogNuevoGuiaRemision"/>
+    
     <v-card elevation="0" class="mt-5">
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
@@ -240,12 +27,27 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaGuiaRemision"
           sort-by="guiserie"
-          :items="listGuiaRemision"
+          :items="listaGuiaRemisionStore"
           :search="buscarGuia"
           class="elevation-1"
         >
+          <template v-slot:top>
+            <DialogMostrarGuiaRemision ref="componentDialogMostrarGuiaRemision"></DialogMostrarGuiaRemision>
+          </template>
+          <template v-slot:item.guifechaemision="{ item }">
+            {{new Date(item.guifechaemision).toISOString().substr(0, 10),}}
+          </template>
+          <template v-slot:item.guifechainicio="{ item }">
+            {{new Date(item.guifechainicio).toISOString().substr(0, 10),}}
+          </template>
+          <template v-slot:item.guifechafin="{ item }">
+            {{new Date(item.guifechafin).toISOString().substr(0, 10),}}
+          </template>
+          <template v-slot:item.guidestinatario="{ item }">
+            {{JSON.parse(item.guidestinatario).rucci}}
+          </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirMostrarGuiaRemision(item)"> mdi-eye </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -257,7 +59,7 @@
           large
           elevation="0"
           color="primary"
-          @click="dialog = true"
+          @click="cargarDialogNuevoGuiaRemision()"
           >Nuevo</v-btn
         >
       </v-card-actions>
@@ -267,6 +69,13 @@
 
 <script>
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+
+import { mapMutations, mapState } from 'vuex';
+import DialogNuevoGuiaRemision from "@/components/DialogNuevoGuiaRemision";
+import DialogMostrarGuiaRemision from "@/components/DialogMostrarGuiaRemision";
+import ServicioGuiaRemision from '../services/ServicioGuiaRemision';
+import ServicioProductorPersona from '../services/ServicioProductorPersona';
+import ServicioConductorPersona from '../services/ServicioConductorPersona';
 
 export default {
   data() {
@@ -288,64 +97,7 @@ export default {
         guiobservacion: "",
         guiemiteurocal: false,
       },
-      menuFechaEmision: false,
-      menuFechaInicioTraslado: false,
-      menuFechaFinTraslado: false,
       buscarGuia: "",
-      dialog: false,
-      motivos: [
-        "Venta",
-        "Compra",
-        "Transformación",
-        "Consignación",
-        "Traslado entre establecimientos de una misma empresa",
-        "Traslado por emisor itinerante de comprobantes de venta",
-        "Devolución",
-        "Importación",
-        "Exportación",
-        "Otros",
-      ],
-      cabeceraTablaBienes: [
-        {
-          text: "Cantidad",
-          value: "cantidad",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Unidad",
-          value: "unidad",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Código de cosecha",
-          value: "codigocosecha",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Descripción",
-          value: "descripcion",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Estado",
-          value: "estado",
-          align: "center",
-          class: "grey lighten-3",
-        },
-      ],
-      listaBienes: [
-        {
-          cantidad: 1,
-          unidad: "Sacos",
-          codigocosecha: "URF10A-L1-RP0000000001",
-          descripcion: "Cacao Nacional Orgánico SPP",
-          estado: "Baba",
-        },
-      ],
       cabeceraTablaGuiaRemision: [
         {
           text: "Serie",
@@ -403,7 +155,7 @@ export default {
         },
         {
           text: "Comprobante de venta",
-          value: "comprobante",
+          value: "guicomprobanteventa",
           align: "center",
           class: "grey lighten-3",
         },
@@ -451,22 +203,145 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listGuiaRemision: [],
-      fechaActual: new Date().toISOString().substr(0, 10),
     };
   },
 
-  methods: {},
+  components: {
+    DialogNuevoGuiaRemision,
+    DialogMostrarGuiaRemision
+  },
+
+  computed:{
+    ...mapState('moduloGuiaRemision', ['listaGuiaRemisionStore', 'editarGuiaRemision']),
+    ...mapState('moduloProductorPersona', ['listaProductorPersonaStore']),
+
+    dialogNuevoGuiaRemision: {
+      get() {
+        return this.$store.getters["gestionDialogos/dialogNuevoGuiaRemision"];
+      },
+      set(v) {
+        return this.$store.commit("gestionDialogos/toggleDialogNuevoGuiaRemision", v);
+      },
+    },
+
+    dialogMostrarGuiaRemision: {
+      get() {
+        return this.$store.getters["gestionDialogos/dialogMostrarGuiaRemision"];
+      },
+      set(v) {
+        return this.$store.commit("gestionDialogos/toggleDialogMostrarGuiaRemision", v);
+      },
+    },
+
+    modeloGuiaRemisionStore: {
+      get() {
+        return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloGuiaRemision/establecerModeloGuiaRemisionStore", v);
+      },
+    },
+
+    listaGuiaRemisionStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloGuiaRemision/listaGuiaRemisionStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloGuiaRemision/establecerListaGuiaRemisionStore", v);
+      },
+    },
+
+    listaProductorPersonaStore: {
+      get() {
+        return this.$store.getters["moduloProductorPersona/listaProductorPersonaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloProductorPersona/establecerListaProductorPersonaStore", v);
+      },
+    },
+
+    listaConductorPersonaStore: {
+      get() {
+        return this.$store.getters["moduloConductorPersona/listaConductorPersonaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloConductorPersona/establecerListaConductorPersonaStore", v);
+      },
+    },
+
+    editarGuiaRemision: {
+      get() {
+        return this.$store.getters["moduloGuiaRemision/editarGuiaRemision"];
+      },
+      set(v) {
+        return this.$store.commit("moduloGuiaRemision/establecerEditarGuiaRemision", v);
+      },
+    },
+  },
+
+  methods: {
+    ...mapMutations("moduloGuiaRemision", ["vaciarGuiaRemision"]),
+
+    async cargarListaGuiaRemision() {
+      let listaGuiaRemision = [];
+      let respuesta = await ServicioGuiaRemision.obtenerTodosGuiaRemision();
+      let guiaremisiones = await respuesta.data;
+      guiaremisiones.forEach((f) => {
+        listaGuiaRemision.push(f);
+      });
+      this.listaGuiaRemisionStore = listaGuiaRemision;
+    },
+
+    async cargarProductores(){
+      let listaProductores = [];
+      let respuesta = await ServicioProductorPersona.obtenerTodosProductorPersona();
+      let productores = await respuesta.data;
+      productores.forEach((f) => {
+        listaProductores.push(f);
+      });
+      this.listaProductorPersonaStore = listaProductores;
+    },
+
+    async cargarConductores(){
+      let listaConductores = [];
+      let respuesta = await ServicioConductorPersona.obtenerTodosConductorPersona();
+      let conductores = await respuesta.data;
+      conductores.forEach((f) => {
+        listaConductores.push(f);
+      });
+      this.listaConductorPersonaStore = listaConductores;
+    },
+    
+    cargarDialogNuevoGuiaRemision(){
+      this.dialogNuevoGuiaRemision = !this.dialogNuevoGuiaRemision;
+      this.editarGuiaRemision = false;
+      this.$refs.componentDialogNuevoGuiaRemision.$refs.componentFormGuiaRemision.$refs.formGuiaRemision.resetValidation();
+      this.vaciarGuiaRemision();
+    },
+
+    async abrirMostrarGuiaRemision(item) {
+      this.dialogMostrarGuiaRemision = !this.dialogMostrarGuiaRemision;
+      this.editarGuiaRemision = true;
+      this.$refs.componentDialogMostrarGuiaRemision.$refs.componentFormGuiaRemision.$refs.formGuiaRemision.resetValidation();
+      this.vaciarGuiaRemision();
+      let respuesta = await ServicioGuiaRemision.obtenerCargas(item.guiaremisionid);
+      item.carga = respuesta.data;
+      this.modeloGuiaRemisionStore = item;
+    },
+  },
 
   mixins: [autenticacionMixin, myMixin],
 
   created() {
+    this.cargarListaGuiaRemision();
+    this.cargarProductores();
+    this.cargarConductores();
     let usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario.rol === "Administrador")
       this.$store.commit("colocarLayout", "LayoutAdministrador");
     if (usuario.rol === "Productor")
       this.$store.commit("colocarLayout", "LayoutProductor");
-  },
+  }
 };
 </script>
 

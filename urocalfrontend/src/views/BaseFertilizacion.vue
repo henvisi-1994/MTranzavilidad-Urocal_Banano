@@ -10,21 +10,14 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div
-              :class="[`text-h4`, `mb-4`]"
-              class="transition-swing primary--text"
-              v-text="nombre"
-            ></div>
+            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarFertilizante"
               append-icon="mdi-magnify"
-              label="Buscar"
-              class="custom"
-              filled
-              dense
+              label="Buscar" class="custom" filled dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -36,7 +29,7 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaFertilizante"
           sort-by="id_lote"
-          :items="listaFertilizante"
+          :items="listaFertilizantesStore"
           :search="buscarFertilizante"
           class="elevation-1"
           dense
@@ -49,7 +42,7 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarFertilizante()"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirMostrarFertilizante(item)"> mdi-eye </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -58,7 +51,7 @@
         <!-- Botón para agregar nueva fertilizante -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="200px"
           color="primary"
           @click="cargarDialogNuevoFertilizante()"
           >Nuevo</v-btn
@@ -73,7 +66,7 @@ import { mapMutations } from "vuex";
 
 import DialogNuevoFertilizante from "@/components/DialogNuevoFertilizante";
 import DialogMostrarFertilizante from "@/components/DialogMostrarFertilizante";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import ServicioFertilizantes from '../services/ServicioFertilizantes';
 
 export default {
   name: "BaseFertilizante",
@@ -83,9 +76,13 @@ export default {
     DialogMostrarFertilizante,
   },
 
+  mounted() {
+    this.cargarListaFertilizante();
+  },
+
   data() {
     return {
-      nombre: "Gestión de Fertilización",
+      nombre: "Gestión de Fertilización",      
       buscarFertilizante: "", // Guarda el texto de búsqueda
       cabeceraTablaFertilizante: [
         // Detalla las cabeceras de la tabla
@@ -193,12 +190,19 @@ export default {
           align: "center",
           class: "grey lighten-3",
         },
-      ],
-      listaFertilizante: [{ codigo_finca: 1, id_farm: 1 }], // Almacena una lista de Lotes, la misma se muestra en tabla
+      ],      
     };
   },
 
   computed: {
+    listaFertilizantesStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listaFertilizantesStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerListaFertilizantesStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoFertilizante
     dialogNuevoFertilizante: {
       get() {
@@ -219,35 +223,91 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogMostrarFertilizante", v);
       },
     },
+
+    modeloFertilizanteStore: {
+      get() {
+        return this.$store.getters["moduloFertilizante/modeloFertilizanteStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerModeloFertilizanteStore", v);
+      },
+    },
   },
 
   methods: {
+    async cargarListaFertilizante () {
+      let listaFertilizantes = [];
+      let respuesta = await ServicioFertilizantes.obtenerTodosFertilizantes();
+      let fertilizantes = await respuesta.data;
+      fertilizantes.forEach((f) => {
+        listaFertilizantes.push(f);
+      });
+      this.listaFertilizantesStore = listaFertilizantes;
+    },
+
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
+    },
+
     // Carga el DialogMostrarFertilizante
-    abrirMostrarFertilizante() {
+    abrirMostrarFertilizante(item) {
       this.dialogMostrarFertilizante = !this.dialogMostrarFertilizante; // Abre el DialogMostrarFertilizante
-      this.$refs.componentDialogMostrarFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation(); // Reinicia las validaciones de formFertilizante
-      this.vaciarFertilizante(); // Vacia el modelo Fertilizante
+      this.$refs.componentDialogMostrarFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation();
+      this.vaciarModeloFertilizanteStore();
+      this.modeloFertilizanteStore = item;
     },
 
     // Vacia el modelo fertilizante
-    ...mapMutations("moduloFertilizante", ["vaciarFertilizante"]),
+    ...mapMutations("moduloFertilizante", ["vaciarModeloFertilizanteStore"]),
 
     // Carga el DialogNuevoFertilizante
     cargarDialogNuevoFertilizante() {
-      this.dialogNuevoFertilizante = !this.dialogNuevoFertilizante; // Abre el DialogNuevoFertilizante
-      this.$refs.componentDialogNuevoFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation(); // Reinicia las validaciones de formFertilizante
-      this.vaciarFertilizante(); // Vacia el modelo fertilizante
+      this.dialogNuevoFertilizante = !this.dialogNuevoFertilizante;
+      this.$refs.componentDialogNuevoFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation();
+      this.vaciarModeloFertilizanteStore();
     },
   },
 
-  mixins: [autenticacionMixin, myMixin],
-
   created() {
-    let usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario.rol === "Administrador")
-      this.$store.commit("colocarLayout", "LayoutAdministrador");
-    if (usuario.rol === "Productor")
-      this.$store.commit("colocarLayout", "LayoutProductor");
+    this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };
 </script>

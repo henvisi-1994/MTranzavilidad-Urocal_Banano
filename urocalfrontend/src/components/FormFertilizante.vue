@@ -6,9 +6,9 @@
         justify-md="space-around"
         :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
       >
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fertilizante.fincaid"
+            v-model="modeloFertilizanteStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="fincanombre"
@@ -24,9 +24,9 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fertilizante.loteid"
+            v-model="modeloFertilizanteStore.loteid"
             placeholder="Lote"
             class="style-chooser"
             label="lotenombre"
@@ -45,9 +45,9 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fertilizante.cultivoid"
+            v-model="modeloFertilizanteStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
             label="cultivonombre"
@@ -63,17 +63,17 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Ciclo"
-            v-model="fertilizante.ferciclo"
-            :rules="[reglas.campoVacio(fertilizante.ferciclo)]"
+            v-model="modeloFertilizanteStore.ferciclo"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferciclo)]"
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -82,94 +82,94 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field class="custom px-2" filled 
+              <v-text-field
                 label="Fecha"
-                v-model="fertilizante.ferfecha"
-                :rules="[reglas.campoVacio(fertilizante.ferfecha)]"
+                v-model="modeloFertilizanteStore.ferfecha"
+                :rules="[reglas.campoVacio(modeloFertilizanteStore.ferfecha)]"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="fertilizante.ferfecha"
+              v-model="modeloFertilizanteStore.ferfecha"
               @input="menuMostrarCalendario = false"
               :show-current="fechaActual"
               locale="es-419"
             ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Nombre comercial"
-            v-model="fertilizante.fernombrecomercial"
-            :rules="[reglas.campoVacio(fertilizante.fernombrecomercial)]"
+            v-model="modeloFertilizanteStore.fernombrecomercial"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.fernombrecomercial)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Elementos"
-            v-model="fertilizante.ferelementos"
-            :rules="[reglas.campoVacio(fertilizante.ferelementos)]"
+            v-model="modeloFertilizanteStore.ferelementos"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferelementos)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Concentración"
-            v-model="fertilizante.ferconcentracion"
-            :rules="[reglas.campoVacio(fertilizante.ferconcentracion)]"
+            v-model="modeloFertilizanteStore.ferconcentracion"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Área aplicada (HA)"
-            v-model="fertilizante.ferareaaplicada"
-            :rules="[reglas.campoVacio(fertilizante.ferareaaplicada)]"
+            v-model="modeloFertilizanteStore.ferareaaplicada"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferareaaplicada)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Cantidad aplicada"
-            v-model="fertilizante.fercantidadaplicada"
-            :rules="[reglas.campoVacio(fertilizante.fercantidadaplicada)]"
+            v-model="modeloFertilizanteStore.fercantidadaplicada"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.fercantidadaplicada)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Unidad de medida"
-            v-model="fertilizante.ferunidadmedida"
-            :rules="[reglas.campoVacio(fertilizante.ferunidadmedida)]"
+            v-model="modeloFertilizanteStore.ferunidadmedida"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferunidadmedida)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Equipo de aplicación"
-            v-model="fertilizante.ferequipoaplicacion"
-            :rules="[reglas.campoVacio(fertilizante.ferequipoaplicacion)]"
+            v-model="modeloFertilizanteStore.ferequipoaplicacion"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferequipoaplicacion)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Método de aplicación"
-            v-model="fertilizante.fermetodoaplicacion"
-            :rules="[reglas.campoVacio(fertilizante.fermetodoaplicacion)]"
+            v-model="modeloFertilizanteStore.fermetodoaplicacion"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.fermetodoaplicacion)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="fertilizante.feroperario"
+            v-model="modeloFertilizanteStore.feroperario"
             placeholder="Operario"
             class="style-chooser"
             label="operarionombre"
@@ -267,8 +267,7 @@ export default {
   },
 
   computed: {
-    // Obtiene el modelo poda
-    ...mapState("moduloFertilizante", ["fertilizante"]),
+    ...mapState("moduloFertilizante", ["modeloFertilizanteStore"]),
 
     // Obtiene la variable que indica si el formulario es valido
     formFertilizanteValido: {
@@ -276,10 +275,16 @@ export default {
         return this.$store.getters["moduloFertilizante/formFertilizanteValido"];
       },
       set(v) {
-        return this.$store.commit(
-          "moduloFertilizante/cambiarEstadoValidoFormFertilizante",
-          v
-        );
+        return this.$store.commit("moduloFertilizante/cambiarEstadoValidoFormFertilizante", v);
+      },
+    },
+
+    modeloFertilizanteStore: {
+      get() {
+        return this.$store.getters["moduloFertilizante/modeloFertilizanteStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerModeloFertilizanteStore", v);
       },
     },
 
