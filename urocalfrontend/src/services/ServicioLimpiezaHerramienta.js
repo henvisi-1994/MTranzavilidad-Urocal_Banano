@@ -17,7 +17,8 @@ class ServicioLimpiezaHerramienta {
     }
 
     obtenerTodosCultivos() {
-        return axios.get(`${API_URL}/v1/cleaningTool/cultivo/`);
+        // return axios.get(`${API_URL}/v1/cleaningTool/cultivo/`);
+        return axios.get(`${API_URL}/v1/sowing/sowinginformacion`);
     }
 
     // UPDATE: Actualiza un sitio
