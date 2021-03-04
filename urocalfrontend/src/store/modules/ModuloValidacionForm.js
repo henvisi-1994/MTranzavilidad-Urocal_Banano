@@ -15,6 +15,9 @@ export default {
 
             soloNumerosPositivos: (texto) =>
                 Number(texto) >= 0 || "No se permiten cantidades negativas!",
+            
+            /*soloDiezDigitos: (texto) =>
+                String(texto).lenght <= 10 || "Deben tener 10 numeros positivos",*/
         }
     }
 }
