@@ -7,7 +7,7 @@
             v-model="cultivo"
             placeholder="Seleccione un cultivo"
             class="style-chooser"
-            label="detalles"
+            label="pronombre"
             :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
             :options="listaCultivoStore"
           >

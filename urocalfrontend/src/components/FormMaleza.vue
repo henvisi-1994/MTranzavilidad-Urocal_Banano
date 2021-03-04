@@ -65,24 +65,17 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-
-
         <v-col cols="12" md="6">
-
-          <v-select
+          <v-text-field
+            label="Método utilizado"
             v-model="maleza.conmetodo"
-            placeholder="Seleccione método"
-            class="style-chooser"
-            label="detalles"
-            :options="['Manual','Mecanica']"
+            class="custom px-2"
+            filled
+            dense
             :rules="[reglas.campoVacio(maleza.conmetodo)]"
             :disabled="bloquearCamposFormMalezaControl"
-          >
-          </v-select>
-
+          ></v-text-field>
         </v-col>
-
-
         <v-col cols="12" md="6">
           <v-text-field
             label="Operario"
