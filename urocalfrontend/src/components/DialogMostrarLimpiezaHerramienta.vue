@@ -35,7 +35,7 @@
                 v-model="modeloLimpiezaHerramientaStore.cultivoproducto.cultivoid"
                 placeholder="Seleccione un cultivo"
                 class="style-chooser"
-                label="pronombre"
+                label="detalles"
                 :disabled="noeditar"
                 :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
                 :options="listaCultivoStore"
