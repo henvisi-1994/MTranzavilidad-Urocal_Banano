@@ -9,11 +9,11 @@
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="white primary--text">
+      <v-card-title class="primary white--text">
         <h5>Registrar riego</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="primary--text" @click="cerrarDialogNuevoRiego()">mdi-close</v-icon>
+          <v-icon class="white--text" @click="cerrarDialogNuevoRiego()">mdi-close</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -28,9 +28,9 @@
         <!-- Botón para agregar nuevo Riego -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="200px"
           color="primary"
-          @click="registrar()"
+          @click="agregarRiego()"
           >Registrar</v-btn
         >
       </v-card-actions>
@@ -42,6 +42,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormRiego from "@/components/FormRiego";
+import SerivicioRiegos from '../services/SerivicioRiegos';
 
 export default {
   name: "DialogNuevoRiego",
@@ -50,11 +51,15 @@ export default {
     FormRiego,
   },
 
-  data() {
-    return {};
-  },
-
   computed: {
+    listaRiegoStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloRiego/listaRiegoStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerListaRiegoStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoRiego
     dialogNuevoRiego: {
       get() {
@@ -65,19 +70,46 @@ export default {
       },
     },
 
+    modeloRiegoStore: {
+      get() {
+        return this.$store.getters["moduloRiego/modeloRiegoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerModeloRiegoStore", v);
+      },
+    },
+
     // Obtiene es estado de la variable formRiegoValido y el modelo Riego
-    ...mapState("moduloRiego", ["formRiegoValido", "riego"]),
+    ...mapState("moduloRiego", ["formRiegoValido", "modeloRiegoStore"]),
   },
 
   methods: {
-    // Registra un nuevo riego
-    registrar() {
-      //console.log(this.limpiezaHerramienta);
+    async agregarRiego() {
+      let respuesta = await SerivicioRiegos.agregarRiego(this.modeloRiegoStore);
+      if (respuesta.status == 201) {
+        this.cerrarDialogNuevoRiego();
+        this.cargarListaRiego();
+        this.vaciarModeloRiegoStore();
+      }
+    },
+
+    async cargarListaRiego () {
+      let listaRiegos = [];
+      let respuesta = await SerivicioRiegos.obtenerTodosRiegos();
+      let riegos = await respuesta.data;
+      riegos.forEach((f) => {
+        listaRiegos.push(f);
+      });
+      this.listaRiegoStore = listaRiegos;
     },
 
     cerrarDialogNuevoRiego() {
       this.dialogNuevoRiego = !this.dialogNuevoRiego; // Cierra el dialogNuevoRiego
+      this.$refs.componentFormRiego.limpiarIds();
+      this.vaciarModeloRiegoStore();
     },
+
+    ...mapMutations("moduloRiego", ["vaciarModeloRiegoStore"]),
   },
 };
 </script>

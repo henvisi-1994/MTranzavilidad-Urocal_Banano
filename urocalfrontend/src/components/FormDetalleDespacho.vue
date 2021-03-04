@@ -27,8 +27,9 @@
         <v-col cols="12" md="6">
           <v-text-field
             label="Número de Bultos"
-            type="Number"
+            @change="CambiaNumeroBultos"
             v-model="detalledespacho.detdesnumerobultos"
+            type="Number"   
             class="custom px-2"
             filled
             dense
@@ -38,6 +39,7 @@
               reglas.soloNumerosPositivos(detalledespacho.detdesnumerobultos),
             ]"
             error-count="3"
+             
             :disabled="bloquearCamposFormDetalleDespacho"
           ></v-text-field>
         </v-col>
@@ -45,6 +47,7 @@
           <v-text-field
             label="Peso Unitario"
             type="Number"
+            @change="CambiaPesoUnitario"
             v-model="detalledespacho.detdespesounitario"
             class="custom px-2"
             filled
@@ -54,6 +57,7 @@
               reglas.soloNumeros(detalledespacho.detdespesounitario),
               reglas.soloNumerosPositivos(detalledespacho.detdespesounitario),]"
             error-count="3"
+             
             :disabled="bloquearCamposFormDetalleDespacho"
           ></v-text-field>
         </v-col>
@@ -70,8 +74,10 @@
             :rules="[
               reglas.campoVacio(detalledespacho.detdespesototal),
               reglas.soloNumeros(detalledespacho.detdespesototal),
-              reglas.soloNumerosPositivos(detalledespacho.detdespesototal),]"
+              reglas.soloNumerosPositivos(detalledespacho.detdespesototal),
+              ]"
             error-count="3"
+            
             :disabled="bloquearCamposFormDetalleDespacho"
           ></v-text-field>
         </v-col>
@@ -99,6 +105,8 @@ export default {
   data() {
     return {
       listaAlmacenAcopio: [],
+      
+
     };
   },
 
@@ -147,6 +155,29 @@ export default {
       let resultado = await servicioDetalleDespacho.obtenerTodosListaAcopio();
       this.listaAlmacenAcopio = resultado.data;
     },
+    
+    //Calcula Peso total cuando cambia peso unitario
+    CambiaPesoUnitario(event){
+      
+      let numBultos, pesUnitario;
+      numBultos=this.detalledespacho.detdesnumerobultos;
+      pesUnitario=this.detalledespacho.detdespesounitario;
+      this.detalledespacho.detdespesototal=numBultos*pesUnitario;
+      
+    },
+    // Calcula peso total cuando cambia numero de bultos
+    CambiaNumeroBultos(event){
+      
+      let numBultos, pesUnitario;
+      numBultos=this.detalledespacho.detdesnumerobultos;
+      pesUnitario=this.detalledespacho.detdespesounitario;
+      this.detalledespacho.detdespesototal=numBultos*pesUnitario;
+      
+    }
+    
+
+
+
   },
 
   mounted() {

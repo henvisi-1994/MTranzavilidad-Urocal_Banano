@@ -9,13 +9,13 @@
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="white primary--text">
+      <v-card-title class="primary white--text">
         <h5>
           Registrar poda
         </h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="primary--text" @click="cerrarDialogNuevoPoda()"
+          <v-icon class="white--text" @click="cerrarDialogNuevoPoda()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -32,9 +32,9 @@
         <!-- Botón para agregar nuevo Poda -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="200px"
           color="primary"
-          @click="registrar()"
+          @click="agregarPoda()"
           >Registrar</v-btn>
       </v-card-actions>
     </v-card>
@@ -45,6 +45,8 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormPoda from "@/components/FormPoda";
+
+import ServicioPodas from '../services/ServicioPodas';
 
 export default {
   name: "DialogNuevoPoda",
@@ -69,22 +71,44 @@ export default {
       },
     },
 
+    modeloPodaStore: {
+      get() {
+        return this.$store.getters["moduloPoda/modeloPodaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
+      },
+    },
+
     // Obtiene es estado de la variable formPodaValido y el modelo poda
-    ...mapState("moduloPoda", ["formPodaValido", "poda"]),
+    ...mapState("moduloPoda", ["formPodaValido", "modeloPodaStore"]),
   },
 
   methods: {
-    // Vacia el modelo poda
-    ...mapMutations("moduloPoda", ["vaciarPoda"]),
+    async agregarPoda() {
+      let respuesta = await ServicioPodas.agregarPoda(this.modeloPodaStore);
+      if (respuesta.status == 201) {
+        this.cerrarDialogNuevoPoda();
+        this.cargarListaPoda();
+        this.vaciarModeloPodaStore();
+      }
+    },
 
-    // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      //console.log(this.limpiezaHerramienta);
+    async cargarListaPoda () {
+      let listaPodas = [];
+      let respuesta = await ServicioPodas.obtenerTodosPodas();
+      let podas = await respuesta.data;
+      podas.forEach((f) => {
+        listaPodas.push(f);
+      });
+      this.listaPodaStore = listaPodas;
     },
 
     cerrarDialogNuevoPoda() {
       this.dialogNuevoPoda = !this.dialogNuevoPoda; // Cierra el dialogNuevoPoda
     },
+
+    ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
   },
 };
 </script>

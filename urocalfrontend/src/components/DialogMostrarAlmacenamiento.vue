@@ -23,15 +23,15 @@
         >
           <v-icon class="primary--text">mdi-pencil</v-icon>
         </v-btn>
-        <v-btn
+       <!-- <v-btn
           icon
           v-if="tab !== 'tabRevisionHumedad' && tab != 'tabListaRevisionHumedad'"
         >
           <v-icon class="primary--text">mdi-trash-can</v-icon>
-        </v-btn>
+        </v-btn>-->
         <v-btn icon @click="cerrarDialogMostrarAlmacenamiento()">
           <v-icon class="primary--text">mdi-close</v-icon>
-        </v-btn>
+        </v-btn> 
       </v-card-title>
 
       <!-- Formulario Almacenamiento -->

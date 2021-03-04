@@ -4,19 +4,24 @@ export default {
     namespaced: true,
 
     state: {
-        fertilizante: new Fertilizante('', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fertilizante
+        listaFertilizantesStore: [],
+        modeloFertilizanteStore: new Fertilizante('', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fertilizante
         formFertilizanteValido: false, // Indica si el formulario de Fertilizante es valido
     },
 
     mutations: {
         // Coloca un nuevo Fertilizante
-        nuevoFertilizante(state, nuevoFertilizante) {
-            state.fertilizante = nuevoFertilizante
+        establecerModeloFertilizanteStore(state, nuevoFertilizante) {
+            state.modeloFertilizanteStore = nuevoFertilizante
+        },
+
+        establecerListaFertilizantesStore(state, newState) {
+            state.listaFertilizantesStore = newState;
         },
 
         // Vacia el modelo Fertilizante
-        vaciarFertilizante(state) {
-            state.fertilizante = new Fertilizante('', '', '', '', '', '', '', '', '', '', '', '', '')
+        vaciarModeloFertilizanteStore(state) {
+            state.modeloFertilizanteStore = new Fertilizante('', '', '', '', '', '', '', '', '', '', '', '', '')
         },
 
         // Cambia  el estado del Formulario Fertilizante
@@ -27,5 +32,7 @@ export default {
 
     getters: {
         formFertilizanteValido: (state) => state.formFertilizanteValido, // Devuelve la variable formFertilizanteValido
+        listaFertilizantesStore: (state) => state.listaFertilizantesStore,
+        modeloFertilizanteStore: (state) => state.modeloFertilizanteStore,
     },
 }
