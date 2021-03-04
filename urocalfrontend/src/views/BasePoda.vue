@@ -8,21 +8,14 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div
-              :class="[`text-h4`, `mb-4`]"
-              class="transition-swing primary--text"
-              v-text="nombre"
-            ></div>
+            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarPoda"
               append-icon="mdi-magnify"
-              label="Buscar"
-              class="custom"
-              filled
-              dense
+              label="Buscar" class="custom" filled dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -34,10 +27,9 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaPoda"
           sort-by="id_lote"
-          :items="listaPoda"
+          :items="listaPodaStore"
           :search="buscarPoda"
-          class="elevation-1"
-        >
+          class="elevation-1">
           <template v-slot:top>
             <!-- Dialog que muestra el formulario con toda la informacion de poda -->
             <DialogMostrarPoda ref="componentDialogMostrarPoda"></DialogMostrarPoda>
@@ -53,8 +45,7 @@
         <!-- Botón para agregar nueva poda -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" elevation="0"
-          large
+          width="200px" large
           color="primary"
           @click="cargarDialogNuevoPoda()"
           >Nuevo</v-btn
@@ -69,7 +60,7 @@ import { mapMutations } from "vuex";
 
 import DialogNuevoPoda from "@/components/DialogNuevoPoda";
 import DialogMostrarPoda from "@/components/DialogMostrarPoda";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import ServicioPodas from '../services/ServicioPodas';
 
 export default {
   name: "BasePoda",
@@ -79,9 +70,13 @@ export default {
     DialogMostrarPoda,
   },
 
+  mounted() {
+    this.cargarListaPoda();
+  },
+
   data() {
     return {
-      nombre: "Gestión de Poda",
+      nombre: "Gestión de Poda",      
       buscarPoda: "", // Guarda el texto de búsqueda
       cabeceraTablaPoda: [
         // Detalla las cabeceras de la tabla
@@ -148,11 +143,18 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaPoda: [{ codigo_finca: 1, id_farm: 1 }], // Almacena una lista de Lotes, la misma se muestra en tabla
     };
   },
 
   computed: {
+    listaPodaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloPoda/listaPodasStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoPoda
     dialogNuevoPoda: {
       get() {
@@ -173,35 +175,91 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogMostrarPoda", v);
       },
     },
+
+    modeloPodaStore: {
+      get() {
+        return this.$store.getters["moduloPoda/modeloPodaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
+      },
+    },
   },
 
   methods: {
+    async cargarListaPoda () {
+      let listaPodas = [];
+      let respuesta = await ServicioPodas.obtenerTodosPodas();
+      let podas = await respuesta.data;
+      podas.forEach((f) => {
+        listaPodas.push(f);
+      });
+      this.listaPodaStore = listaPodas;
+    },
+
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
+    },
+
     // Carga el DialogMostrarPoda
-    abrirMostrarPoda() {
+    abrirMostrarPoda(item) {
       this.dialogMostrarPoda = !this.dialogMostrarPoda; // Abre el DialogNuevoPoda
-      this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation(); // Reinicia las validaciones de formPoda
-      this.vaciarPoda(); // Vacia el modelo poda
+      this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
+      this.vaciarModeloPodaStore(); // Vacia el modelo poda
+      this.modeloPodaStore = item;
     },
 
     // Vacia el modelo lot
-    ...mapMutations("moduloPoda", ["vaciarPoda"]),
+    ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
 
     // Carga el DialogNuevoPoda
     cargarDialogNuevoPoda() {
-      this.dialogNuevoPoda = !this.dialogNuevoPoda; // Abre el DialogNuevoPoda
-      this.$refs.componentDialogNuevoPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation(); // Reinicia las validaciones de formPoda
-      this.vaciarPoda(); // Vacia el modelo poda
+      this.dialogNuevoPoda = !this.dialogNuevoPoda;
+      this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
+      this.vaciarModeloPodaStore();
     },
   },
 
-  mixins: [autenticacionMixin, myMixin],
-
   created() {
-    let usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario.rol === "Administrador")
-      this.$store.commit("colocarLayout", "LayoutAdministrador");
-    if (usuario.rol === "Productor")
-      this.$store.commit("colocarLayout", "LayoutProductor");
+    this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };
 </script>

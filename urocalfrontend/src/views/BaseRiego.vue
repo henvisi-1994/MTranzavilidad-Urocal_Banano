@@ -8,21 +8,14 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div
-              :class="[`text-h4`, `mb-4`]"
-              class="transition-swing primary--text"
-              v-text="nombre"
-            ></div>
+            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarRiego"
               append-icon="mdi-magnify"
-              label="Buscar"
-              class="custom"
-              filled
-              dense
+              label="Buscar" class="custom" filled dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -34,17 +27,16 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaRiego"
           sort-by="id_lote"
-          :items="listaRiego"
+          :items="listaRiegoStore"
           :search="buscarRiego"
-          class="elevation-1"
-        >
+          class="elevation-1">
           <template v-slot:top>
             <!-- Dialog que muestra el formulario con toda la informacion de Riego -->
             <DialogMostrarRiego ref="componentDialogMostrarRiego"></DialogMostrarRiego>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarRiego()"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirMostrarRiego(item)"> mdi-eye </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -53,8 +45,7 @@
         <!-- Botón para agregar nuevo Riego -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" elevation="0"
-          large
+          width="200px" large
           color="primary"
           @click="cargarDialogNuevoRiego()"
           >Nuevo</v-btn
@@ -65,11 +56,12 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import DialogNuevoRiego from "@/components/DialogNuevoRiego";
 import DialogMostrarRiego from "@/components/DialogMostrarRiego";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import SerivicioRiegos from '../services/SerivicioRiegos';
+import ServicioFinca from "../services/ServicioFinca";
 
 export default {
   name: "BaseRiego",
@@ -87,20 +79,20 @@ export default {
         // Detalla las cabeceras de la tabla
         {
           text: "Código de finca",
-          value: "codigo_finca",
+          value: "fincodigo",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "lotnumero",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Cultivo",
-          value: "cultivo",
+          value: "cultivoid",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -162,11 +154,28 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaRiego: [{ codigo_finca: 1, id_farm: 1 }], // Almacena una lista de Riego, la misma se muestra en tabla
     };
   },
 
   computed: {
+    ...mapState('moduloRiego', ['editarRiego']),
+
+    listaRiegoStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloRiego/listaRiegoStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerListaRiegoStore", v);
+      },
+    },
+    listaFincaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoRiego
     dialogNuevoRiego: {
       get() {
@@ -187,35 +196,112 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogMostrarRiego", v);
       },
     },
+
+    modeloRiegoStore: {
+      get() {
+        return this.$store.getters["moduloRiego/modeloRiegoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerModeloRiegoStore", v);
+      },
+    },
+
+    editarRiego: {
+      get() {
+        return this.$store.getters["moduloRiego/editarRiego"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerEditarRiego", v);
+      },
+    },
   },
 
   methods: {
-    // Carga el DialogMostrarRiego
-    abrirMostrarRiego() {
-      this.dialogMostrarRiego = !this.dialogMostrarRiego; // Abre el DialogMostrarRiego
-      this.$refs.componentDialogMostrarRiego.$refs.componentFormRiego.$refs.formRiego.resetValidation(); // Reinicia las validaciones de formRiego
-      this.vaciarRiego(); // Vacia el modelo riego
+    ...mapMutations("moduloRiego", ["vaciarModeloRiegoStore"]),
+
+    async cargarListaRiego () {
+      let listaRiegos = [];
+      let respuesta = await SerivicioRiegos.obtenerTodosRiegos();
+      let riegos = await respuesta.data;
+      riegos.forEach((f) => {
+        listaRiegos.push(f);
+      });
+      this.listaRiegoStore = listaRiegos;
     },
 
-    // Vacia el modelo Riego
-    ...mapMutations("moduloRiego", ["vaciarRiego"]),
+    async cargarListaFinca() {
+      let listaFinca = [];
+      let respuesta = await ServicioFinca.obtenerTodosFincas();
+      let datosFinca = await respuesta.data;
+      datosFinca.forEach((finca) => {
+        listaFinca.push(finca);
+      });
+      this.listaFincaStore = listaFinca;
+    },
 
-    // Carga el DialogNuevoRiego
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
+    },
+
+    abrirMostrarRiego(item) {
+      this.dialogMostrarRiego = !this.dialogMostrarRiego; // Abre el DialogMostrarRiego
+      this.$refs.componentDialogMostrarRiego.$refs.componentFormRiego.$refs.formRiego.resetValidation(); // Reinicia las validaciones de formRiego
+      this.vaciarModeloRiegoStore(); // Vacia el modelo riego
+      this.editarRiego = true;
+      this.modeloRiegoStore = item;
+    },
+
     cargarDialogNuevoRiego() {
       this.dialogNuevoRiego = !this.dialogNuevoRiego; // Abre el DialogNuevoRiego
-      this.$refs.componentDialogNuevoRiego.$refs.componentFormRiego.$refs.formRiego.resetValidation(); // Reinicia las validaciones de formRiego
-      this.vaciarRiego(); // Vacia el modelo Riego
+      this.$refs.componentDialogNuevoRiego.$refs.componentFormRiego.$refs.formRiego.resetValidation();
+      this.$refs.componentDialogNuevoRiego.$refs.componentFormRiego.limpiarIds();
+      this.editarRiego = false;
+      this.vaciarModeloRiegoStore();
     },
   },
 
-  mixins: [autenticacionMixin, myMixin],
-
   created() {
-    let usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario.rol === "Administrador")
-      this.$store.commit("colocarLayout", "LayoutAdministrador");
-    if (usuario.rol === "Productor")
-      this.$store.commit("colocarLayout", "LayoutProductor");
+    this.cargarListaRiego();
+    this.cargarListaFinca();
+    this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };
 </script>

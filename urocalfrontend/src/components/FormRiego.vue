@@ -6,14 +6,16 @@
         justify-md="space-around"
         :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
       >
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="riego.fincaid"
+            :disabled="editarRiego"
+            v-model="fincaid"
             placeholder="Finca"
             class="style-chooser"
-            label="fincanombre"
+            label="finnombrefinca"
             :reduce="(listaFinca) => listaFinca.fincaid"
-            :options="listaFinca"
+            :options="listaFincaStore"
+            :rules="[reglas.campoVacio(fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -24,20 +26,23 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="riego.loteid"
+            :disabled="editarRiego"
+            v-model="loteid"
             placeholder="Lote"
             class="style-chooser"
-            label="lotenombre"
+            label="lotnumero"
             :reduce="(listaLote) => listaLote.loteid"
             :options="listaLote"
+            :rules="[reglas.campoVacio(loteid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
+              <em style="opacity: 0.5" v-else-if="!fincaid">Escoja una finca</em>
               <em style="opacity: 0.5" v-else>Empiece a escribir un lote</em>
             </template>
           </v-select>
@@ -45,14 +50,16 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="riego.cultivoid"
+            :disabled="editarRiego"
+            v-model="modeloRiegoStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
             label="cultivonombre"
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
+            :rules="[reglas.campoVacio(modeloRiegoStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -63,62 +70,75 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Superficie"
-            v-model="riego.riesuperficie"
-            :rules="[reglas.campoVacio(riego.riesuperficie)]"
+            v-model="modeloRiegoStore.riesuperficie"
+            :rules="[reglas.campoVacio(modeloRiegoStore.riesuperficie),
+            reglas.soloNumeros(modeloRiegoStore.riesuperficie)]"
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Módulos"
-            v-model="riego.riemodulos"
-            :rules="[reglas.campoVacio(riego.riemodulos)]"
+            v-model="modeloRiegoStore.riemodulos"
+            :rules="[reglas.campoVacio(modeloRiegoStore.riemodulos),
+            reglas.soloNumeros(modeloRiegoStore.riemodulos)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Semana"
-            v-model="riego.riesemana"
-            :rules="[reglas.campoVacio(riego.riesemana)]"
+            v-model="modeloRiegoStore.riesemana"
+            :rules="[reglas.campoVacio(modeloRiegoStore.riesemana),
+            reglas.soloNumeros(modeloRiegoStore.riesemana)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Año"
-            v-model="riego.rieanio"
-            :rules="[reglas.campoVacio(riego.rieanio)]"
+            v-model="modeloRiegoStore.rieanio"
+            :rules="[reglas.campoVacio(modeloRiegoStore.rieanio),
+            reglas.soloNumeros(modeloRiegoStore.rieanio)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Horas regadas"
-            v-model="riego.riehorasregadas"
-            :rules="[reglas.campoVacio(riego.riehorasregadas)]"
+            v-model="modeloRiegoStore.riehorasregadas"
+            :rules="[reglas.campoVacio(modeloRiegoStore.riehorasregadas)]"
           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Porcentaje de eficiencia"
-            v-model="riego.rieporcentajeeficiencia"
-            :rules="[reglas.campoVacio(riego.rieporcentajeeficiencia)]"
+            v-model="modeloRiegoStore.rieporcentajeeficiencia"
+            :rules="[reglas.campoVacio(modeloRiegoStore.rieporcentajeeficiencia),
+            reglas.soloNumeros(modeloRiegoStore.rieporcentajeeficiencia)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled dense
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
             placeholder="Volumen de agua utilizado"
-            v-model="riego.rievolumenutilizado"
-            :rules="[reglas.campoVacio(riego.rievolumenutilizado)]"
+            v-model="modeloRiegoStore.rievolumenutilizado"
+            :rules="[reglas.campoVacio(modeloRiegoStore.rievolumenutilizado),
+            reglas.soloNumeros(modeloRiegoStore.rievolumenutilizado)]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -132,6 +152,8 @@ import { mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
+import ServicioLote from "../services/ServicioLote";
+
 export default {
   name: "FormRiego",
 
@@ -141,56 +163,19 @@ export default {
 
   data() {
     return {
-      listaFinca: [
-        {
-          fincaid: 1,
-          fincanombre: "Finca 1",
-        },
-        {
-          fincaid: 2,
-          fincanombre: "Finca 2",
-        },
-        {
-          fincaid: 3,
-          fincanombre: "Finca 3",
-        },
-      ],
-      listaLote: [
-        {
-          loteid: 1,
-          lotenombre: "Lote 1",
-        },
-        {
-          loteid: 2,
-          lotenombre: "Lote 2",
-        },
-        {
-          loteid: 3,
-          lotenombre: "Lote 3",
-        },
-      ],
+      listaLote: [],
+      fincaid: '',
+      loteid: '',
       listaCultivo: [
-        {
-          cultivoid: 1,
-          cultivonombre: "Cultivo 1",
-        },
-        {
-          cultivoid: 2,
-          cultivonombre: "Cultivo 2",
-        },
-        {
-          cultivoid: 3,
-          cultivonombre: "Cultivo 3",
-        },
-      ],
-    };
+        {cultivoid: 1,
+        cultivonombre: 'Cultivo provicional 1'},]
+    }
   },
 
   computed: {
-    // Obtiene el modelo Riego
-    ...mapState("moduloRiego", ["riego"]),
+    ...mapState("moduloRiego", ["modeloRiegoStore", "editarRiego"]),
+    ...mapState("moduloFinca", ["listaFincaStore"]),
 
-    // Obtiene la variable que indica si el formulario es valido
     formRiegoValido: {
       get() {
         return this.$store.getters["moduloRiego/formRiegoValido"];
@@ -200,10 +185,72 @@ export default {
       },
     },
 
-    // Obtiene las reglas de validacion
+    modeloRiegoStore: {
+      get() {
+        return this.$store.getters["moduloRiego/modeloRiegoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerModeloRiegoStore", v);
+      },
+    },
+
+    // Descomentar cuando el modulo cultivos este finalizado
+    // listaCultivoStore: {
+    //   get() {
+    //     return JSON.parse(JSON.stringify(this.$store.getters["moduloCultivo/listaCultivoStore"]));
+    //   },
+    //   set(v) {
+    //     return this.$store.commit("moduloCultivo/establecerListaCultivoStore", v);
+    //   },
+    // },
+
     ...mapState("validacionForm", ["reglas"]),
   },
 
-  methods: {},
+  watch: {
+    fincaid(newValue, oldValue){
+      if(!this.fincaid){
+        this.listaLote = [];
+        this.loteid = '';
+      } else {
+        this.obtenerLotes();
+      }
+    },
+
+    'modeloRiegoStore.fincaid'(){
+      if(this.modeloRiegoStore.fincaid) {
+        this.fincaid = this.modeloRiegoStore.fincaid;
+        this.loteid = this.modeloRiegoStore.lotecultivadoid;
+      }
+    }
+  },
+
+  methods: {
+    async obtenerLotes(){
+      let newListaLotes = []
+      let respuesta = await ServicioLote.obtenerTodosLote();
+      let lotes = await respuesta.data;
+      lotes.forEach((f) => {
+        newListaLotes.push(f);
+      });
+      this.listaLote = newListaLotes;
+    },
+
+    // Asignar metodo cuando se termine el modulo de cultivo
+    async obtenerCultivos(){
+      let listaCultivos = [];
+      let respuesta = await ServicioCultivo.obtenerTodosCultivo();
+      let cultivos = await respuesta.data;
+      cultivos.forEach((f) => {
+        listaCultivos.push(f);
+      });
+      this.listaCultivoStore = listaCultivos;
+    },
+
+    limpiarIds(){
+      this.fincaid = '';
+      this.loteid = '';
+    }
+  },
 };
 </script>

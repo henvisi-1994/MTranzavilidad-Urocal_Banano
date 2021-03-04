@@ -2,9 +2,9 @@
   <v-form ref="formPoda" v-model="formPodaValido">
     <v-container>
       <v-row no-gutters justify-md="space-around" :class="$vuetify.breakpoint.xs ? '' : 'mb-5'">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="poda.fincaid"
+            v-model="modeloPodaStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="fincanombre"
@@ -20,9 +20,9 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="poda.loteid"
+            v-model="modeloPodaStore.loteid"
             placeholder="Lote"
             class="style-chooser"
             label="lotenombre"
@@ -40,10 +40,10 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="poda.cultivoid"
+            v-model="modeloPodaStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
             label="cultivonombre"
@@ -59,7 +59,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -68,17 +68,17 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
                 label="Fecha de poda"
-                v-model="poda.podfecha"
-                :rules="[reglas.campoVacio(poda.podfecha)]"
+                v-model="modeloPodaStore.podfecha"
+                :rules="[reglas.campoVacio(modeloPodaStore.podfecha)]"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="poda.podfecha"
+              v-model="modeloPodaStore.podfecha"
               @input="menuMostrarCalendario = false"
               :show-current="fechaActual"
               locale="es-419"
@@ -87,10 +87,10 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
           <v-select
-            v-model="poda.podtipo"
+            v-model="modeloPodaStore.podtipo"
             placeholder="Tipo de poda"
             class="style-chooser"
             label="podatipo"
@@ -106,28 +106,28 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Hectáreas"
-            v-model="poda.podhectareas"
-            :rules="[reglas.campoVacio(poda.podhectareas)]"
+            v-model="modeloPodaStore.podhectareas"
+            :rules="[reglas.campoVacio(modeloPodaStore.podhectareas)]"
           ></v-text-field>
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Cantidad de plantas"
-            v-model="poda.podcantidadplantas"
-            :rules="[reglas.campoVacio(poda.podcantidadplantas)]"
+            v-model="modeloPodaStore.podcantidadplantas"
+            :rules="[reglas.campoVacio(modeloPodaStore.podcantidadplantas)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field class="custom px-2" filled 
+        <v-col cols="12" md="5">
+          <v-text-field
             placeholder="Herramienta"
-            v-model="poda.podherramienta"
-            :rules="[reglas.campoVacio(poda.podherramienta)]"
+            v-model="modeloPodaStore.podherramienta"
+            :rules="[reglas.campoVacio(modeloPodaStore.podherramienta)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -213,7 +213,7 @@ export default {
 
   computed: {
     // Obtiene el modelo poda
-    ...mapState("moduloPoda", ["poda"]),
+    ...mapState("moduloPoda", ["modeloPodaStore"]),
 
     // Obtiene la variable que indica si el formulario es valido
     formPodaValido: {
@@ -222,6 +222,15 @@ export default {
       },
       set(v) {
         return this.$store.commit("moduloPoda/cambiarEstadoValidoFormPoda", v);
+      },
+    },
+
+    modeloPodaStore: {
+      get() {
+        return this.$store.getters["moduloPoda/modeloPodaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
 

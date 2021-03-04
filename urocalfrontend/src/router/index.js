@@ -1,13 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-<<<<<<< HEAD
-=======
-import Login from '../views/BaseLogin.vue'
-import BaseMalezaControl from '../views/BaseMalezaControl.vue'
-import BaseMonitoreoRoedorCentroAcopio from '../views/BaseMonitoreoRoedorCentroAcopio.vue'
-import BaseVehiculo from '../views/BaseVehiculo.vue'
-import BaseReporteEmbarque from '../views/BaseReporteEmbarque.vue'
->>>>>>> parent of 478b03b... Recuperacion de Archivos
 
 Vue.use(VueRouter)
 
@@ -139,7 +131,7 @@ const routes = [
     component: () => import('@/views/BaseCosecha.vue'),
   },
   {
-    path: '/cacao/remision',
+    path: '/cacao/guiaremision',
     name: 'BaseGuiaRemision',
     component: () => import('@/views/BaseGuiaRemision.vue'),
   },
@@ -185,20 +177,6 @@ const routes = [
     name: 'MonitoreoRoedorCentroAcopio',
     component: () => import('@/views/BaseMonitoreoRoedorCentroAcopio.vue'),
   },
-<<<<<<< HEAD
-=======
-  // ------------- EXPORTADOR - BANANO --------------------
-
-  {
-    path: '/ReporteEmbarque',
-    name: 'BaseReporteEmbarque',
-    component: BaseReporteEmbarque
-  },
-
-  // ------------- EXPORTADOR - CACAO ---------------------
-
-  // ---------------------
->>>>>>> parent of 478b03b... Recuperacion de Archivos
   {
     path: '/centroacopio/vehiculo',
     name: 'BaseVehiculo',

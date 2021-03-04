@@ -49,12 +49,7 @@ export default {
         // Vehiculo
         dialogNuevoVehiculo: false,                         // Indica si se abre o cierra el dialogNuevoVehiculo
         dialogEditarVehiculo: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
-<<<<<<< HEAD
         // Poda
-=======
-        dialogNuevoReporteEmbarque: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
-        dialogEditarReporteEmbarque: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
->>>>>>> parent of 478b03b... Recuperacion de Archivos
         dialogNuevoPoda: false,                             // Indica si se abre o cierra el dialogNuevoPoda
         dialogMostrarPoda: false,                           // Indica si se abre o cierra el dialogMostrarPoda
         // Fertilizante
@@ -128,7 +123,10 @@ export default {
         dialogNuevoRegistroEnvio: false,                  // Indica si se abre o cierra el dialogNuevoRegistroEnvio
         // Exportador
         dialogNuevoExportadorPersona: false,                   
-        dialogEditarExportadorPersona: false,                  
+        dialogEditarExportadorPersona: false,
+        //Guia Remision
+        dialogNuevoGuiaRemision: false,
+        dialogMostrarGuiaRemision: false
     },
 
     mutations: {
@@ -260,14 +258,6 @@ export default {
             state.dialogEditarVehiculo = newState;
         },
 
-        /*  REPORTE EMBARQUE*/
-        toggleDialogNuevoReporteEmbarque(state, newState) {
-            state.dialogNuevoReporteEmbarque = newState;
-        },
-
-        toggleDialogEditarReporteEmbarque(state, newState) {
-            state.dialogEditarReporteEmbarque = newState;
-        },
         /* Poda */
         toggleDialogNuevoPoda(state, newState) {
             state.dialogNuevoPoda = newState;
@@ -495,6 +485,14 @@ export default {
         toggleDialogEditarExportadorPersona(state, newState) {
             state.dialogEditarExportadorPersona = newState;
         },
+
+        // Guia Remision
+        toggleDialogNuevoGuiaRemision(state, newState) {
+            state.dialogNuevoGuiaRemision = newState;
+        },
+        toggleDialogMostrarGuiaRemision(state, newState) {
+            state.dialogMostrarGuiaRemision = newState;
+        }
     },
 
     getters: {
@@ -534,12 +532,7 @@ export default {
         // Vehiculo
         dialogNuevoVehiculo: (state) => state.dialogNuevoVehiculo,                                              // Devuelve la variable dialogNuevoVehiculo
         dialogEditarVehiculo: (state) => state.dialogEditarVehiculo,                                            // Devuelve la variable dialogEditarVehiculo
-<<<<<<< HEAD
         // Poda
-=======
-        dialogNuevoReporteEmbarque: (state) => state.dialogNuevoReporteEmbarque,                                              // Devuelve la variable dialogNuevoVehiculo
-        dialogEditarReporteEmbarque: (state) => state.dialogEditarReporteEmbarque,                                            // Devuelve la variable dialogEditarVehiculo
->>>>>>> parent of 478b03b... Recuperacion de Archivos
         dialogNuevoPoda: (state) => state.dialogNuevoPoda,                                                      // Devuelve la variable dialogNuevoPoda
         dialogMostrarPoda: (state) => state.dialogMostrarPoda,                                                  // Devuelve la variable dialogMostrarPoda
         // CentroAcopio
@@ -637,5 +630,8 @@ export default {
         // Exportador
         dialogNuevoExportadorPersona: (state) => state.dialogNuevoExportadorPersona,                              
         dialogEditarExportadorPersona: (state) => state.dialogEditarExportadorPersona,
+        // Guia Remision
+        dialogNuevoGuiaRemision: (state) => state.dialogNuevoGuiaRemision,
+        dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision
     },
 }

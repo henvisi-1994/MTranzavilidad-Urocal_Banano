@@ -1,7 +1,6 @@
 export default class Riego {
-    constructor(riegoid, riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia,
+    constructor(riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia,
         rievolumenutilizado, rieoperario, cultivoid) {
-        this.riegoid = riegoid;
         this.riesuperficie = riesuperficie;
         this.riemodulos = riemodulos;
         this.riesemana = riesemana;

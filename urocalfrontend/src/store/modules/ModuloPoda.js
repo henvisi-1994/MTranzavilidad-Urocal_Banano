@@ -4,19 +4,24 @@ export default {
     namespaced: true,
 
     state: {
-        poda: new Poda('', '', '', '', '', '', '', ''), // Modelo Poda
+        listaPodasStore: [],
+        modeloPodaStore: new Poda('', '', '', '', '', '', '', ''), // Modelo Poda
         formPodaValido: false, // Indica si el formulario de Poda es valido
     },
 
     mutations: {
         // Coloca un nuevo Poda
-        nuevoPoda(state, nuevoPoda) {
-            state.poda = nuevoPoda
+        establecerModeloPodaStore(state, nuevoPoda) {
+            state.modeloPodaStore = nuevoPoda
+        },
+
+        establecerListaPodasStore(state, newState) {
+            state.listaFertilizantesStore = newState;
         },
 
         // Vacia el modelo Poda
-        vaciarPoda(state) {
-            state.poda = new Poda('', '', '', '', '', '', '', '')
+        vaciarModeloPodaStore(state) {
+            state.modeloPodaStore = new Poda('', '', '', '', '', '', '', '')
         },
 
         // Cambia  el estado del Formulario Poda
@@ -27,5 +32,7 @@ export default {
 
     getters: {
         formPodaValido: (state) => state.formPodaValido, // Devuelve la variable formPodaValido
+        listaPodasStore: (state) => state.listaPodasStore,
+        modeloPodaStore: (state) => state.modeloPodaStore,
     },
 }

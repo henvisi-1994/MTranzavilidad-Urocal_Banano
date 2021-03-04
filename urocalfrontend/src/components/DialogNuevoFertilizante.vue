@@ -9,11 +9,11 @@
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="white primary--text">
+      <v-card-title class="primary white--text">
         <h5>Registrar fertilizante</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="primary--text" @click="cerrarDialogNuevoFertilizante()"
+          <v-icon class="white--text" @click="cerrarDialogNuevoFertilizante()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -30,9 +30,9 @@
         <!-- Botón para agregar nuevo Fertilizante -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="200px"
           color="primary"
-          @click="registrar()"
+          @click="agregarFertilizante()"
           >Registrar</v-btn
         >
       </v-card-actions>
@@ -44,6 +44,8 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormFertilizante from "@/components/FormFertilizante";
+
+import ServicioFertilizantes from '../services/ServicioFertilizantes';
 
 export default {
   name: "DialogNuevoFertilizante",
@@ -67,19 +69,44 @@ export default {
       },
     },
 
+    modeloFertilizanteStore: {
+      get() {
+        return this.$store.getters["moduloFertilizante/modeloFertilizanteStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerModeloFertilizanteStore", v);
+      },
+    },
+
     // Obtiene es estado de la variable formFertilizanteValido y el modelo fertilizante
-    ...mapState("moduloFertilizante", ["formFertilizanteValido", "fertilizante"]),
+    ...mapState("moduloFertilizante", ["formFertilizanteValido", "modeloFertilizanteStore"]),
   },
 
   methods: {
-    // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      //console.log(this.limpiezaHerramienta);
+    async agregarFertilizante() {
+      let respuesta = await ServicioFertilizantes.agregarFertilizante(this.modeloFertilizanteStore);
+      if (respuesta.status == 201) {
+        this.cerrarDialogNuevoFertilizante();
+        this.cargarListaFertilizante();
+        this.vaciarModeloFertilizanteStore();
+      }
+    },
+
+    async cargarListaFertilizante () {
+      let listaFertilizantes = [];
+      let respuesta = await ServicioFertilizantes.obtenerTodosFertilizantes();
+      let fertilizantes = await respuesta.data;
+      fertilizantes.forEach((f) => {
+        listaFertilizantes.push(f);
+      });
+      this.listaFertilizantesStore = listaFertilizantes;
     },
 
     cerrarDialogNuevoFertilizante() {
-      this.dialogNuevoFertilizante = !this.dialogNuevoFertilizante; // Cierra el dialogNuevoPoda
+      this.dialogNuevoFertilizante = !this.dialogNuevoFertilizante;
     },
+
+    ...mapMutations("moduloFertilizante", ["vaciarModeloFertilizanteStore"]),
   },
 };
 </script>

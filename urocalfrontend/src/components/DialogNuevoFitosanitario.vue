@@ -9,11 +9,11 @@
   >
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
-      <v-card-title class="white primary--text">
+      <v-card-title class="primary white--text">
         <h5>Registrar fitosanitario</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="primary--text" @click="cerrarDialogNuevoFitosanitario()"
+          <v-icon class="white--text" @click="cerrarDialogNuevoFitosanitario()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -30,9 +30,9 @@
         <!-- Botón para agregar nuevo Fitosanitario -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="200px"
           color="primary"
-          @click="registrar()"
+          @click="agregarFitosanitario()"
           >Registrar</v-btn
         >
       </v-card-actions>
@@ -44,6 +44,8 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormFitosanitario from "@/components/FormFitosanitario";
+
+import ServicioFitosanitarios from '../services/ServicioFitosanitarios';
 
 export default {
   name: "DialogNuevoFitosanitario",
@@ -67,19 +69,45 @@ export default {
       },
     },
 
+    modeloFitosanitarioStore: {
+      get() {
+        return this.$store.getters["moduloFitosanitario/modeloFitosanitarioStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFitosanitario/establecerModeloFitosanitariosStor", v);
+      },
+    },
+
     // Obtiene es estado de la variable formFitosanitarioValido y el modelo fitosanitario
-    ...mapState("moduloFitosanitario", ["formFitosanitarioValido", "fitosanitario"]),
+    ...mapState("moduloFitosanitario", ["formFitosanitarioValido", "modeloFitosanitarioStore"]),
   },
 
   methods: {
     // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      //console.log(this.limpiezaHerramienta);
+    async agregarFitosanitario() {
+      let respuesta = await ServicioFitosanitarios.agregarFitosanitario(this.modeloFitosanitarioStore);
+      if (respuesta.status == 201) {
+        this.cerrarDialogNuevoFitosanitario();
+        this.cargarListaFitosanitario();
+        this.vaciarModeloFitosanitarioStore();
+      }
+    },
+
+    async cargarListaFitosanitario () {
+      let listaFitosanitarios = [];
+      let respuesta = await ServicioFitosanitarios.obtenerTodosFitosanitarios();
+      let fitosanitarios = await respuesta.data;
+      fitosanitarios.forEach((f) => {
+        listaFitosanitarios.push(f);
+      });
+      this.listaFitosanitariosStore = listaFitosanitarios;
     },
 
     cerrarDialogNuevoFitosanitario() {
       this.dialogNuevoFitosanitario = !this.dialogNuevoFitosanitario; // Cierra el dialogNuevoFitosanitario
     },
+
+    ...mapMutations("moduloFitosanitario", ["vaciarModeloFitosanitarioStore"]),
   },
 };
 </script>

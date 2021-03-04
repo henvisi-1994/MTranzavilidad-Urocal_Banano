@@ -2,3 +2,4 @@ Cómo restaurar por consola
 psql -U postgres --port=5432 -d urocaldb -a -f urocaldb.sql
 
 
+pg_restore -d urocaldb -h localhost -U postgres  C:\Users\Jason\Desktop\VINCULACION\postgresql_e48efefe-0a73-4d0d-9170-0a2e8388e883-20210301004516.dump
