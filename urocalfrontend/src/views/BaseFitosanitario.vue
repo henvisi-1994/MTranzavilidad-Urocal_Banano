@@ -10,14 +10,21 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarFitosanitario"
               append-icon="mdi-magnify"
-              label="Buscar" class="custom" filled dense
+              label="Buscar"
+              class="custom"
+              filled
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -31,7 +38,8 @@
           sort-by="id_lote"
           :items="listaFitosanitariosStore"
           :search="buscarFitosanitario"
-          class="elevation-1">
+          class="elevation-1"
+        >
           <template v-slot:top>
             <!-- Dialog que muestra el formulario con toda la informacion de fitosanitario -->
             <DialogMostrarFitosanitario
@@ -51,7 +59,8 @@
         <!-- Botón para agregar nueva fitosanitario -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px" large
+          width="200px"
+          large
           color="primary"
           @click="cargarDialogNuevoFitosanitario()"
           >Nuevo</v-btn
@@ -66,7 +75,7 @@ import { mapMutations } from "vuex";
 
 import DialogNuevoFitosanitario from "@/components/DialogNuevoFitosanitario";
 import DialogMostrarFitosanitario from "@/components/DialogMostrarFitosanitario";
-import ServicioFitosanitarios from '../services/ServicioFitosanitarios';
+import ServicioFitosanitarios from "../services/ServicioFitosanitarios";
 
 export default {
   name: "BaseFitosanitario",
@@ -212,10 +221,17 @@ export default {
   computed: {
     listaFitosanitariosStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloFitosanitario/listaFitosanitariosStore"]));
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/listaFitosanitariosStore"]
+          )
+        );
       },
       set(v) {
-        return this.$store.commit("moduloFitosanitario/establecerListaFitosanitariosStore", v);
+        return this.$store.commit(
+          "moduloFitosanitario/establecerListaFitosanitariosStore",
+          v
+        );
       },
     },
     // Obtiene y modifica el estado de la variable dialogNuevoFitosanitario
@@ -224,41 +240,75 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoFitosanitario"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoFitosanitario", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoFitosanitario",
+          v
+        );
       },
     },
 
     // Obtiene y modifica el estado de la variable dialogMostrarFitosanitario
     dialogMostrarFitosanitario: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarFitosanitario"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarFitosanitario"
+        ];
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarFitosanitario", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarFitosanitario",
+          v
+        );
       },
     },
 
     modeloFitosanitarioStore: {
       get() {
-        return this.$store.getters["moduloFitosanitario/modeloFitosanitarioStore"];
+        return this.$store.getters[
+          "moduloFitosanitario/modeloFitosanitarioStore"
+        ];
       },
       set(v) {
-        return this.$store.commit("moduloFitosanitario/establecerModeloFitosanitariosStore", v);
+        return this.$store.commit(
+          "moduloFitosanitario/establecerModeloFitosanitariosStore",
+          v
+        );
       },
     },
   },
 
   methods: {
-    async cargarListaFitosanitario () {
-      let listaFitosanitarios = [];
+    async cargarListaFitosanitario() {
       let respuesta = await ServicioFitosanitarios.obtenerTodosFitosanitarios();
       let fitosanitarios = await respuesta.data;
+      this.$store.commit("moduloFitosanitario/vaciarLista", null);
       fitosanitarios.forEach((f) => {
-        listaFitosanitarios.push(f);
+        this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",
+          {
+            fitosanitarioid: f.fitosanitarioid,
+            fitciclo: f.fitciclo,
+            fitfecha: this.convertirFecha(f.fitfecha),
+            fitnombrecomercial: f.fitnombrecomercial,
+            fitingredienteactivo: f.fitingredienteactivo,
+            fitautorizaciontecnica: f.fitautorizaciontecnica,
+            fitnombrecomun: f.fitnombrecomun,
+            fitdosis: f.fitdosis,
+            fitcantidadtotal: f.fitcantidadtotal,
+            fitareaplicada: f.fitareaaplicada,
+            fitequipoaplicacion:f.fitequipoaplicacion,
+            fitmetodo: f.fitmetodo,
+            fitplazoseguridad: f.fitplazoseguridad,
+            fitoperario: f.fitoperario,
+            cultivoid: f.cultivoid,
+            condicionclimaticaid: f.condicionclimaticaid,
+          }
+        );
       });
-      this.listaFitosanitariosStore = listaFitosanitarios;
     },
+    /*
+
+    */
 
     tablaResponsiva() {
       // Ajusta el tamaño de la tabla para pantallas pequeñas
@@ -319,6 +369,10 @@ export default {
       this.$refs.componentDialogNuevoFitosanitario.$refs.componentFormFitosanitario.$refs.formFitosanitario.resetValidation();
       this.vaciarModeloFitosanitarioStore();
     },
+    convertirFecha(fecha){
+      let fechaC = fecha.split("T")[0];
+      return fechaC;
+    }
   },
 
   created() {
