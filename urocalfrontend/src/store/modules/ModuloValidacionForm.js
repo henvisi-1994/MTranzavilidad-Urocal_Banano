@@ -13,6 +13,9 @@ export default {
             soloNumeros: (texto) =>
                 Number.isInteger(Number(texto)) || "Ingrese sólo números enteros!",
 
+            soloNum: (texto) =>
+                Number.isInteger(Number(texto)) || "Ingrese sólo números enteros!",
+
             soloNumerosPositivos: (texto) =>
                 Number(texto) >= 0 || "No se permiten cantidades negativas!",
             

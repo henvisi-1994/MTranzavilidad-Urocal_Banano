@@ -57,8 +57,8 @@
             placeholder="Cultivo"
             class="style-chooser"
             label="cultivonombre"
-            :reduce="(listaCultivo) => listaCultivo.cultivoid"
-            :options="listaCultivo"
+            :reduce="(listaCultivos) => listaCultivos.cultivoid"
+            :options="listaCultivos"
             :rules="[reglas.campoVacio(modeloRiegoStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -115,7 +115,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="editarRiego"
-            placeholder="Horas regadas"
+            placeholder="Horas regadas (HH:MM:SS)"
             v-model="modeloRiegoStore.riehorasregadas"
             :rules="[reglas.campoVacio(modeloRiegoStore.riehorasregadas)]"
           ></v-text-field
@@ -142,6 +142,26 @@
           ></v-text-field
         ></v-col>
       </v-row>
+
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
+            placeholder="Operador"
+            v-model="modeloRiegoStore.rieoperario"
+            :rules="[reglas.campoVacio(modeloRiegoStore.rieoperario)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
+            placeholder="Sistema de riego"
+            v-model="modeloRiegoStore.riesistemariego"
+            :rules="[reglas.campoVacio(modeloRiegoStore.riesistemariego)]"
+          ></v-text-field
+        ></v-col>
+      </v-row>
+
     </v-container>
   </v-form>
 </template>
@@ -153,6 +173,8 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
 import ServicioLote from "../services/ServicioLote";
+
+import ServicioCultivo from "../services/ServicioCultivo";
 
 export default {
   name: "FormRiego",
@@ -166,9 +188,7 @@ export default {
       listaLote: [],
       fincaid: '',
       loteid: '',
-      listaCultivo: [
-        {cultivoid: 1,
-        cultivonombre: 'Cultivo provicional 1'},]
+      listaCultivos: []
     }
   },
 
@@ -225,6 +245,10 @@ export default {
     }
   },
 
+  mounted() {
+    this.obtenerCultivos();
+  },
+
   methods: {
     async obtenerLotes(){
       let newListaLotes = []
@@ -241,10 +265,8 @@ export default {
       let listaCultivos = [];
       let respuesta = await ServicioCultivo.obtenerTodosCultivo();
       let cultivos = await respuesta.data;
-      cultivos.forEach((f) => {
-        listaCultivos.push(f);
-      });
-      this.listaCultivoStore = listaCultivos;
+      this.listaCultivos = cultivos;
+      console.log(cultivos);
     },
 
     limpiarIds(){
