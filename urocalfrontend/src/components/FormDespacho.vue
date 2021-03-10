@@ -20,7 +20,8 @@
                 :disabled="bloquearCamposFormDespacho"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="despacho.desfechasalida" @input="menuDateShow = false" :show-current="currentDate" locale="es-419" ></v-date-picker>
+            <v-date-picker v-model="despacho.desfechasalida" @input="menuDateShow = false" :min="currentDate"
+                :show-current="currentDate" locale="es-419" ></v-date-picker>
           </v-menu>
         </v-col>
         <v-col cols="12" md="6">

@@ -152,9 +152,10 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            type="number"
             placeholder="Área aplicada"
-            v-model="modeloFitosanitarioStore.fitareaaplicda"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitareaaplicda)]"
+            v-model="modeloFitosanitarioStore.fitareaplicada"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitareaplicada)]"
           ></v-text-field
         ></v-col>
       </v-row>

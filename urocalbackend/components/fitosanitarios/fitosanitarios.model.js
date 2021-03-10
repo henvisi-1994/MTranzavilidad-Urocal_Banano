@@ -14,7 +14,7 @@ module.exports = {
     },
 
     async updateFitosanitario(id, fitosanitario){
-        return fitosanitariosDao.updateFitosanitario(id, fitosanitarios);
+        return fitosanitariosDao.updateFitosanitario(id, fitosanitario);
     },
 
     async deleteFitosanitario(id){
