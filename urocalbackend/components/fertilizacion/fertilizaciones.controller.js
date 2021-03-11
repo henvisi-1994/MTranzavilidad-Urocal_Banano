@@ -13,6 +13,7 @@ module.exports = {
         return rows != null ? res.status(200).send(rows) : res.status(404).send({ message: "Fertilizacion no encontrado" });
     },
 
+
     async createFertilizacion(req, res) {
 
         // Añadir capa de validación

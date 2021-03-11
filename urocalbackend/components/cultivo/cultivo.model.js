@@ -11,7 +11,10 @@ module.exports = {
     async obtenerTodosCultivo() {
         return cultivoDao.obtenerTodosCultivo();
     },
-
+    
+    async obtenerTodosCultivoDetalles() {
+        return cultivoDao.obtenerTodosCultivoDetalles();
+    },
     async obtenerCultivo(id) {
         return cultivoDao.obtenerCultivo(id);
     },

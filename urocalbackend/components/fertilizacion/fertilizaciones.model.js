@@ -4,6 +4,7 @@ module.exports = {
     async getFertilizaciones(){
         return fertilizacionesDao.getFertilizaciones();
     },
+ 
 
     async getFertilizacion(id){
         return fertilizacionesDao.getFertilizacion(id);

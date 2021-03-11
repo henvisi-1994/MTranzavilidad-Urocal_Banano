@@ -8,6 +8,7 @@ class ServicioFertilizantes {
     
     // INSERT: Agrega un registro
     agregarFertilizante(formData){
+        console.log(formData)
         return axios.post(`${API_URL}/v1/fertilizacion`, formData);
     }
 
@@ -20,7 +21,8 @@ class ServicioFertilizantes {
     obtenerFertilizante() {
         return axios.get(`${API_URL}/v1/fertilizacion/${id}`);
     }
-
+   
+ 
     // UPDATE: Actualiza un registro
     actualizarFertilizante(id, formData) {
         return axios.put(`${API_URL}/v1/fertilizacion/${id}`, formData); 

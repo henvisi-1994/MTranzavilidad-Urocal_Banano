@@ -5,6 +5,7 @@
 
 const modeloLoteCultivado = require('./loteCultivado.model');
 const validation = require('../../utils/validations');
+const { obtenerTodosLoteCultivadoDeFinca } = require('./loteCultivado.dao');
 
 module.exports = {
     // Agrega un nuevo lote cultivado
@@ -32,6 +33,14 @@ module.exports = {
         //return res.status(200).send(userDto.multiple(users, req.user)); //<--
         return res.status(200).send(result); // <--
     },
+
+    async obtenerTodosLoteCultivadoDeFinca(req, res) {
+        const { id } = req.params;
+        const result = await modeloLoteCultivado.obtenerTodosLoteCultivadoDeFinca(id)
+        //return res.status(200).send(userDto.multiple(users, req.user)); //<--
+        return res.status(200).send(result); // <--
+    },
+
 
     // Obtener un lote cultivado por ID
     async obtenerLoteCultivado(req, res) {

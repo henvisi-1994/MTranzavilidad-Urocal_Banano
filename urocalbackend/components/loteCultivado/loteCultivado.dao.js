@@ -20,6 +20,14 @@ module.exports = {
         return result.rows; // Devuelve array de lotes cultivados
     },
 
+    async obtenerTodosLoteCultivadoDeFinca(id) {
+        let query = `select * from lotecultivado
+                     where fincaid= ${id}`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve array de lotes cultivados
+    },
+
+
     async obtenerLoteCultivado(id) {
         let query = `SELECT * FROM loteCultivado WHERE lotecultivadoid = ${id}`;
         let result = await pool.query(query);
