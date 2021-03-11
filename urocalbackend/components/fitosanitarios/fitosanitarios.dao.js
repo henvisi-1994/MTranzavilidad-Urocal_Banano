@@ -3,7 +3,11 @@ const pool = require('../../services/postgresql/index');
 
 module.exports = {
     async getFitosanitarios() {
-        let query = `SELECT * FROM fitosanitario`;
+        let query = `SELECT * FROM fitosanitario f 
+                        JOIN cultivo c ON c.cultivoid =f.cultivoid
+                        JOIN condicionclimatica cc ON cc.condicionclimaticaid =f.condicionclimaticaid
+                        JOIN lotecultivado l on l.lotecultivadoid=c.lotecultivadoid
+                        JOIN finca fc ON fc.fincaid = l.fincaid`;
         let result = await pool.query(query);
         console.log(result);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
