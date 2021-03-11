@@ -17,7 +17,7 @@ module.exports = {
 
         // Añadir capa de validación
 
-        const { riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia, rievolumenutilizado, rieoperario, cultivoid } = req.body;
+        const { riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia, rievolumenutilizado, rieoperario, cultivoid, riesistemariego } = req.body;
 
         try {
             await riegosModel.createRiego({
@@ -30,6 +30,7 @@ module.exports = {
                 rievolumenutilizado: rievolumenutilizado,
                 rieoperario: rieoperario,
                 cultivoid: cultivoid,
+                riesistemariego: riesistemariego,
             });
         } catch (error) {
             return res.status(500).send({ message: "Registro fallido" });
@@ -40,7 +41,7 @@ module.exports = {
 
     async updateRiego(req, res) {
         const { id } = req.params;
-        const { riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia, rievolumenutilizado, rieoperario, cultivoid } = req.body;
+        const { riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia, rievolumenutilizado, rieoperario, cultivoid, riesistemariego } = req.body;
 
         const rowCount = await riegosModel.updateRiego(id, {
             riesuperficie: riesuperficie,
@@ -52,6 +53,7 @@ module.exports = {
             rievolumenutilizado: rievolumenutilizado,
             rieoperario: rieoperario,
             cultivoid: cultivoid,
+            riesistemariego: riesistemariego,
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
