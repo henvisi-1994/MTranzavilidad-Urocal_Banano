@@ -28,7 +28,20 @@ module.exports = {
     },
     
     async updateFitosanitario(id, fitosanitario) {
-        let query = `UPDATE fitosanitario SET fitciclo = '${fitosanitario.fitciclo}', fitfecha = '${fitosanitario.fitfecha}', fitnombrecomercial = '${fitosanitario.fitnombrecomercial}', fitingredienteactivo = '${fitosanitario.fitingredienteactivo}', fitnombrecomun = '${fitosanitario.fitnombrecomun}', fitdosis = '${fitosanitario.fitdosis}', fitcantidadtotal = '${fitosanitario.fitcantidadtotal}', fitareaplicada = '${fitosanitario.fitareaplicada}' fitequipoaplicacion = '${fitosanitario.fitequipoaplicacion}', fitmetodo = '${fitosanitario.fitmetodo}', fitplazoseguridad = '${fitosanitario.fitplazoseguridad}', fitoperario = '${fitosanitario.fitoperario}', cultivoid = '${fitosanitario.cultivoid}', condicionclimaticaid = '${fitosanitario.condicionclimaticaid}' WHERE fitosanitarioid = ${id}`;
+        let query = `UPDATE fitosanitario SET fitciclo = '${fitosanitario.fitciclo}', 
+        fitfecha = '${fitosanitario.fitfecha}', 
+        fitnombrecomercial = '${fitosanitario.fitnombrecomercial}', 
+        fitingredienteactivo = '${fitosanitario.fitingredienteactivo}', 
+        fitnombrecomun = '${fitosanitario.fitnombrecomun}', 
+        fitdosis = '${fitosanitario.fitdosis}', 
+        fitcantidadtotal = '${fitosanitario.fitcantidadtotal}', 
+        fitareaaplicada = '${fitosanitario.fitareaplicada}',
+        fitautorizaciontecnica = '${fitosanitario.fitautorizaciontecnica}',
+        fitequipoaplicacion = '${fitosanitario.fitequipoaplicacion}', 
+        fitmetodo = '${fitosanitario.fitmetodo}', 
+        fitplazoseguridad = '${fitosanitario.fitplazoseguridad}', fitoperario = '${fitosanitario.fitoperario}', cultivoid = '${fitosanitario.cultivoid}', condicionclimaticaid = '${fitosanitario.condicionclimaticaid}' WHERE fitosanitarioid = ${id}`;
+
+        
         let result = await pool.query(query);
 
         return result.rowCount;

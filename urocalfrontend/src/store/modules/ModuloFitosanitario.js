@@ -18,10 +18,16 @@ export default {
         establecerListaFitosanitariosStore(state, newState) {
             state.listaFertilizantesStore = newState;
         },
+        updateListaFitosanitariosStore(state, newState) {
+            state.listaFitosanitariosStore.push(newState)
+        },
 
         // Vacia el modelo Fitosanitario
         vaciarModeloFitosanitarioStore(state) {
             state.modeloFitosanitarioStore = new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
+        },
+        vaciarLista(state, newState) {
+            state.listaFitosanitariosStore.length = 0;
         },
 
         // Cambia  el estado del Formulario Fitosanitario
