@@ -97,13 +97,12 @@ export default {
     },
 
     async cargarListaFertilizante () {
-      let listaFertilizantes = [];
       let respuesta = await ServicioFertilizantes.obtenerTodosFertilizantes();
       let fertilizantes = await respuesta.data;
-      fertilizantes.forEach((f) => {
-        listaFertilizantes.push(f);
+      this.$store.commit("moduloFertilizante/vaciarLista",null);
+        fertilizantes.forEach((f) => {
+          this.$store.commit("moduloFertilizante/updateListaFertilizacion",f);
       });
-      this.listaFertilizantesStore = listaFertilizantes;
     },
 
     async eliminarRegistro() {

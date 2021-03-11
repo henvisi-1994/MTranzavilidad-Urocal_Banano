@@ -14,7 +14,15 @@ export default {
         establecerModeloFertilizanteStore(state, nuevoFertilizante) {
             state.modeloFertilizanteStore = nuevoFertilizante
         },
+        
+        updateListaFertilizacion(state, newState) {
+            state.listaFertilizantesStore.push(newState)
+          },
 
+        vaciarLista(state, newState){
+            state.listaFertilizantesStore.length = 0;
+        },
+        
         establecerListaFertilizantesStore(state, newState) {
             state.listaFertilizantesStore = newState;
         },

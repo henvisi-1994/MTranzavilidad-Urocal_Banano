@@ -92,14 +92,14 @@ export default {
       }
     },
 
+     
     async cargarListaFertilizante () {
-      let listaFertilizantes = [];
       let respuesta = await ServicioFertilizantes.obtenerTodosFertilizantes();
       let fertilizantes = await respuesta.data;
-      fertilizantes.forEach((f) => {
-        listaFertilizantes.push(f);
-      });
-      this.listaFertilizantesStore = listaFertilizantes;
+      this.$store.commit("moduloFertilizante/vaciarLista",null);
+        fertilizantes.forEach((f) => {
+          this.$store.commit("moduloFertilizante/updateListaFertilizacion",f);
+        });
     },
 
     cerrarDialogNuevoFertilizante() {

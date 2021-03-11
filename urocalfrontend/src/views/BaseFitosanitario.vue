@@ -97,7 +97,7 @@ export default {
         // Detalla las cabeceras de la tabla
         {
           text: "Código de finca",
-          value: "codigo_finca",
+          value: "fincodigo",
           align: "center",
           class: "grey lighten-3",
         },
@@ -287,6 +287,9 @@ export default {
         this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",
           {
             fitosanitarioid: f.fitosanitarioid,
+            fincodigo: f.fincodigo,
+            lote: f.lotnumero,
+            loteid: f.loteid,
             fitciclo: f.fitciclo,
             fitfecha: this.convertirFecha(f.fitfecha),
             fitnombrecomercial: f.fitnombrecomercial,

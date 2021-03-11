@@ -32,6 +32,11 @@ module.exports = {
         return res.status(200).send(result); // <--
     },
 
+    async obtenerTodosCultivoDestalles(req, res) {
+        const result = await modeloCultivo.obtenerTodosCultivoDetalles()
+        //return res.status(200).send(userDto.multiple(users, req.user)); //<--
+        return res.status(200).send(result); // <--
+    },
     // Obtener un cultivo por ID
     async obtenerCultivo(req, res) {
         const { id } = req.params;

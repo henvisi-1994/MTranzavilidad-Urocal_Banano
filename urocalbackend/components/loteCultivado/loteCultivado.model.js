@@ -12,6 +12,10 @@ module.exports = {
         return loteCultivadoDao.obtenerTodosLoteCultivado();
     },
 
+    async obtenerTodosLoteCultivadoDeFinca(id) {
+        return loteCultivadoDao.obtenerTodosLoteCultivadoDeFinca(id);
+    },
+
     async obtenerLoteCultivado(id) {
         return loteCultivadoDao.obtenerLoteCultivado(id);
     },
