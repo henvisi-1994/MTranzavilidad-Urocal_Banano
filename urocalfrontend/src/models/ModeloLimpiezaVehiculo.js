@@ -1,10 +1,10 @@
 export default class LimpiezaVehiculo {
-    constructor(limpiezavehiculoid, limvehfecha, limvehproductoutilizado, limvehescobillon, limvehscoba, limvehagua, limvehaspiradora, vehiculoid) {
+    constructor(limpiezavehiculoid, limvehfecha, limvehproductoutilizado, limvehescobillon, limvehescoba, limvehagua, limvehaspiradora, vehiculoid) {
         this.limpiezavehiculoid = limpiezavehiculoid;
         this.limvehfecha = limvehfecha;
         this.limvehproductoutilizado = limvehproductoutilizado;
         this.limvehescobillon = limvehescobillon;
-        this.limvehscoba = limvehscoba;
+        this.limvehescoba = limvehescoba;
         this.limvehagua = limvehagua;
         this.limvehaspiradora = limvehaspiradora;
         this.vehiculoid = vehiculoid;

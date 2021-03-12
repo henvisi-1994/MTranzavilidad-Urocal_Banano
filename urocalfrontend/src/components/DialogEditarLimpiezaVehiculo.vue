@@ -3,26 +3,68 @@
     <v-card tile>
       <v-card-title class="justify-center white primary--text">
         
-        <h5>Editar Limpieza Vehiculo</h5>
+        <h5>Actualizar/Eliminar</h5>
         <v-spacer></v-spacer>
+        <v-btn icon><v-icon :disabled="!noeditar" class="primary--text" @click="cambiarEstadoEditar()">mdi-pencil</v-icon></v-btn>
+        <v-btn icon><v-icon @click="eliminarRegistro()" class="primary--text">mdi-trash-can</v-icon></v-btn>
         <v-btn icon><v-icon class="primary--text" @click="cerrarDialogo()">mdi-close</v-icon></v-btn>
       </v-card-title>
       
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            <v-text-field label="Producto utilizado" class="custom px-2" filled dense></v-text-field>
-            <v-text-field label="Escobillon" class="custom px-2" filled dense></v-text-field>
-            <v-text-field label="Escoba" class="custom px-2" filled dense></v-text-field>
-            <v-text-field label="Agua" class="custom px-2" filled dense></v-text-field>
-            <v-text-field label="Aspiradora" class="custom px-2" filled dense></v-text-field>
-            <v-text-field label="Vehiculoid" class="custom px-2" filled dense></v-text-field>
+            <v-text-field class="custom px-2" v-model="limpieza_vehiculo.limvehproductoutilizado" :disabled="noeditar" filled dense label="Producto utilizado"></v-text-field>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehescobillon"
+              label="Escobillon"
+              color="success"
+              :disabled="noeditar"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehescoba"
+              label="Escoba"
+              color="success"
+              :disabled="noeditar"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehagua"
+              label="Agua"
+              color="success"
+              :disabled="noeditar"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehaspiradora"
+              label="Aspiradora"
+              color="success"
+              :disabled="noeditar"
+              hide-details
+            ></v-checkbox>
+          <v-select
+            v-model="limpieza_vehiculo.vehiculoid"
+            placeholder="Seleccione una placa de Vehiculo"
+            class="style-chooser"
+            label="vehplaca"
+            :reduce="(listaVehiculos) => listaVehiculos.vehiculoid"
+            :options="listaVehiculos"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una Placa de Vehiculo</em>
+            </template>
+          </v-select> 
             <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   label="Fecha" 
                   v-model="limpieza_vehiculo.limvehfecha" class="custom px-2" filled dense 
                   :rules="[reglas.campoVacio(limpieza_vehiculo.limvehfecha)]"
+                  :disabled="noeditar"
                   readonly
                   v-bind="attrs"
                   v-on="on">
@@ -36,7 +78,7 @@
       <v-card-actions>
         <v-col>
         <!--<v-btn color="error" block @click="dialogEditarLimpiezaVehiculo = !dialogEditarLimpiezaVehiculo" >Cancelar</v-btn>-->
-        <v-btn color="primary" large block class="mt-2">Guardar</v-btn>
+        <v-btn color="primary" @click="guardar()" block class="mt-2">Guardar</v-btn>
         </v-col>
       </v-card-actions>
     </v-card>
@@ -44,19 +86,25 @@
 </template>
 
 <script>
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 import { mapMutations, mapState } from "vuex";
-
+import ServicioLimpiezaVehiculo from "../services/ServicioLimpiezaVehiculo";  // Interactuar con el Backend
+import ServicioVehiculo from '../services/ServicioVehiculo';
 export default {
   name: "DialogEditarLimpiezaVehiculo",
+  components: {
+    vSelect,
+  },
 
   props: {},
 
   data() {
     return {
       menuMostrarCalendario: "",
+      noeditar:true,
       fechaActual: new Date().toISOString().substr(0, 10), // Fecha actual
-      itemsGenero: ['Masculino', 'Femenino'],
-      itemsCiudades: ['Machala', 'Pasaje', 'Santa Rosa'],
+      listaVehiculos:[],
     };
   },
 
@@ -76,12 +124,63 @@ export default {
     ...mapState("validacionForm", ["reglas"]),                  // Reglas de validacion
     
   },
+  mounted() {
+    this.cargarListaVehiculoPlaca();
+    
+  },
+
 
   methods: {
     cerrarDialogo(){
       this.dialogEditarLimpiezaVehiculo = !this.dialogEditarLimpiezaVehiculo;
       this.vaciarLimpiezaVehiculo;
+      this.noeditar=true;
+    },
+    async guardar(){
+      try {
+        let respuestaServicioLimpiezaVehiculo=await ServicioLimpiezaVehiculo.actualizarLimpiezaVehiculo(this.limpieza_vehiculo.limpiezavehiculoid,this.limpieza_vehiculo);
+        this.$toast.success(respuestaServicioLimpiezaVehiculo.data.message);
+        this.cerrarDialogo();
+        this.cargarListaLimpiezaVehiculo();
+        
+      } catch (error) {
+        this.$toast.error(error.response.data.messagge);
+        
+      }
+
+    },
+    async cargarListaVehiculoPlaca(){
+      let respuesta = await ServicioVehiculo.obtenerTodosVehiculos();  // Obtener respuesta de backend
+      console.log(respuesta);
+      this.listaVehiculos = await respuesta.data;     
+    },
+    async eliminarRegistro(){
+      try {
+        let respuestaServicioLimpiezaVehiculo=await ServicioLimpiezaVehiculo.eliminarLimpiezaVehiculo(this.limpieza_vehiculo.limpiezavehiculoid);
+        this.$toast.error(respuestaServicioLimpiezaVehiculo.data.message);
+        this.cerrarDialogo();
+        this.cargarListaLimpiezaVehiculo();
+        
+      } catch (error) {
+        this.$toast.error(error.response.data.messagge);
+      }
+
+    },
+    async cargarListaLimpiezaVehiculo()
+    {
+        let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();  // Obtener respuesta de backend
+        let datosLimpiezaVehiculo = await respuesta.data;                                    // Rescatar datos de la respuesta
+        this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);
+        datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
+        this.$store.commit("moduloLimpiezaVehiculo/addListaLimpiezaVe",LimpiezaVehiculo);
+        
+      });
+      
+    },
+    cambiarEstadoEditar(){
+      this.noeditar=false;
     }
+ 
   }
 };
 </script>
