@@ -5,6 +5,7 @@ const controlador = require('./ProductorPersona.controller');
 const router = express.Router();
 
 router.get('/', controlador.obtenerProductores);                          // Coleccion (plural)
+router.get('/:id', controlador.obtenerProductor);   
 router.post('/', controlador.crearProductor);                                 
 router.put('/:id', controlador.actualizarProductor);        
 router.delete('/:id', controlador.eliminarProductor);                     

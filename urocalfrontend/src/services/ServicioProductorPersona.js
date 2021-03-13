@@ -11,11 +11,15 @@ class ServicioProductorPersona {
         return axios.post(`${API_URL}/v1/productor`, formData);
     }
 
+
     // SELECT: Devuelve todos los registros
     obtenerTodosProductorPersona() {
         return axios.get(`${API_URL}/v1/productor/`);
     }
-
+    // SELECT: Devuelve productor
+    obtenerProductorPersona(id) {
+        return axios.get(`${API_URL}/v1/productor/${id}`);
+    }
     // SELECT: Devuelve todas las ciudades
     obtenerTodosCiudad() {
         return axios.get(`${API_URL}/v1/ciudad`);

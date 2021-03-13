@@ -7,7 +7,7 @@ module.exports = {
 
     // INSERT: Agrega un registro
     async crearProductor(req, res) {
-        
+
         const { percedula, perapellidos, pernombres, perdireccion, pertelefono, perwhatsapp, peremail, pergenero, perfechanacimiento, productoridioma, ciudadnacimiento } = req.body;
 
         try {
@@ -33,10 +33,16 @@ module.exports = {
 
     // SELECT: Devuelve todos los registros
     async obtenerProductores(req, res) {
-        const rowsProductorPersonas = await modeloProductor.obtenerProductores();         
-        return res.status(200).send(productorDto.multipleProductorPersona(rowsProductorPersonas)); 
+        const rowsProductorPersonas = await modeloProductor.obtenerProductores();
+        return res.status(200).send(productorDto.multipleProductorPersona(rowsProductorPersonas));
     },
 
+    // SELECT: Devuelve todos los registros
+    async obtenerProductor(req, res) {
+        const { id } = req.params;
+        const rowsProductorPersonas = await modeloProductor.obtenerProductor(id);
+        return res.status(200).send(productorDto.multipleProductorPersona(rowsProductorPersonas));
+    },
 
     // UPDATE: Actualiza un registro
     async actualizarProductor(req, res) {
@@ -65,9 +71,9 @@ module.exports = {
 
         try {
             let rowCount = await modeloProductor.eliminarProductor(id);
-            return rowCount == 1 ? res.status(200).send({ message: "Eliminado exitosamente"}) : res.status(404).send({ message: "Conductor no encontrado" });            
+            return rowCount == 1 ? res.status(200).send({ message: "Eliminado exitosamente" }) : res.status(404).send({ message: "Conductor no encontrado" });
         } catch (err) {
-            return res.status(500).send({ message: "Error al tratar de eliminar productor"});
+            return res.status(500).send({ message: "Error al tratar de eliminar productor" });
         }
     },
 }

@@ -2,6 +2,7 @@
 
 // Seccion de Unicos
 const unicoProductorPersona = (recurso) => ({
+    productorid: recurso.productorid,
     personaid : recurso.personaid, 
     percedula : recurso.percedula, 
     perapellidos : recurso.perapellidos, 

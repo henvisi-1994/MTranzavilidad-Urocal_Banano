@@ -14,11 +14,11 @@ module.exports = {
 
         query = `SELECT peremail FROM persona WHERE peremail = '${user.peremail}'`;                                 // Validacion email ya registrado
         result = await pool.query(query);
-        if (result.rowCount > 0) return { message: "Este correo ya está siendo utilizado."};
-        
+        if (result.rowCount > 0) return { message: "Este correo ya está siendo utilizado." };
+
         query = `SELECT percedula FROM persona WHERE percedula = '${user.percedula}'`;                              // Validacion cedula ya registrada
         result = await pool.query(query);
-        if (result.rowCount > 0) return { message: "La cédula ingresada ya se encuentra registrada."};
+        if (result.rowCount > 0) return { message: "La cédula ingresada ya se encuentra registrada." };
 
         // Registro en tabla persona
         query = `INSERT INTO persona
@@ -41,13 +41,19 @@ module.exports = {
         let result = await pool.query(query);
         return result.rows;                     // Devuelve el array de json
     },
+    // SELECT: Devuelve todos los registros
+    async obtenerProductor(id) {
+        let query = `SELECT prod.productorid, p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre, prod.productoridioma FROM persona p, ciudad c, productor prod WHERE prod.productorid= ${id} AND p.ciudadnacimientoid = c.ciudadid AND p.personaid = prod.productorid;`;
+        let result = await pool.query(query);
+        return result.rows;                     // Devuelve el array de json
+    },
 
 
     // UPDATE: Actualiza un registro
     async actualizarProductor(id, user) {
 
         let query, result;
-        
+
         query = `UPDATE persona SET pernombres = '${user.pernombres}', perapellidos = '${user.perapellidos}', 
         perdireccion = '${user.perdireccion}', pergenero = '${user.pergenero}', pertelefono = '${user.pertelefono}', 
         perwhatsapp = '${user.perwhatsapp}', peremail = '${user.peremail}', ciudadnacimientoid = '${user.ciudadnacimientoid}', 
@@ -66,7 +72,7 @@ module.exports = {
 
         let query = `DELETE FROM productor WHERE productorid = '${id}'`;
         let result = await pool.query(query);
-        
+
         query = `DELETE FROM persona WHERE personaid = '${id}'`;
         result = await pool.query(query);
 
