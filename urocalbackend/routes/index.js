@@ -18,6 +18,7 @@ const sowing = require('../components/sowing/sowing.routes');
 const collcenter = require('../components/collectioncenter/collectioncenter.routes');
 const respcoll = require('../components/responsiblecollection/responsiblecollection.routes');
 const cleaningTool = require('../components/cleaning-tool/cleaning-tool.routes');
+const limpiezaVehiculo = require('../components/limpiezaVehiculos/limpiezaV.routes');
 const rodentMonitoring = require('../components/rodent-monitoring/rodent-monitoring.routes');
 const rodentFarmMonitoring = require('../components/rodent-farm-monitoring/rodent-farm-monitoring.routes');
 const rodentMonitoringGatheringCenter = require('../components/rodent-monitoring-gathering-center/rodent-monitoring-gathering-center.routes');
@@ -44,6 +45,7 @@ const productor = require('../components/productorpersona/ProductorPersona.route
 const operario = require('../components/operariopersona/OperarioPersona.routes');
 const ingreso = require('../components/ingresoInsumo/income.routes');
 const egreso = require('../components/egresoIsumo/egress.routes');
+const vehiculo = require('../components/vehiculo/vehiculo.routes');
 const guiaremision = require('../components/guiaremision/guiaremision.routes');
 const carga = require('../components/carga/carga.routes');
 
@@ -65,6 +67,7 @@ router.use(VERSION + '/sowing', sowing);                                        
 router.use(VERSION + '/centroacopio', collcenter);                                            // CentroAcopio
 router.use(VERSION + '/respcoll', respcoll);                                                // ResponsableAcopio
 router.use(VERSION + '/cleaningTool', cleaningTool);                                        // LimpiezaHerramienta
+router.use(VERSION + '/limpiezaVehiculo', limpiezaVehiculo);                                // LimpiezaHerramienta
 router.use(VERSION + '/rodentMonitoring', rodentMonitoring);                                // MonitoreoRoedor
 router.use(VERSION + '/rodentFarmMonitoring', rodentFarmMonitoring);                        // MonitoreoRoedor_Finca
 router.use(VERSION + '/rodentMonitoringGatheringCenter', rodentMonitoringGatheringCenter);  // MonitoreoRoedor_CentroAcopio
@@ -93,5 +96,6 @@ router.use(VERSION + '/ingreso_insumo', ingreso);                               
 router.use(VERSION + '/egreso_insumo', egreso);                                             // Egreso insumo
 router.use(VERSION + '/guiaremision', guiaremision);
 router.use(VERSION + '/carga', carga);
+router.use(VERSION + '/vehiculo', vehiculo);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import ServicioAutenticacion from '@/services/ServicioAutenticacion';
 
+
 // Obtiene la informacion de usuario almacenado en localstorage
 const usuario = JSON.parse(localStorage.getItem('usuario'));
 
@@ -21,6 +22,7 @@ export default {
         login({ commit }, usuario) {
             return ServicioAutenticacion.login(usuario).then(
                 respuesta => {
+                    let authUser = respuesta.rol;
                     commit('loginExitoso', respuesta);
                     return Promise.resolve(respuesta.rol);
                 },
@@ -29,7 +31,6 @@ export default {
                 }
             )
         },
-
         cerrarSesion({ commit }) {
             ServicioAutenticacion.cerrarSesion();
             commit('cerrarSesion');

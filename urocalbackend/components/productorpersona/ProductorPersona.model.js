@@ -12,6 +12,9 @@ module.exports = {
     async obtenerProductores(){
         return productorPersonaDao.obtenerProductores();
     },
+    async obtenerProductor(id){
+        return productorPersonaDao.obtenerProductor(id);
+    },
 
     // UPDATE: Actualiza un registro
     async actualizarProductor(id, objeto){

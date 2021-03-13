@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import ServicioProductorPersona from '@/services/ServicioProductorPersona';
 // Ruta del servidor backend
 const URL_API = 'http://localhost:3000/v1';
 
@@ -14,6 +14,17 @@ class ServicioAutenticacion {
         }).then(respuesta => {
             if (respuesta.data.hasOwnProperty('accessToken')) {
                 localStorage.setItem('usuario', JSON.stringify(respuesta.data));
+                
+                if(respuesta.data.rol == 'Productor'){
+                    ServicioProductorPersona.obtenerProductorPersona(respuesta.data.id).then(
+                        respuesta => {
+                            console.log(respuesta);
+                            localStorage.setItem('productor', JSON.stringify(respuesta.data[0]));
+                        },error => {
+                            return Promise.reject(error);
+                        }
+                        )
+                }
             }
             return Promise.resolve(respuesta.data);
         }, error => {
