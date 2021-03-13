@@ -232,13 +232,6 @@ export default {
 
     ...mapState("validacionForm", ["reglas"]),
   },
-
- 
-
-  mounted() {
-    this.obtenerCultivos();
-  },
-
   methods: {
 
 
