@@ -70,7 +70,7 @@ module.exports = {
         comsubtotal = ${compra.comsubtotal} , comdescuentos = ${compra.comdescuentos},
         comotrosvalores = ${compra.comotrosvalores},comtotal = ${compra.comtotal},
         comobservaciones = '${compra.comobservaciones}', guiaremisionid = ${compra.guiaremisionid} ,
-        organizacion='${compra.organizacion}', cod='${compra.cod}',slugar='${compra.lugar}'
+        organizacion='${compra.organizacion}', cod='${compra.cod}',lugar='${compra.lugar}'
         where compraid = ${id}`;
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó la compra y 0 sino lo hizo.
