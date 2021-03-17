@@ -12,7 +12,7 @@
             v-model="fincaid"
             placeholder="Finca"
             class="style-chooser"
-            label="finnombrefinca"
+            label="findescripcionfinca"
             @input="obtenerTodosLoteCultivadoDeFinca" 
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFincaStore"
@@ -34,7 +34,8 @@
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
-            :reduce="(listaLote) => listaLote.loteid"
+            @input="obtenerTodosListaCultivo" 
+            :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
             :rules="[reglas.campoVacio(loteid)]"
           >
@@ -164,7 +165,6 @@ export default {
   },
 
   mounted() {
-    this.obtenerTodosListaCultivo();
     this.obtenerTodosFincas();
   },
 
@@ -219,7 +219,8 @@ export default {
 
 
     async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerTodosCultivoDetalles();
+      console.log(this.loteid);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
       this.listaCultivo = resultado.data; 
 
     },
@@ -233,6 +234,7 @@ export default {
       this.listaLote = resultado.data; 
       
     },
+    
 
     
 
