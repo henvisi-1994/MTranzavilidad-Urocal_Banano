@@ -13,6 +13,7 @@ const unicoFinca = (recurso) => ({
     fincaid: recurso.fincaid,
     fincodigo: recurso.fincodigo,
     finnombrefinca: recurso.finnombrefinca,
+    findescripcionfinca: recurso.fincodigo + " | " + recurso.finnombrefinca,
     finsuperficietotal: recurso.finsuperficietotal,
     finsuperficiecultivada: recurso.finsuperficiecultivada,
     fincoordenadax: recurso.fincoordenadax,
