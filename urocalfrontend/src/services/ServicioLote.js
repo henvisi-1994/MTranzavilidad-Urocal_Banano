@@ -11,6 +11,12 @@ class ServicioLote {
         return axios.get(`${API_URL}/lote`);
     }
 
+
+    // SELECT: Devuelve todos los lotes por finca
+    obtenerTodosLoteCultivadoDeFinca(id) {
+        return axios.get(`${API_URL}/lote/loteporfinca/${id}`);
+    }
+
     // SELECT: Devuelve un lote
     obtenerLote(id) {
         return axios.get(`${API_URL}/lote/${id}`);

@@ -3,7 +3,11 @@ const pool = require('../../services/postgresql/index');
 
 module.exports = {
     async getFitosanitarios() {
-        let query = `SELECT * FROM fitosanitario`;
+        let query = `SELECT * FROM fitosanitario f 
+                        JOIN cultivo c ON c.cultivoid =f.cultivoid
+                        JOIN condicionclimatica cc ON cc.condicionclimaticaid =f.condicionclimaticaid
+                        JOIN lotecultivado l on l.lotecultivadoid=c.lotecultivadoid
+                        JOIN finca fc ON fc.fincaid = l.fincaid`;
         let result = await pool.query(query);
         console.log(result);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
@@ -28,7 +32,20 @@ module.exports = {
     },
     
     async updateFitosanitario(id, fitosanitario) {
-        let query = `UPDATE fitosanitario SET fitciclo = '${fitosanitario.fitciclo}', fitfecha = '${fitosanitario.fitfecha}', fitnombrecomercial = '${fitosanitario.fitnombrecomercial}', fitingredienteactivo = '${fitosanitario.fitingredienteactivo}', fitnombrecomun = '${fitosanitario.fitnombrecomun}', fitdosis = '${fitosanitario.fitdosis}', fitcantidadtotal = '${fitosanitario.fitcantidadtotal}', fitareaplicada = '${fitosanitario.fitareaplicada}' fitequipoaplicacion = '${fitosanitario.fitequipoaplicacion}', fitmetodo = '${fitosanitario.fitmetodo}', fitplazoseguridad = '${fitosanitario.fitplazoseguridad}', fitoperario = '${fitosanitario.fitoperario}', cultivoid = '${fitosanitario.cultivoid}', condicionclimaticaid = '${fitosanitario.condicionclimaticaid}' WHERE fitosanitarioid = ${id}`;
+        let query = `UPDATE fitosanitario SET fitciclo = '${fitosanitario.fitciclo}', 
+        fitfecha = '${fitosanitario.fitfecha}', 
+        fitnombrecomercial = '${fitosanitario.fitnombrecomercial}', 
+        fitingredienteactivo = '${fitosanitario.fitingredienteactivo}', 
+        fitnombrecomun = '${fitosanitario.fitnombrecomun}', 
+        fitdosis = '${fitosanitario.fitdosis}', 
+        fitcantidadtotal = '${fitosanitario.fitcantidadtotal}', 
+        fitareaaplicada = '${fitosanitario.fitareaplicada}',
+        fitautorizaciontecnica = '${fitosanitario.fitautorizaciontecnica}',
+        fitequipoaplicacion = '${fitosanitario.fitequipoaplicacion}', 
+        fitmetodo = '${fitosanitario.fitmetodo}', 
+        fitplazoseguridad = '${fitosanitario.fitplazoseguridad}', fitoperario = '${fitosanitario.fitoperario}', cultivoid = '${fitosanitario.cultivoid}', condicionclimaticaid = '${fitosanitario.condicionclimaticaid}' WHERE fitosanitarioid = ${id}`;
+
+        
         let result = await pool.query(query);
 
         return result.rowCount;

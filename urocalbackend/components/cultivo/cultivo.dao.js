@@ -19,6 +19,15 @@ module.exports = {
         return result.rows; // Devuelve array de cultivos
     },
 
+    async obtenerTodosCultivoDetalles() {
+        let query = `Select cu.cultivoid, pr.productoid, concat('Finca: ', fi.finnombrefinca, '   |   N. lote: ', lc.lotnumero, '   |   Cultivo: ', pr.pronombre) "detalles"
+        FROM cultivo cu, producto pr, lotecultivado lc, finca fi
+        WHERE cu.productoid = pr.productoid AND cu.lotecultivadoid = lc.lotecultivadoid 
+        AND lc.fincaid = fi.fincaid;`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve array de cultivos
+    },
+
     async obtenerCultivo(id) {
         let query = `SELECT * FROM cultivo WHERE lotecultivadoid = ${id}`;
         let result = await pool.query(query);

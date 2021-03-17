@@ -38,6 +38,7 @@ module.exports = {
         console.log(result.rows);
         return result.rows; // Devuelve el array de json que contiene la tabla finca
     },
+    
 
     async obtenerPropietario() {
         let query = `SELECT p.productorid,  concat(pe.pernombres, ' ' , pe.perapellidos) "propietario" FROM  productor p, persona pe WHERE p.productorid = pe.personaid`;

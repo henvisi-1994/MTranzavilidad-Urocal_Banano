@@ -89,10 +89,12 @@ export default {
   methods: {
     async actualizarRegistro () {
       const respuesta = await ServicioFitosanitarios.actualizarFitosanitario(this.modeloFitosanitarioStore.fitosanitarioid, this.modeloFitosanitarioStore);
-      if (respuesta.status == 200) {
+      console.log(respuesta);
+     if (respuesta.status == 200) {
         this.cerrarDialogMostrarFitosanitario();
         this.cargarListaFitosanitario();
         this.vaciarModeloFitosanitarioStore();
+        this.$toast.success('Fitosanitario actualizado con éxito')
       }
     },
 
@@ -107,10 +109,14 @@ export default {
     },
 
     async eliminarRegistro() {
+      if(!window.confirm('Esta seguro de que desea eliminar este registro')) return;
       const respuesta = await ServicioFitosanitarios.eliminarFitosanitario(this.modeloFitosanitarioStore.fitosanitarioid);
+      
       if (respuesta.status == 200) {
         this.cerrarDialogMostrarFitosanitario();
         this.cargarListaFitosanitario();
+        this.$toast.success("Registro fitosanitario eliminado con éxito");
+        this.$emit('delete', true);
       } 
     },
     

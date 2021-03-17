@@ -8,12 +8,14 @@
       >
         <v-col cols="12" md="5">
           <v-select
+            @input="obtenerTodosLoteCultivadoDeFinca" 
             v-model="modeloFertilizanteStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
-            label="fincanombre"
+            label="finnombrefinca"
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFinca"
+           
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -29,9 +31,10 @@
             v-model="modeloFertilizanteStore.loteid"
             placeholder="Lote"
             class="style-chooser"
-            label="lotenombre"
-            :reduce="(listaLote) => listaLote.loteid"
+            label="lotnumero"
+            :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
+
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -50,7 +53,7 @@
             v-model="modeloFertilizanteStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
-            label="cultivonombre"
+            label="detalles"
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
           >
@@ -118,7 +121,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
-            placeholder="Concentración"
+            placeholder="Concentración: (%)"
             v-model="modeloFertilizanteStore.ferconcentracion"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
           ></v-text-field
@@ -168,22 +171,11 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
-          <v-select
-            v-model="modeloFertilizanteStore.feroperario"
+          <v-text-field
             placeholder="Operario"
-            class="style-chooser"
-            label="operarionombre"
-            :reduce="(listaOperario) => listaOperario.operarioid"
-            :options="listaOperario"
-          >
-            <template v-slot:no-options="{ search, searching }">
-              <template v-if="searching">
-                No hay resultados para <em>{{ search }}</em
-                >.
-              </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un operario</em>
-            </template>
-          </v-select>
+            v-model="modeloFertilizanteStore.feroperario"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.feroperario)]"
+          ></v-text-field>           
         </v-col>
       </v-row>
     </v-container>
@@ -192,8 +184,12 @@
 
 <script>
 import { mapState } from "vuex";
-
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioFertilizantes from "../services/ServicioFertilizantes";
+import servicioLote from "../services/ServicioLote";
+import servicioFinca from "../services/ServicioFinca";
 import vSelect from "vue-select";
+
 import "vue-select/dist/vue-select.css";
 
 export default {
@@ -202,65 +198,16 @@ export default {
   components: {
     vSelect,
   },
-
+  mounted() {
+    this.obtenerTodosListaCultivo();
+    this.obtenerTodosFincas();
+  },
   data() {
     return {
-      listaFinca: [
-        {
-          fincaid: 1,
-          fincanombre: "Finca 1",
-        },
-        {
-          fincaid: 2,
-          fincanombre: "Finca 2",
-        },
-        {
-          fincaid: 3,
-          fincanombre: "Finca 3",
-        },
-      ],
-      listaLote: [
-        {
-          loteid: 1,
-          lotenombre: "Lote 1",
-        },
-        {
-          loteid: 2,
-          lotenombre: "Lote 2",
-        },
-        {
-          loteid: 3,
-          lotenombre: "Lote 3",
-        },
-      ],
-      listaCultivo: [
-        {
-          cultivoid: 1,
-          cultivonombre: "Cultivo 1",
-        },
-        {
-          cultivoid: 2,
-          cultivonombre: "Cultivo 2",
-        },
-        {
-          cultivoid: 3,
-          cultivonombre: "Cultivo 3",
-        },
-      ],
-      listaOperario: [
-        {
-          operarioid: 1,
-          operarionombre: "Operario 1",
-        },
-        {
-          operarioid: 2,
-          operarionombre: "Operario 2",
-        },
-        {
-          operarioid: 3,
-          operarionombre: "Operario 3",
-        },
-      ],
+      listaFinca: [],
+      listaLote: [],
+      listaCultivo: [],
+      listaOperario: [],
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
     };
@@ -292,6 +239,28 @@ export default {
     ...mapState("validacionForm", ["reglas"]),
   },
 
-  methods: {},
+  methods: {
+    
+      async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerTodosCultivoDetalles();
+      this.listaCultivo = resultado.data; 
+
+    },
+      async obtenerTodosFincas() {
+      let resultado = await servicioFinca.obtenerTodosFincas();
+      this.listaFinca = resultado.data; 
+    },
+      async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFertilizanteStore.fincaid);
+      this.listaLote = resultado.data; 
+      
+    },
+      
+   
+
+
+
+  },
+  
 };
 </script>

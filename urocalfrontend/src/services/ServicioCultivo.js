@@ -9,6 +9,10 @@ class ServicioCultivo {
     obtenerTodosCultivo() {
         return axios.get(`${API_URL}/cultivo`);
     }
+    
+    obtenerTodosCultivoDetalles() {
+        return axios.get(`${API_URL}/cultivo/detalles`);
+    }
 
     // SELECT: Devuelve todos los cultivos por lote
     obtenerCultivoPorIdLote(id) {

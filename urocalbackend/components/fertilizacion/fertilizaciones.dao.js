@@ -20,8 +20,7 @@ module.exports = {
 
         query = `INSERT INTO fertilizacion
                     (ferciclo, ferfecha, fernombrecomercial, ferelementos, ferconcentracion, ferareaaplicada, fercantidadaplicada, ferunidadmedida, ferequipoaplicacion, fermetodoaplicacion, feroperario, cultivoid) VALUES
-                    ('${fertilizacion.ferciclo}', '${fertilizacion.ferfecha}','${fertilizacion.fernombrecomercial}','${fertilizacion.ferelementos}','${fertilizacion.ferconcentracion}','${fertilizacion.ferareaaplicada}','${fertilizacion.fercantidadaplicada}','${fertilizacion.ferunidadmedida}','${fertilizacion.ferequipoaplicacion}','${fertilizacion.fermetodoaplicacion}','${fertilizacion.feroperario}','${fertilizacion.cultivoid}',) RETURNING fertilizacionid;`
-
+                    ('${fertilizacion.ferciclo}', '${fertilizacion.ferfecha}','${fertilizacion.fernombrecomercial}','${fertilizacion.ferelementos}','${fertilizacion.ferconcentracion}','${fertilizacion.ferareaaplicada}','${fertilizacion.fercantidadaplicada}','${fertilizacion.ferunidadmedida}','${fertilizacion.ferequipoaplicacion}','${fertilizacion.fermetodoaplicacion}','${fertilizacion.feroperario}','${fertilizacion.cultivoid}') RETURNING fertilizacionid;`
         result = await pool.query(query);
 
         return fertilizacion;
