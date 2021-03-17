@@ -1,6 +1,6 @@
 export default class Compra {
     constructor(compraid, comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores, comtotal,
-        comobservaciones, guiaremisionid) {
+        comobservaciones, guiaremisionid, productor, organizacion, cod, transporte, lugar) {
         this.compraid = compraid;
         this.comnumero = comnumero;
         this.comfechaemision = comfechaemision;
@@ -10,5 +10,10 @@ export default class Compra {
         this.comtotal = comtotal;
         this.comobservaciones = comobservaciones;
         this.guiaremisionid = guiaremisionid;
+        this.productor = productor;
+        this.organizacion = organizacion;
+        this.cod = cod;
+        this.transporte = transporte;
+        this.lugar = lugar;
     }
 }
