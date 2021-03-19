@@ -50,8 +50,8 @@ export default {
   },
 
   computed: {
-    ...mapState("moduloGuiaRemision", ["modeloGuiaRemisionStore"]),
-    // ...mapState('moduloGuiaRemision', ["modeloGuiaRemisionStore",'listaGuiaRemisionStore']),
+    //...mapState("moduloGuiaRemision", ["modeloGuiaRemisionStore"]),
+    ...mapState('moduloGuiaRemision', ["modeloGuiaRemisionStore",'listaGuiaRemisionStore']),
 
     dialogNuevoGuiaRemision: {
       get() {
@@ -62,14 +62,14 @@ export default {
       },
     },
 
-    // modeloGuiaRemisionStore: {
-    //   get() {
-    //     return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloGuiaRemision/establecerModeloGuiaRemisionStore", v);
-    //   },
-    // },
+    modeloGuiaRemisionStore: {
+       get() {
+        return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
+       },
+      set(v) {
+         return this.$store.commit("moduloGuiaRemision/establecerModeloGuiaRemisionStore", v);
+       },
+     },
   },
 
   methods: {
@@ -80,18 +80,16 @@ export default {
       if (respuesta.status == 201) {
         this.cerrarDialogNuevoGuiaRemision();
         this.cargarListaGuiaRemision();
-        this.vaciarModeloRiegoStore();
+         this.vaciarGuiaRemision();
       }
     },
 
     async cargarListaGuiaRemision () {
-      let listaGuiaRemision = [];
-      let respuesta = await ServicioGuiaRemision.obtenerTodosGuiaRemision();
-      let guiasRemision = await respuesta.data;
-      guiasRemision.forEach((f) => {
+    listaGuiaRemision = [];
+     guiasRemision.forEach((f) => {
         listaGuiaRemision.push(f);
       });
-      this.listaGuiaRemisionStore = listaGuiaRemision;
+      this.listaGuiaRemisionStore = listaGuiaRemision; 
     },
 
     cerrarDialogNuevoGuiaRemision() {

@@ -1,5 +1,5 @@
 <template>
-    <v-dialog
+  <v-dialog
     v-model="dialogMostrarGuiaRemision"
     scrollable
     :fullscreen="$vuetify.breakpoint.xs ? true : false"
@@ -12,10 +12,16 @@
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="primary--text" @click="editarGuiaRemision = !editarGuiaRemision">mdi-pencil</v-icon>
+          <v-icon
+            class="primary--text"
+            @click="editarGuiaRemision = !editarGuiaRemision"
+            >mdi-pencil</v-icon
+          >
         </v-btn>
         <v-btn icon>
-          <v-icon class="primary--text">mdi-trash-can</v-icon>
+          <v-icon class="primary--text" @click="eliminarGuiaRemision()"
+            >mdi-trash-can</v-icon
+          >
         </v-btn>
         <v-btn icon @click="cerrarDialogMostrarGuiaRemision()">
           <v-icon class="primary--text">mdi-close</v-icon>
@@ -31,10 +37,12 @@
       <v-card-actions class="justify-center">
         <v-btn
           :disabled="editarGuiaRemision"
-          color="primary" 
-          large 
+          color="primary"
+          large
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="250px">
+          @click="updateGuiaRemision()"
+          width="250px"
+        >
           Guardar cambios
         </v-btn>
       </v-card-actions>
@@ -43,34 +51,43 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 import FormGuiaRemision from "@/components/FormGuiaRemision";
+import ServicioGuiaRemision from "../services/ServicioGuiaRemision";
 
 export default {
-  name: 'DialogMostrarGuiaRemision',
+  name: "DialogMostrarGuiaRemision",
 
   components: {
-    FormGuiaRemision
+    FormGuiaRemision,
   },
 
   computed: {
-    ...mapState('moduloGuiaRemision', ['editarGuiaRemision']),
+    ...mapState("moduloGuiaRemision", ["editarGuiaRemision"]),
 
     dialogMostrarGuiaRemision: {
       get() {
         return this.$store.getters["gestionDialogos/dialogMostrarGuiaRemision"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarGuiaRemision", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarGuiaRemision",
+          v
+        );
       },
     },
 
     modeloGuiaRemisionStore: {
       get() {
-        return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
+        return this.$store.getters[
+          "moduloGuiaRemision/modeloGuiaRemisionStore"
+        ];
       },
       set(v) {
-        return this.$store.commit("moduloGuiaRemision/establecerModeloGuiaRemisionStore", v);
+        return this.$store.commit(
+          "moduloGuiaRemision/establecerModeloGuiaRemisionStore",
+          v
+        );
       },
     },
 
@@ -79,19 +96,47 @@ export default {
         return this.$store.getters["moduloGuiaRemision/editarGuiaRemision"];
       },
       set(v) {
-        return this.$store.commit("moduloGuiaRemision/establecerEditarGuiaRemision", v);
+        return this.$store.commit(
+          "moduloGuiaRemision/establecerEditarGuiaRemision",
+          v
+        );
       },
     },
   },
 
   methods: {
+    async updateGuiaRemision() {
+      let respuesta = await ServicioGuiaRemision.actualizarGuiaRemision(
+        this.modeloGuiaRemisionStore.guiaremisionid,
+        this.modeloGuiaRemisionStore
+      );
+      if (respuesta.status == 200) {
+        this.cerrarDialogMostrarGuiaRemision();
+        this.cargarListaGuiaRemision();
+      }
+    },
+    async eliminarGuiaRemision() {
+    console.log('eliminar');
+      let respuesta = await ServicioGuiaRemision.eliminarGuiaRemision(
+        this.modeloGuiaRemisionStore.guiaremisionid
+      );
+      this.cerrarDialogMostrarGuiaRemision();
+      this.cargarListaGuiaRemision();
+    },
     cerrarDialogMostrarGuiaRemision() {
       this.dialogMostrarGuiaRemision = !this.dialogMostrarGuiaRemision;
     },
-  }
-}
+    async cargarListaGuiaRemision() {
+      let listaGuiaRemision = [];
+      let respuesta = await ServicioGuiaRemision.obtenerTodosGuiaRemision();
+      let guiasRemision = await respuesta.data;
+      guiasRemision.forEach((f) => {
+        listaGuiaRemision.push(f);
+      });
+      this.listaGuiaRemisionStore = listaGuiaRemision;
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

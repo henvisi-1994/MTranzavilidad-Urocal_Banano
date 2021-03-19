@@ -174,17 +174,80 @@
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
-          <v-select :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guimotivo" class="style-chooser custom px-2" :items="motivos" label="Motivo" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guimotivo)]"></v-select>
+          
+          <v-select
+            v-model="modeloGuiaRemisionStore.guimotivo"
+            placeholder="Seleccione una motivo"
+            class="style-chooser"
+            label="descripcion"
+            :reduce="(motivos) => motivos.nombre"
+            :options="motivos"
+            :disabled="editarGuiaRemision"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir un motivo</em>
+            </template>
+          </v-select>
+
         </v-col>
         <v-col cols="12" md="6">
+             <v-select
+            v-model="modeloGuiaRemisionStore.guiformapago"
+            placeholder="Seleccione una forma de pago"
+            class="style-chooser"
+            label="descripcion"
+            :reduce="(forma_pago) => forma_pago.nombre"
+            :options="forma_pago"
+            :disabled="editarGuiaRemision"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir una forma de pago</em>
+            </template>
+          </v-select>
         </v-col>
       </v-row>
+
+      <v-row no-gutters justify-md="space-around" class="mt-5">
+        <v-col cols="12" md="6">
+          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guiobservacion" class="custom px-2" dense filled label="Descripción" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guiobservacion)]"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6" >
+        </v-col>
+      </v-row>
+
       <v-row no-gutters justify-md="space-around" class="mt-5">
         <v-col cols="12">
           <p class="text-center overline primary--text">Productor</p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-select :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.productorid" class="style-chooser custom px-2" :items="listaProductorPersona" item-text="productor" item-value="id" label="Productor"></v-select>
+          
+          <v-select
+            v-model="modeloGuiaRemisionStore.productorid"
+            placeholder="Seleccione una productor"
+            class="style-chooser"
+            label="productor"
+            :reduce="(listaProductorPersona) => listaProductorPersona.id"
+            :options="listaProductorPersona"
+            :disabled="editarGuiaRemision"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir un productor</em>
+            </template>
+          </v-select>
+
+
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around" class="mt-5">
@@ -192,10 +255,7 @@
           <p class="text-center overline primary--text">Destinatario</p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guidestinatario.nombre" class="custom px-2" dense filled label="Nombre o Razón Social" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guidestinatario)]"></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guidestinatario.rucci" class="custom px-2" dense filled label="RUC o CI"></v-text-field>
+          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guidestinatario" class="custom px-2" dense filled label="Nombre o Razón Social" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guidestinatario)]"></v-text-field>
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around" class="mt-5">
@@ -205,7 +265,47 @@
           </p>
         </v-col>
         <v-col cols="12" md="9">
-          <v-select :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.conductorid" class="style-chooser custom px-2" :items="listaConductorPersona" item-text="conductor" item-value="id" label="Conductor"></v-select>
+         
+          <v-select
+            v-model="modeloGuiaRemisionStore.conductorid"
+            placeholder="Seleccione un conductor"
+            class="style-chooser"
+            label="conductor"
+            :reduce="(listaConductorPersona) => listaConductorPersona.id"
+            :options="listaConductorPersona"
+            :disabled="editarGuiaRemision"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir un conductor</em>
+            </template>
+          </v-select>
+
+         
+        </v-col>
+        <v-col cols="12" md="9">
+          
+           <v-select
+            v-model="modeloGuiaRemisionStore.vehiculoid"
+            placeholder="Seleccione una placa de vehiculo"
+            class="style-chooser"
+            label="vehplaca"
+            :reduce="(listaVehiculos) => listaVehiculos.vehiculoid"
+            :options="listaVehiculos"
+            :disabled="editarGuiaRemision"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir la placa del vehiculo</em>
+            </template>
+          </v-select>
+
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around" class="mt-5">
@@ -241,16 +341,21 @@
       </v-row>
       <v-row no-gutters justify-md="space-around" class="mt-10">
         <v-col cols="11">
-          <v-data-table
-            :headers="cabeceraTablaBienes"
-            :items="modeloGuiaRemisionStore.carga"
-            class="elevation-1"
-            no-data-text= 'No se han agregado bienes'
-          >
-            <template v-slot:item.actions="{ item }">
-              <v-icon :disabled="editarGuiaRemision" color="primary" @click="eliminarBien(item)"> mdi-trash-can </v-icon>
-            </template>
-          </v-data-table>
+           <!--nuevo data table-->
+
+           <v-data-table
+          :headers="cabeceraTablaBienes"
+          :items="modeloGuiaRemisionStore.carga"
+          class="elevation-1"
+          no-data-text= 'No se han agregado bienes'
+        >
+          <template v-slot:item.actions="{ item }">
+            <v-icon :disabled="editarGuiaRemision" color="primary" @click="eliminarBien(item)"> mdi-trash-can </v-icon>
+          </template>
+        </v-data-table>
+
+
+
         </v-col>
       </v-row>
     </v-container>
@@ -259,8 +364,18 @@
 
 <script>
 import {mapState} from 'vuex';
+import ServicioVehiculo from "../services/ServicioVehiculo";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+
 export default {
   name: 'FormGuiaRemision',
+
+  components: {
+    vSelect,
+  },
+
+
   data() {
     return {
       menuFechaEmision: false,
@@ -278,6 +393,7 @@ export default {
         carestado: '',
         cosechaid: '',
       },
+      listaVehiculos:[],
       cabeceraTablaBienes: [
         {
           text: "Cantidad",
@@ -316,17 +432,23 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      motivos: [
-        "Venta",
-        "Compra",
-        "Transformación",
-        "Consignación",
-        "Traslado entre establecimientos de una misma empresa",
-        "Traslado por emisor itinerante de comprobantes de venta",
-        "Devolución",
-        "Importación",
-        "Exportación",
-        "Otros",
+      forma_pago: [{nombre: "Efectivo", descripcion: "Efectivo"},
+                   {nombre: "Tarjeta de débito", descripcion: "Tarjeta de débito"},
+                   {nombre: "Dinero Electrónico", descripcion: "Dinero Electrónico"},
+                   {nombre: "Tarjeta Prepago", descripcion: "Tarjeta Prepago"},
+                   {nombre: "Tarjeta de Crédito", descripcion: "Tarjeta de Crédito"},
+      
+      ],
+      motivos: [{nombre: "Venta", descripcion: "Venta"},
+                {nombre: "Compra", descripcion: "Compra"},
+                {nombre: "Transformación", descripcion: "Transformación"},
+                {nombre: "Consignación", descripcion: "Consignación"},
+                {nombre: "Traslado entre establecimientos de una misma empresa", descripcion: "Traslado entre establecimientos de una misma empresa"},
+                {nombre: "Traslado por emisor itinerante de comprobantes de venta", descripcion: "Traslado por emisor itinerante de comprobantes de venta"},
+                {nombre: "Devolución", descripcion: "Devolución"},
+                {nombre: "Importación", descripcion: "Importación"},
+                {nombre: "Exportación", descripcion: "Exportación"},
+                {nombre: "Otros", descripcion: "Otros"},
       ],
     }
   },
@@ -382,11 +504,61 @@ export default {
     }
   },
   
+  mounted(){
+    this.listaVehiculo();
+  },
   methods: {
     agregarBien() {
       this.modeloGuiaRemisionStore.carga.push(this.bien);
       this.$refs.formGuiaRemision.resetValidation();
       this.vaciarBien();
+    },
+
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
+    },
+
+    async listaVehiculo (){
+      let respuesta= await ServicioVehiculo.obtenerTodosVehiculos();
+      this.listaVehiculos= respuesta.data;
     },
 
     eliminarBien(item){

@@ -18,11 +18,12 @@ module.exports = {
 
     async createGuiaRemision(guiaremision) {
         let query, result;
+        
 
         query = `INSERT INTO guiaremision
                     (guiserie, guinumero, guifechaemision, guifechainicio, guihorainicio, guifechafin, guihorafin, guipuntoinicio, guipuntofin, guicomprobanteventa, guimotivo, guidestinatario, guiformapago, guiobservacion, guiemiteurocal, conductorid, vehiculoid, productorid) VALUES
-                    ('${guiaremision.guiserie}','${parseInt(guiaremision.guinumero)}','${guiaremision.guifechaemision}','${guiaremision.guifechainicio}','${guiaremision.guihorainicio}','${guiaremision.guifechafin}','${guiaremision.guihorafin}', '${guiaremision.guipuntoinicio}','${guiaremision.guipuntofin}','${parseInt(guiaremision.guicomprobanteventa)}','${guiaremision.guimotivo}','${JSON.stringify(guiaremision.guidestinatario)}','${guiaremision.guiformapago}','${guiaremision.guiobservacion}','${false}','${guiaremision.conductorid}','${0}','${guiaremision.productorid}') RETURNING guiaremisionid;`
-
+                    ('${guiaremision.guiserie}','${parseInt(guiaremision.guinumero)}','${guiaremision.guifechaemision}','${guiaremision.guifechainicio}','${guiaremision.guihorainicio}','${guiaremision.guifechafin}','${guiaremision.guihorafin}', '${guiaremision.guipuntoinicio}','${guiaremision.guipuntofin}','${parseInt(guiaremision.guicomprobanteventa)}','${guiaremision.guimotivo}','${guiaremision.guidestinatario}','${guiaremision.guiformapago}','${guiaremision.guiobservacion}','${false}','${guiaremision.conductorid}','${guiaremision.vehiculoid}','${guiaremision.productorid}') RETURNING guiaremisionid;`
+                    
         result = await pool.query(query);
 
         if(result.rows){
