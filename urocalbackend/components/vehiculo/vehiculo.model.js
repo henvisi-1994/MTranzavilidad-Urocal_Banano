@@ -8,4 +8,8 @@ module.exports = {
     async obtenerTodosVehiculo() {
         return vehiculoDao.obtenerTodosVehiculo();
     },
+    async obtenerVehiculoFinca(id){
+        return vehiculoDao.obtenerVehiculoFinca(id);
+
+    }
 }

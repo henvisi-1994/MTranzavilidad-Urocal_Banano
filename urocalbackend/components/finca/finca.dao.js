@@ -46,6 +46,12 @@ module.exports = {
         return result.rows; // Devuelve el json de finca encontrado
     },
 
+    async obtenerFincaProductor(id){
+        let query=`SELECT *from finca where propietarioid='${id}'`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve el json de finca encontrado
+    },
+
     async eliminarFinca(id) {
         //Borrado logico
         let query = `DELETE FROM finca WHERE fincaid = '${id}'`;

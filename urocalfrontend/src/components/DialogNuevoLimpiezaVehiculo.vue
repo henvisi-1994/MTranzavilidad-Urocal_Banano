@@ -11,6 +11,23 @@
       <v-card-text>
         <v-row>
           <v-col cols="12">
+          <v-select
+            v-model="fincaid"
+            @input="cargarListaVehiculo"
+            placeholder="Finca"
+            class="style-chooser"
+            label="findescripcionfinca"
+            :reduce="(listaFinca) => listaFinca.fincaid"
+            :options="listaFinca"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una Placa de Vehiculo</em>
+            </template>
+          </v-select>
             <v-text-field class="custom px-2" v-model="limpieza_vehiculo.limvehproductoutilizado" filled dense label="Producto utilizado"></v-text-field>
             <v-checkbox
               v-model="limpieza_vehiculo.limvehescobillon"
@@ -40,7 +57,7 @@
               value="true"
               hide-details
             ></v-checkbox>
-            
+            <br>
             <v-select
             v-model="limpieza_vehiculo.vehiculoid"
             placeholder="Vehiculo"
@@ -88,6 +105,7 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import ServicioLimpiezaVehiculo from '../services/ServicioLimpiezaVehiculo';
 import ServicioVehiculo from '../services/ServicioVehiculo';
+import ServicioFinca from '../services/ServicioFinca';
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -101,6 +119,8 @@ export default {
   data() {
     return {
       menuMostrarCalendario: "",
+      listaFinca:[],
+      fincaid:0,
       fechaActual: new Date().toISOString().substr(0, 10), // Fecha actual
       listaVehiculos:[],
     };
@@ -140,7 +160,7 @@ export default {
     
   },
     mounted() {
-    this.cargarListaVehiculo();
+    this.obtenerTodosFincas();
   },
 
   methods: {
@@ -161,9 +181,14 @@ export default {
       }
     },
     async cargarListaVehiculo(){
-      let respuesta = await ServicioVehiculo.obtenerTodosVehiculos();  // Obtener respuesta de backend
-      console.log(respuesta);
+      let respuesta = await ServicioVehiculo.obtenerVehiculoFinca(this.fincaid);  // Obtener respuesta de backend
       this.listaVehiculos = await respuesta.data;     
+    },
+    async obtenerTodosFincas() {
+      let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+      //console.log(usuariosesion.productorid);
+      let resultado = await ServicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
+      this.listaFinca = resultado.data;
     },
     // #  MANIPULACIÓN DE DATOS  #
     async cargarListaLimpiezaVehiculo () { 
