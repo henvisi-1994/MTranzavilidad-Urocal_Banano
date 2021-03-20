@@ -8,5 +8,7 @@ router.get('/propietario', controller.obtenerPropietario);                      
 router.post('/', controller.crearFinca);                                 
 router.put('/:id', controller.actualizarFinca);        
 router.delete('/:id', controller.eliminarFinca);
+router.get('/:id', controller.obtenerFincaProductor);
+
 
 module.exports = router;

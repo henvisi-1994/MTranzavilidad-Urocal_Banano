@@ -2,7 +2,8 @@ const limpiezaVModel = require('./limpiezaV.model');
 
 module.exports = {
     async getLimpiezasV(req, res) {
-        const limpiezasV = await limpiezaVModel.getLimpiezasV();
+        const { id } = req.params;
+        const limpiezasV = await limpiezaVModel.getLimpiezasV(id);
         return res.status(200).send(limpiezasV);
     },
 

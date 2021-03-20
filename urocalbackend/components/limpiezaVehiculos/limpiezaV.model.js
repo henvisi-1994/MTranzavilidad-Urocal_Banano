@@ -1,8 +1,8 @@
 const limpiezaVDao = require('./limpiezaV.dao');
 
 module.exports = {
-    async getLimpiezasV(){
-        return limpiezaVDao.getLimpiezasV();
+    async getLimpiezasV(id){
+        return limpiezaVDao.getLimpiezasV(id);
     },
 
     async getLimpiezaV(id){

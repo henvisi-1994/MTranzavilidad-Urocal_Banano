@@ -5,7 +5,7 @@ export default {
 
     state: {
         listaLimpiezaVe: [],
-        limpieza_vehiculo: new LimpiezaVehiculo(0, '', '', false, false, false, false, 0), // Modelo lote
+        limpieza_vehiculo: new LimpiezaVehiculo(0, '', '', false, false, false, false, 0, 0), // Modelo lote
         
         formLimpiezaVehiculoValido: false, // Indica si el formulario de lote es valido
     },
@@ -26,7 +26,7 @@ export default {
 
         // Vacia el modelo Persona
         vaciarLimpiezaVehiculo(state) {
-            state.limpieza_vehiculo= new LimpiezaVehiculo(0, '', '', false, false, false, false, 0) // Modelo lote
+            state.limpieza_vehiculo= new LimpiezaVehiculo(0, '', '', false, false, false, false, 0,0) // Modelo lote
         },
         vaciarLista(state, newState){
             state.listaLimpiezaVe.length = 0;

@@ -10,6 +10,9 @@ class ServicioSitio {
     obtenerTodosVehiculos() {
         return axios.get(`${API_URL}/v1/vehiculo/`);
     }
+    obtenerVehiculoFinca(id) {
+        return axios.get(`${API_URL}/v1/vehiculo/${id}`);
+    }
 }
 
 export default new ServicioSitio();

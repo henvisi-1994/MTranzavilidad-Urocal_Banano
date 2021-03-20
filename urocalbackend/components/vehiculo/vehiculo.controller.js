@@ -14,4 +14,10 @@ module.exports = {
         //return res.status(200).send(userDto.multiple(users, req.user)); //<--
         return res.status(200).send(result); // <--
     },
+    async obtenerVehiculoFinca(req, res) {
+        const { id } = req.params;
+        const result = await modeloVehiculo.obtenerVehiculoFinca(id)
+        //return res.status(200).send(userDto.multiple(users, req.user)); //<--
+        return res.status(200).send(result); // <--
+    },
 }

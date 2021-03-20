@@ -23,4 +23,7 @@ module.exports = {
     async eliminarFinca(id){
         return fincaDao.eliminarFinca(id);
     },
+    async obtenerFincaProductor(id){
+        return fincaDao.obtenerFincaProductor(id);
+    },
 }
