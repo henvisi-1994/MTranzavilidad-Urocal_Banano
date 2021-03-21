@@ -13,6 +13,24 @@
       <v-card-text>
         <v-row>
           <v-col cols="12">
+            <v-select
+            v-model="limpieza_vehiculo.fincaid"
+            placeholder="Seleccione una Finca"
+            class="style-chooser"
+            label="findescripcionfinca"
+            :reduce="(listaFinca) => listaFinca.fincaid"
+            :options="listaFinca"
+            :disabled="noeditar"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una Placa de Vehiculo</em>
+            </template>
+          </v-select> 
+            
             <v-text-field class="custom px-2" v-model="limpieza_vehiculo.limvehproductoutilizado" :disabled="noeditar" filled dense label="Producto utilizado"></v-text-field>
             <v-checkbox
               v-model="limpieza_vehiculo.limvehescobillon"
@@ -42,6 +60,7 @@
               :disabled="noeditar"
               hide-details
             ></v-checkbox>
+            <br>
           <v-select
             v-model="limpieza_vehiculo.vehiculoid"
             placeholder="Seleccione una placa de Vehiculo"
@@ -49,6 +68,7 @@
             label="vehplaca"
             :reduce="(listaVehiculos) => listaVehiculos.vehiculoid"
             :options="listaVehiculos"
+            :disabled="noeditar"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -90,6 +110,7 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { mapMutations, mapState } from "vuex";
 import ServicioLimpiezaVehiculo from "../services/ServicioLimpiezaVehiculo";  // Interactuar con el Backend
+import ServicioFinca from '../services/ServicioFinca';
 import ServicioVehiculo from '../services/ServicioVehiculo';
 export default {
   name: "DialogEditarLimpiezaVehiculo",
@@ -101,6 +122,7 @@ export default {
 
   data() {
     return {
+      listaFinca:[],
       menuMostrarCalendario: "",
       noeditar:true,
       fechaActual: new Date().toISOString().substr(0, 10), // Fecha actual
@@ -126,6 +148,7 @@ export default {
   },
   mounted() {
     this.cargarListaVehiculoPlaca();
+    this.obtenerTodosFincas();
     
   },
 
@@ -151,7 +174,6 @@ export default {
     },
     async cargarListaVehiculoPlaca(){
       let respuesta = await ServicioVehiculo.obtenerTodosVehiculos();  // Obtener respuesta de backend
-      console.log(respuesta);
       this.listaVehiculos = await respuesta.data;     
     },
     async eliminarRegistro(){
@@ -176,6 +198,12 @@ export default {
         
       });
       
+    },
+    async obtenerTodosFincas() {
+      let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+      //console.log(usuariosesion.productorid);
+      let resultado = await ServicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
+      this.listaFinca = resultado.data;
     },
     cambiarEstadoEditar(){
       this.noeditar=false;

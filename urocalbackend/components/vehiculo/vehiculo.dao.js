@@ -8,4 +8,12 @@ module.exports = {
         let result = await pool.query(query);
         return result.rows; // Devuelve array de productos
     },
+    async obtenerVehiculoFinca(id) {
+        let query = `SELECT *from vehiculo where fincaid='${id}'`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve array de productos
+    },
+
+
+    
 }

@@ -50,6 +50,11 @@ module.exports = {
         const finca = await fincaModel.obtenerFincas()
         return res.status(200).send(fincaDto.multipleFinca(finca)); //<--
     },
+    async obtenerFincaProductor(req,res){
+        const { id } = req.params;
+        const finca_productor = await fincaModel.obtenerFincaProductor(id)
+        return res.status(200).send(fincaDto.multipleFinca(finca_productor)); //<--
+    },
 
     //  Obtener registro de finca por id
     async obtenerPropietario(req, res) {

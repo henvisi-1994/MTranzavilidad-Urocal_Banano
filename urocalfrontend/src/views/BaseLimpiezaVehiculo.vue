@@ -131,6 +131,13 @@ export default {
           align: "center",
           class: "grey lighten-3",
         },
+                {
+          text: "Finca",
+          value: "finnombrefinca",
+          align: "center",
+          sortable: false,
+          class: "grey lighten-3",
+        },
         {
           text: "Vehiculo",
           value: "vehplaca",
@@ -210,8 +217,10 @@ export default {
     },
     async cargarListaVehiculo()
     {
-        let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();  // Obtener respuesta de backend
-        let datosLimpiezaVehiculo = await respuesta.data;                                    // Rescatar datos de la respuesta
+        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+        let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo(usuariosesion.productorid);  // Obtener respuesta de backend
+        let datosLimpiezaVehiculo = await respuesta.data;
+        this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);                                    // Rescatar datos de la respuesta
         datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
         this.$store.commit("moduloLimpiezaVehiculo/addListaLimpiezaVe",LimpiezaVehiculo);
       });
