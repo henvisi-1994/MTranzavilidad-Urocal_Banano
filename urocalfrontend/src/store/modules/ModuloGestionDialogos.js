@@ -127,6 +127,9 @@ export default {
         //Guia Remision
         dialogNuevoGuiaRemision: false,
         dialogMostrarGuiaRemision: false
+		//Tratamiento
+		dialogNuevoTratamiento: false,
+        dialogMostrarTratamiento: false
     },
 
     mutations: {
@@ -493,6 +496,13 @@ export default {
         toggleDialogMostrarGuiaRemision(state, newState) {
             state.dialogMostrarGuiaRemision = newState;
         }
+		 // Tratamiento
+         toggleDialogoNuevoTratamiento(state, newState) {
+            state.dialogNuevoTratamiento = newState;
+        },
+        toggleDialogoMostrarTratamiento(state, newState) {
+            state.dialogMostrarTratamiento = newState;
+        },
     },
 
     getters: {
@@ -633,5 +643,8 @@ export default {
         // Guia Remision
         dialogNuevoGuiaRemision: (state) => state.dialogNuevoGuiaRemision,
         dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision
+		// Tratamiento
+        dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
+        dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento
     },
 }

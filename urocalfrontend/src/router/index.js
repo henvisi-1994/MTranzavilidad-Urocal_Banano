@@ -135,6 +135,11 @@ const routes = [
     name: 'BaseGuiaRemision',
     component: () => import('@/views/BaseGuiaRemision.vue'),
   },
+  {
+    path: '/cacao/tratamiento',
+    name: 'BaseTratamiento',
+    component: () => import('@/views/BaseTratamiento.vue'),
+  },
   // -------------------------------- PRODUCTOR - FINCA ------------------------------------  
   {
     path: '/finca/lote',
