@@ -27,6 +27,7 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-select
             :disabled="editarRiego"
@@ -49,6 +50,8 @@
             </template>
           </v-select>
         </v-col>
+
+
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
@@ -72,6 +75,7 @@
             </template>
           </v-select>
         </v-col>
+        
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="editarRiego"

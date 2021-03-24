@@ -12,14 +12,17 @@ module.exports = {
     async createCleaningTool(req, res) {
 
         // Añadir capa de validación
-        const { limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoproducto } = req.body;
-        
-        if(validation.emptyField(limfecha) || validation.emptyField(limproducto) || validation.emptyField(limequipos) || validation.emptyField(limmaquinaria) || validation.emptyField(limherramientas) || 
-            validation.emptyField(limcajones) || validation.emptyField(limtendales) || validation.emptyField(limoperario) || validation.emptyField(cultivoproducto.cultivoid)){
+        const { limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoid } = req.body;
+        console.log("----------------------------------------BODI -----------------------------------------");
+        console.log(req.body);
+        console.log("----------------------------------------BODI -----------------------------------------");
+
+        if (validation.emptyField(limfecha) || validation.emptyField(limproducto) || validation.emptyField(limequipos) || validation.emptyField(limmaquinaria) || validation.emptyField(limherramientas) ||
+            validation.emptyField(limcajones) || validation.emptyField(limtendales) || validation.emptyField(limoperario) || validation.emptyField(cultivoid)) {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
-        }else{
+        } else {
             try {
-                let result =  await cleaningToolModel.createCleaningTool({
+                let result = await cleaningToolModel.createCleaningTool({
                     limfecha: limfecha,
                     limproducto: limproducto,
                     limequipos: limequipos,
@@ -28,7 +31,8 @@ module.exports = {
                     limcajones: limcajones,
                     limtendales: limtendales,
                     limoperario: limoperario,
-                    cultivoid: cultivoproducto.cultivoid})
+                    cultivoid: cultivoid
+                })
                 return res.status(201).send({ message: 'Limpieza Herramienta registrado', limpiezaherramientaid: result.limpiezaherramientaid });
             } catch (error) {
                 return res.status(500).send({ message: "Error al registrar limpieza herramienta" });
@@ -52,12 +56,12 @@ module.exports = {
     // Actualiza informacion de un registro de limpieza herramienta
     async updateCleaningTool(req, res) {
         const { id } = req.params;
-        const { limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoproducto } = req.body;
+        const { limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoid } = req.body;
 
-        if(validation.emptyField(limfecha) || validation.emptyField(limproducto) || validation.emptyField(limequipos) || validation.emptyField(limmaquinaria) || validation.emptyField(limherramientas) || 
-            validation.emptyField(limcajones) || validation.emptyField(limtendales) || validation.emptyField(limoperario) || validation.emptyField(cultivoproducto.cultivoid)){
+        if (validation.emptyField(limfecha) || validation.emptyField(limproducto) || validation.emptyField(limequipos) || validation.emptyField(limmaquinaria) || validation.emptyField(limherramientas) ||
+            validation.emptyField(limcajones) || validation.emptyField(limtendales) || validation.emptyField(limoperario) || validation.emptyField(cultivoid)) {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
-        }else{
+        } else {
             const rowCount = await cleaningToolModel.updateCleaningTool(id, {
                 limfecha: limfecha,
                 limproducto: limproducto,
@@ -67,7 +71,8 @@ module.exports = {
                 limcajones: limcajones,
                 limtendales: limtendales,
                 limoperario: limoperario,
-                cultivoid: cultivoproducto.cultivoid})
+                cultivoid: cultivoid
+            })
             return rowCount == 1 ? res.status(200).send({ message: "Limpieza herramienta actualizado" }) : res.status(400).send({ message: "Error al actualizar limpieza herramienta" });
         }
     },
@@ -81,7 +86,7 @@ module.exports = {
                 return res.status(200).send({ message: "Eliminado exitosamente" });
             } else {
                 return res.status(400).send({ message: "Limpieza herramienta no registrado" });
-            }            
+            }
         } catch (err) {
             if (err.code == '23503') {
                 res.status(400).send({ message: "Herramienta limpieza  a eliminar tiene relaciones con otros registros en la base de datos" });
