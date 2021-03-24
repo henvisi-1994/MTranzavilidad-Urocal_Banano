@@ -70,9 +70,6 @@ export default {
     DialogMostrarPoda,
   },
 
-  mounted() {
-    this.cargarListaPoda();
-  },
 
   data() {
     return {
@@ -259,7 +256,9 @@ export default {
   },
 
   created() {
+    this.cargarListaPoda();
     this.$store.commit("colocarLayout", "LayoutProductor");
+    
   },
 };
 </script>
