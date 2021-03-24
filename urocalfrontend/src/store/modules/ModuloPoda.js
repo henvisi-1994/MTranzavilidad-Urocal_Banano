@@ -7,6 +7,7 @@ export default {
         listaPodasStore: [],
         modeloPodaStore: new Poda('', '', '', '', '', '', '', ''), // Modelo Poda
         formPodaValido: false, // Indica si el formulario de Poda es valido
+        
     },
 
     mutations: {
@@ -16,7 +17,7 @@ export default {
         },
 
         establecerListaPodasStore(state, newState) {
-            state.listaFertilizantesStore = newState;
+            state.listaPodasStore = newState;
         },
 
         // Vacia el modelo Poda
