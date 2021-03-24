@@ -4,9 +4,6 @@ const bcrypt = require('bcryptjs');
 const pool = require('../../services/postgresql/index');
 const { updateTreatment } = require('./treatments.model');
 const format = require('pg-format');
-const pgp = require('pg-promise')({
-    capSQL: true // capitalize all generated SQL
-});
 //const { getUser, updatePasswd } = require('./users.model');
 
 module.exports = {

@@ -126,7 +126,7 @@ export default {
         dialogEditarExportadorPersona: false,
         //Guia Remision
         dialogNuevoGuiaRemision: false,
-        dialogMostrarGuiaRemision: false
+        dialogMostrarGuiaRemision: false,
 		//Tratamiento
 		dialogNuevoTratamiento: false,
         dialogMostrarTratamiento: false
@@ -495,7 +495,7 @@ export default {
         },
         toggleDialogMostrarGuiaRemision(state, newState) {
             state.dialogMostrarGuiaRemision = newState;
-        }
+        },
 		 // Tratamiento
          toggleDialogoNuevoTratamiento(state, newState) {
             state.dialogNuevoTratamiento = newState;
@@ -642,7 +642,7 @@ export default {
         dialogEditarExportadorPersona: (state) => state.dialogEditarExportadorPersona,
         // Guia Remision
         dialogNuevoGuiaRemision: (state) => state.dialogNuevoGuiaRemision,
-        dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision
+        dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision,
 		// Tratamiento
         dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
         dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento
