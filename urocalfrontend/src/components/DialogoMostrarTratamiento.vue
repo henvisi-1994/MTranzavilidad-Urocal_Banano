@@ -89,6 +89,15 @@ export default {
         return this.$store.commit("moduloTratamiento/establecerEditarTratamiento", v);
       },
     },
+
+    listaTratamientoStore:{
+      get(){
+        return this.$store.getters["moduloTratamiento/listaTratamientoStore"];
+      },
+      set(v){
+        return this.$store.commit("moduloTratamiento/asignarListaTratamientoStore", v);
+      }
+    }
   },
 
   methods: {

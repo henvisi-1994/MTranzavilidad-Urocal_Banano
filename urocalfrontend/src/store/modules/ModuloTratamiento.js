@@ -29,11 +29,16 @@ export default {
         cambiarEstadoValidoFormTratamiento(state, nuevoEstado) {
             state.formTratamientoValido = nuevoEstado
         },
+
+        asignarListaTratamientoStore(state, nuevaListaTratamientoControl) {
+            state.listaTratamientoStore = nuevaListaTratamientoControl;
+        },
     },
 
     getters: {
         formTratamientoValido: (state) => state.formTratamientoValido, // Devuelve la variable formTratamientoValido
         modeloTratamientoStore: (state) => state.modeloTratamientoStore,
         editarTratamiento: (state) => state.editarTratamiento,
+        listaTratamientoStore:(state)=> state.asignarListaTratamientoStore,
     },
 }
