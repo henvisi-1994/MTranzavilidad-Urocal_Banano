@@ -82,6 +82,15 @@ export default {
     ...mapState("moduloFertilizante", ["formFertilizanteValido", "modeloFertilizanteStore"]),
   },
 
+  // Obtiene la variable bloquearCamposFormFertilizante
+    bloquearCamposFormFertilizante: {
+      get() {
+        return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", v);
+      },
+    },
   methods: {
     async agregarFertilizante() {
       let respuesta = await ServicioFertilizantes.agregarFertilizante(this.modeloFertilizanteStore);

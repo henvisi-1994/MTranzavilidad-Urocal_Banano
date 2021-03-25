@@ -85,16 +85,16 @@ export default {
       nombre: "Gestión de Fertilización",      
       buscarFertilizante: "", // Guarda el texto de búsqueda
       cabeceraTablaFertilizante: [
-        // Detalla las cabeceras de la tabla
+        //Detalla las cabeceras de la tabla
         {
           text: "Código de finca",
-          value: "codigo_finca",
+          value: "fincodigo",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "lotnumero",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -232,8 +232,18 @@ export default {
         return this.$store.commit("moduloFertilizante/establecerModeloFertilizanteStore", v);
       },
     },
-  },
 
+    // Obtiene la variable bloquearCamposFormFertilizante
+    bloquearCamposFormFertilizante: {
+      get() {
+        return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", v);
+      },
+    },
+  },
+  
   methods: {
     async cargarListaFertilizante () {
       let listaFertilizantes = [];
@@ -292,6 +302,7 @@ export default {
       this.dialogMostrarFertilizante = !this.dialogMostrarFertilizante; // Abre el DialogMostrarFertilizante
       this.$refs.componentDialogMostrarFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation();
       this.vaciarModeloFertilizanteStore();
+      this.bloquearCamposFormFertilizante=true;
       this.modeloFertilizanteStore = item;
     },
 

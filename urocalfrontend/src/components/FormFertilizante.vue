@@ -8,6 +8,7 @@
       >
         <v-col cols="12" md="5">
           <v-select
+            :disabled="bloquearCamposFormFertilizante"
             @input="obtenerTodosLoteCultivadoDeFinca" 
             v-model="modeloFertilizanteStore.fincaid"
             placeholder="Finca"
@@ -28,10 +29,12 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-select
-            v-model="modeloFertilizanteStore.loteid"
+            :disabled="bloquearCamposFormFertilizante"
+            v-model="modeloFertilizanteStore.lotecultivadoid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
+            @input="obtenerTodosListaCultivo" 
             :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
 
@@ -49,13 +52,15 @@
 
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
-          <v-select
+         <v-select
+            :disabled="bloquearCamposFormFertilizante"
             v-model="modeloFertilizanteStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
             label="detalles"
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
+            :rules="[reglas.campoVacio(modeloFertilizanteStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -68,6 +73,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Ciclo"
             v-model="modeloFertilizanteStore.ferciclo"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.ferciclo)]"
@@ -86,6 +92,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
+                :disabled="bloquearCamposFormFertilizante"
                 label="Fecha"
                 v-model="modeloFertilizanteStore.ferfecha"
                 :rules="[reglas.campoVacio(modeloFertilizanteStore.ferfecha)]"
@@ -104,6 +111,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Nombre comercial"
             v-model="modeloFertilizanteStore.fernombrecomercial"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.fernombrecomercial)]"
@@ -114,6 +122,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Elementos"
             v-model="modeloFertilizanteStore.ferelementos"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.ferelementos)]"
@@ -121,6 +130,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Concentración: (%)"
             v-model="modeloFertilizanteStore.ferconcentracion"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
@@ -131,30 +141,45 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Área aplicada (HA)"
             v-model="modeloFertilizanteStore.ferareaaplicada"
-            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferareaaplicada)]"
+            :rules="[
+                      reglas.soloNumeros(modeloFertilizanteStore.ferareaaplicada),
+                      reglas.soloNumerosPositivos(modeloFertilizanteStore.ferareaaplicada),
+                      reglas.campoVacio(modeloFertilizanteStore.ferareaaplicada),
+                      ]"
+                      error-count="2"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Cantidad aplicada"
             v-model="modeloFertilizanteStore.fercantidadaplicada"
-            :rules="[reglas.campoVacio(modeloFertilizanteStore.fercantidadaplicada)]"
-          ></v-text-field
+            :rules="[
+                      reglas.soloNumeros(modeloFertilizanteStore.fercantidadaplicada),
+                      reglas.soloNumerosPositivos(modeloFertilizanteStore.fercantidadaplicada),
+                      reglas.campoVacio(modeloFertilizanteStore.fercantidadaplicada),
+                      ]"
+                      error-count="2"
+           ></v-text-field
         ></v-col>
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Unidad de medida"
             v-model="modeloFertilizanteStore.ferunidadmedida"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.ferunidadmedida)]"
+            
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Equipo de aplicación"
             v-model="modeloFertilizanteStore.ferequipoaplicacion"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.ferequipoaplicacion)]"
@@ -165,6 +190,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Método de aplicación"
             v-model="modeloFertilizanteStore.fermetodoaplicacion"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.fermetodoaplicacion)]"
@@ -172,6 +198,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+            :disabled="bloquearCamposFormFertilizante"
             placeholder="Operario"
             v-model="modeloFertilizanteStore.feroperario"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.feroperario)]"
@@ -199,8 +226,10 @@ export default {
     vSelect,
   },
   mounted() {
-    this.obtenerTodosListaCultivo();
     this.obtenerTodosFincas();
+    this.obtenerTodosListaCultivo();
+    this.obtenerTodosLoteCultivadoDeFinca();
+
   },
   data() {
     return {
@@ -235,17 +264,26 @@ export default {
       },
     },
 
+  bloquearCamposFormFertilizante: {
+      get() {
+        return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", v);
+      },
+    },
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
 
+  
   methods: {
-    
       async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerTodosCultivoDetalles();
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloFertilizanteStore.lotecultivadoid);
       this.listaCultivo = resultado.data; 
 
     },
+    
       async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
       this.listaFinca = resultado.data; 
