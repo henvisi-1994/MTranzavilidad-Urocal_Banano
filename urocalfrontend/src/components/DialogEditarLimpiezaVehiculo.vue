@@ -159,6 +159,7 @@ export default {
       this.vaciarLimpiezaVehiculo;
       this.noeditar=true;
     },
+
     async guardar(){
       try {
         let respuestaServicioLimpiezaVehiculo=await ServicioLimpiezaVehiculo.actualizarLimpiezaVehiculo(this.limpieza_vehiculo.limpiezavehiculoid,this.limpieza_vehiculo);
@@ -190,7 +191,9 @@ export default {
     },
     async cargarListaLimpiezaVehiculo()
     {
-        let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();  // Obtener respuesta de backend
+      let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+      //console.log(usuariosesion.productorid);
+      let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo(usuariosesion.productorid);
         let datosLimpiezaVehiculo = await respuesta.data;                                    // Rescatar datos de la respuesta
         this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);
         datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
