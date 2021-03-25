@@ -5,9 +5,9 @@ export default {
 
     state: {
         listaPodasStore: [],
+        listaCultivoStore: [],
         modeloPodaStore: new Poda('', '', '', '', '', '', '', ''), // Modelo Poda
         formPodaValido: false, // Indica si el formulario de Poda es valido
-
         editarPoda: false
     },
 
@@ -30,6 +30,20 @@ export default {
         cambiarEstadoValidoFormPoda(state, nuevoEstado) {
             state.formPodaValido = nuevoEstado
         },
+        establecerEditarPoda(state, newState) {
+            state.editarPoda = newState;
+        },
+
+        nuevoPoda(state, nuevoPoda) {
+            state.modeloPodaStore = nuevoPoda
+        },
+        establecerListaCultivoStore(state, newState) {
+            state.listaCultivoStore = newState;
+        },
+
+        limpiarListaCultivoStore(state) {
+            state.listaCultivoStore = [];
+        },
     },
 
     getters: {
@@ -37,5 +51,6 @@ export default {
         listaPodasStore: (state) => state.listaPodasStore,
         modeloPodaStore: (state) => state.modeloPodaStore,
         editarPoda: (state) => state.editarPoda,
+        listaCultivoStore: (state) => state.listaCultivoStore,
     },
 }

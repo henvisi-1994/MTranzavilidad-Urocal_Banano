@@ -77,20 +77,26 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
+    listaPodasStore: {
+      get() {
+        return this.$store.getters["moduloPoda/listaPodasStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
 
-    // Obtiene es estado de la variable formPodaValido y el modelo poda
-    ...mapState("moduloPoda", ["formPodaValido", "poda"]),
+    ...mapState("moduloPoda", ["formPodaValido"]),
   },
 
   methods: {
     async agregarPoda() {
       try {
         let respuesta = await ServicioPodas.agregarPoda(this.modeloPodaStore);
-          this.$toast.success(respuesta.data.message);
-          this.cargarListaPoda();
-          this.cerrarDialogNuevoPoda();
-          // this.vaciarModeloPodaStore();
-        
+        this.$toast.success(respuesta.data.message);
+        this.cerrarDialogNuevoPoda();
+        this.cargarListaPoda();
+        this.vaciarModeloPodaStore();
       } catch (error) {
         this.$toast.error(error.response.data.message);
       }
@@ -103,7 +109,7 @@ export default {
       podas.forEach((f) => {
         listaPodas.push(f);
       });
-      this.listaPodaStore = listaPodas;
+      this.listaPodasStore = listaPodas;
     },
 
     cerrarDialogNuevoPoda() {
@@ -111,7 +117,6 @@ export default {
       this.$refs.componentFormPoda.limpiarIds();
       this.vaciarModeloPodaStore();
     },
-
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
   },
 };

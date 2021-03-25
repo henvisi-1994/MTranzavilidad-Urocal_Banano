@@ -127,7 +127,6 @@ export default {
       podas.forEach((f) => {
         listaPodas.push(f);
       });
-      console.log(listaPodas);
       this.listaPodasStore = listaPodas;
     },
 

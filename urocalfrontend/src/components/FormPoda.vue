@@ -126,8 +126,10 @@
           <v-text-field
             placeholder="Hectáreas"
             v-model="modeloPodaStore.podhectareas"
-            :rules="[reglas.campoVacio(modeloPodaStore.podhectareas),
-            reglas.soloNumerosPositivos(modeloPodaStore.podhectareas),]"
+            :rules="[
+              reglas.campoVacio(modeloPodaStore.podhectareas),
+              reglas.soloNumerosPositivos(modeloPodaStore.podhectareas),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -137,8 +139,10 @@
           <v-text-field
             placeholder="Cantidad de plantas"
             v-model="modeloPodaStore.podcantidadplantas"
-            :rules="[reglas.campoVacio(modeloPodaStore.podcantidadplantas),
-            reglas.soloNumerosPositivos(modeloPodaStore.podcantidadplantas),]"
+            :rules="[
+              reglas.campoVacio(modeloPodaStore.podcantidadplantas),
+              reglas.soloNumerosPositivos(modeloPodaStore.podcantidadplantas),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -200,7 +204,7 @@ export default {
       loteid: "",
       tipoid: "",
       listaCultivo: [],
-      fecha:null,
+      fecha: null,
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
     };
@@ -211,8 +215,6 @@ export default {
     },
   },
   computed: {
-
-
     // Obtiene la variable que indica si el formulario es valido
     formPodaValido: {
       get() {
@@ -231,16 +233,23 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
-    // Obtiene el modelo poda
-    ...mapState("moduloPoda", ["modeloPodaStore","Poda"]),
+    // DC i
+    listaPodasStore: {
+      get() {
+        return this.$store.getters["moduloPoda/listaPodasStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
+    // //DC f
     ...mapState("moduloFinca", ["listaFincaStore"]),
-    // Obtiene las reglas de validacion
+    // ...mapState("moduloPoda", ["modeloPodaStore"]),
     ...mapState("validacionForm", ["reglas"]),
   },
 
   methods: {
     async obtenerTodosListaCultivo() {
-      console.log(this.loteid);
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
       this.listaCultivo = resultado.data;
     },
