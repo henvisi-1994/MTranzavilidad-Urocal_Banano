@@ -2,9 +2,9 @@
   <v-form ref="formLimpiezaHerramienta" v-model="formLimpiezaHerramientaValido">
     <v-container>
       <v-row no-gutters justify-md="space-around">
-
         <v-col cols="12" md="6">
           <v-select
+            :disabled="editarLimpiezaHerramienta"
             v-model="fincaid"
             placeholder="Finca"
             class="style-chooser"
@@ -26,7 +26,8 @@
 
         <v-col cols="12" md="6">
           <v-select
-            v-model="cultivoid"
+            :disabled="editarLimpiezaHerramienta"
+            v-model="loteid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
@@ -47,31 +48,12 @@
             </template>
           </v-select>
         </v-col>
-
-        <!-- <v-col cols="12" md="6">
-          <v-select
-            v-model="cultivo"
-            placeholder="Seleccione un cultivo"
-            class="style-chooser"
-            label="detalles"
-            :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
-            :options="listaCultivoStore"
-          >
-            <template v-slot:no-options="{ search, searching }">
-              <template v-if="searching">
-                No hay resultados para <em>{{ search }}</em
-                >.
-              </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un cultivo</em>
-            </template>
-          </v-select>
-        </v-col> -->
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-select
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             v-model="modeloLimpiezaHerramientaStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
@@ -99,7 +81,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-              :disabled="editarLimpiezaHerramienta"
+                :disabled="editarLimpiezaHerramienta"
                 class="custom px-2"
                 filled
                 dense
@@ -123,7 +105,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -136,7 +118,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -152,7 +134,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -165,6 +147,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -180,7 +163,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -188,13 +171,15 @@
             v-model="modeloLimpiezaHerramientaStore.limcajones"
             :rules="[
               reglas.campoVacio(modeloLimpiezaHerramientaStore.limcajones),
-              reglas.soloNumerosPositivos(modeloLimpiezaHerramientaStore.limcajones),
+              reglas.soloNumerosPositivos(
+                modeloLimpiezaHerramientaStore.limcajones
+              ),
             ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -202,7 +187,9 @@
             v-model="modeloLimpiezaHerramientaStore.limtendales"
             :rules="[
               reglas.campoVacio(modeloLimpiezaHerramientaStore.limtendales),
-              reglas.soloNumerosPositivos(modeloLimpiezaHerramientaStore.limtendales),
+              reglas.soloNumerosPositivos(
+                modeloLimpiezaHerramientaStore.limtendales
+              ),
             ]"
           ></v-text-field>
         </v-col>
@@ -211,7 +198,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6"
           ><v-text-field
-          :disabled="editarLimpiezaHerramienta"
+            :disabled="editarLimpiezaHerramienta"
             class="custom px-2"
             filled
             dense
@@ -277,7 +264,10 @@ export default {
 
   computed: {
     // Obtiene el modelo limpiezaHerramienta
-    ...mapState("moduloLimpiezaHerramienta", ["limpiezaHerramienta", "editarLimpiezaHerramienta"]),
+    ...mapState("moduloLimpiezaHerramienta", [
+      "limpiezaHerramienta",
+      "editarLimpiezaHerramienta",
+    ]),
     ...mapState("moduloFinca", ["listaFincaStore"]),
 
     // Obtiene la variable que indica si el formulario es valido

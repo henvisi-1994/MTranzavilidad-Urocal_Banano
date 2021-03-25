@@ -8,7 +8,7 @@
       >
         <v-col cols="12" md="5">
           <v-select
-            v-model="modeloPodaStore.fincodigo"
+            v-model="fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
@@ -29,7 +29,7 @@
 
         <v-col cols="12" md="5">
           <v-select
-            v-model="modeloPodaStore.lotnumero"
+            v-model="loteid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
