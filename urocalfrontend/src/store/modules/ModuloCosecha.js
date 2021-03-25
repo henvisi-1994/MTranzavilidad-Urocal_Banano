@@ -6,6 +6,7 @@ export default {
     state: {
         cosecha: new Cosecha('', '', '', '', '', '','','',''), // Modelo cosecha
         formCosechaValido: false, // Indica si el formulario de cosecha es valido
+        listaCosechaStore:[],
     },
 
     actions: {
@@ -25,6 +26,10 @@ export default {
 
         cambiarEstadoFormCosechaValido(state, nuevoEstado) {
             state.formCosechaValido = nuevoEstado
+        },
+        
+        asignarListaCosecha(state, newState) {
+            state.listaCosechaStore = newState
         },
     },
 

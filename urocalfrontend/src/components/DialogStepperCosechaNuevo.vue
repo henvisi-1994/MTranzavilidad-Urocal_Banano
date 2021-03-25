@@ -16,7 +16,7 @@
         <v-spacer></v-spacer>
         <div v-if="n_step > 1">
           <v-btn icon>
-            <v-icon class="white--text" @click="atras()">mdi-arrow-left-bold</v-icon>
+            <!-- <v-icon class="white--text" @click="atras()">mdi-arrow-left-bold</v-icon> -->
           </v-btn>
         </div>
         <v-btn icon>
@@ -26,33 +26,8 @@
         </v-btn>
       </v-card-title>
 
-      <v-card-text style="padding: 0px">
-        <!-- Stepper -->
-        <v-stepper v-model="n_step" class="elevation-0">
-          <v-stepper-header>
-            <v-stepper-step step="1"> Cosecha </v-stepper-step>
-            <v-divider></v-divider>
-
-            <v-stepper-step step="2"> Tratamiento </v-stepper-step>
-            <v-divider></v-divider>
-          </v-stepper-header>
-
-          <v-stepper-items>
-            <v-container>
-              <v-stepper-content step="1" class="pa-1">
-                <!-- Formulario para registrar cosecha -->
-                <FormCosecha ref="componentFormCosecha"></FormCosecha>
-              </v-stepper-content>
-
-              <v-stepper-content step="2" class="pa-1">
-                <!-- Formulario para registrar cultivo -->
-                <FormTratamiento></FormTratamiento>
-              </v-stepper-content>
-
-            </v-container>
-          </v-stepper-items>
-        </v-stepper>
-        <!-- Fin: Stepper -->
+      <v-card-text class="py-top">
+          <FormCosecha ref="componentFormCosecha"></FormCosecha>
       </v-card-text>
 
       <v-card-actions class="justify-center pb-3">
@@ -63,7 +38,7 @@
           color="primary"
           :disabled="validarBtnAgregarCosecha()"
           @click="registrar()"
-          >{{ btn_nombre_step }}</v-btn
+          >{{ 'registrar' }}</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -75,6 +50,7 @@ import { mapMutations, mapState } from "vuex";
 
 import FormCosecha from "@/components/FormCosecha";
 import FormTratamiento from "@/components/FormTratamiento";
+import ServicioCosecha from '../services/ServicioCosecha';
 
 
 export default {
@@ -113,32 +89,63 @@ export default {
 
   methods: {
     // Vacia el modelo lot
-    ...mapMutations("moduloCosecha", ["vaciarCosecha"]),
+    ...mapMutations("moduloCosecha", ["vaciarCosecha","establecerListaCosecha"]),
 
     // Vacia el modelo environment
     ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
 
-    // Registra dependiendo el tab donde se encuentre
-    registrar() {
-      switch (this.n_step) {
-        case 1:
-          this.n_step++;
-          console.log(this.cosecha);
-          break;
-        case 2:
-          this.n_step++;
-          console.log(this.medAmbiente);
-          this.btn_nombre_step = "Registrar";
-          break;
-        case 3:
-          this.n_step = 1;
-          this.cerrarDialogStepperCosechaNuevo();
-          break;
-
-        default:
-          this.cerrarDialogStepperCosechaNuevo();
+    async registrar() {
+      try {
+        console.log(this.siembra);
+        let respuestaServicioCosecha = await ServicioCosecha.crearCosecha(this.cosecha);
+        if(respuestaServicioCosecha.status == 201){
+          this.cerrarDialogStepperCosechaNuevo()
+          this.obtenerTodosCosecha();
+          this.vaciarCosecha();
+          this.$toast.success(respuestaServicioCosecha.data.message);
+        }else{
+          console.log(error.response.data.message);
+        }
+      } catch (error) {
+        //console.log(error.response.data.message);
+        this.$toast.error(error.response.data.message);
       }
     },
+
+    validarBtnAgregarCosecha() {
+      let validSelect = this.cosecha.cultivoid== "" || this.cosecha.cultivoid == null;
+      return this.formCosechaValido && !validSelect ? false : true;
+    },
+
+    cerrarDialogoNuevaCosecha() {
+      this.dialogoNuevaSiembra = false; // Cierra el DialogoNuevaSiembra
+    },
+    async obtenerTodosCosecha() {
+      let resultado = await ServicioCosecha.obtenerTodosCosecha();
+      this.establecerListaCosecha(resultado.data);
+      //console.log(this.listaMalezaControl);
+    },
+    // Registra dependiendo el tab donde se encuentre
+    // registrar() {
+    //   switch (this.n_step) {
+    //     case 1:
+    //       this.n_step++;
+    //       console.log(this.cosecha);
+    //       break;
+    //     case 2:
+    //       this.n_step++;
+    //       console.log(this.medAmbiente);
+    //       this.btn_nombre_step = "Registrar";
+    //       break;
+    //     case 3:
+    //       this.n_step = 1;
+    //       this.cerrarDialogStepperCosechaNuevo();
+    //       break;
+
+    //     default:
+    //       this.cerrarDialogStepperCosechaNuevo();
+    //   }
+    // },
 
     cerrarDialogStepperCosechaNuevo() {
       this.n_step = 1;
@@ -151,44 +158,44 @@ export default {
     },
 
     // Cambia el titulo del dialogo
-    tituloDialog() {
-      switch (this.n_step) {
-        case 1:
-          return "Cosecha";
-          break;
-        case 2:
-          return "Tratamiento";
-          break;
+    // tituloDialog() {
+    //   switch (this.n_step) {
+    //     case 1:
+    //       return "Cosecha";
+    //       break;
+    //     case 2:
+    //       return "Tratamiento";
+    //       break;
         
-      }
-    },
+    //   }
+    // },
 
     // Retorna un paso atras en el stepper
-    atras() {
-      this.n_step--;
-      this.btn_nombre_step = "Siguiente";
-    },
+    // atras() {
+    //   this.n_step--;
+    //   this.btn_nombre_step = "Siguiente";
+    // },
 
-    // Valida que el boton este activo si el formulario correspondiente a la seccion es valido
-    validarBtnAgregarCosecha() {
-      let seletValido = this.cosecha.cultivoid== "" || this.cosecha.cultivoid == null;
-      //let CheckboxesValidos = this.listaIDsProductos.length == 0;
-      switch (this.n_step) {
-        case 1:
-          /*if (this.validFormLot && !seletValido) {
-            return false;
-          } else {
-            return true;
-          }*/
-          return false;
-          break;
-        case 2:
-          //return CheckboxesValidos ? true : false;
-          return false;
-          break;
+    // // Valida que el boton este activo si el formulario correspondiente a la seccion es valido
+    // validarBtnAgregarCosecha() {
+    //   let seletValido = this.cosecha.cultivoid== "" || this.cosecha.cultivoid == null;
+    //   //let CheckboxesValidos = this.listaIDsProductos.length == 0;
+    //   switch (this.n_step) {
+    //     case 1:
+    //       /*if (this.validFormLot && !seletValido) {
+    //         return false;
+    //       } else {
+    //         return true;
+    //       }*/
+    //       return false;
+    //       break;
+    //     case 2:
+    //       //return CheckboxesValidos ? true : false;
+    //       return false;
+    //       break;
         
-      }
-    },
+    //   }
+    // },
   },
 };
 </script>
