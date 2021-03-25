@@ -45,7 +45,7 @@ module.exports = {
     // SELECT: Devuelve todos los registros
     async obtenerOperarios() {
         //let query = `SELECT p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre, oper.opecargo FROM persona p, ciudad c, operario oper WHERE p.ciudadnacimientoid = c.ciudadid AND p.personaid = oper.operarioid;`;
-        let query = `SELECT p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre, oper.opecargo, (SELECT fincaid FROM nomina WHERE operarioid=p.personaid), (SELECT finnombrefinca FROM finca WHERE fincaid=(SELECT fincaid FROM nomina WHERE operarioid=p.personaid)) FROM persona p, ciudad c, operario oper WHERE p.ciudadnacimientoid = c.ciudadid AND p.personaid = oper.operarioid;`;
+        let query = `SELECT p.personaid, p.percedula, p.perapellidos, p.pernombres,concat(p.pernombres,' ', p.perapellidos) as operario ,p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre, oper.opecargo, (SELECT fincaid FROM nomina WHERE operarioid=p.personaid), (SELECT finnombrefinca FROM finca WHERE fincaid=(SELECT fincaid FROM nomina WHERE operarioid=p.personaid)) FROM persona p, ciudad c, operario oper WHERE p.ciudadnacimientoid = c.ciudadid AND p.personaid = oper.operarioid;`;
         let result = await pool.query(query);
         return result.rows;                     // Devuelve el array de json
     },

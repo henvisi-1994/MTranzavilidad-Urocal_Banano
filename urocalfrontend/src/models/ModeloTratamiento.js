@@ -1,14 +1,12 @@
 export default class Tratamiento {
-    constructor(tratamientoid,trafechainiciofermentacion, trafechafinfermentacion, tratiposecado, trafechainiciosecado, trafechafinSecado, travolumenseco, traconversion, traobservacion, traoperario ) {
+    constructor(tratamientoid,traobservacion, traubicacion, trafecha, cultivoid, productorid, fincaid, detalle ) {
         this.tratamientoid = tratamientoid;
-        this.trafechainiciofermentacion = trafechainiciofermentacion;
-        this.trafechafinfermentacion = trafechafinfermentacion;
-        this.tratiposecado = tratiposecado;
-        this.trafechainiciosecado = trafechainiciosecado;
-        this.trafechafinSecado = trafechafinSecado;
-        this.travolumenseco = travolumenseco;
-        this.traconversion = traconversion;
         this.traobservacion = traobservacion;
-        this.traoperario = traoperario;
+        this.traubicacion = traubicacion;
+        this.trafecha = trafecha;
+        this.cultivoid = cultivoid;
+        this.productorid = productorid;
+        this.fincaid = fincaid;
+        this.detalle = detalle;
     }
 }

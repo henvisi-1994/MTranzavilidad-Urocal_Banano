@@ -11,7 +11,8 @@
             v-model="modeloFitosanitarioStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
-            label="fincanombre"
+            label="findescripcionfinca"
+            @input="obtenerTodosLoteCultivadoDeFinca" 
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFinca"
           >
@@ -29,8 +30,9 @@
             v-model="modeloFitosanitarioStore.loteid"
             placeholder="Lote"
             class="style-chooser"
-            label="lotenombre"
-            :reduce="(listaLote) => listaLote.loteid"
+            label="lotnumero"
+            @input="obtenerTodosListaCultivo" 
+            :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -50,7 +52,7 @@
             v-model="modeloFitosanitarioStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
-            label="cultivonombre"
+            label="detalles"
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
           >
@@ -67,7 +69,7 @@
           <v-text-field
             placeholder="Ciclo"
             v-model="modeloFitosanitarioStore.fitciclo"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitciclo)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitciclo),reglas.soloNumeros(modeloFitosanitarioStore.fitciclo),reglas.soloNumerosPositivos(modeloFitosanitarioStore.fitciclo)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -120,7 +122,7 @@
           <v-text-field
             placeholder="Autorización Técnica"
             v-model="modeloFitosanitarioStore.fitautorizaciontecnica"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitautorizaciontecnica)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitautorizaciontecnica), reglas.soloLetras(modeloFitosanitarioStore.fitautorizaciontecnica)]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -130,14 +132,14 @@
           <v-text-field
             placeholder="Nombre común"
             v-model="modeloFitosanitarioStore.fitnombrecomun"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitnombrecomun)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitnombrecomun),reglas.soloLetras(modeloFitosanitarioStore.fitnombrecomun)]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Dosis"
             v-model="modeloFitosanitarioStore.fitdosis"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitdosis)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitdosis), reglas.soloNumeros(modeloFitosanitarioStore.fitdosis), reglas.soloNumerosPositivos(modeloFitosanitarioStore.fitdosis)]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -147,7 +149,7 @@
           <v-text-field
             placeholder="Cantidad total (Kg)"
             v-model="modeloFitosanitarioStore.fitcantidadtotal"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitcantidadtotal)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitcantidadtotal), reglas.soloNumeros(modeloFitosanitarioStore.fitcantidadtotal), reglas.soloNumerosPositivos(modeloFitosanitarioStore.fitcantidadtotal)]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -155,7 +157,7 @@
             type="number"
             placeholder="Área aplicada"
             v-model="modeloFitosanitarioStore.fitareaplicada"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitareaplicada)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitareaplicada), reglas.soloNumeros(modeloFitosanitarioStore.fitareaplicada), reglas.soloNumerosPositivos(modeloFitosanitarioStore.fitareaplicada)]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -172,7 +174,8 @@
           <v-text-field
             placeholder="Método de aplicación"
             v-model="modeloFitosanitarioStore.fitmetodo"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitmetodo)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitmetodo), reglas.soloLetras(modeloFitosanitarioStore.fitmetodo)
+]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -182,7 +185,7 @@
           <v-text-field
             placeholder="Plazo de seguridad"
             v-model="modeloFitosanitarioStore.fitplazoseguridad"
-            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitplazoseguridad)]"
+            :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitplazoseguridad), reglas.soloNumeros(modeloFitosanitarioStore.fitplazoseguridad), reglas.soloNumerosPositivos(modeloFitosanitarioStore.fitplazoseguridad)]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -190,8 +193,8 @@
             v-model="modeloFitosanitarioStore.fitoperario"
             placeholder="Operario"
             class="style-chooser"
-            label="operarionombre"
-            :reduce="(listaOperario) => listaOperario.operarioid"
+            label="operario" 
+            :reduce="(listaOperario) => listaOperario.personaid"
             :options="listaOperario"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -213,6 +216,10 @@ import { mapState } from "vuex";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import servicioLote from "../services/ServicioLote";
+import servicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioOperario from "../services/ServicioOperarioPersona";
 
 export default {
   name: "FormFitosanitario",
@@ -220,65 +227,16 @@ export default {
   components: {
     vSelect,
   },
-
+  mounted() {
+    this.obtenerTodosFincas();
+    this.obtenerTodosOperarios();
+  },
   data() {
     return {
-      listaFinca: [
-        {
-          fincaid: 1,
-          fincanombre: "Finca 1",
-        },
-        {
-          fincaid: 2,
-          fincanombre: "Finca 2",
-        },
-        {
-          fincaid: 3,
-          fincanombre: "Finca 3",
-        },
-      ],
-      listaLote: [
-        {
-          loteid: 1,
-          lotenombre: "Lote 1",
-        },
-        {
-          loteid: 2,
-          lotenombre: "Lote 2",
-        },
-        {
-          loteid: 3,
-          lotenombre: "Lote 3",
-        },
-      ],
-      listaCultivo: [
-        {
-          cultivoid: 1,
-          cultivonombre: "Cultivo 1",
-        },
-        {
-          cultivoid: 2,
-          cultivonombre: "Cultivo 2",
-        },
-        {
-          cultivoid: 3,
-          cultivonombre: "Cultivo 3",
-        },
-      ],
-      listaOperario: [
-        {
-          operarioid: 1,
-          operarionombre: "Operario 1",
-        },
-        {
-          operarioid: 2,
-          operarionombre: "Operario 2",
-        },
-        {
-          operarioid: 3,
-          operarionombre: "Operario 3",
-        },
-      ],
+      listaFinca: [],
+      listaLote: [],
+      listaCultivo: [],
+      listaOperario: [],
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
     };
@@ -311,6 +269,30 @@ export default {
     ...mapState("validacionForm", ["reglas"]),
   },
 
-  methods: {},
+  methods: {
+     async obtenerTodosListaCultivo() {
+      console.log(this.modeloFitosanitarioStore.loteid);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloFitosanitarioStore.loteid);
+      this.listaCultivo = resultado.data; 
+
+    },
+      async obtenerTodosFincas() {
+      let resultado = await servicioFinca.obtenerTodosFincas();
+      this.listaFinca = resultado.data;
+       
+    },
+      async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFitosanitarioStore.fincaid);
+      this.listaLote = resultado.data; 
+      
+    },
+    async obtenerTodosOperarios(){
+      
+      let resultado =await servicioOperario.obtenerTodosOperarioPersona();
+      console.log(resultado)
+      this.listaOperario= resultado.data;
+      
+    }
+  },
 };
 </script>

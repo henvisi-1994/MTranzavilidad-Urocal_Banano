@@ -4,7 +4,8 @@ const controller = require('./treatments.controller');
 
 const router = express.Router();
 
-router.get('/', controller.getTreatments);                                   // Coleccion (plural)
+router.get('/', controller.getTreatments);   
+router.get('/detalle/:id', controller.getDetalleTreatment);                                 // Coleccion (plural)
 router.get('/:id', controller.getTreatment);                                 // Documento (singular)        
 router.post('/', controller.createTreatment);                                // crea un tratamiento
 router.put('/:id', controller.updateTreatment);                             //acualiza un tratamiento
