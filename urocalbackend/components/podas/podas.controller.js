@@ -7,6 +7,11 @@ module.exports = {
         return res.status(200).send(podas);
     },
 
+    async getTiposPodas(req, res) {
+        const tipospodas = await podasModel.getTiposPodas();
+        return res.status(200).send(tipospodas);
+    },
+
     async getPoda(req, res) {
         const { id } = req.params;
         const rows = await podasModel.getPoda(id);
@@ -49,7 +54,7 @@ module.exports = {
             podoperario: podoperario,
             cultivoid: cultivoid
         });
-        
+
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
 
     },
@@ -60,7 +65,7 @@ module.exports = {
         try {
             let rowCount = await podasModel.deletePoda(id);
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Poda no registrada", tipo: "error" });
-            
+
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar poda", tipo: "error" });
         }
