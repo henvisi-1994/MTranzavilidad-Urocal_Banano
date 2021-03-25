@@ -3,11 +3,19 @@ const pool = require('../../services/postgresql/index');
 
 module.exports = {
     async getFitosanitarios() {
-        let query = `SELECT * FROM fitosanitario f 
-                        JOIN cultivo c ON c.cultivoid =f.cultivoid
-                        JOIN condicionclimatica cc ON cc.condicionclimaticaid =f.condicionclimaticaid
-                        JOIN lotecultivado l on l.lotecultivadoid=c.lotecultivadoid
-                        JOIN finca fc ON fc.fincaid = l.fincaid`;
+        let query = `SELECT f.fitosanitarioid, fitciclo, TO_CHAR(fitfecha, 'YYYY-MM-DD')as fitfecha,
+        fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica,
+        fitnombrecomun, fitdosis, fitcantidadtotal,
+        fitareaaplicada, fitequipoaplicacion, fitmetodo,
+        fitplazoseguridad, fitoperario,concat(pernombres, ' ',perapellidos) as operario, f.cultivoid, 
+        l.lotecultivadoid, lotnumero, p.productoid, 
+        concat(pronombre, ' ', provariedad) as cultivo, fc.fincaid, fincodigo
+        FROM fitosanitario f 
+                                JOIN cultivo c ON c.cultivoid =f.cultivoid
+                                join producto p on c.productoid = p.productoid
+                                JOIN lotecultivado l on l.lotecultivadoid=c.lotecultivadoid
+                                JOIN finca fc ON fc.fincaid = l.fincaid
+                                join persona pe on pe.personaid = to_number(f.fitoperario,'999999')`;
         let result = await pool.query(query);
         console.log(result);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
@@ -20,14 +28,16 @@ module.exports = {
     },
 
     async createFitosanitario(fitosanitario) {
+        
         let query, result;
-
+        
         query = `INSERT INTO fitosanitario
-                    (fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid) VALUES
-                    ('${fitosanitario.fitciclo}', '${fitosanitario.fitfecha}', '${fitosanitario.fitnombrecomercial}', '${fitosanitario.fitingredienteactivo}', '${fitosanitario.fitnombrecomun}', '${fitosanitario.fitdosis}', '${fitosanitario.fitcantidadtotal}', '${fitosanitario.fitareaplicada}, '${fitosanitario.fitequipoaplicacion}, '${fitosanitario.fitmetodo}, '${fitosanitario.fitplazoseguridad}, '${fitosanitario.fitoperario}, '${fitosanitario.cultivoid}, '${fitosanitario.condicionclimaticaid}) RETURNING fitosanitarioid;`
+                    (fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid) VALUES
+                    ('${fitosanitario.fitciclo}', '${fitosanitario.fitfecha}', '${fitosanitario.fitnombrecomercial}', '${fitosanitario.fitingredienteactivo}', '${fitosanitario.fitautorizaciontecnica}','${fitosanitario.fitnombrecomun}', '${fitosanitario.fitdosis}', '${fitosanitario.fitcantidadtotal}', '${fitosanitario.fitareaplicada}', '${fitosanitario.fitequipoaplicacion}', '${fitosanitario.fitmetodo}', '${fitosanitario.fitplazoseguridad}', '${fitosanitario.fitoperario}', '${fitosanitario.cultivoid}' ) RETURNING fitosanitarioid;`
 
+        console.log(query);
         result = await pool.query(query);
-
+        
         return fitosanitario;
     },
     
@@ -43,7 +53,7 @@ module.exports = {
         fitautorizaciontecnica = '${fitosanitario.fitautorizaciontecnica}',
         fitequipoaplicacion = '${fitosanitario.fitequipoaplicacion}', 
         fitmetodo = '${fitosanitario.fitmetodo}', 
-        fitplazoseguridad = '${fitosanitario.fitplazoseguridad}', fitoperario = '${fitosanitario.fitoperario}', cultivoid = '${fitosanitario.cultivoid}', condicionclimaticaid = '${fitosanitario.condicionclimaticaid}' WHERE fitosanitarioid = ${id}`;
+        fitplazoseguridad = '${fitosanitario.fitplazoseguridad}', fitoperario = '${fitosanitario.fitoperario}', cultivoid = '${fitosanitario.cultivoid}' WHERE fitosanitarioid = ${id}`;
 
         
         let result = await pool.query(query);

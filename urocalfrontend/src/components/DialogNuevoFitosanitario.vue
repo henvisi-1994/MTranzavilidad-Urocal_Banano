@@ -77,6 +77,14 @@ export default {
         return this.$store.commit("moduloFitosanitario/establecerModeloFitosanitariosStor", v);
       },
     },
+    listaFitosanitarioStore:{
+      get(){
+        return this.$store.getters["moduloFitosanitorio/listaFitosanitariosStore"];
+      },
+      set(v){
+        return this.$store.commit("moduloFitosanitario/establecerListaFitosanitariosStor",v);
+      }
+    },
 
     // Obtiene es estado de la variable formFitosanitarioValido y el modelo fitosanitario
     ...mapState("moduloFitosanitario", ["formFitosanitarioValido", "modeloFitosanitarioStore"]),
@@ -86,6 +94,7 @@ export default {
     // Registra dependiendo el tab donde se encuentre
     async agregarFitosanitario() {
       let respuesta = await ServicioFitosanitarios.agregarFitosanitario(this.modeloFitosanitarioStore);
+      
       if (respuesta.status == 201) {
         this.cerrarDialogNuevoFitosanitario();
         this.cargarListaFitosanitario();
@@ -97,10 +106,11 @@ export default {
       let listaFitosanitarios = [];
       let respuesta = await ServicioFitosanitarios.obtenerTodosFitosanitarios();
       let fitosanitarios = await respuesta.data;
+      this.$store.commit("moduloFitosanitario/vaciarLista",null);
       fitosanitarios.forEach((f) => {
-        listaFitosanitarios.push(f);
+        return this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",f);
       });
-      this.listaFitosanitariosStore = listaFitosanitarios;
+      
     },
 
     cerrarDialogNuevoFitosanitario() {

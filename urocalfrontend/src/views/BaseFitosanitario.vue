@@ -103,7 +103,7 @@ export default {
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "lotnumero",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -174,7 +174,7 @@ export default {
         },
         {
           text: "Área Aplicada",
-          value: "fitareaplicada",
+          value: "fitareaaplicada",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -202,7 +202,7 @@ export default {
         },
         {
           text: "Operario",
-          value: "fitoperario",
+          value: "operario",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -284,29 +284,7 @@ export default {
       let fitosanitarios = await respuesta.data;
       this.$store.commit("moduloFitosanitario/vaciarLista", null);
       fitosanitarios.forEach((f) => {
-        this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",
-          {
-            fitosanitarioid: f.fitosanitarioid,
-            fincodigo: f.fincodigo,
-            lote: f.lotnumero,
-            loteid: f.loteid,
-            fitciclo: f.fitciclo,
-            fitfecha: this.convertirFecha(f.fitfecha),
-            fitnombrecomercial: f.fitnombrecomercial,
-            fitingredienteactivo: f.fitingredienteactivo,
-            fitautorizaciontecnica: f.fitautorizaciontecnica,
-            fitnombrecomun: f.fitnombrecomun,
-            fitdosis: f.fitdosis,
-            fitcantidadtotal: f.fitcantidadtotal,
-            fitareaplicada: f.fitareaaplicada,
-            fitequipoaplicacion:f.fitequipoaplicacion,
-            fitmetodo: f.fitmetodo,
-            fitplazoseguridad: f.fitplazoseguridad,
-            fitoperario: f.fitoperario,
-            cultivoid: f.cultivoid,
-            condicionclimaticaid: f.condicionclimaticaid,
-          }
-        );
+        this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",f);
       });
     },
     /*
