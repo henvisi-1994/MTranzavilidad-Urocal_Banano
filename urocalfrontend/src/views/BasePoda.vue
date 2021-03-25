@@ -8,14 +8,21 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarPoda"
               append-icon="mdi-magnify"
-              label="Buscar" class="custom" filled dense
+              label="Buscar"
+              class="custom"
+              filled
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -29,14 +36,19 @@
           sort-by="id_lote"
           :items="listaPodaStore"
           :search="buscarPoda"
-          class="elevation-1">
+          class="elevation-1"
+        >
           <template v-slot:top>
             <!-- Dialog que muestra el formulario con toda la informacion de poda -->
-            <DialogMostrarPoda ref="componentDialogMostrarPoda"></DialogMostrarPoda>
+            <DialogMostrarPoda
+              ref="componentDialogMostrarPoda"
+            ></DialogMostrarPoda>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarPoda()"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirMostrarPoda(item)">
+              mdi-eye
+            </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -45,7 +57,8 @@
         <!-- Botón para agregar nueva poda -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="200px" large
+          width="200px"
+          large
           color="primary"
           @click="cargarDialogNuevoPoda()"
           >Nuevo</v-btn
@@ -56,11 +69,12 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import DialogNuevoPoda from "@/components/DialogNuevoPoda";
 import DialogMostrarPoda from "@/components/DialogMostrarPoda";
-import ServicioPodas from '../services/ServicioPodas';
+import ServicioPodas from "../services/ServicioPodas";
+import ServicioFinca from "../services/ServicioFinca";
 
 export default {
   name: "BasePoda",
@@ -72,30 +86,31 @@ export default {
 
   mounted() {
     this.cargarListaPoda();
+    // this.cargarListaCultivos();
   },
 
   data() {
     return {
-      nombre: "Gestión de Poda",      
+      nombre: "Gestión de Poda",
       buscarPoda: "", // Guarda el texto de búsqueda
       cabeceraTablaPoda: [
         // Detalla las cabeceras de la tabla
         {
           text: "Código de finca",
-          value: "codigo_finca",
+          value: "fincodigo",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "lotnumero",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Cultivo",
-          value: "cultivo",
+          value: "cultivoid",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -147,14 +162,29 @@ export default {
   },
 
   computed: {
+    // ...mapState('moduloPoda', ['editarPoda']),
+
     listaPodaStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloPoda/listaPodasStore"]));
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloPoda/listaPodasStore"])
+        );
       },
       set(v) {
         return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
       },
     },
+    listaFincaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
+
     // Obtiene y modifica el estado de la variable dialogNuevoPoda
     dialogNuevoPoda: {
       get() {
@@ -184,10 +214,19 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
+
+    editarPoda: {
+      get() {
+        return this.$store.getters["moduloPoda/editarPoda"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerEditarPoda", v);
+      },
+    },
   },
 
   methods: {
-    async cargarListaPoda () {
+    async cargarListaPoda() {
       let listaPodas = [];
       let respuesta = await ServicioPodas.obtenerTodosPodas();
       let podas = await respuesta.data;
@@ -195,6 +234,15 @@ export default {
         listaPodas.push(f);
       });
       this.listaPodaStore = listaPodas;
+    },
+    async cargarListaFinca() {
+      let listaFinca = [];
+      let respuesta = await ServicioFinca.obtenerTodosFincas();
+      let datosFinca = await respuesta.data;
+      datosFinca.forEach((finca) => {
+        listaFinca.push(finca);
+      });
+      this.listaFincaStore = listaFinca;
     },
 
     tablaResponsiva() {
@@ -245,20 +293,25 @@ export default {
       this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
       this.vaciarModeloPodaStore(); // Vacia el modelo poda
       this.modeloPodaStore = item;
+      // this.editarRiego = true;
     },
 
-    // Vacia el modelo lot
+    // Vacia el modelo
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
 
     // Carga el DialogNuevoPoda
     cargarDialogNuevoPoda() {
       this.dialogNuevoPoda = !this.dialogNuevoPoda;
       this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
+      // this.$refs.componentDialogNuevoPoda.$refs.componentFormPoda.limpiarIds();
+      this.editarRiego = false;
       this.vaciarModeloPodaStore();
     },
   },
 
   created() {
+    this.cargarListaPoda();
+    this.cargarListaFinca();
     this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };

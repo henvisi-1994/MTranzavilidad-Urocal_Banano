@@ -26,7 +26,7 @@
 
         <v-col cols="12" md="6">
           <v-select
-            v-model="loteid"
+            v-model="cultivoid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
@@ -188,6 +188,7 @@
             v-model="modeloLimpiezaHerramientaStore.limcajones"
             :rules="[
               reglas.campoVacio(modeloLimpiezaHerramientaStore.limcajones),
+              reglas.soloNumerosPositivos(modeloLimpiezaHerramientaStore.limcajones),
             ]"
           ></v-text-field>
         </v-col>
@@ -201,6 +202,7 @@
             v-model="modeloLimpiezaHerramientaStore.limtendales"
             :rules="[
               reglas.campoVacio(modeloLimpiezaHerramientaStore.limtendales),
+              reglas.soloNumerosPositivos(modeloLimpiezaHerramientaStore.limtendales),
             ]"
           ></v-text-field>
         </v-col>

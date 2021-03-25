@@ -14,17 +14,12 @@
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon
-            
-            class="primary--text"
-            @click="!this.editarLimpiezaHerramienta"
+          <v-icon class="primary--text" @click="cambiarEstadoEditar()"
             >mdi-pencil</v-icon
           >
         </v-btn>
         <v-btn icon>
-          <v-icon
-            class="primary--text"
-            @click="eliminarRegistro()"
+          <v-icon class="primary--text" @click="eliminarRegistro()"
             >mdi-trash-can</v-icon
           >
         </v-btn>
@@ -78,7 +73,6 @@ export default {
     ...mapState("moduloLimpiezaHerramienta", [
       ,
       "modeloLimpiezaHerramientaStore",
-      "editarLimpiezaHerramienta",
     ]),
     dialogMostrarLimpiezaHerramienta: {
       get() {
@@ -117,7 +111,7 @@ export default {
       },
       set(v) {
         return this.$store.commit(
-          "moduloLimpiezaHerramienta/editarLimpiezaHerramienta",
+          "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
           v
         );
       },
@@ -178,7 +172,12 @@ export default {
     },
 
     cambiarEstadoEditar() {
-      this.editarLimpiezaHerramienta= !this.editarLimpiezaHerramienta
+      console.log(this.editarLimpiezaHerramienta);
+      this.$store.commit(
+        "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
+        false
+      );
+
     },
 
     // FORMATO: Modifica el formato de la fecha a dd/mm/aaaa

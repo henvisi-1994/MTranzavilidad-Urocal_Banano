@@ -10,6 +10,7 @@ export default class LimpiezaHerramienta {
         this.limtendales = limtendales;
         this.limoperario = limoperario;
         this.cultivoid = cultivoproducto.cultivoid;
+        // this.fincaid=fincaid;
         this.cultivoproducto = {
             cultivoid: cultivoproducto.cultivoid,
             productoid: cultivoproducto.productoid,

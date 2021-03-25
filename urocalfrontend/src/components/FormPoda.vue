@@ -1,15 +1,21 @@
 <template>
   <v-form ref="formPoda" v-model="formPodaValido">
     <v-container>
-      <v-row no-gutters justify-md="space-around" :class="$vuetify.breakpoint.xs ? '' : 'mb-5'">
+      <v-row
+        no-gutters
+        justify-md="space-around"
+        :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
+      >
         <v-col cols="12" md="5">
           <v-select
-            v-model="modeloPodaStore.fincaid"
+            v-model="modeloPodaStore.fincodigo"
             placeholder="Finca"
             class="style-chooser"
-            label="fincanombre"
+            label="findescripcionfinca"
+            @input="obtenerTodosLoteCultivadoDeFinca"
             :reduce="(listaFinca) => listaFinca.fincaid"
-            :options="listaFinca"
+            :options="listaFincaStore"
+            :rules="[reglas.campoVacio(fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -20,20 +26,26 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-select
-            v-model="modeloPodaStore.loteid"
+            v-model="modeloPodaStore.lotnumero"
             placeholder="Lote"
             class="style-chooser"
-            label="lotenombre"
-            :reduce="(listaLote) => listaLote.loteid"
+            label="lotnumero"
+            @input="obtenerTodosListaCultivo"
+            :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
+            :rules="[reglas.campoVacio(loteid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
+              <em style="opacity: 0.5" v-else-if="!fincaid"
+                >Escoja una finca</em
+              >
               <em style="opacity: 0.5" v-else>Empiece a escribir un lote</em>
             </template>
           </v-select>
@@ -46,9 +58,10 @@
             v-model="modeloPodaStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
-            label="cultivonombre"
+            label="detalles"
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
+            :rules="[reglas.campoVacio(modeloPodaStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -59,6 +72,7 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendario"
@@ -78,9 +92,9 @@
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="modeloPodaStore.podfecha"
-              @input="menuMostrarCalendario = false"
+              v-model="fecha"
               :show-current="fechaActual"
+              @input="menuMostrarCalendario = false"
               locale="es-419"
             ></v-date-picker>
           </v-menu>
@@ -102,7 +116,9 @@
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un tipo de poda</em>
+              <em style="opacity: 0.5" v-else
+                >Empiece a escribir un tipo de poda</em
+              >
             </template>
           </v-select>
         </v-col>
@@ -110,7 +126,8 @@
           <v-text-field
             placeholder="Hectáreas"
             v-model="modeloPodaStore.podhectareas"
-            :rules="[reglas.campoVacio(modeloPodaStore.podhectareas)]"
+            :rules="[reglas.campoVacio(modeloPodaStore.podhectareas),
+            reglas.soloNumerosPositivos(modeloPodaStore.podhectareas),]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -120,7 +137,8 @@
           <v-text-field
             placeholder="Cantidad de plantas"
             v-model="modeloPodaStore.podcantidadplantas"
-            :rules="[reglas.campoVacio(modeloPodaStore.podcantidadplantas)]"
+            :rules="[reglas.campoVacio(modeloPodaStore.podcantidadplantas),
+            reglas.soloNumerosPositivos(modeloPodaStore.podcantidadplantas),]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -141,6 +159,10 @@ import { mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
+import servicioLote from "../services/ServicioLote";
+import servicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
+
 export default {
   name: "FormPoda",
 
@@ -148,72 +170,48 @@ export default {
     vSelect,
   },
 
+  mounted() {
+    this.obtenerTodosFincas();
+  },
+
   data() {
     return {
-      listaFinca: [
-        {
-          fincaid: 1,
-          fincanombre: "Finca 1",
-        },
-        {
-          fincaid: 2,
-          fincanombre: "Finca 2",
-        },
-        {
-          fincaid: 3,
-          fincanombre: "Finca 3",
-        },
-      ],
-      listaLote: [
-        {
-          loteid: 1,
-          lotenombre: "Lote 1",
-        },
-        {
-          loteid: 2,
-          lotenombre: "Lote 2",
-        },
-        {
-          loteid: 3,
-          lotenombre: "Lote 3",
-        },
-      ],
-      listaCultivo: [
-        {
-          cultivoid: 1,
-          cultivonombre: "Cultivo 1",
-        },
-        {
-          cultivoid: 2,
-          cultivonombre: "Cultivo 2",
-        },
-        {
-          cultivoid: 3,
-          cultivonombre: "Cultivo 3",
-        },
-      ],
+      listaLote: [],
+      listaFinca: [],
       listaTipo: [
         {
           tipoid: 1,
-          podatipo: "Tipo 1",
+          podatipo: "Poda Formación",
         },
         {
           tipoid: 2,
-          podatipo: "Tipo 2",
+          podatipo: "Poda Mantenimiento",
         },
         {
           tipoid: 3,
-          podatipo: "Tipo 3",
+          podatipo: "Poda Fitosanitaria",
+        },
+        {
+          tipoid: 4,
+          podatipo: "Poda de Descope",
         },
       ],
+      fincaid: "",
+      loteid: "",
+      tipoid: "",
+      listaCultivo: [],
+      fecha:null,
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
     };
   },
-
+  watch: {
+    fecha(val) {
+      this.modeloPodaStore.podfecha = this.formatDate(this.fecha);
+    },
+  },
   computed: {
-    // Obtiene el modelo poda
-    ...mapState("moduloPoda", ["modeloPodaStore"]),
+
 
     // Obtiene la variable que indica si el formulario es valido
     formPodaValido: {
@@ -233,11 +231,41 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
-
+    // Obtiene el modelo poda
+    ...mapState("moduloPoda", ["modeloPodaStore","Poda"]),
+    ...mapState("moduloFinca", ["listaFincaStore"]),
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
 
-  methods: {},
+  methods: {
+    async obtenerTodosListaCultivo() {
+      console.log(this.loteid);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
+      this.listaCultivo = resultado.data;
+    },
+    async obtenerTodosFincas() {
+      let resultado = await servicioFinca.obtenerTodosFincas();
+      this.listaFinca = resultado.data;
+    },
+
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.fincaid
+      );
+      this.listaLote = resultado.data;
+    },
+    limpiarIds() {
+      this.fincaid = "";
+      this.loteid = "";
+      this.tipoid = "";
+    },
+    formatDate(fecha) {
+      if (!fecha) return null;
+
+      const [year, month, day] = fecha.split("-");
+      return `${day}/${month}/${year}`;
+    },
+  },
 };
 </script>

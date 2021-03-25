@@ -1,5 +1,5 @@
 export default class Poda {
-    constructor(podaid, podfecha, podtipo, podhectareas, podcantidadplantas, podherramienta, podopeario, cultivoid) {
+    constructor(podaid, podfecha, podtipo, podhectareas, podcantidadplantas, podherramienta, podopeario, cultivoid,fincodigo,lotnumero) {
         this.podaid = podaid;
         this.podfecha = podfecha;
         this.podtipo = podtipo;
@@ -9,5 +9,7 @@ export default class Poda {
         this.podherramienta = podherramienta;
         this.podopeario = podopeario;
         this.cultivoid = cultivoid;
+        this.fincodigo=fincodigo;
+        this.lotnumero=lotnumero;
     }
 }

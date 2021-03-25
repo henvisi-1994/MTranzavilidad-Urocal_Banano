@@ -255,10 +255,6 @@ export default {
       this.listaLote = resultado.data; 
       
     },
-    
-
-    
-
     limpiarIds(){
       this.fincaid = '';
       this.loteid = '';

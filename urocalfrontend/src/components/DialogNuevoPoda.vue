@@ -10,9 +10,7 @@
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
-        <h5>
-          Registrar poda
-        </h5>
+        <h5>Registrar poda</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
           <v-icon class="white--text" @click="cerrarDialogNuevoPoda()"
@@ -35,7 +33,8 @@
           width="200px"
           color="primary"
           @click="agregarPoda()"
-          >Registrar</v-btn>
+          >Registrar</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -46,18 +45,17 @@ import { mapMutations, mapState } from "vuex";
 
 import FormPoda from "@/components/FormPoda";
 
-import ServicioPodas from '../services/ServicioPodas';
+import ServicioPodas from "../services/ServicioPodas";
 
 export default {
   name: "DialogNuevoPoda",
 
   components: {
-    FormPoda
+    FormPoda,
   },
 
   data() {
-    return {
-    };
+    return {};
   },
 
   computed: {
@@ -81,20 +79,24 @@ export default {
     },
 
     // Obtiene es estado de la variable formPodaValido y el modelo poda
-    ...mapState("moduloPoda", ["formPodaValido", "modeloPodaStore"]),
+    ...mapState("moduloPoda", ["formPodaValido", "poda"]),
   },
 
   methods: {
     async agregarPoda() {
-      let respuesta = await ServicioPodas.agregarPoda(this.modeloPodaStore);
-      if (respuesta.status == 201) {
-        this.cerrarDialogNuevoPoda();
-        this.cargarListaPoda();
-        this.vaciarModeloPodaStore();
+      try {
+        let respuesta = await ServicioPodas.agregarPoda(this.modeloPodaStore);
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaPoda();
+          this.cerrarDialogNuevoPoda();
+          // this.vaciarModeloPodaStore();
+        
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
       }
     },
 
-    async cargarListaPoda () {
+    async cargarListaPoda() {
       let listaPodas = [];
       let respuesta = await ServicioPodas.obtenerTodosPodas();
       let podas = await respuesta.data;
@@ -106,6 +108,8 @@ export default {
 
     cerrarDialogNuevoPoda() {
       this.dialogNuevoPoda = !this.dialogNuevoPoda; // Cierra el dialogNuevoPoda
+      this.$refs.componentFormPoda.limpiarIds();
+      this.vaciarModeloPodaStore();
     },
 
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),

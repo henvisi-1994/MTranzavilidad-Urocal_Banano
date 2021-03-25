@@ -16,7 +16,9 @@
           <v-icon class="white--text">mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text">mdi-trash-can</v-icon>
+          <v-icon class="white--text" @click="eliminarRegistro()"
+            >mdi-trash-can</v-icon
+          >
         </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="cerrarDialogMostrarPoda()"
@@ -31,6 +33,18 @@
           <FormPoda ref="componentFormPoda"></FormPoda>
         </v-container>
       </v-card-text>
+
+      <v-card-actions class="justify-center pb-3">
+        <v-btn
+          :block="$vuetify.breakpoint.xs ? true : false"
+          width="300px"
+          large
+          elevation="0"
+          color="primary"
+          @click="actualizarRegistro()"
+          >Guardar Cambios</v-btn
+        >
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -39,6 +53,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormPoda from "@/components/FormPoda";
+import ServicioPodas from "../services/ServicioPodas";
 
 export default {
   name: "DialogMostrarPoda",
@@ -52,6 +67,8 @@ export default {
   },
 
   computed: {
+    ...mapState("moduloPoda", ["modeloPodaStore"]),
+
     // Obtiene y modifica el estado de la variable dialogMostrarPoda
     dialogMostrarPoda: {
       get() {
@@ -62,10 +79,81 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogMostrarPoda", v);
       },
     },
+    modeloPodaStore: {
+      get() {
+        return this.$store.getters["moduloPoda/modeloPodaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
+      },
+    },
+    listaPodasStore: {
+      get() {
+        return this.$store.getters["moduloPoda/listaPodasStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
+
+    // editarPoda: {
+    //   get() {
+    //     return this.$store.getters["moduloPoda/editarPoda"];
+    //   },
+    //   set(v) {
+    //     return this.$store.commit("moduloPoda/establecerEditarPoda", v);
+    //   },
+    // },
   },
 
   methods: {
     // Cierra el dialogo
+    async actualizarRegistro() {
+      const respuesta = await ServicioPodas.actualizarPoda(
+        this.modeloPodaStore.podaid,
+        this.modeloPodaStore
+      );
+      if (respuesta.status == 200) {
+        this.cerrarDialogMostrarPoda();
+        this.cargarListaPoda();
+        this.vaciarModeloPodaStore();
+      }
+    },
+
+    async cargarListaPoda() {
+      let listaPodas = [];
+      let respuesta = await ServicioPodas.obtenerTodosPodas();
+      let podas = await respuesta.data;
+      podas.forEach((f) => {
+        listaPodas.push(f);
+      });
+      console.log(listaPodas);
+      this.listaPodasStore = listaPodas;
+    },
+
+    async eliminarRegistro() {
+      try {
+        const respuesta = await ServicioPodas.eliminarPoda(
+          this.modeloPodaStore.podaid
+        );
+        if (respuesta.status == 200) {
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaPoda();
+          this.cerrarDialogMostrarPoda();
+        }
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
+      }
+    },
+    // Cierra el dialogo
+    cerrarDialogMostrarPoda() {
+      this.dialogMostrarPoda = !this.dialogMostrarPoda;
+      this.$refs.componentFormPoda.limpiarIds();
+      this.vaciarModeloPodaStore();
+    },
+
+    ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
+
     cerrarDialogMostrarPoda() {
       this.dialogMostrarPoda = !this.dialogMostrarPoda; // Cierra el dialogMostrarLimpiezaHerramienta
     },
