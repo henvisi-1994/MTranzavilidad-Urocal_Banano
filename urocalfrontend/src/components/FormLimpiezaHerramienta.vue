@@ -268,6 +268,7 @@ export default {
       "limpiezaHerramienta",
       "editarLimpiezaHerramienta",
     ]),
+    
     ...mapState("moduloFinca", ["listaFincaStore"]),
 
     // Obtiene la variable que indica si el formulario es valido
@@ -325,8 +326,12 @@ export default {
       },
     },
 
-    // Obtiene el modelo Ciudad
+    // Obtiene el modelo 
+
+    //Parece redundanyte
     ...mapState("moduloLimpiezaHerramienta", ["limpiezaHerramienta"]),
+
+
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
@@ -341,7 +346,6 @@ export default {
     },
 
     async obtenerTodosListaCultivo() {
-      console.log(this.loteid);
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
       this.listaCultivo = resultado.data;
     },
@@ -349,7 +353,6 @@ export default {
     async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
       this.listaFinca = resultado.data;
-      console.log(this.listaFinca);
     },
 
     async obtenerTodosLoteCultivadoDeFinca() {

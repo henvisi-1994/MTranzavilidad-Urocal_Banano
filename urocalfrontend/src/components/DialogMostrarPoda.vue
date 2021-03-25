@@ -13,7 +13,9 @@
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text">mdi-pencil</v-icon>
+          <v-icon class="white--text" @click="cambiarEstadoEditar()"
+            >mdi-pencil</v-icon
+          >
         </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="eliminarRegistro()"
@@ -96,14 +98,14 @@ export default {
       },
     },
 
-    // editarPoda: {
-    //   get() {
-    //     return this.$store.getters["moduloPoda/editarPoda"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloPoda/establecerEditarPoda", v);
-    //   },
-    // },
+    editarPoda: {
+      get() {
+        return this.$store.getters["moduloPoda/editarPoda"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerEditarPoda", v);
+      },
+    },
   },
 
   methods: {
@@ -152,6 +154,14 @@ export default {
     },
 
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
+
+    cambiarEstadoEditar() {
+      console.log(this.editarPoda);
+      this.$store.commit(
+        "moduloPoda/establecerEditarPoda",
+        false
+      );
+    },
 
     cerrarDialogMostrarPoda() {
       this.dialogMostrarPoda = !this.dialogMostrarPoda; // Cierra el dialogMostrarLimpiezaHerramienta

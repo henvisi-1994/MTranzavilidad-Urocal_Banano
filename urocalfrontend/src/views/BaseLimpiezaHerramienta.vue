@@ -180,6 +180,7 @@ export default {
         ];
       },
       set(v) {
+        //establecerEditarimpiezaHerramienta en vez de editar en caso de dar error
         return this.$store.commit(
           "moduloLimpiezaHerramienta/editarLimpiezaHerramienta",
           v

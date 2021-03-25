@@ -8,6 +8,7 @@
       >
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="fincaid"
             placeholder="Finca"
             class="style-chooser"
@@ -29,6 +30,7 @@
 
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="loteid"
             placeholder="Lote"
             class="style-chooser"
@@ -55,6 +57,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="modeloPodaStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
@@ -83,6 +86,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
+              :disabled="editarPoda"
                 label="Fecha de poda"
                 v-model="modeloPodaStore.podfecha"
                 :rules="[reglas.campoVacio(modeloPodaStore.podfecha)]"
@@ -104,6 +108,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="modeloPodaStore.podtipo"
             placeholder="Tipo de poda"
             class="style-chooser"
@@ -124,6 +129,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+          :disabled="editarPoda"
             placeholder="Hectáreas"
             v-model="modeloPodaStore.podhectareas"
             :rules="[
@@ -137,6 +143,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
+          :disabled="editarPoda"
             placeholder="Cantidad de plantas"
             v-model="modeloPodaStore.podcantidadplantas"
             :rules="[
@@ -147,6 +154,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+          :disabled="editarPoda"
             placeholder="Herramienta"
             v-model="modeloPodaStore.podherramienta"
             :rules="[reglas.campoVacio(modeloPodaStore.podherramienta)]"
@@ -244,7 +252,7 @@ export default {
     },
     // //DC f
     ...mapState("moduloFinca", ["listaFincaStore"]),
-    // ...mapState("moduloPoda", ["modeloPodaStore"]),
+    ...mapState("moduloPoda", ["editarPoda","modeloPodaStore"]),
     ...mapState("validacionForm", ["reglas"]),
   },
 
