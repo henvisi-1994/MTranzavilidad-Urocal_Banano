@@ -190,13 +190,13 @@ export default {
     // Carga el DialogoNuevaTratamiento
     cargarDialogoNuevoTratamiento() {
       this.dialogoNuevoTratamiento = !this.dialogoNuevoTratamiento; // Abre el DialogStepperFormNewTratamiento
-      this.vaciarTratamiento(); // Reinicia el modelo Tratamiento
+      this.vaciarModeloTratamientoStore(); // Reinicia el modelo Tratamiento
     },
 
     // Carga el TabsMostrarTratamiento
     async abrirTabsMostrarTratamiento(item) {
       this.dialogoMostrarTratamiento = true; // Abre el DialogMostrarRiego
-      this.vaciarTratamiento(); // Vacia el modelo riego
+      this.vaciarModeloTratamientoStore(); // Vacia el modelo riego
       let resultado = await ServicioTratamiento.obtenerDetalleTratamiento(item.tratamientoid);
       this.modeloTratamientoStore = {
         cultivo: item.cultivo,
@@ -224,7 +224,7 @@ export default {
 
     // Vacia el modelo siembra
     ...mapMutations("moduloTratamiento", [
-      "vaciarTratamiento",
+      "vaciarModeloTratamientoStore",
       "asignarListaTratamiento",
     ]),
   },

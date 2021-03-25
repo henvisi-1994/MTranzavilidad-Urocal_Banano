@@ -1,6 +1,6 @@
 export default class Fitosanitario {
     constructor(fitosanitarioid, fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun,
-        fitdosis, fitcantidadtotal, fitareaaplicda, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid) {
+        fitdosis, fitcantidadtotal, fitareaaplicda, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid) {
         this.fitosanitarioid = fitosanitarioid;
         this.fitciclo = fitciclo;
         this.fitfecha = fitfecha;
@@ -16,6 +16,6 @@ export default class Fitosanitario {
         this.fitplazoseguridad = fitplazoseguridad;
         this.fitoperario = fitoperario;
         this.cultivoid = cultivoid;
-        this.condicionclimaticaid = condicionclimaticaid;
+        
     }
 }

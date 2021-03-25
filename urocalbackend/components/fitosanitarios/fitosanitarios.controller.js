@@ -16,15 +16,16 @@ module.exports = {
     async createFitosanitario(req, res) {
 
         // Añadir capa de validación
-
-        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid } = req.body;
+        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid } = req.body;
 
         try {
+            console.log("entro")
             await fitosanitariosModel.createFitosanitario({
-            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid
+            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid
             });
         } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
+            console.log(error);
+            return res.status(500).send({ message: "Registro fallido" , messagee:error });
         }
 
         return res.status(201).send({ message: "Registro exitoso" });
