@@ -113,8 +113,8 @@
         <v-col cols="12" md="6">
           <v-text-field class="custom px-2" filled dense
             label="Encargado"
-            v-model="modeloEgresoInsumoStore.egrinsencargado"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsencargado)]"
+            v-model="modeloEgresoInsumoStore.egrencargado"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -126,7 +126,7 @@
           large
           :block="$vuetify.breakpoint.xs ? true : false"
           width="300px" elevation="0"
-          @click="guardarEgresoInsumo()"
+          @click="registrarEgresoInsumo()"
         >
           Guardar
         </v-btn>
@@ -263,7 +263,7 @@ export default {
     // CRUD: Create (Insert) - Read (Select) - Update (Update) - Delete (Delete)
 
     // INSERT: Agrega un usuario
-    async guardarEgresoInsumo() {
+    /*async guardarEgresoInsumo() {
       console.log("dataper:", this.modeloEgresoInsumoStore);
       let respuesta = await ServicioEgresoInsumo.agregarEgresoInsumo(
         this.modeloEgresoInsumoStore
@@ -272,6 +272,24 @@ export default {
         this.cerrarDialogo();
         this.cargarListaEgresoInsumo();
         this.vaciarModeloEgresoInsumo();
+      }
+    },*/
+
+    async registrarEgresoInsumo() {
+      try {
+        console.log(this.modeloEgresoInsumoStore);
+        let respuestaServicioEgresoInsumo = await ServicioEgresoInsumo.agregarEgresoInsumo(this.modeloEgresoInsumoStore);
+        if(respuestaServicioEgresoInsumo.status == 201){
+          this.cerrarDialogo();
+          this.obtenerTodosEgresoInsumo();
+          this.vaciarModeloEgresoInsumo();
+          this.$toast.success(respuestaServicioEgresoInsumo.data.message);
+        }else{
+          console.log(error.response.data.message);
+        }
+      } catch (error) {
+        //console.log(error.response.data.message);
+        this.$toast.error(error.response.data.message);
       }
     },
 

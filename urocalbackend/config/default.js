@@ -6,11 +6,11 @@ module.exports = {
 
     // Base de datos
     postgres: {
-        user: process.env.DBUSER || 'postgres',
-        host: process.env.DBHOST || 'localhost',
-        database: process.env.DBNAME || 'urocaldb',
-        password: process.env.DBPASSWORD || '1234',
-        port: process.env.DBPORT || '5432'
+        user: 'postgres',
+        host: 'localhost',
+        database: 'urocaldb',
+        password: '12345',
+        port: '5432'
     },
 
     // Email
