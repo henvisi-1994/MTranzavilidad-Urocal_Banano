@@ -19,7 +19,8 @@ module.exports = {
     },
 
     async getHarvests() {
-        let query = `SELECT * FROM cosecha`;
+        let query = `SELECT cu.cultivoid, TO_CHAR(cosfecha, 'YYYY-MM-DD') as cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo
+        FROM cosecha co, cultivo cu WHERE co.cultivoid=cu.cultivoid `;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todas las cosechas
     },

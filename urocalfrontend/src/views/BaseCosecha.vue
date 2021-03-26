@@ -36,7 +36,7 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaCosecha"
           sort-by="cosecha_id"
-          :items="listaCosechas"
+          :items="listaCosechaStore"
           :search="buscarCosecha"
           class="elevation-1"
         >
@@ -68,11 +68,12 @@
   </v-container>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import DialogStepperCosechaNuevo from "../components/DialogStepperCosechaNuevo";
 import DialogTabMostrarCosecha from "../components/DialogTabMostrarCosecha";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import ServicioCosecha from "../services/ServicioCosecha"
 
 export default {
   name: "BaseCosecha",
@@ -91,55 +92,48 @@ export default {
 
         {
           text: "Cultivo",
-          value: "cultivo_id",
+          value: "cultivoid",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Fecha",
-          value: "cos_fecha",
+          value: "cosfecha",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Cantidad",
-          value: "cos_cantidad",
+          value: "coscantidad",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Unidad de Medida",
-          value: "cos_unidad",
+          value: "cosunidad",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Peso Total",
-          value: "cos_peso_total",
+          value: "cospesototal",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Observación",
-          value: "cos_observacion",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Fermentación y Secado",
-          value: "tratamiento_id",
+          value: "cosobservacion",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Codigo Cosecha",
-          value: "cos_codigo",
+          value: "coscodigo",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -152,7 +146,7 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaCosechas: [{ cultivo_id: 1, cosecha_id: 1 }], // Almacena una lista de cosechas, la misma se muestra en tabla
+      
     };
   },
 
@@ -177,11 +171,13 @@ export default {
         return this.$store.commit("gestionDialogos/toggledialogTabMostrarCosecha", v);
       },
     },
+    ...mapState("moduloCosecha", ["listaCosechaStore"]),
   },
+
 
   methods: {
     // Vacia el modelo lot
-    ...mapMutations("moduloCosecha", ["vaciarCosecha"]),
+    ...mapMutations("moduloCosecha", ["vaciarCosecha","asignarListaCosecha"]),
 
     // Vacia el modelo environment
     ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
@@ -205,7 +201,18 @@ export default {
       this.vaciarCosecha(); // Vacia el modelo Lote
       this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
     },
+    async obtenerTodosCosecha() {
+      let resultado = await ServicioCosecha.obtenerTodosCosecha();
+      this.asignarListaCosecha(resultado.data);
+      //console.log(this.listaMalezaControl);
+    },
   },
+  
+  mounted() {
+    this.obtenerTodosCosecha();
+  },
+
+
 
   mixins: [autenticacionMixin, myMixin],
 

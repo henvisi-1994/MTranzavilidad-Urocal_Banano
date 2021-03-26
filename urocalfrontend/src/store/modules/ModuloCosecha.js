@@ -1,4 +1,4 @@
-import Cosecha from '@/models/ModeloCosecha';
+import Cosecha from '../../models/ModeloCosecha';
 
 export default {
     namespaced: true,
@@ -6,6 +6,7 @@ export default {
     state: {
         cosecha: new Cosecha('', '', '', '', '', '','','',''), // Modelo cosecha
         formCosechaValido: false, // Indica si el formulario de cosecha es valido
+        listaCosechaStore:[],
     },
 
     actions: {
@@ -26,9 +27,14 @@ export default {
         cambiarEstadoFormCosechaValido(state, nuevoEstado) {
             state.formCosechaValido = nuevoEstado
         },
+        
+        asignarListaCosecha(state, newState) {
+            state.listaCosechaStore = newState
+        },
     },
 
     getters: {
+        cosecha: (state) => state.cosecha,
         formCosechaValido: (state) => state.formCosechaValido, // Devuelve la variable formcosechaValido
     },
 }
