@@ -13,6 +13,7 @@ class ServicioPodas {
 
     // SELECT: Devuelve todos los registros
     obtenerTodosPodas() {
+      
       return axios.get(`${API_URL}/v1/podas/`);
     }
 
