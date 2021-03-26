@@ -10,7 +10,7 @@ module.exports = {
     },
 
     async createFitosanitario(fitosanitario){
-        return fitosanitariosDao.createFitosanitario(fitosanitarios);
+        return fitosanitariosDao.createFitosanitario(fitosanitario);
     },
 
     async updateFitosanitario(id, fitosanitario){

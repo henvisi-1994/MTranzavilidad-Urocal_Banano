@@ -1,5 +1,5 @@
 export default class Siembra {
-    constructor(siembraid, siefechacomprasemilla, sieproveedorsemilla, siefechasiembra, siecantidadplantas, siehectareas, sieoperario, cultivoid) {
+    constructor(siembraid, siefechacomprasemilla, sieproveedorsemilla, siefechasiembra, siecantidadplantas, siehectareas, sieoperario, cultivoid, fincaid, loteid) {
         this.siembraid = siembraid;
         this.siefechacomprasemilla = siefechacomprasemilla;
         this.sieproveedorsemilla = sieproveedorsemilla;
@@ -8,5 +8,7 @@ export default class Siembra {
         this.siehectareas = siehectareas;
         this.sieoperario = sieoperario;
         this.cultivoid = cultivoid;
+        this.fincaid = fincaid;
+        this.loteid = loteid;
     }
 }

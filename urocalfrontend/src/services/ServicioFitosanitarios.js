@@ -8,6 +8,7 @@ class ServicioFitosanitarios {
     
     // INSERT: Agrega un registro
     agregarFitosanitario(formData){
+        console.log(formData);
       return axios.post(`${API_URL}/v1/fitosanitarios`, formData);
     }
 

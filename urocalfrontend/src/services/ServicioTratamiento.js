@@ -9,7 +9,23 @@ class ServicioTratamiento {
     obtenerTodosTratamiento() {
         return axios.get(`${API_URL}/treatments`);
     }
+    // SELECT: Devuelve todos los tratamientos
+    obtenerDetalleTratamiento(id) {
+        return axios.get(`${API_URL}/treatments/detalle/${id}`);
+    }
+    // INSERT: Agrega un lote
+    agregarTratamiento(tratamiento) {
+        return axios.post(`${API_URL}/treatments`, tratamiento);
+    }
+    // UPDATE: Actualiza un lote
+    actualizarTratamiento(tratamiento) {
+        return axios.put(`${API_URL}/treatments/${tratamiento.tratamientoid}`, tratamiento);
+    }
 
+    // DELETE: Eliminar un lote
+    eliminarTratamiento(tratamientoid) {
+        return axios.delete(`${API_URL}/treatments/${tratamientoid}`);
+    }
     /*// SELECT: Devuelve un lote
     obtenerLote(id) {
         return axios.get(`${API_URL}/lote/${id}`);

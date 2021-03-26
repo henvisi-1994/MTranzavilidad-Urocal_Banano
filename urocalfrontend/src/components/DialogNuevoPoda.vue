@@ -62,6 +62,14 @@ export default {
   },
 
   computed: {
+    listaPodaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloPoda/listaPodasStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoPoda
     dialogNuevoPoda: {
       get() {

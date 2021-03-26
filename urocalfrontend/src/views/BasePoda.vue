@@ -317,6 +317,7 @@ export default {
     this.cargarListaPoda();
     this.cargarListaFinca();
     this.$store.commit("colocarLayout", "LayoutProductor");
+    
   },
 };
 </script>
