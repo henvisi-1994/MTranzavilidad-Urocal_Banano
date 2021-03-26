@@ -307,7 +307,8 @@ export default {
       this.dialogNuevoPoda = !this.dialogNuevoPoda;
       this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
       // this.$refs.componentDialogNuevoPoda.$refs.componentFormPoda.limpiarIds();
-      this.editarRiego = false;
+      this.editarPoda = false;
+
       this.vaciarModeloPodaStore();
     },
   },

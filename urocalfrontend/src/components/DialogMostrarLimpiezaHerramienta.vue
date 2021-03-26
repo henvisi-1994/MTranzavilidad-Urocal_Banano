@@ -153,7 +153,7 @@ export default {
         let respuesta = await ServicioLimpiezaHerramienta.eliminarLimpiezaHerramienta(
           this.modeloLimpiezaHerramientaStore.limpiezaherramientaid
         );
-        this.$toast.success(respuesta.data.message);
+        this.$toast.error(respuesta.data.message);
         this.cargarListaLimpiezaHerramienta();
         this.cerrarDialogMostrarLimpiezaHerramienta();
       } catch (error) {

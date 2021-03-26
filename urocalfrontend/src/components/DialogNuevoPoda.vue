@@ -57,6 +57,9 @@ export default {
   data() {
     return {};
   },
+  mounted(){
+
+  },
 
   computed: {
     // Obtiene y modifica el estado de la variable dialogNuevoPoda

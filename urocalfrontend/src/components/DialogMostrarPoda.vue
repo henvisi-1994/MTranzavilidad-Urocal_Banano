@@ -67,6 +67,9 @@ export default {
   data() {
     return {};
   },
+  mounted(){
+
+  },
 
   computed: {
     ...mapState("moduloPoda", ["modeloPodaStore"]),
@@ -111,14 +114,16 @@ export default {
   methods: {
     // Cierra el dialogo
     async actualizarRegistro() {
-      const respuesta = await ServicioPodas.actualizarPoda(
-        this.modeloPodaStore.podaid,
-        this.modeloPodaStore
-      );
-      if (respuesta.status == 200) {
-        this.cerrarDialogMostrarPoda();
+      try {
+        const respuesta = await ServicioPodas.actualizarPoda(
+          this.modeloPodaStore.podaid,
+          this.modeloPodaStore
+        );
+        this.$toast.success(respuesta.data.message);
         this.cargarListaPoda();
-        this.vaciarModeloPodaStore();
+        this.cerrarDialogMostrarPoda();
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
       }
     },
 
@@ -137,11 +142,9 @@ export default {
         const respuesta = await ServicioPodas.eliminarPoda(
           this.modeloPodaStore.podaid
         );
-        if (respuesta.status == 200) {
-          this.$toast.success(respuesta.data.message);
-          this.cargarListaPoda();
-          this.cerrarDialogMostrarPoda();
-        }
+        this.$toast.error(respuesta.data.message);
+        this.cargarListaPoda();
+        this.cerrarDialogMostrarPoda();
       } catch (error) {
         this.$toast.error(error.response.data.message);
       }
@@ -149,18 +152,23 @@ export default {
     // Cierra el dialogo
     cerrarDialogMostrarPoda() {
       this.dialogMostrarPoda = !this.dialogMostrarPoda;
-      this.$refs.componentFormPoda.limpiarIds();
+      // this.$refs.componentFormPoda.limpiarIds();
       this.vaciarModeloPodaStore();
+      this.cargarListaPoda();
+      // this.$store.commit("moduloPoda/establecerEditarPoda", true);
     },
 
-    ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
+    // ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
 
     cambiarEstadoEditar() {
-      console.log(this.editarPoda);
-      this.$store.commit(
-        "moduloPoda/establecerEditarPoda",
-        false
-      );
+      this.$store.commit("moduloPoda/establecerEditarPoda", false);
+    },
+
+    formatDate(fecha) {
+      if (!fecha) return null;
+
+      const [year, month, day] = fecha.split("-");
+      return `${day}/${month}/${year}`;
     },
 
     cerrarDialogMostrarPoda() {

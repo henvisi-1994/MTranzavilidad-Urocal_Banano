@@ -182,7 +182,7 @@ export default {
       set(v) {
         //establecerEditarimpiezaHerramienta en vez de editar en caso de dar error
         return this.$store.commit(
-          "moduloLimpiezaHerramienta/editarLimpiezaHerramienta",
+          "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
           v
         );
       },
@@ -300,6 +300,8 @@ export default {
         .dialogNuevoLimpiezaHerramienta; // Abre el DialogNuevoLimpiezaHerramienta
       this.$refs.DialogNuevoLimpiezaHerramienta.$refs.componentFormLimpiezaHerramienta.$refs.formLimpiezaHerramienta.resetValidation(); // Reinicia las validaciones de formLimpiezaHerramienta
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
+      this.editarLimpiezaHerramienta=false;
+      // this.$store.commit("moduloPoda/establecerEditarLimpiezaHerramienta", false);
     },
 
     abrirMostrarLimpiezaHerramienta(item) {

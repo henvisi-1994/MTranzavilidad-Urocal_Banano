@@ -9,14 +9,14 @@
         <v-col cols="12" md="5">
           <v-select
           :disabled="editarPoda"
-            v-model="fincaid"
+            v-model="modeloPodaStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
             @input="obtenerTodosLoteCultivadoDeFinca"
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFincaStore"
-            :rules="[reglas.campoVacio(fincaid)]"
+            :rules="[reglas.campoVacio(modeloPodaStore.fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -31,21 +31,21 @@
         <v-col cols="12" md="5">
           <v-select
           :disabled="editarPoda"
-            v-model="loteid"
+            v-model="modeloPodaStore.lotecultivadoid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
             @input="obtenerTodosListaCultivo"
             :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
-            :rules="[reglas.campoVacio(loteid)]"
+            :rules="[reglas.campoVacio(modeloPodaStore.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else-if="!fincaid"
+              <em style="opacity: 0.5" v-else-if="!modeloPodaStore.fincaid"
                 >Escoja una finca</em
               >
               <em style="opacity: 0.5" v-else>Empiece a escribir un lote</em>
@@ -89,7 +89,7 @@
               :disabled="editarPoda"
                 label="Fecha de poda"
                 v-model="modeloPodaStore.podfecha"
-                :rules="[reglas.campoVacio(modeloPodaStore.podfecha)]"
+                :rules="[reglas.campoVacio(fecha)]"
                 readonly
                 v-bind="attrs"
                 v-on="on"
@@ -97,7 +97,6 @@
             </template>
             <v-date-picker
               v-model="fecha"
-              :show-current="fechaActual"
               @input="menuMostrarCalendario = false"
               locale="es-419"
             ></v-date-picker>
@@ -184,6 +183,8 @@ export default {
 
   mounted() {
     this.obtenerTodosFincas();
+    this.obtenerTodosListaCultivo();
+    this.obtenerTodosLoteCultivadoDeFinca();
   },
 
   data() {
@@ -208,8 +209,8 @@ export default {
           podatipo: "Poda de Descope",
         },
       ],
-      fincaid: "",
-      loteid: "",
+
+
       tipoid: "",
       listaCultivo: [],
       fecha: null,
@@ -258,7 +259,7 @@ export default {
 
   methods: {
     async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloPodaStore.lotecultivadoid);
       this.listaCultivo = resultado.data;
     },
     async obtenerTodosFincas() {
@@ -268,15 +269,16 @@ export default {
 
     async obtenerTodosLoteCultivadoDeFinca() {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
-        this.fincaid
+        this.modeloPodaStore.fincaid
       );
       this.listaLote = resultado.data;
     },
-    limpiarIds() {
-      this.fincaid = "";
-      this.loteid = "";
-      this.tipoid = "";
-    },
+    // limpiarIds() {
+    //   this.fincaid = "";
+    //   this.loteid = "";
+    //   this.tipoid = "";
+    // },
+
     formatDate(fecha) {
       if (!fecha) return null;
 
