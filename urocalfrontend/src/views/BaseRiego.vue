@@ -147,6 +147,20 @@ export default {
           class: "grey lighten-3",
         },
         {
+          text: "Operador",
+          value: "rieoperario",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Sistema de riego",
+          value: "riesistemariego",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
           text: "Detalles",
           value: "actions",
           sortable: false,

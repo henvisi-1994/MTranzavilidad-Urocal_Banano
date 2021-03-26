@@ -9,7 +9,7 @@
           dense
           filled
           :rules="[reglas.campoVacio(revisionHumedad.almacenamientoid)]"
-          disabled
+          :disabled="true"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
@@ -22,6 +22,7 @@
           filled
           :rules="[reglas.campoVacio(revisionHumedad.revporcentajehumedad)]"
           error-count="2"
+          :disabled="bloquearCamposFormRevisionHumedad"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -42,10 +43,13 @@
               class="custom px-2"
               dense
               filled
-              :rules="[reglas.campoVacio(revisionHumedad.revfechaingresosecadora)]"
+              :rules="[
+                reglas.campoVacio(revisionHumedad.revfechaingresosecadora),
+              ]"
               readonly
               v-bind="attrs"
               v-on="on"
+              :disabled="bloquearCamposFormRevisionHumedad"
             ></v-text-field>
           </template>
           <v-date-picker
@@ -53,6 +57,7 @@
             @input="menuMostrarFechaIngresoSecadora = false"
             :show-current="fechaActual"
             locale="es-419"
+            :disabled="bloquearCamposFormRevisionHumedad"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -66,6 +71,7 @@
           filled
           :rules="[reglas.campoVacio(revisionHumedad.revhoraingresosecadora)]"
           error-count="2"
+          :disabled="bloquearCamposFormRevisionHumedad"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -86,10 +92,13 @@
               class="custom px-2"
               dense
               filled
-              :rules="[reglas.campoVacio(revisionHumedad.revfechasalidasecadora)]"
+              :rules="[
+                reglas.campoVacio(revisionHumedad.revfechasalidasecadora),
+              ]"
               readonly
               v-bind="attrs"
               v-on="on"
+              :disabled="bloquearCamposFormRevisionHumedad"
             ></v-text-field>
           </template>
           <v-date-picker
@@ -110,6 +119,7 @@
           filled
           :rules="[reglas.campoVacio(revisionHumedad.revhorasalidasecadora)]"
           error-count="2"
+          :disabled="bloquearCamposFormRevisionHumedad"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -147,11 +157,27 @@ export default {
     // Obtiene la variable que indica si el formulario es valido
     formRevisionHumedadValido: {
       get() {
-        return this.$store.getters["moduloRevisionHumedad/formRevisionHumedadValido"];
+        return this.$store.getters[
+          "moduloRevisionHumedad/formRevisionHumedadValido"
+        ];
       },
       set(v) {
         return this.$store.commit(
           "moduloRevisionHumedad/cambiarEstadoValidoFormRevisionHumedad",
+          v
+        );
+      },
+    },
+    // Obtiene la variable bloquearCamposFormAlmacenamiento
+    bloquearCamposFormRevisionHumedad: {
+      get() {
+        return this.$store.getters[
+          "moduloRevisionHumedad/bloquearCamposFormRevisionHumedad"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRevisionHumedad/cambiarbloquearCamposFormRevisionHumedad",
           v
         );
       },
