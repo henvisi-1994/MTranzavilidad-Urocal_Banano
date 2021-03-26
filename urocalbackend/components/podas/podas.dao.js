@@ -3,13 +3,14 @@ const pool = require('../../services/postgresql/index');
 
 module.exports = {
     async getPodas() {
-
-
-        let query = `SELECT f.fincaid,f.fincodigo ,l.lotecultivadoid as cultivoid,l.lotnumero,p.podaid,p.podfecha,p.podtipo,p.podhectareas,p.podcantidadplantas,p.podherramienta,p.podoperario
-FROM lotecultivado l INNER JOIN finca f ON f.fincaid= l.fincaid
-INNER JOIN cultivo c ON l.lotecultivadoid = c.lotecultivadoid
-INNER JOIN poda p ON c.cultivoid = p.cultivoid`;
+        let query = `SELECT f.fincaid,f.fincodigo ,l.lotecultivadoid,c.cultivoid,
+        l.lotnumero,p.podaid,TO_CHAR(p.podfecha, 'YYYY-MM-DD') as podfecha,
+        p.podtipo,p.podhectareas,p.podcantidadplantas,p.podherramienta,p.podoperario 
+        FROM lotecultivado l INNER JOIN finca f ON f.fincaid= l.fincaid 
+        INNER JOIN cultivo c ON l.lotecultivadoid = c.lotecultivadoid 
+        INNER JOIN poda p ON c.cultivoid = p.cultivoid`;
         let result = await pool.query(query);
+
         // console.log(result.rows); // Devuelve el array de json que contiene a todos los usuarios
 
         // let query = `SELECT * FROM poda`;
@@ -18,11 +19,11 @@ INNER JOIN poda p ON c.cultivoid = p.cultivoid`;
     },
 
     async getPoda(id) {
-        let query = `SELECT * FROM poda WHERE podaid = ${id}`;
-//         let query = `SELECT f.fincaid,f.fincodigo ,l.lotecultivadoid as cultivoid,l.lotnumero,p.podaid,p.podfecha,p.podtipo,p.podhectareas,p.podcantidadplantas,p.podherramienta,p.podoperario
-// FROM lotecultivado l INNER JOIN finca f ON f.fincaid= l.fincaid
-// INNER JOIN cultivo c ON l.lotecultivadoid = c.lotecultivadoid
-// INNER JOIN poda p ON c.cultivoid = p.cultivoid AND p.podaid = ${id}`;
+        // let query = `SELECT * FROM poda WHERE podaid = ${id}`;
+                let query = `SELECT f.fincaid,f.fincodigo ,l.lotecultivadoid,c.cultivoid,l.lotnumero,p.podaid,p.podfecha,p.podtipo,p.podhectareas,p.podcantidadplantas,p.podherramienta,p.podoperario
+        FROM lotecultivado l INNER JOIN finca f ON f.fincaid= l.fincaid
+        INNER JOIN cultivo c ON l.lotecultivadoid = c.lotecultivadoid
+        INNER JOIN poda p ON c.cultivoid = p.cultivoid AND p.podaid = ${id}`;
         let result = await pool.query(query);
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },

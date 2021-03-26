@@ -64,7 +64,7 @@ module.exports = {
 
         try {
             let rowCount = await podasModel.deletePoda(id);
-            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Poda no registrada", tipo: "error" });
+            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Eliminado exitosamente", tipo: "error" });
 
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar poda", tipo: "error" });

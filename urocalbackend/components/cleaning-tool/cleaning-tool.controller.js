@@ -13,9 +13,7 @@ module.exports = {
 
         // Añadir capa de validación
         const { limfecha, limproducto, limequipos, limmaquinaria, limherramientas, limcajones, limtendales, limoperario, cultivoid } = req.body;
-        console.log("----------------------------------------BODI -----------------------------------------");
-        console.log(req.body);
-        console.log("----------------------------------------BODI -----------------------------------------");
+
 
         if (validation.emptyField(limfecha) || validation.emptyField(limproducto) || validation.emptyField(limequipos) || validation.emptyField(limmaquinaria) || validation.emptyField(limherramientas) ||
             validation.emptyField(limcajones) || validation.emptyField(limtendales) || validation.emptyField(limoperario) || validation.emptyField(cultivoid)) {
