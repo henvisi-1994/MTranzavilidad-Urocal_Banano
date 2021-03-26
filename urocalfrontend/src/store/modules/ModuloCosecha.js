@@ -1,4 +1,4 @@
-import Cosecha from '@/models/ModeloCosecha';
+import Cosecha from '../../models/ModeloCosecha';
 
 export default {
     namespaced: true,
@@ -34,6 +34,7 @@ export default {
     },
 
     getters: {
+        cosecha: (state) => state.cosecha,
         formCosechaValido: (state) => state.formCosechaValido, // Devuelve la variable formcosechaValido
     },
 }

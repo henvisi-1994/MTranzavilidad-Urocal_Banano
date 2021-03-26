@@ -89,7 +89,7 @@ export default {
 
   methods: {
     // Vacia el modelo lot
-    ...mapMutations("moduloCosecha", ["vaciarCosecha","establecerListaCosecha"]),
+    ...mapMutations("moduloCosecha", ["vaciarCosecha","asignarListaCosecha"]),
 
     // Vacia el modelo environment
     ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
@@ -118,11 +118,11 @@ export default {
     },
 
     cerrarDialogoNuevaCosecha() {
-      this.dialogoNuevaSiembra = false; // Cierra el DialogoNuevaSiembra
+      this.dialogStepperCosechaNuevo = false; // Cierra el DialogoNuevaSiembra
     },
     async obtenerTodosCosecha() {
       let resultado = await ServicioCosecha.obtenerTodosCosecha();
-      this.establecerListaCosecha(resultado.data);
+      this.asignarListaCosecha(resultado.data);
       //console.log(this.listaMalezaControl);
     },
     // Registra dependiendo el tab donde se encuentre
