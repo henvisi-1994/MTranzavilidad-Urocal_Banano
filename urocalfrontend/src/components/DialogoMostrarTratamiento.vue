@@ -112,7 +112,7 @@ export default {
 
     async cargarListaTratamiento () {
       let listaTratamientos = [];
-      let respuesta = await ServicioTratamiento.obtenerTodosTratamientos();
+      let respuesta = await ServicioTratamiento.obtenerTodosTratamiento();
       let riegos = await respuesta.data;
       riegos.forEach((f) => {
         listaTratamientos.push(f);
