@@ -109,6 +109,22 @@ export default {
         return this.$store.commit("moduloPoda/establecerEditarPoda", v);
       },
     },
+        listaTipoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaTipoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaTipoStore",
+          v
+        );
+      },
+    },
+    
   },
 
   methods: {
