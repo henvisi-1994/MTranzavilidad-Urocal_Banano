@@ -19,6 +19,13 @@ module.exports = {
     },
 
     async getPoda(id) {
+        // let query = `SELECT f.fincaid,f.fincodigo ,l.lotecultivadoid,c.cultivoid,
+        // l.lotnumero,p.podaid,TO_CHAR(p.podfecha, 'YYYY-MM-DD') as podfecha,
+        // p.podtipo,p.podhectareas,p.podcantidadplantas,p.podherramienta,p.podoperario 
+        // FROM lotecultivado l INNER JOIN finca f ON f.fincaid= l.fincaid 
+        // INNER JOIN cultivo c ON l.lotecultivadoid = c.lotecultivadoid 
+        // INNER JOIN poda p ON c.cultivoid = p.cultivoid WHERE p.podaid = ${id}`;
+        
         // let query = `SELECT * FROM poda WHERE podaid = ${id}`;
                 let query = `SELECT f.fincaid,f.fincodigo ,l.lotecultivadoid,c.cultivoid,l.lotnumero,p.podaid,p.podfecha,p.podtipo,p.podhectareas,p.podcantidadplantas,p.podherramienta,p.podoperario
         FROM lotecultivado l INNER JOIN finca f ON f.fincaid= l.fincaid
