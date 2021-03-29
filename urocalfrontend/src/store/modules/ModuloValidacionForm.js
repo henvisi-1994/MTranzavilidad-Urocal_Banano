@@ -17,7 +17,7 @@ export default {
                 Number.isInteger(Number(texto)) || "Ingrese sólo números enteros!",
 
             soloNumerosPositivos: (texto) =>
-                Number(texto) >= 0 || "No se permiten cantidades negativas!",
+                Number(texto) >= 0 || "No se permiten cantidades negativas o texto!",
             soloLetras:(texto) =>
             {
                 const letters = /^[A-Za-z]+$/;

@@ -83,6 +83,7 @@ import DialogMostrarAlmacenamiento from "@/components/DialogMostrarAlmacenamient
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 import servicioAlmacenamiento from "../services/ServicioAlmacenamiento";
+import servicioRevisionHumedad from "../services/ServicioRevisionHumedad";
 
 export default {
   name: "BaseAlmacenamiento",
@@ -161,6 +162,16 @@ export default {
         return this.$store.commit("moduloAlmacenamiento/nuevoAlmacenamiento", v);
       },
     },
+        // Obtiene y modifica el modelo almacenamiento
+    humedad: {
+      get() {
+        return this.$store.getters["moduloRevisionHumedad/revisionHumedad"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRevisionHumedad/nuevoRevisionHumedad", v);
+      },
+    },
+
 
     // Obtiene y modifica el estado de la variable dialogNuevoAlmacenamiento
     dialogNuevoAlmacenamiento: {
@@ -174,6 +185,14 @@ export default {
 
     // Obtiene y modifica el estado de la variable dialogMostrarAlmacenamiento
     dialogMostrarAlmacenamiento: {
+      get() {
+        return this.$store.getters["gestionDialogos/dialogMostrarAlmacenamiento"];
+      },
+      set(v) {
+        return this.$store.commit("gestionDialogos/toggleDialogMostrarAlmacenamiento", v);
+      },
+    },
+    dialogMostrarHumedad: {
       get() {
         return this.$store.getters["gestionDialogos/dialogMostrarAlmacenamiento"];
       },
@@ -215,6 +234,8 @@ export default {
       respuestaServicioAlmacenamiento.data.forEach(mix => {
         this.agregarCosecha(mix.cosechaid);
       });
+      let respuestaServicioRevisionHumedad = await servicioRevisionHumedad.obtenerRevisionHumedadPorAlmacenamiento(item.almacenamientoid);
+      this.humedad = respuestaServicioRevisionHumedad.data[0];
     },
 
     // Llena la listaAlmacenamiento con datos del servidor backend

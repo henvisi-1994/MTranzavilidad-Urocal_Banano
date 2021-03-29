@@ -21,8 +21,8 @@ module.exports = {
         let query, result;
 
         query = `INSERT INTO riego
-                    (riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia, rievolumenutilizado, rieoperario, cultivoid) VALUES
-                    ('${riego.riesuperficie}', '${riego.riemodulos}','${riego.riesemana}','${riego.rieanio}','${riego.riehorasregadas}','${riego.rieporcentajeeficiencia}','${riego.rievolumenutilizado}','${riego.rieoperario}','${riego.cultivoid}') RETURNING riegoid;`
+                    (riesuperficie, riemodulos, riesemana, rieanio, riehorasregadas, rieporcentajeeficiencia, rievolumenutilizado, rieoperario, cultivoid, riesistemariego) VALUES
+                    ('${riego.riesuperficie}', '${riego.riemodulos}','${riego.riesemana}','${riego.rieanio}','${riego.riehorasregadas}','${riego.rieporcentajeeficiencia}','${riego.rievolumenutilizado}','${riego.rieoperario}','${riego.cultivoid}', '${riego.riesistemariego}') RETURNING riegoid;`
 
         result = await pool.query(query);
 
@@ -30,7 +30,7 @@ module.exports = {
     },
 
     async updateRiego(id, riego) {
-        let query = `UPDATE riego SET riesuperficie = '${riego.riesuperficie}', riemodulos = '${riego.riemodulos}', riesemana = '${riego.riesemana}', rieanio = '${riego.rieanio}', riehorasregadas = '${riego.riehorasregadas}', rieporcentajeeficiencia = '${riego.rieporcentajeeficiencia}', rievolumenutilizado = '${riego.rievolumenutilizado}', rieoperario = '${riego.rieoperario}', cultivoid = '${riego.cultivoid}' WHERE riegoid = ${id}`;
+        let query = `UPDATE riego SET riesuperficie = '${riego.riesuperficie}', riemodulos = '${riego.riemodulos}', riesemana = '${riego.riesemana}', rieanio = '${riego.rieanio}', riehorasregadas = '${riego.riehorasregadas}', rieporcentajeeficiencia = '${riego.rieporcentajeeficiencia}', rievolumenutilizado = '${riego.rievolumenutilizado}', rieoperario = '${riego.rieoperario}', cultivoid = '${riego.cultivoid}', riesistemariego = '${riego.riesistemariego}' WHERE riegoid = ${id}`;
         let result = await pool.query(query);
 
         return result.rowCount;

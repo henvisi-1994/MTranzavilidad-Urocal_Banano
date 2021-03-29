@@ -48,7 +48,10 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarLimpiezaHerramienta(item)">
+            <v-icon
+              color="primary"
+              @click="abrirMostrarLimpiezaHerramienta(item)"
+            >
               mdi-eye
             </v-icon>
           </template>
@@ -60,7 +63,8 @@
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
           width="300px"
-          large elevation="0"
+          large
+          elevation="0"
           color="primary"
           @click="cargarDialogNuevoLimpiezaHerramienta()"
           >Nuevo</v-btn
@@ -169,10 +173,26 @@ export default {
   },
 
   computed: {
+    editarLimpiezaHerramienta: {
+      get() {
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/editarLimpiezaHerramienta"
+        ];
+      },
+      set(v) {
+        //establecerEditarimpiezaHerramienta en vez de editar en caso de dar error
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
+          v
+        );
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoLimpiezaHerramienta
     dialogNuevoLimpiezaHerramienta: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogNuevoLimpiezaHerramienta"];
+        return this.$store.getters[
+          "gestionDialogos/dialogNuevoLimpiezaHerramienta"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -185,7 +205,9 @@ export default {
     // Obtiene y modifica el estado de la variable dialogMostrarLimpiezaHerramienta
     dialogMostrarLimpiezaHerramienta: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarLimpiezaHerramienta"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarLimpiezaHerramienta"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -199,7 +221,9 @@ export default {
       get() {
         return JSON.parse(
           JSON.stringify(
-            this.$store.getters["moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"]
+            this.$store.getters[
+              "moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"
+            ]
           )
         );
       },
@@ -213,7 +237,9 @@ export default {
 
     listaCultivoStore: {
       get() {
-        return this.$store.getters["moduloLimpiezaHerramienta/listaCultivoStore"];
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/listaCultivoStore"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -225,7 +251,9 @@ export default {
 
     modeloLimpiezaHerramientaStore: {
       get() {
-        return this.$store.getters["moduloLimpiezaHerramienta/limpiezaHerramienta"];
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/limpiezaHerramienta"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -260,21 +288,32 @@ export default {
       this.listaCultivoStore = listaCultivo;
     },
 
-    ...mapMutations("moduloLimpiezaHerramienta", ["establecerListaCultivoStore"]),
+    ...mapMutations("moduloLimpiezaHerramienta", [
+      "establecerListaCultivoStore",
+    ]),
     // Vacia el modelo LimpiezaHerramienta
     ...mapMutations("moduloLimpiezaHerramienta", ["vaciarLimpiezaHerramienta"]),
 
     // Carga el DialogNuevoLimpiezaHerramienta
     cargarDialogNuevoLimpiezaHerramienta() {
-      this.dialogNuevoLimpiezaHerramienta = !this.dialogNuevoLimpiezaHerramienta; // Abre el DialogNuevoLimpiezaHerramienta
+      this.dialogNuevoLimpiezaHerramienta = !this
+        .dialogNuevoLimpiezaHerramienta; // Abre el DialogNuevoLimpiezaHerramienta
       this.$refs.DialogNuevoLimpiezaHerramienta.$refs.componentFormLimpiezaHerramienta.$refs.formLimpiezaHerramienta.resetValidation(); // Reinicia las validaciones de formLimpiezaHerramienta
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
+      this.editarLimpiezaHerramienta=false;
+      // this.$store.commit("moduloPoda/establecerEditarLimpiezaHerramienta", false);
     },
 
     abrirMostrarLimpiezaHerramienta(item) {
-      this.dialogMostrarLimpiezaHerramienta = !this.dialogMostrarLimpiezaHerramienta;
+      this.dialogMostrarLimpiezaHerramienta = !this
+        .dialogMostrarLimpiezaHerramienta;
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
-      const indiceEditar = this.listaLimpiezaHerramientaStore.indexOf(item);
+      // const indiceEditar = this.listaLimpiezaHerramientaStore.indexOf(item);
+      this.$store.commit(
+        "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
+        true
+      );
+
       this.modeloLimpiezaHerramientaStore = item;
     },
   },

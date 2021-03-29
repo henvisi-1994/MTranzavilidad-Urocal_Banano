@@ -10,9 +10,7 @@
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
-        <h5>
-          Registrar poda
-        </h5>
+        <h5>Registrar poda</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
           <v-icon class="white--text" @click="cerrarDialogNuevoPoda()"
@@ -35,7 +33,8 @@
           width="200px"
           color="primary"
           @click="agregarPoda()"
-          >Registrar</v-btn>
+          >Registrar</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -46,21 +45,31 @@ import { mapMutations, mapState } from "vuex";
 
 import FormPoda from "@/components/FormPoda";
 
-import ServicioPodas from '../services/ServicioPodas';
+import ServicioPodas from "../services/ServicioPodas";
 
 export default {
   name: "DialogNuevoPoda",
 
   components: {
-    FormPoda
+    FormPoda,
   },
 
   data() {
-    return {
-    };
+    return {};
+  },
+  mounted(){
+
   },
 
   computed: {
+    listaPodaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloPoda/listaPodasStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoPoda
     dialogNuevoPoda: {
       get() {
@@ -79,35 +88,46 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
+    listaPodasStore: {
+      get() {
+        return this.$store.getters["moduloPoda/listaPodasStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
 
-    // Obtiene es estado de la variable formPodaValido y el modelo poda
-    ...mapState("moduloPoda", ["formPodaValido", "modeloPodaStore"]),
+    ...mapState("moduloPoda", ["formPodaValido"]),
   },
 
   methods: {
     async agregarPoda() {
-      let respuesta = await ServicioPodas.agregarPoda(this.modeloPodaStore);
-      if (respuesta.status == 201) {
+      try {
+        let respuesta = await ServicioPodas.agregarPoda(this.modeloPodaStore);
+        this.$toast.success(respuesta.data.message);
         this.cerrarDialogNuevoPoda();
         this.cargarListaPoda();
         this.vaciarModeloPodaStore();
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
       }
     },
 
-    async cargarListaPoda () {
+    async cargarListaPoda() {
       let listaPodas = [];
       let respuesta = await ServicioPodas.obtenerTodosPodas();
       let podas = await respuesta.data;
       podas.forEach((f) => {
         listaPodas.push(f);
       });
-      this.listaPodaStore = listaPodas;
+      this.listaPodasStore = listaPodas;
     },
 
     cerrarDialogNuevoPoda() {
       this.dialogNuevoPoda = !this.dialogNuevoPoda; // Cierra el dialogNuevoPoda
+      this.$refs.componentFormPoda.limpiarIds();
+      this.vaciarModeloPodaStore();
     },
-
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
   },
 };

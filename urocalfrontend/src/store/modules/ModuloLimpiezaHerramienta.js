@@ -8,6 +8,7 @@ export default {
         listaCultivoStore: [],
         limpiezaHerramienta: new LimpiezaHerramienta('', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo LimpiezaHerramienta
         formLimpiezaHerramientaValido: false, // Indica si el formulario de LimpiezaHerramienta es valido
+        editarLimpiezaHerramienta: false
     },
 
     mutations: {
@@ -37,6 +38,10 @@ export default {
         establecerListaLimpiezaHerramientaStore(state, newState) {
             state.listaLimpiezaHerramientaStore = newState;
         },
+
+        establecerEditarimpiezaHerramienta(state, newState) {
+            state.editarLimpiezaHerramienta = newState;
+        },
     },
 
     getters: {
@@ -44,5 +49,6 @@ export default {
         limpiezaHerramienta: (state) => state.limpiezaHerramienta,
         listaLimpiezaHerramientaStore: (state) => state.listaLimpiezaHerramientaStore,
         listaCultivoStore: (state) => state.listaCultivoStore,
+        editarLimpiezaHerramienta: (state) => state.editarLimpiezaHerramienta,
     },
 }
