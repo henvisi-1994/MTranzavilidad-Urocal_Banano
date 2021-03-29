@@ -232,9 +232,7 @@ export default {
     vSelect,
   },
   mounted() {
-
     this.obtenerTodosFincas();
-    
   },
 
   data() {

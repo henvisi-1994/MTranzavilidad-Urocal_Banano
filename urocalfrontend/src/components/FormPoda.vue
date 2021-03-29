@@ -183,8 +183,8 @@ export default {
 
   mounted() {
     this.obtenerTodosFincas();
-    this.obtenerTodosListaCultivo();
-    this.obtenerTodosLoteCultivadoDeFinca();
+    // this.obtenerTodosListaCultivo();
+    // this.obtenerTodosLoteCultivadoDeFinca();
   },
 
   data() {

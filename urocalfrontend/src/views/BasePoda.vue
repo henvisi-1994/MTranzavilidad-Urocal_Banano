@@ -292,10 +292,12 @@ export default {
       this.dialogMostrarPoda = !this.dialogMostrarPoda; // Abre el DialogNuevoPoda
       // this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
       this.vaciarModeloPodaStore(); // Vacia el modelo poda
-      this.$store.commit(
-        "moduloPoda/establecerEditarPoda",
-        true
-      );
+      this.editarPoda=true;
+      
+      // this.$store.commit(
+      //   "moduloPoda/establecerEditarPoda",
+      //   true
+      // );
       this.modeloPodaStore = item;
     },
 
