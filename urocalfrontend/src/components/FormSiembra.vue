@@ -278,6 +278,8 @@ export default {
   mounted() {
     this.obtenerTodosListaCultivoDetalles();
     this.obtenerTodosFincas();
+    this.obtenerTodosListaCultivo();
+    this.obtenerTodosListaCultivoDetalles();
   },
 };
 </script>
