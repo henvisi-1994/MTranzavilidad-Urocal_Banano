@@ -374,7 +374,7 @@ export default {
 
   created() {
     this.cargarListaPoda();
-    this.cargarListaFinca();
+    // this.cargarListaFinca();
     this.$store.commit("colocarLayout", "LayoutProductor");
   },
 };

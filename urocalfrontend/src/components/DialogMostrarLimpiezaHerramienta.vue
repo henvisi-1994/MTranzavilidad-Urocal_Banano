@@ -116,6 +116,19 @@ export default {
         );
       },
     },
+        listaLimpiezaHerramientaStore: {
+      get() {
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerListaLimpiezaHerramientaStore",
+          v
+        );
+      },
+    },
   },
 
   methods: {
@@ -154,7 +167,10 @@ export default {
           this.modeloLimpiezaHerramientaStore.limpiezaherramientaid
         );
         this.$toast.error(respuesta.data.message);
+
         this.cargarListaLimpiezaHerramienta();
+
+
         this.cerrarDialogMostrarLimpiezaHerramienta();
       } catch (error) {
         this.$toast.error(error.response.data.message);

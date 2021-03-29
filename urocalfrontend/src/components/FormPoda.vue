@@ -242,7 +242,6 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
-    // DC i
     listaPodasStore: {
       get() {
         return this.$store.getters["moduloPoda/listaPodasStore"];
