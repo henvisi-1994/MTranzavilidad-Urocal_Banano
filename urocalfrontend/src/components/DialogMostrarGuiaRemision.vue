@@ -110,16 +110,18 @@ export default {
         this.modeloGuiaRemisionStore.guiaremisionid,
         this.modeloGuiaRemisionStore
       );
+      this.$toast.success('se ha modificado una guia de remision');
       if (respuesta.status == 200) {
         this.cerrarDialogMostrarGuiaRemision();
         this.cargarListaGuiaRemision();
       }
     },
     async eliminarGuiaRemision() {
-    console.log('eliminar');
+    //console.log('eliminar');
       let respuesta = await ServicioGuiaRemision.eliminarGuiaRemision(
         this.modeloGuiaRemisionStore.guiaremisionid
       );
+      this.$toast.error('se ha eliminado una guia de remision');
       this.cerrarDialogMostrarGuiaRemision();
       this.cargarListaGuiaRemision();
     },
@@ -130,10 +132,10 @@ export default {
       let listaGuiaRemision = [];
       let respuesta = await ServicioGuiaRemision.obtenerTodosGuiaRemision();
       let guiasRemision = await respuesta.data;
-      guiasRemision.forEach((f) => {
-        listaGuiaRemision.push(f);
-      });
-      this.listaGuiaRemisionStore = listaGuiaRemision;
+      this.$store.commit("moduloGuiaRemision/vaciarLista",null);
+            guiasRemision.forEach((f) => {
+              this.$store.commit("moduloGuiaRemision/updateListaGuiaRemision",f);
+            });
     },
   },
 };

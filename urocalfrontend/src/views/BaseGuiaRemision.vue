@@ -179,13 +179,13 @@ export default {
         },
         {
           text: "Conductor",
-          value: "conductorid",
+          value: "conductor",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Vehículo",
-          value: "vehiculoid",
+          value: "vehplaca",
           align: "center",
           class: "grey lighten-3",
         },

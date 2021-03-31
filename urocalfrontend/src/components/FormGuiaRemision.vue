@@ -354,8 +354,6 @@
           </template>
         </v-data-table>
 
-
-
         </v-col>
       </v-row>
     </v-container>
@@ -454,7 +452,7 @@ export default {
   },
 
   computed: {
-    ...mapState("moduloGuiaRemision", ["modeloGuiaRemisionStore", "editarGuiaRemision"]),
+    ...mapState("moduloGuiaRemision", ["editarGuiaRemision"]),
     ...mapState("moduloProductorPersona", ["listaProductorPersonaStore"]),
     ...mapState("moduloConductorPersona", ["listaConductorPersonaStore"]),
 
@@ -482,6 +480,18 @@ export default {
         })
       }
       return [];
+    },
+
+    modeloGuiaRemisionStore: {
+      get() {
+        return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloGuiaRemision/establecerModeloGuiaRemisionStore",
+          v
+        );
+      },
     },
 
     formGuiaRemisionValido: {
@@ -513,7 +523,6 @@ export default {
       this.$refs.formGuiaRemision.resetValidation();
       this.vaciarBien();
     },
-
     tablaResponsiva() {
       // Ajusta el tamaño de la tabla para pantallas pequeñas
       switch (this.$vuetify.breakpoint.name) {
