@@ -2,7 +2,14 @@ const pool = require('../../services/postgresql/index');
 
 module.exports = {
 
-    async getLimpiezasV(id) {
+    async getLimpiezasV() {
+        let query = `SELECT * FROM limpiezavehiculo inner join vehiculo on limpiezavehiculo.vehiculoid=vehiculo.vehiculoid 
+        inner join finca on vehiculo.fincaid=finca.fincaid`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve el array de json que contiene a todos los usuarios
+    },
+
+    async getLimpiezasVProductor(id) {
         let query = `SELECT * FROM limpiezavehiculo inner join vehiculo on limpiezavehiculo.vehiculoid=vehiculo.vehiculoid 
         inner join finca on vehiculo.fincaid=finca.fincaid where finca.propietarioid=${id}`;
         let result = await pool.query(query);
