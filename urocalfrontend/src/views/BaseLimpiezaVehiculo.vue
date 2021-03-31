@@ -45,7 +45,7 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="cargarDialogEditarLimpiezaVehiculo()"
+            <v-icon color="primary" @click="cargarDialogEditarLimpiezaVehiculo(item)"
               >mdi-eye</v-icon
             >
           </template>
@@ -67,11 +67,13 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import DialogNuevoLimpiezaVehiculo from "../components/DialogNuevoLimpiezaVehiculo";
 import DialogEditarLimpiezaVehiculo from "../components/DialogEditarLimpiezaVehiculo";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import ServicioLimpiezaVehiculo from '../services/ServicioLimpiezaVehiculo';
+import ServicioVehiculo from '../services/ServicioVehiculo';
 
 export default {
   name: "BaseLimpiezaVehiculo",
@@ -82,6 +84,7 @@ export default {
   },
 
   data() {
+
     return {
       nombre: "Limpieza de Vehículo",
       buscarLimpiezaVehiculo: "", // Guarda el texto de búsqueda
@@ -110,7 +113,7 @@ export default {
         },
         {
           text: "Escoba",
-          value: "limvehscoba",
+          value: "limvehescoba",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -129,9 +132,16 @@ export default {
           align: "center",
           class: "grey lighten-3",
         },
+                {
+          text: "Finca",
+          value: "finnombrefinca",
+          align: "center",
+          sortable: false,
+          class: "grey lighten-3",
+        },
         {
-          text: "VehiculoID",
-          value: "vehiculoid",
+          text: "Vehiculo",
+          value: "vehplaca",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -144,113 +154,13 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaLimpiezaVehiculos: [
-        // Almacena una lista de Lotes, la misma se muestra en tabla
-        {
-          limpiezavehiculoid: "01",
-          limvehfecha: "07/01/2020",
-          limvehproductoutilizado: "Deja",
-          limvehescobillon: "Si",
-          limvehscoba: "Si",
-          limvehagua: "No",
-          limvehaspiradora: "Si",
-          vehiculoid: "01",
-        },
-        {
-          limpiezavehiculoid: "02",
-          limvehfecha: "11/01/2020",
-          limvehproductoutilizado: "Sonax",
-          limvehescobillon: "No",
-          limvehscoba: "No",
-          limvehagua: "Si",
-          limvehaspiradora: "No",
-          vehiculoid: "01",
-        },
-        {
-          limpiezavehiculoid: "03",
-          limvehfecha: "20/01/2020",
-          limvehproductoutilizado: "Rainx",
-          limvehescobillon: "Si",
-          limvehscoba: "Si",
-          limvehagua: "No",
-          limvehaspiradora: "Si",
-          vehiculoid: "02",
-        },
-        {
-          limpiezavehiculoid: "04",
-          limvehfecha: "05/02/2020",
-          limvehproductoutilizado: "Meguiar",
-          limvehescobillon: "No",
-          limvehscoba: "Si",
-          limvehagua: "Si",
-          limvehaspiradora: "No",
-          vehiculoid: "02",
-        },
-        {
-          limpiezavehiculoid: "05",
-          limvehfecha: "07/02/2020",
-          limvehproductoutilizado: "Maddox",
-          limvehescobillon: "Si",
-          limvehscoba: "Si",
-          limvehagua: "Si",
-          limvehaspiradora: "No",
-          vehiculoid: "03",
-        },
-        {
-          limpiezavehiculoid: "06",
-          limvehfecha: "14/02/2020",
-          limvehproductoutilizado: "Deja",
-          limvehescobillon: "Si",
-          limvehscoba: "No",
-          limvehagua: "No",
-          limvehaspiradora: "Si",
-          vehiculoid: "03",
-        },
-        {
-          limpiezavehiculoid: "07",
-          limvehfecha: "25/02/2020",
-          limvehproductoutilizado: "Deja",
-          limvehescobillon: "Si",
-          limvehscoba: "Si",
-          limvehagua: "Si",
-          limvehaspiradora: "No",
-          vehiculoid: "04",
-        },
-        {
-          limpiezavehiculoid: "08",
-          limvehfecha: "06/03/2020",
-          limvehproductoutilizado: "Turtle",
-          limvehescobillon: "No",
-          limvehscoba: "Si",
-          limvehagua: "Si",
-          limvehaspiradora: "No",
-          vehiculoid: "05",
-        },
-        {
-          limpiezavehiculoid: "09",
-          limvehfecha: "14/03/2020",
-          limvehproductoutilizado: "Sonax",
-          limvehescobillon: "Si",
-          limvehscoba: "No",
-          limvehagua: "No",
-          limvehaspiradora: "Si",
-          vehiculoid: "06",
-        },
-        {
-          limpiezavehiculoid: "10",
-          limvehfecha: "28/03/2020",
-          limvehproductoutilizado: "Deja",
-          limvehescobillon: "Si",
-          limvehscoba: "Si",
-          limvehagua: "Si",
-          limvehaspiradora: "Si",
-          vehiculoid: "07",
-        },
-      ],
+    listaLimpiezaVehiculos: this.$store.getters["moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"],
     };
   },
 
   computed: {
+
+//...mapState("moduloLimpiezaVehiculo", ["limpieza_vehiculo"]),   // Modulo LimpiezaVehiculo
     /* Obtiene y establece el estado de la variable dialogNuevoLimpiezaVehiculo
     que muestra u oculta el dialogo*/
     dialogNuevoLimpiezaVehiculo: {
@@ -261,6 +171,15 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogNuevoLimpiezaVehiculo", v);
       },
     },
+    listaVehiculoStore: {
+      get() {
+        return this.$store.getters["moduloLimpiezaVehiculo/listavehiculoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloLimpiezaVehiculo/nuevoListaVehiculoStore", v);
+      },
+    },
+
 
     /* Obtiene y modifica el estado de la variable dialogTabMostrarLote
     que muestra u oculta el dialogo*/
@@ -277,6 +196,12 @@ export default {
     },
   },
 
+     mounted()
+  {
+    this.cargarListaVehiculo();
+
+  },
+
   methods: {
     // Vacia el modelo LimpiezaVehiculo
     ...mapMutations("moduloLimpiezaVehiculo", ["vaciarLimpiezaVehiculo"]),
@@ -286,8 +211,14 @@ export default {
       this.dialogNuevoLimpiezaVehiculo = !this.dialogNuevoLimpiezaVehiculo; // Abre el DialogNuevoLimpiezaVehiculo
       this.vaciarLimpiezaVehiculo();
     },
-<<<<<<< Updated upstream
-=======
+    async cargarListaVehiculoPlaca(){
+      let limpiezavehiculo=this.$store.getters["moduloLimpiezaVehiculo/limpieza_vehiculo"];
+            
+      let respuesta = await ServicioVehiculo.obtenerVehiculoFinca(limpiezavehiculo.fincaid);  // Obtener respuesta de backend
+      console.log(respuesta);
+      this.listaVehiculoStore = await respuesta.data;     
+    },
+
     conversion(params){
       let resultado=false;
       if(params=="Si"){
@@ -300,6 +231,7 @@ export default {
     async cargarListaVehiculo()
     {
       try {
+        
         let respuesta=null;
       if(localStorage.getItem('productor')!==null){
         let usuariosesion=JSON.parse(localStorage.getItem('productor'));
@@ -323,12 +255,25 @@ export default {
 
       
     },
->>>>>>> Stashed changes
 
     // Dialogo Editar LimpiezaVehiculo
-    cargarDialogEditarLimpiezaVehiculo() {
+        // Dialogo Editar LimpiezaVehiculo
+    cargarDialogEditarLimpiezaVehiculo(item) {
       this.dialogEditarLimpiezaVehiculo = !this.dialogEditarLimpiezaVehiculo;
       this.vaciarLimpiezaVehiculo();
+      //this.limpiezaVehiculo=item;
+      this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo", {limpiezavehiculoid:item.limpiezavehiculoid,
+    limvehfecha:item.limvehfecha,
+    limvehproductoutilizado:item.limvehproductoutilizado, 
+    limvehescobillon:this.conversion(item.limvehescobillon),
+    limvehescoba:this.conversion(item.limvehescoba),
+    limvehagua:this.conversion(item.limvehagua),
+    limvehaspiradora:this.conversion(item.limvehaspiradora),
+    vehiculoid:item.vehiculoid,
+    vehplaca:item.vehplaca,
+    fincaid: item.fincaid,
+    finnombrefinca: item.finnombrefinca,});
+    this.cargarListaVehiculoPlaca();
     },
   },
 

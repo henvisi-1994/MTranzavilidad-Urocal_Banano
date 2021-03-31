@@ -9,14 +9,71 @@
       </v-card-title>
       
       <v-card-text>
-        <v-row>
+         <v-row>
           <v-col cols="12">
-            <v-text-field class="custom px-2" filled dense label="Producto utilizado"></v-text-field>
-            <v-text-field class="custom px-2" filled dense label="Escobillon"></v-text-field>
-            <v-text-field class="custom px-2" filled dense label="Escoba"></v-text-field>
-            <v-text-field class="custom px-2" filled dense label="Agua"></v-text-field>
-            <v-text-field class="custom px-2" filled dense label="Aspiradora"></v-text-field>
-            <v-text-field class="custom px-2" filled dense label="Vehiculoid"></v-text-field>
+          <v-select
+            v-model="fincaid"
+            @input="cargarListaVehiculo"
+            placeholder="Finca"
+            class="style-chooser"
+            label="findescripcionfinca"
+            :reduce="(listaFinca) => listaFinca.fincaid"
+            :options="listaFinca"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una Placa de Vehiculo</em>
+            </template>
+          </v-select>
+            <v-text-field class="custom px-2" v-model="limpieza_vehiculo.limvehproductoutilizado" filled dense label="Producto utilizado"></v-text-field>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehescobillon"
+              label="Escobillon"
+              color="success"
+              value="true"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehescoba"
+              label="Escoba"
+              color="success"
+              value="true"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehagua"
+              label="Agua"
+              color="success"
+              value="true"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              v-model="limpieza_vehiculo.limvehaspiradora"
+              label="Aspiradora"
+              color="success"
+              value="true"
+              hide-details
+            ></v-checkbox>
+            <br>
+            <v-select
+            v-model="limpieza_vehiculo.vehiculoid"
+            placeholder="Vehiculo"
+            class="style-chooser"
+            label="vehplaca"
+            :reduce="(listaVehiculos) => listaVehiculos.vehiculoid"
+            :options="listaVehiculos"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una Placa de Vehiculo</em>
+            </template>
+          </v-select>
             <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field class="custom px-2" filled dense
@@ -36,7 +93,7 @@
       <v-card-actions>
         <v-col>
         <!--<v-btn color="error" block @click="dialogNuevoLimpiezaVehiculo = !dialogNuevoLimpiezaVehiculo" >Cancelar</v-btn>-->
-        <v-btn color="primary" large elevation="0" width="300px" block class="mt-2">Guardar</v-btn>
+        <v-btn color="primary" large elevation="0" @click="guardarLimpiezaVehiculo()" width="300px" block class="mt-2">Guardar</v-btn>
         </v-col>
       </v-card-actions>
     </v-card>
@@ -45,14 +102,27 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import ServicioFinca from '../services/ServicioFinca';
+import ServicioVehiculo from '../services/ServicioVehiculo';
+import ServicioLimpiezaVehiculo from '../services/ServicioLimpiezaVehiculo';
+
 
 export default {
   name: "DialogNuevoLimpiezaVehiculo",
+  components: {
+    vSelect,
+  },
 
   props: {},
 
   data() {
     return {
+      fincaid:0,
+      listaFinca:[],
+      listaVehiculos:[],
+
       menuMostrarCalendario: "",
       fechaActual: new Date().toISOString().substr(0, 10), // Fecha actual
       itemsGenero: ['Masculino', 'Femenino'],
@@ -76,14 +146,15 @@ export default {
     ...mapState("validacionForm", ["reglas"]),                  // Reglas de validacion
     
   },
+  mounted() {
+    
+    this.obtenerTodosFincas();
+  },
 
   methods: {
     cerrarDialogo(){
       this.dialogNuevoLimpiezaVehiculo = !this.dialogNuevoLimpiezaVehiculo;
       this.vaciarLimpiezaVehiculo;
-<<<<<<< Updated upstream
-    }
-=======
     },
     async guardarLimpiezaVehiculo()
     {
@@ -145,7 +216,6 @@ export default {
       
       
     },   
->>>>>>> Stashed changes
   }
 };
 </script>
