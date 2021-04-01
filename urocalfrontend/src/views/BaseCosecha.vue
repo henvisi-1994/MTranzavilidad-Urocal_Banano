@@ -180,7 +180,7 @@ export default {
     ...mapMutations("moduloCosecha", ["vaciarCosecha","asignarListaCosecha"]),
 
     // Vacia el modelo environment
-    ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
+    ...mapMutations("moduloTratamiento", ["vaciarModeloTratamientoStore"]),
 
     // Carga el dialogStepperCosechaTratamientoNuevo
     cargarDialogStepperCosechaNuevo() {
@@ -189,7 +189,7 @@ export default {
       //this.$refs.DialogStepperCosechaNuevo.$refs.componentFormCosecha.$refs.formCosecha.resetValidation(); // Reinicia las validaciones de formLote
       //this.$refs.DialogStepperCosechaNuevo.$refs.componentFormTratamiento.$refs.formTratamiento.resetValidation(); // Reinicia las validaciones de formMedioAmbiente
       this.vaciarCosecha(); // Vacia el modelo Lote
-      this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
+      this.vaciarModeloTratamientoStore(); // Vacia el modelo MedioAmbiente
     },
 
     abrirTabsMostrarCosecha() {
