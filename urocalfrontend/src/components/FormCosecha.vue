@@ -4,6 +4,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12">
           <v-select
+            id="vueSelect"
             v-model="cosecha.fincaid"
             placeholder="Seleccione una finca"
             class="style-chooser"
@@ -11,6 +12,7 @@
             @input="ObtenerTodosLoteCultivadoDeFinca"
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFinca"
+            
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -48,6 +50,7 @@
             label="detalles"
             :reduce="(listacultivo) => listacultivo.cultivoid"
             :options="listacultivo"
+            
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -91,6 +94,8 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
+            v-model="cosecha.coscantidad"
+            @change="obtenerCodigoCosecha()"
             label="Cantidad"
             class="custom px-2"
             dense
@@ -99,6 +104,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-select
+            v-model="cosecha.cosunidad"
             placeholder="Seleccione Unidad"
             class="style-chooser"
             :reduce="(listaunidad) => listaunidad"
@@ -108,16 +114,24 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
+            v-model="cosecha.cospesototal"
             label="Peso Total (Kg)"
             class="custom px-2"
             dense
             filled
+            placeholder="Peso en Kg"
           ></v-text-field>
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
-          <v-text-field label="Código"></v-text-field>
+          <v-text-field
+            v-model="cosecha.coscodigo"
+            label="Codigo"
+            :disabled= true
+          >
+          </v-text-field>
+          
         </v-col>
         <v-col cols="12" md="6">
           <v-textarea
@@ -155,17 +169,31 @@ export default {
       listaFinca: [],
       listaLote: [],
       listaunidad: ["Quintales", "Tachos"],
+      selecionado: "",
+      
     };
   },
+  
+  // mounted:function() {
+  //       var vue = this;//vue
 
+  //       $('select').material_select();
+
+  //       $('#vueSelect').on('change', function () {
+  //           vue.$emit("change", this.value)
+  //       });
+
+  //       vue.$on("change", function(data){
+  //           this.seleccionar.value = data
+  //       });
+  // },
   computed: {
     // Obtiene el modelo lot
     ...mapState("moduloCosecha", ["cosecha"]),
-
     // Obtiene la variable que indica si el formulario es valido
     formCosechaValido: {
       get() {
-        return this.$store.getters["moduloCosecha/ormCosechaValido"];
+        return this.$store.getters["moduloCosecha/formCosechaValido"];
       },
       set(v) {
         return this.$store.commit(
@@ -180,29 +208,41 @@ export default {
   },
 
   methods: {
+    async changeState(valor) {
+      this.selecionado = this.listaFinca[valor - 1];
+    },
     async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
       this.listaFinca = resultado.data;
+      console.log(this.listaFinca)
       
     },
     async ObtenerTodosLoteCultivadoDeFinca() {
-      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
-        this.cosecha.fincaid
-      );
-      console.log(resultado.data);
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.cosecha.fincaid);
       this.listaLote = resultado.data;
+      
     },
     async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(
-        this.cosecha.loteid
-      );
-      console.log(resultado.data);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.cosecha.loteid);
       this.listacultivo = resultado.data;
+      console.log(resultado.data);
+      
     },
+    async obtenerCodigoCosecha(){
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.cosecha.loteid);
+      const finca = this.listaFinca.find( finca => finca.fincaid === this.cosecha.fincaid );
+      const cultivo =resultado.data.find( cultivo=> cultivo.cultivoid === this.cosecha.cultivoid )
+      let division = cultivo.detalles.split('|');
+      let fecha=this.cosecha.cosfecha.split('-');
+      this.cosecha.coscodigo= finca.fincodigo +"-" +fecha[2]+fecha[1]+fecha[0] +"-"+division[1].trim()
+      
+    }
+
   },
 
   mounted() {
     this.obtenerTodosFincas();
+    
   },
 };
 </script>

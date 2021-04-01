@@ -10,17 +10,18 @@ module.exports = {
         //cosFecha, cosCantidad, cosUnidad, cosPesoTotal, cosObservacion, cosCodigo, tratamientoId, cultivoId 
         // Registro en tabla cosecha
         query = `INSERT INTO cosecha
-                    (cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid) VALUES 
-                    ('${harvest.cosfecha}','${harvest.coscantidad}','${harvest.cosunidad}','${harvest.cospesototal}','${harvest.cosobservacion}','${harvest.coscodigo}', '${harvest.tratamientoid}', '${harvest.cultivoid}')
+                    (cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cultivoid) VALUES 
+                    ('${harvest.cosfecha}','${harvest.coscantidad}','${harvest.cosunidad}','${harvest.cospesototal}','${harvest.cosobservacion}','${harvest.coscodigo}', '${harvest.cultivoid}')
                     RETURNING cosechaid;`;
-        result = await pool.query(query);
-
+                    console.log(query);
+                    result = await pool.query(query);
+        
         return harvest;
     },
 
     async getHarvests() {
         let query = `SELECT cu.cultivoid, TO_CHAR(cosfecha, 'YYYY-MM-DD') as cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo
-        FROM cosecha co, cultivo cu WHERE co.cultivoid=cu.cultivoid `;
+        FROM cosecha co, cultivo cu,  producto pro WHERE co.cultivoid=cu.cultivoid and cu.productoid=pro.productoid`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todas las cosechas
     },
@@ -57,7 +58,7 @@ module.exports = {
         //cosFecha, cosCantidad, cosUnidad, cosPesoTotal, cosObservacion, cosCodigo, tratamientoId, cultivoId 
         let query = `UPDATE cosecha SET cosfecha = '${harvest.cosfecha}',  coscantidad = '${harvest.coscantidad}', 
         cosunidad = '${harvest.cosunidad}', cospesototal = '${harvest.cospesototal}', cosobservacion = '${harvest.cosobservacion}', 
-        coscodigo = '${harvest.coscodigo}', tratamientoid = '${harvest.tratamientoid}', cultivoid = '${harvest.cultivoid}' 
+        coscodigo = '${harvest.coscodigo}', cultivoid = '${harvest.cultivoid}' 
         WHERE cosechaid = ${id}`;
         let result = await pool.query(query);
 
