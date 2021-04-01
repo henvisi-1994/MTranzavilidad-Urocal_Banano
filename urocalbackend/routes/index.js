@@ -48,6 +48,7 @@ const egreso = require('../components/egresoIsumo/egress.routes');
 const vehiculo = require('../components/vehiculo/vehiculo.routes');
 const guiaremision = require('../components/guiaremision/guiaremision.routes');
 const carga = require('../components/carga/carga.routes');
+const facturaExportacion = require('../components/facturaExportacion/FacturaExport.routes')
 
 const VERSION = "/v1";
 router.use(VERSION + '/', auth);
@@ -97,5 +98,5 @@ router.use(VERSION + '/egreso_insumo', egreso);                                 
 router.use(VERSION + '/guiaremision', guiaremision);
 router.use(VERSION + '/carga', carga);
 router.use(VERSION + '/vehiculo', vehiculo);
-
+router.use(VERSION + '/facturaExport',facturaExportacion);
 module.exports = router;
