@@ -4,7 +4,7 @@ export default {
     namespaced: true,
 
     state: {
-        cosecha: new Cosecha('', '', '', '', '', '','','',''), // Modelo cosecha
+        cosecha: new Cosecha('', '', '', '', '', '','',null,''), // Modelo cosecha
         formCosechaValido: false, // Indica si el formulario de cosecha es valido
         listaCosechaStore:[],
     },
@@ -21,7 +21,7 @@ export default {
 
         // Vacia el modelo cosecha
         vaciarCosecha(state) {
-            state.cosecha = new Cosecha('', '', '', '', '', '','','','')
+            state.cosecha = new Cosecha('', '', '', '', '', '','',null,'')
         },
 
         cambiarEstadoFormCosechaValido(state, nuevoEstado) {
