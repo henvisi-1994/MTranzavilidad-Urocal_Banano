@@ -27,6 +27,7 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-select
             :disabled="editarRiego"
@@ -49,6 +50,8 @@
             </template>
           </v-select>
         </v-col>
+
+
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
@@ -72,6 +75,7 @@
             </template>
           </v-select>
         </v-col>
+        
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="editarRiego"
@@ -117,7 +121,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="editarRiego"
-            placeholder="Horas regadas"
+            placeholder="Horas regadas (HH:MM:SS)"
             v-model="modeloRiegoStore.riehorasregadas"
             :rules="[reglas.campoVacio(modeloRiegoStore.riehorasregadas)]"
           ></v-text-field
@@ -144,6 +148,26 @@
           ></v-text-field
         ></v-col>
       </v-row>
+
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
+            placeholder="Operador"
+            v-model="modeloRiegoStore.rieoperario"
+            :rules="[reglas.campoVacio(modeloRiegoStore.rieoperario)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-text-field
+            :disabled="editarRiego"
+            placeholder="Sistema de riego"
+            v-model="modeloRiegoStore.riesistemariego"
+            :rules="[reglas.campoVacio(modeloRiegoStore.riesistemariego)]"
+          ></v-text-field
+        ></v-col>
+      </v-row>
+
     </v-container>
   </v-form>
 </template>
@@ -212,9 +236,6 @@ export default {
 
     ...mapState("validacionForm", ["reglas"]),
   },
-
- 
-
   methods: {
 
 
@@ -234,10 +255,6 @@ export default {
       this.listaLote = resultado.data; 
       
     },
-    
-
-    
-
     limpiarIds(){
       this.fincaid = '';
       this.loteid = '';

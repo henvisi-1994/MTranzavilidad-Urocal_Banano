@@ -76,6 +76,7 @@ import DialogoNuevaMaleza from "../components/DialogoNuevaMaleza";
 import DialogoMostrarMalezaControl from "../components/DialogoMostrarMalezaControl";
 import servicioMalezaControl from "../services/ServicioMalezaControl";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import ServicioFinca from "../services/ServicioFinca";
 
 export default {
   name: "BaseMaleza",
@@ -145,6 +146,15 @@ export default {
   },
 
   computed: {
+
+    listaFincaStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogoNuevaMaleza
     dialogoNuevaMaleza: {
       get() {
@@ -154,6 +164,9 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogoNuevaMaleza", v);
       },
     },
+
+     
+
 
     // Obtiene y modifica el estado de la variable dialogoMostrarMalezaControl
     dialogoMostrarMalezaControl: {
@@ -185,6 +198,15 @@ export default {
     cargarDialogoNuevaMaleza() {
       this.dialogoNuevaMaleza = true; // Abre el DialogoNuevaMaleza
       this.vaciarMaleza(); // Vacia el modelo Maleza
+    },
+    async cargarListaFinca() {
+      let listaFinca = [];
+      let respuesta = await ServicioFinca.obtenerTodosFincas();
+      let datosFinca = await respuesta.data;
+      datosFinca.forEach((finca) => {
+        listaFinca.push(finca);
+      });
+      this.listaFincaStore = listaFinca;
     },
 
     // Carga el TabMostrarLote
@@ -224,6 +246,7 @@ export default {
 
   mounted() {
     this.obtenerTodosMalezaControl();
+    this.cargarListaFinca();
   },
 };
 </script>

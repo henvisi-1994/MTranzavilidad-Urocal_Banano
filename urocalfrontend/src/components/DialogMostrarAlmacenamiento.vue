@@ -13,8 +13,12 @@
       <v-card-title class="white primary--text">
         <h5>INFORMACIÓN</h5>
         <v-spacer></v-spacer>
-        <v-btn icon v-if="tab == 'tabRevisionHumedad'">
-          <v-icon class="primary--text">mdi-plus-circle</v-icon>
+        <v-btn 
+          icon 
+          v-if="tab == 'tabRevisionHumedad'"
+          @click="bloquearCamposFormRevisionHumedad = false"
+        >
+          <v-icon class="primary--text">mdi-pencil</v-icon>
         </v-btn>
         <v-btn
           icon
@@ -23,12 +27,13 @@
         >
           <v-icon class="primary--text">mdi-pencil</v-icon>
         </v-btn>
-       <!-- <v-btn
+       <v-btn
           icon
           v-if="tab !== 'tabRevisionHumedad' && tab != 'tabListaRevisionHumedad'"
+          @click="eliminaralmacenamiento()"
         >
           <v-icon class="primary--text">mdi-trash-can</v-icon>
-        </v-btn>-->
+        </v-btn>
         <v-btn icon @click="cerrarDialogMostrarAlmacenamiento()">
           <v-icon class="primary--text">mdi-close</v-icon>
         </v-btn> 
@@ -100,6 +105,7 @@ import DatatableRevisionHumedad from "./DatatableRevisionHumedad";
 import { myMixin } from "../mixins/MyMixin";
 
 import servicioAlmacenamiento from "../services/ServicioAlmacenamiento";
+import servicioRevisionHumedad from "../services/ServicioRevisionHumedad";
 
 export default {
   name: "DialogMostrarAlmacenamiento",
@@ -123,6 +129,7 @@ export default {
       "almacenamiento",
       "cosecha",
     ]),
+    ...mapState("moduloRevisionHumedad",["revisionHumedad"]),
 
     // Obtiene y modifica el estado de la variable dialogMostrarAlmacenamiento
     dialogMostrarAlmacenamiento: {
@@ -158,6 +165,19 @@ export default {
         );
       },
     },
+     bloquearCamposFormRevisionHumedad: {
+      get() {
+        return this.$store.getters[
+          "moduloRevisionHumedad/bloquearCamposFormRevisionHumedad"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRevisionHumedad/cambiarBloquearCamposFormRevisionHumedad",
+          v
+        );
+      },
+    },
 
     // Obtiene la lista cosecha
     cosecha: {
@@ -182,7 +202,7 @@ export default {
 
     // Abre del dialog para ver RevisioneHumedad
     revisionHumedad() {
-      this.dialogNuevoRevisionHumedad = treu;
+      this.dialogNuevoRevisionHumedad = true;
     },
 
     validarBotonCambios() {
@@ -200,8 +220,18 @@ export default {
           break;
 
         case "tabRevisionHumedad":
-          return true;
+          return !this.bloquearCamposFormRevisionHumedad
+          ? false
+            : true;
           break;
+      }
+    },
+    async eliminaralmacenamiento(){
+      console.log(this.almacenamiento.almacenamientoid);
+      try{
+        //let resultadoServicioAlmacenamiento = await servicioAlmacenamiento.
+      }catch (error) {
+
       }
     },
 
@@ -221,6 +251,16 @@ export default {
           break;
 
         case "tabRevisionHumedad":
+          try{
+            let resultadoServicioRevisionHumedad = await servicioRevisionHumedad.actualizarRevisionHumedad(
+              this.revisionHumedad
+              );
+              this.$toast.success(resultadoServicioRevisionHumedad.data.message);
+              this.bloquearCamposFormRevisionHumedad = true;
+              this.obtenerTodosAlmacenamiento();
+          } catch (errror){
+            this.$toast.error(error.response.data.message);
+          }
           break;
       }
     },
@@ -249,6 +289,7 @@ export default {
           this.$refs.componentTab.callSlider();
           this.$refs.componentFormRevisionHumedad.$refs.formRevisionHumedad.resetValidation();
           this.bloquearCamposFormAlmacenamiento = true;
+          this.bloquearCamposFormRevisionHumedad = true;
         }, 100);
       }
     },

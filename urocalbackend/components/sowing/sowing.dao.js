@@ -24,19 +24,36 @@ module.exports = {
     async getSowings() {
         //let query = `SELECT * FROM siembra`;
         let query = `Select si.siembraid, TO_CHAR(si.siefechacomprasemilla, 'YYYY-MM-DD') as siefechacomprasemilla, 
-                        si.sieproveedorsemilla, TO_CHAR(si.siefechasiembra, 'YYYY-MM-DD') as siefechasiembra, 
-                        si.siecantidadplantas, si.siehectareas, si.sieoperario, cu.cultivoid, pr.pronombre, lc.lotnumero, fi.finnombrefinca 
-                    FROM siembra si, cultivo cu, producto pr, lotecultivado lc, finca fi
-                    WHERE si.cultivoid = cu.cultivoid AND cu.productoid = pr.productoid AND cu.lotecultivadoid = lc.lotecultivadoid AND lc.fincaid = fi.fincaid;`;
+        si.sieproveedorsemilla, TO_CHAR(si.siefechasiembra, 'YYYY-MM-DD') as siefechasiembra, 
+        si.siecantidadplantas, si.siehectareas, si.sieoperario, cu.cultivoid, concat(pr.pronombre, ' | ', pr.provariedad) as pronombre, lc.lotnumero, fi.finnombrefinca 
+        FROM siembra si, cultivo cu, producto pr, lotecultivado lc, finca fi
+         WHERE si.cultivoid = cu.cultivoid AND cu.productoid = pr.productoid AND cu.lotecultivadoid = lc.lotecultivadoid AND lc.fincaid = fi.fincaid;`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todas las Siembras registradas
     },
 
+    /*
     async getSowing(id) {
         //let query = `SELECT * FROM siembra WHERE siembraid = ${id}`;
         let query = `Select siembraid, TO_CHAR(siefechacomprasemilla, 'YYYY-MM-DD') as siefechacomprasemilla, sieproveedorsemilla, TO_CHAR(siefechasiembra, 'YYYY-MM-DD') as siefechasiembra, 
                         siecantidadplantas, siehectareas, sieoperario, cultivoid
                     FROM siembra WHERE siembraid =  ${id}`;
+        let result = await pool.query(query);
+        return result.rows[0]; // Devuelve el json de la Siembra encontrada
+    },
+    */
+
+    async getSowing(id) {
+        //let query = `SELECT * FROM siembra WHERE siembraid = ${id}`;
+        let query = `Select siembraid, TO_CHAR(siefechacomprasemilla, 'YYYY-MM-DD') as siefechacomprasemilla, sieproveedorsemilla, TO_CHAR(siefechasiembra, 'YYYY-MM-DD') as siefechasiembra, 
+        siecantidadplantas, siehectareas, sieoperario, c.cultivoid, concat(pronombre, ' | ', provariedad) as cultivo, lc.lotecultivadoid as loteid, lotnumero,
+        f.fincaid, finnombrefinca, fincodigo
+                FROM  siembra 
+                    inner join cultivo c on c.cultivoid = siembra.cultivoid
+                    inner join producto p on p.productoid = c.productoid
+                    inner join lotecultivado lc on lc.lotecultivadoid = c.lotecultivadoid
+                    inner join finca f on f.fincaid = lc.fincaid
+                WHERE siembra.siembraid =  ${id}`;
         let result = await pool.query(query);
         return result.rows[0]; // Devuelve el json de la Siembra encontrada
     },

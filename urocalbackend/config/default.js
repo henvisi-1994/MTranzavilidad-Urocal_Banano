@@ -18,5 +18,6 @@ module.exports = {
         provider: process.env.PROVIDER,
         user: process.env.EMAILUSER,
         password: process.env.EMAILPASSWD
+        
     }
 }
