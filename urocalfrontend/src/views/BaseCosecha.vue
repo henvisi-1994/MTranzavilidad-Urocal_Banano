@@ -199,7 +199,7 @@ export default {
       //this.$refs.DialogTabMostrarCosecha.$refs.componentFormTratamiento.$refs.formTratamiento.resetValidation(); // Reinicia las validaciones de formMedioAmbiente
 
       this.vaciarCosecha(); // Vacia el modelo Lote
-      this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
+      this.vaciarModeloTratamientoStore(); // Vacia el modelo MedioAmbiente
     },
     async obtenerTodosCosecha() {
       let resultado = await ServicioCosecha.obtenerTodosCosecha();
