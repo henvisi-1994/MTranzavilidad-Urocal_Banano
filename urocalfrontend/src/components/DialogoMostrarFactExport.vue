@@ -10,8 +10,14 @@
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
-        <h5>Registrar Factura de Exportacion</h5>
+        <h5>Actualizar Eliminar Factura de Exportacion</h5>
         <v-spacer></v-spacer>
+         <v-btn icon >
+          <v-icon class="white--text" @click="editarRiego = !editarRiego">mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon class="white--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
+        </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="cerrarDialogNuevoFactExport()">mdi-close</v-icon>
         </v-btn>
@@ -30,7 +36,7 @@
           :block="$vuetify.breakpoint.xs ? true : false"
           width="200px"
           color="primary"
-          @click="agregarFactExport()"
+          @click="guardarFactExport()"
           >Registrar</v-btn
         >
       </v-card-actions>
@@ -66,29 +72,25 @@ export default {
       },
     },
 
-    // modeloFactExportStore: {
-    //   get() {
-    //     return this.$store.getters["moduloFactExport/modeloFactExportStore"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloFactExport/establecerModeloFactExportStore", v);
-    //   },
-    // },
+    factExportaStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/factExportaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+      },
+    },
 
     // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
     ...mapState("moduloFactExport", ["formFactExportValido", "modeloFactExportStore"]),
   },
 
   methods: {
-    async agregarFactExport() {
-    //   let respuesta = await SerivicioFactExports.agregarFactExport(this.modeloFactExportStore);
-    //   if (respuesta.status == 201) {
-    //     this.cerrarDialogNuevoFactExport();
-    //     this.cargarListaFactExport();
-    //     this.vaciarModeloFactExportStore();
-    //   }
+    async eliminarRegistro() {
     },
-
+    async guardarFactExport(){
+      
+    },
     async cargarListaFactExport () {
     //   let listaFactExports = [];
     //   let respuesta = await SerivicioFactExports.obtenerTodosFactExports();

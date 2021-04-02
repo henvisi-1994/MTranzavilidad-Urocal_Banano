@@ -1,9 +1,6 @@
 <template>
   <v-form ref="formFactExporta">
     <v-container>
-<<<<<<< Updated upstream
-        Poner contenido aqui
-=======
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
@@ -376,7 +373,6 @@
           ></v-text-field>
         </v-col>
       </v-row>
->>>>>>> Stashed changes
     </v-container>
   </v-form>
 </template>
@@ -396,35 +392,6 @@ export default {
 
   data() {
     return {
-<<<<<<< Updated upstream
-      
-    };
-  },
-
-  
-  computed: {
-
-   
-
-    // // Obtiene la variable que indica si el formulario es valido
-    // formFactExportaValido: {
-    //   get() {
-    //     return this.$store.getters["moduloFactExporta/formFactExportaValido"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloFactExporta/cambiarEstadoValidoFormFactExporta", v);
-    //   },
-    // },
-
-    // modeloFactExportaStore: {
-    //   get() {
-    //     return this.$store.getters["moduloFactExporta/finca"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloFactExporta/nuevoFactExporta", v);
-    //   },
-    // },
-=======
       menuMostrarCalendario: "",
       menuMostrarCalendarioZarpe: "",
       currentDate: new Date().toISOString().substr(0, 10),
@@ -462,7 +429,6 @@ export default {
         return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
       },
     },
->>>>>>> Stashed changes
 
     // Obtiene el modelo Ciudad
     // ...mapState("moduloFactExporta", ["finca"]),
@@ -470,12 +436,6 @@ export default {
     ...mapState("validacionForm", ["reglas"]),
   },
 
-<<<<<<< Updated upstream
-  methods: {
-    
-  },
-=======
   methods: {},
->>>>>>> Stashed changes
 };
 </script>
