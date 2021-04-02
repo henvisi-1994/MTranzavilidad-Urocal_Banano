@@ -13,7 +13,7 @@
         <h5>Actualizar Eliminar Factura de Exportacion</h5>
         <v-spacer></v-spacer>
          <v-btn icon >
-          <v-icon class="white--text" @click="editarRiego = !editarRiego">mdi-pencil</v-icon>
+          <v-icon class="white--text" @click="bloquearFacturaExport = !bloquearFacturaExport">mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
@@ -48,7 +48,7 @@
 import { mapMutations, mapState } from "vuex";
 
  import FormFactExport from "@/components/FormFactExport";
-// import SerivicioFactExports from '../services/SerivicioFactExports';
+ import SerivicioFactExport from '../services/ServicioFacturaExportacion';
 
 export default {
   name: "DialogoMostrarFactExport",
@@ -80,6 +80,14 @@ export default {
         return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
       },
     },
+    bloquearFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFacturaExport/cambiarEstadoBloquearFacturaExport", v);
+      },
+    },
 
     // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
     ...mapState("moduloFactExport", ["formFactExportValido", "modeloFactExportStore"]),
@@ -89,6 +97,15 @@ export default {
     async eliminarRegistro() {
     },
     async guardarFactExport(){
+      let respuesta = SerivicioFactExport.guardarFactExport(this.factExportaStore);
+       if(respuesta.status == 201){
+         this.cerrarDialogNuevoFactExport();
+         this.vaciarFacturaExport();
+         this.cargarListaFactExport();
+         this.$toast.success(respuesta.data.message);
+       }else{
+          console.log(error.response.data.message);
+        }
       
     },
     async cargarListaFactExport () {
@@ -102,12 +119,12 @@ export default {
     },
 
     cerrarDialogNuevoFactExport() {
-      this.dialogoMostrarFactExport = !this.dialogoMostrarFactExport; // Cierra el dialogNuevoFactExport
+      this.dialogoMostrarFactExport = !this.dialogoMostrarFactExport; // Cierra el dialogNuevoFactExport    
     //   this.$refs.componentFormFactExport.limpiarIds();
     //   this.vaciarModeloFactExportStore();
     },
 
-    // ...mapMutations("moduloFactExport", ["vaciarModeloFactExportStore"]),
+    ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
   },
 };
 </script>

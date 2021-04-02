@@ -153,7 +153,7 @@ export default {
           align: "center",
           class: "grey lighten-3",
         },
-                {
+        {
           text: "Total",
           value: "facvalortotal",
           sortable: false,
@@ -198,6 +198,17 @@ export default {
         );
       },
     },
+    bloquearFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/cambiarEstadoBloquearFacturaExport",
+          v
+        );
+      },
+    },
 
     // // Obtiene el modelo Control Maleza
     // modeloFactExportStore: {
@@ -234,6 +245,7 @@ export default {
     // Carga el TabsMostrarFactExport
     async abrirTabsMostrarFactExport(item) {
       this.dialogoMostrarFactExport = true; // Abre el DialogMostrarRiego
+      this.bloquearFacturaExport = true;
       // this.vaciarModeloFactExportStore(); // Vacia el modelo riego
       // let resultado = await ServicioFactExport.obtenerDetalleFactExport(
       //   item.tratamientoid

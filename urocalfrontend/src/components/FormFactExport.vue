@@ -5,6 +5,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Numero"
@@ -15,6 +16,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Comprador"
@@ -27,6 +29,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Vendedor"
@@ -45,6 +48,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="factExportaStore.facfecha"
+                :disabled="bloquearFacturaExport"
                 class="custom px-2"
                 filled
                 dense
@@ -68,6 +72,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Puerto de Embarque"
@@ -78,6 +83,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Puerto de Destino"
@@ -90,6 +96,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Vapor"
@@ -100,6 +107,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Subtotal 12%"
@@ -112,6 +120,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Subtotal 0%"
@@ -122,6 +131,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Subtotal sin IVA"
@@ -134,6 +144,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Subtotal Excento de IVA"
@@ -144,6 +155,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Subtotal sin Impuestos"
@@ -158,6 +170,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Subtotal sin Impuestos"
@@ -170,6 +183,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="ICE"
@@ -182,6 +196,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="IVA 12%"
@@ -192,6 +207,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="IRBPM"
@@ -204,6 +220,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Total"
@@ -214,12 +231,12 @@
         <v-col cols="12" md="6">
            <v-select
             v-model="factExportaStore.facformapago"
+            :disabled="bloquearFacturaExport"
             placeholder="Seleccione una forma de pago"
             class="style-chooser"
             label="descripcion"
             :reduce="(forma_pago) => forma_pago.nombre"
             :options="forma_pago"
-            :disabled="editarGuiaRemision"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -236,6 +253,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Plazo"
@@ -246,6 +264,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Tiempo"
@@ -258,6 +277,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="DAE"
@@ -268,6 +288,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Peso Neto"
@@ -280,6 +301,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Peso Bruto"
@@ -290,6 +312,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Lote"
@@ -302,6 +325,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Contenedor"
@@ -312,6 +336,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Semana"
@@ -332,6 +357,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 label="Fecha de Zarpe"
+                :disabled="bloquearFacturaExport"
                 v-model="factExportaStore.facfechazarpe"
                 class="custom px-2"
                 filled
@@ -353,6 +379,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Marca"
@@ -365,6 +392,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
+            :disabled="bloquearFacturaExport"
             filled
             dense
             label="Certificaciones"
@@ -427,6 +455,14 @@ export default {
       },
       set(v) {
         return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+      },
+    },
+       bloquearFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFacturaExport/cambiarEstadoBloquearFacturaExport", v);
       },
     },
 

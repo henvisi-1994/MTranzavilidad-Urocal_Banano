@@ -13,7 +13,9 @@
         <h5>Nueva Factura de Exportacion</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogNuevoFactExport()">mdi-close</v-icon>
+          <v-icon class="white--text" @click="cerrarDialogNuevoFactExport()"
+            >mdi-close</v-icon
+          >
         </v-btn>
       </v-card-title>
 
@@ -42,18 +44,17 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormFactExport from "@/components/FormFactExport";
-// import SerivicioFactExports from '../services/SerivicioFactExports';
+import SerivicioFactExport from '../services/ServicioFacturaExportacion';
 
 export default {
   name: "DialogoNuevaFactExport",
 
   components: {
-     FormFactExport,
+    FormFactExport,
   },
 
   computed: {
-    
-     dialogoNuevoFactExport: {
+    dialogoNuevoFactExport: {
       get() {
         return this.$store.getters["gestionDialogos/dialogoNuevoFactExport"];
       },
@@ -64,46 +65,46 @@ export default {
         );
       },
     },
-    // modeloFactExportStore: {
-    //   get() {
-    //     return this.$store.getters["moduloFactExport/modeloFactExportStore"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloFactExport/establecerModeloFactExportStore", v);
-    //   },
-    // },
+    factExportaStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/factExportaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+      },
+    },
 
     // // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
-    // ...mapState("moduloFactExport", ["formFactExportValido", "modeloFactExportStore"]),
+    ...mapState("moduloFacturaExport", ["formFacturaExportValido"]),
   },
 
   methods: {
     async agregarFactExport() {
-    //   let respuesta = await SerivicioFactExports.agregarFactExport(this.modeloFactExportStore);
-    //   if (respuesta.status == 201) {
-    //     this.cerrarDialogNuevoFactExport();
-    //     this.cargarListaFactExport();
-    //     this.vaciarModeloFactExportStore();
-    //   }
+        let respuesta = await SerivicioFactExport.agregarFacturaExport(this.factExportaStore);
+        if (respuesta.status == 201) {
+          this.cerrarDialogNuevoFactExport();
+          this.cargarListaFactExport();
+          this.vaciarModeloFactExportStore();
+        }
     },
 
-    async cargarListaFactExport () {
-    //   let listaFactExports = [];
-    //   let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
-    //   let riegos = await respuesta.data;
-    //   riegos.forEach((f) => {
-    //     listaFactExports.push(f);
-    //   });
-    //   this.listaFactExportStore = listaFactExports;
+    async cargarListaFactExport() {
+      //   let listaFactExports = [];
+      //   let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
+      //   let riegos = await respuesta.data;
+      //   riegos.forEach((f) => {
+      //     listaFactExports.push(f);
+      //   });
+      //   this.listaFactExportStore = listaFactExports;
     },
 
     cerrarDialogNuevoFactExport() {
       this.dialogoNuevoFactExport = !this.dialogoNuevoFactExport; // Cierra el dialogNuevoFactExport
-    //   this.$refs.componentFormFactExport.limpiarIds();
-    //   this.vaciarModeloFactExportStore();
+      //   this.$refs.componentFormFactExport.limpiarIds();
+      //   this.vaciarModeloFactExportStore();
     },
 
-    // ...mapMutations("moduloFactExport", ["vaciarModeloFactExportStore"]),
+     ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
   },
 };
 </script>

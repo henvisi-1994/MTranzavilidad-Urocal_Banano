@@ -5,8 +5,9 @@ export default {
 
     state: {
         listaFacturaExportStore: [],
-        factExportaStore: new FacturaExportacion(0, ' ', 0, 0, ' ', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0,0.0, ' ', ' ', 0, ' ', ' ', ' ',[]), 
+        factExportaStore: new FacturaExportacion(0, ' ', 0, 0, ' ', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', []),
         formFacturaExportValido: false, // Indica si el formulario de Finca es valido
+        bloquearFacturaExport: false,
     },
 
     mutations: {
@@ -17,12 +18,16 @@ export default {
 
         // Vacia el modelo Finca
         vaciarFacturaExport(state) {
-            state.factExportaStore = new FacturaExportacionFacturaExportacion(0, ' ', 0, 0, ' ', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0,0.0, ' ', ' ', 0, ' ', ' ', ' ',[])
+            state.factExportaStore = new FacturaExportacionFacturaExportacion(0, ' ', 0, 0, ' ', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', [])
         },
 
         // Cambia  el estado del Formulario FacturaExport
         cambiarEstadoValidoFormFacturaExport(state, nuevoEstado) {
             state.formFacturaExportValido = nuevoEstado
+        },
+        // Cambia  el estado del Formulario FacturaExport
+        cambiarEstadoBloquearFacturaExport(state, nuevoEstado) {
+            state.bloquearFacturaExport = nuevoEstado
         },
 
         establecerListaFacturaExportStore(state, newState) {
@@ -34,5 +39,6 @@ export default {
         formFacturaExportValido: (state) => state.formFacturaExportValido, // Devuelve la variable validarFormularioFinca
         factExportaStore: (state) => state.factExportaStore,
         listaFacturaExportStore: (state) => state.listaFacturaExportStore,
+        bloquearFacturaExport: (state) => state.bloquearFacturaExport,
     },
 }
