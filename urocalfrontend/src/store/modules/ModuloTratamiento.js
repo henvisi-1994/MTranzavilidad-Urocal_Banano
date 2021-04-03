@@ -7,6 +7,7 @@ export default {
         listaTratamientoStore: [],
         listaLoteStore: [],
         listaCultivoStore: [],
+        listaFincaStore: [],
         modeloTratamientoStore: new Tratamiento('', '', '', '',0, 0, 0, 0, []), // Modelo Tratamiento
         formTratamientoValido: false, // Indica si el formulario de Tratamiento es valido
         editarTratamiento: false
@@ -41,6 +42,9 @@ export default {
         asignarListaLoteStore(state, nuevaListaLoteStore) {
             state.listaLoteStore = nuevaListaLoteStore;
         },
+        asignarListaFincaStore(state, nuevaListaFincaStore) {
+            state.listaFincaStore = nuevaListaFincaStore;
+        },
         updateListaTratamientoStore(state, newState) {
             state.listaTratamientoStore.push(newState)
         },
@@ -56,5 +60,6 @@ export default {
         listaTratamientoStore:(state)=> state.listaTratamientoStore,
         listaLoteStore: (state)=> state.listaLoteStore,
         listaCultivoStore: (state)=> state.listaCultivoStore,
+        listaFincaStore: (state)=> state.listaFincaStore,
     },
 }

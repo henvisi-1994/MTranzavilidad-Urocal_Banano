@@ -7,6 +7,7 @@
             placeholder="Productor"
             class="style-chooser"
             label="productor"
+            @input="obtenerTodosFincas"
             v-if="visible === true"
             v-model="modeloTratamientoStore.productorid"
             :disabled="editarTratamiento"
@@ -33,8 +34,8 @@
             v-model="modeloTratamientoStore.fincaid"
             :disabled="editarTratamiento"
             @input="obtenerTodosLoteCultivadoDeFinca"
-            :reduce="(listaFinca) => listaFinca.fincaid"
-            :options="listaFinca"
+            :reduce="(listaFincaStore) => listaFincaStore.fincaid"
+            :options="listaFincaStore"
             :rules="[reglas.campoVacio(modeloTratamientoStore.fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -327,7 +328,6 @@ export default {
     vSelect,
   },
   mounted() {
-    this.obtenerTodosFincas();
     this.obtenerTodosProductorPersona();
     this.visibilidadProductor();
   },
@@ -462,6 +462,17 @@ export default {
         );
       },
     },
+    listaFincaStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaFincaStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaFincaStore",
+          v
+        );
+      },
+    },
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
@@ -479,8 +490,21 @@ export default {
       this.listaCultivoStore = resultado.data;
     },
     async obtenerTodosFincas() {
-      let resultado = await servicioFinca.obtenerTodosFincas();
-      this.listaFinca = resultado.data;
+      try {
+      let respuesta=null;
+      let id = 0;
+      if(localStorage.getItem('productor')!==null){
+        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+        id = usuariosesion.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
+      }else{
+        id = this.modeloTratamientoStore.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(id);
+      }
+        this.listaFincaStore = respuesta.data;
+      } catch (error) {
+
+      }
     },
     async obtenerTodosProductorPersona() {
       let resultado = await servicioProductorPersona.obtenerTodosProductorPersona();
