@@ -5,7 +5,9 @@ export default {
 
     state: {
         listaTratamientoStore: [],
-        modeloTratamientoStore: new Tratamiento('', '', '', '', 0, 0, 0, []), // Modelo Tratamiento
+        listaLoteStore: [],
+        listaCultivoStore: [],
+        modeloTratamientoStore: new Tratamiento('', '', '', '',0, 0, 0, 0, []), // Modelo Tratamiento
         formTratamientoValido: false, // Indica si el formulario de Tratamiento es valido
         editarTratamiento: false
     },
@@ -22,7 +24,7 @@ export default {
 
         // Vacia el modelo Tratamiento
         vaciarModeloTratamientoStore(state) {
-            state.modeloTratamientoStore = new Tratamiento('', '', '', '', 0, 0, 0, [])
+            state.modeloTratamientoStore = new Tratamiento('', '', '', '',0, 0, 0, 0, [])
         },
 
         // Cambia  el estado del Formulario Tratamiento
@@ -33,12 +35,26 @@ export default {
         asignarListaTratamientoStore(state, nuevaListaTratamientoControl) {
             state.listaTratamientoStore = nuevaListaTratamientoControl;
         },
+        asignarListaCultivoStore(state, nuevaListaCultivoStore) {
+            state.listaCultivoStore = nuevaListaCultivoStore;
+        },
+        asignarListaLoteStore(state, nuevaListaLoteStore) {
+            state.listaLoteStore = nuevaListaLoteStore;
+        },
+        updateListaTratamientoStore(state, newState) {
+            state.listaTratamientoStore.push(newState)
+        },
+        vaciarLista(state, newState) {
+            state.listaTratamientoStore.length = 0;
+        },
     },
 
     getters: {
         formTratamientoValido: (state) => state.formTratamientoValido, // Devuelve la variable formTratamientoValido
         modeloTratamientoStore: (state) => state.modeloTratamientoStore,
         editarTratamiento: (state) => state.editarTratamiento,
-        listaTratamientoStore:(state)=> state.asignarListaTratamientoStore,
+        listaTratamientoStore:(state)=> state.listaTratamientoStore,
+        listaLoteStore: (state)=> state.listaLoteStore,
+        listaCultivoStore: (state)=> state.listaCultivoStore,
     },
 }
