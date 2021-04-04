@@ -97,7 +97,7 @@ export default {
                 opcionesNivel1: [
                     { texto: 'Registro de envío', ruta: '#' },
                     { texto: 'Guía de remisión', ruta: '#' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -106,7 +106,7 @@ export default {
                 opcionesNivel1: [
                     { texto: 'Registro de envío', ruta: '/cacao/registroEnvio' },
                     { texto: 'Guía de remisión', ruta: '/cacao/remision' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             }
         ],
@@ -149,7 +149,7 @@ export default {
                     { texto: 'Despacho', ruta: '#' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '#' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -171,7 +171,7 @@ export default {
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '/cacao/registroEnvio' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -237,7 +237,7 @@ export default {
                     { texto: 'Despacho', ruta: '#' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '#' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -259,7 +259,7 @@ export default {
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '/cacao/registroEnvio' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
