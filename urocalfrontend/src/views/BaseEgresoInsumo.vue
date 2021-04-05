@@ -282,7 +282,7 @@ export default {
     cargarDialogEditarEgresoInsumo(item) {
       this.dialogEditarEgresoInsumo = !this.dialogEditarEgresoInsumo;
       this.vaciarModeloEgresoInsumo();
-      const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
+     //const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
       this.modeloEgresoInsumoStore = item;
     },
 

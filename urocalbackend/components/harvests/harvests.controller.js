@@ -15,7 +15,7 @@ module.exports = {
 
         // Añadir capa de validación
         //cosechaid, cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid)
-        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid } = req.body;
+        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cultivoid } = req.body;
 
         try {
             await harvestsModel.createHarvest({
@@ -24,8 +24,7 @@ module.exports = {
                 cosunidad: cosunidad,
                 cospesototal: cospesototal,
                 cosobservacion: cosobservacion,
-                coscodigo: coscodigo,
-                tratamientoid: tratamientoid,
+                coscodigo: coscodigo,                
                 cultivoid: cultivoid
             });
         } catch (error) {
@@ -67,7 +66,7 @@ module.exports = {
     // Actualiza informacion de una cosecha
     async updateHarvest(req, res) {
         const { id } = req.params;
-        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid } = req.body;
+        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cultivoid } = req.body;
 
         const rowCount = await harvestsModel.updateHarvest(id, {
             cosfecha: cosfecha,
@@ -75,8 +74,7 @@ module.exports = {
             cosunidad: cosunidad,
             cospesototal: cospesototal,
             cosobservacion: cosobservacion,
-            coscodigo: coscodigo,
-            tratamientoid: tratamientoid,
+            coscodigo: coscodigo,            
             cultivoid: cultivoid
         });
 
@@ -87,12 +85,13 @@ module.exports = {
     // Elimina una cosecha
     async deleteHarvest(req, res) {
         const { id } = req.params;
-
+        //console.log(id);
         try {
             let rowCount = await harvestsModel.deleteHarvest(id);
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Cosecha no registrado", tipo: "error" });
 
         } catch (err) {
+            console.log(err);
             return res.json({ message: "Error al tratar de eliminar la cosecha", tipo: "error" });
         }
     }
