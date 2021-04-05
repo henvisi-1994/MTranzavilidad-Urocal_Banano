@@ -32,7 +32,7 @@
           :height="tablaResponsiva()"
           :headers="cabeceraTablaVehiculos"
           sort-by="id_lote"
-          :items="listaVehiculos"
+          :items="listavehiculoStore"
           :search="buscarVehiculo"
           class="elevation-1"
         >
@@ -41,7 +41,7 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="cargarDialogEditarVehiculo()">mdi-eye</v-icon>
+            <v-icon color="primary" @click="cargarDialogEditarVehiculo(item)">mdi-eye</v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -66,6 +66,7 @@ import { mapMutations } from "vuex";
 import DialogNuevoVehiculo from "../components/DialogNuevoVehiculo";
 import DialogEditarVehiculo from "../components/DialogEditarVehiculo";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import ServicioVehiculo from '../services/ServicioVehiculo';
 
 export default {
   name: "BaseVehiculo",
@@ -124,8 +125,8 @@ export default {
           class: "grey lighten-3",
         },
         {
-          text: "Finca id",
-          value: "fincaid",
+          text: "Finca",
+          value: "finnombrefinca",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -138,113 +139,17 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaVehiculos: [
-        // Almacena una lista de Lotes, la misma se muestra en tabla
-        {
-          vehiculoid: "01",
-          vehplaca: "xxx123",
-          vehmarca: "Toyota",
-          vehdescripcion: "Ninguna",
-          vehlona: "Si",
-          vehcaseta: "Si",
-          vehpuerta: "Si",
-          fincaid: "01",
-        },
-        {
-          vehiculoid: "02",
-          vehplaca: "qwr123",
-          vehmarca: "Volvo",
-          vehdescripcion: "Ninguna",
-          vehlona: "No",
-          vehcaseta: "Si",
-          vehpuerta: "Si",
-          fincaid: "01",
-        },
-        {
-          vehiculoid: "03",
-          vehplaca: "rty123",
-          vehmarca: "Mercedes Benz",
-          vehdescripcion: "Ninguna",
-          vehlona: "Si",
-          vehcaseta: "Si",
-          vehpuerta: "Si",
-          fincaid: "02",
-        },
-        {
-          vehiculoid: "04",
-          vehplaca: "uio123",
-          vehmarca: "Renault",
-          vehdescripcion: "Ninguna",
-          vehlona: "Si",
-          vehcaseta: "Si",
-          vehpuerta: "No",
-          fincaid: "03",
-        },
-        {
-          vehiculoid: "05",
-          vehplaca: "asd123",
-          vehmarca: "Isuzu",
-          vehdescripcion: "Ninguna",
-          vehlona: "Si",
-          vehcaseta: "Si",
-          vehpuerta: "Si",
-          fincaid: "04",
-        },
-        {
-          vehiculoid: "06",
-          vehplaca: "fgh123",
-          vehmarca: "Nissan",
-          vehdescripcion: "Ninguna",
-          vehlona: "No",
-          vehcaseta: "Si",
-          vehpuerta: "No",
-          fincaid: "05",
-        },
-        {
-          vehiculoid: "07",
-          vehplaca: "jkl123",
-          vehmarca: "Toyota",
-          vehdescripcion: "Ninguna",
-          vehlona: "Si",
-          vehcaseta: "Si",
-          vehpuerta: "Si",
-          fincaid: "05",
-        },
-        {
-          vehiculoid: "08",
-          vehplaca: "zxc123",
-          vehmarca: "Volvo",
-          vehdescripcion: "Ninguna",
-          vehlona: "Si",
-          vehcaseta: "Si",
-          vehpuerta: "Si",
-          fincaid: "06",
-        },
-        {
-          vehiculoid: "09",
-          vehplaca: "vbn123",
-          vehmarca: "Mercedes Benz",
-          vehdescripcion: "Ninguna",
-          vehlona: "No",
-          vehcaseta: "Si",
-          vehpuerta: "No",
-          fincaid: "07",
-        },
-        {
-          vehiculoid: "10",
-          vehplaca: "bnm123",
-          vehmarca: "Toyota",
-          vehdescripcion: "Ninguna",
-          vehlona: "No",
-          vehcaseta: "No",
-          vehpuerta: "No",
-          fincaid: "07",
-        },
-      ],
     };
+  },
+    mounted()
+  {
+    this.cargarVehiculo();
+
   },
 
   computed: {
+
+    
     /* Obtiene y establece el estado de la variable dialogNuevoVehiculo
     que muestra u oculta el dialogo*/
     dialogNuevoVehiculo: {
@@ -253,6 +158,25 @@ export default {
       },
       set(v) {
         return this.$store.commit("gestionDialogos/toggleDialogNuevoVehiculo", v);
+      },
+    },
+
+     modeloVehiculoStore: {
+      get() {
+        return this.$store.getters["moduloVehiculo/vehiculo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloVehiculo/nuevoVehiculo", v);
+      },
+    
+  },
+
+        listavehiculoStore: {
+      get() {
+        return this.$store.getters["moduloVehiculo/listavehiculoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloVehiculo/establecerlistavehiculoStore", v);
       },
     },
 
@@ -269,19 +193,52 @@ export default {
   },
 
   methods: {
-    // Vacia el modelo Vehiculo
     ...mapMutations("moduloVehiculo", ["vaciarVehiculo"]),
+    // Vacia el modelo Vehiculo
+
 
     // Dialogo Nuevo Vehiculo
     cargarDialogNuevoVehiculo() {
       this.dialogNuevoVehiculo = !this.dialogNuevoVehiculo; // Abre el DialogNuevoVehiculo
       this.vaciarVehiculo();
     },
+    conversion(params){
+      let resultado=false;
+      if(params=="Si"){
+        resultado=true;
+      }else if(params=="No"){
+        resultado=false;
+      }
+      return resultado;
+    },
+
+        async cargarVehiculo()
+    {
+        let respuesta = await ServicioVehiculo.obtenerTodosVehiculos();  // Obtener respuesta de backend
+        let datosVehiculo = await respuesta.data;
+        this.$store.commit("moduloVehiculo/vaciarLista",null);                                    // Rescatar datos de la respuesta
+        datosVehiculo.forEach((vehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
+        this.$store.commit("moduloVehiculo/addListaVehiculo",vehiculo);
+      });
+      
+    },
 
     // Dialogo Editar Vehiculo
-    cargarDialogEditarVehiculo() {
+    async cargarDialogEditarVehiculo(item) {
       this.dialogEditarVehiculo = !this.dialogEditarVehiculo;
-      this.vaciarVehiculo();
+      //this.vaciarVehiculo();
+      let respuesta = await ServicioVehiculo.obtenerVehiculo(item.vehiculoid);  // Obtener respuesta de backend
+      let datosVehiculo = await respuesta.data[0];
+      this.modeloVehiculoStore={
+    vehiculoid:datosVehiculo.vehiculoid,
+    vehplaca:datosVehiculo.vehplaca, 
+    vehmarca:datosVehiculo.vehmarca,
+    vehdescripcion:datosVehiculo.vehdescripcion,
+    vehlona:this.conversion(datosVehiculo.vehlona),
+    vehcaseta:this.conversion(datosVehiculo.vehcaseta),
+    vehpuerta:datosVehiculo.vehpuerta,
+    fincaid:datosVehiculo.fincaid,
+      }
     },
   },
 

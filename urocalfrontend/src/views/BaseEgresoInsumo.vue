@@ -99,13 +99,13 @@ export default {
         },
         {
           text: "Insumo",
-          value: "inginsproducto",
+          value: "ingresoinsumosid",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Finca",
-          value: "finnombrefinca",
+          value: "fincaid",
           align: "center",
           class: "grey lighten-3",
         },
@@ -138,7 +138,7 @@ export default {
         },
         {
           text: "Encargado",
-          value: "egrencargado",
+          value: "egrinsencargado",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -282,22 +282,9 @@ export default {
     cargarDialogEditarEgresoInsumo(item) {
       this.dialogEditarEgresoInsumo = !this.dialogEditarEgresoInsumo;
       this.vaciarModeloEgresoInsumo();
-     //const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
+      const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
       this.modeloEgresoInsumoStore = item;
     },
-
-    /*async baseEditarEgresoInsumo(egresoid) {
-      try {
-        // Obtener datos de siembra
-        let egreso = await ServicioEgresoInsumo.modeloEgresoInsumoStore(egresoid);
-        // Se asignan los datos a los modelos
-        this.egreso = egreso.data;
-      } catch (error) {
-        this.$store.error(error.response.data.message);
-      }
-      this.dialo = true;
-      //this.$refs.DialogTabsMostrarLote.$refs.componentTab.callSlider();
-    },*/
 
     // ###################
     // #  TIENDA DE VUE  #
