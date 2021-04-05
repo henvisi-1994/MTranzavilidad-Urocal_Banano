@@ -15,7 +15,7 @@ module.exports = {
 
         // Añadir capa de validación
         //cosechaid, cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid)
-        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid } = req.body;
+        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cultivoid } = req.body;
 
         try {
             await harvestsModel.createHarvest({
@@ -25,10 +25,10 @@ module.exports = {
                 cospesototal: cospesototal,
                 cosobservacion: cosobservacion,
                 coscodigo: coscodigo,
-                tratamientoid: tratamientoid,
                 cultivoid: cultivoid
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 
@@ -67,7 +67,7 @@ module.exports = {
     // Actualiza informacion de una cosecha
     async updateHarvest(req, res) {
         const { id } = req.params;
-        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid } = req.body;
+        const { cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cultivoid } = req.body;
 
         const rowCount = await harvestsModel.updateHarvest(id, {
             cosfecha: cosfecha,
@@ -76,7 +76,6 @@ module.exports = {
             cospesototal: cospesototal,
             cosobservacion: cosobservacion,
             coscodigo: coscodigo,
-            tratamientoid: tratamientoid,
             cultivoid: cultivoid
         });
 

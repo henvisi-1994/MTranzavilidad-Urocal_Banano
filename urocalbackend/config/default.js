@@ -8,8 +8,8 @@ module.exports = {
     postgres: {
         user: process.env.DBUSER || 'postgres',
         host: process.env.DBHOST || 'localhost',
-        database: process.env.DBNAME || 'urocal',
-        password: process.env.DBPASSWORD || '1234',
+        database: process.env.DBNAME || 'urocaldb',
+        password: process.env.DBPASSWORD || 'root',
         port: process.env.DBPORT || '5432'
     },
 

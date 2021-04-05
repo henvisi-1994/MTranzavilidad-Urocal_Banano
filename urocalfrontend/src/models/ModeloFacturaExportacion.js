@@ -13,7 +13,7 @@ export default class FacturaExportacion {
          this.facsubtotalsiniva = facsubtotalsiniva; 
          this.facsubtotalivaexcento = facsubtotalivaexcento; 
          this.facsubtotalsinimpuestos = facsubtotalsinimpuestos; 
-         this.facsubtotalsinimpuestos = factotaldesc; 
+         this.factotaldesc = factotaldesc; 
          this.facice = facice; 
          this.faciva12 = faciva12; 
          this.facirbpn = facirbpn; 

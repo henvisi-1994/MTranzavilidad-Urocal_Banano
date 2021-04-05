@@ -1,8 +1,10 @@
+
 export default {
     namespaced: true,
 
     state: {
         listaIDsProductos: [], // Array que almacena IDs de productos
+        // producto: new Producto['','','','','','']
     },
 
     actions: {
@@ -23,5 +25,6 @@ export default {
 
     getters: {
         listaIDsProductos: (state) => state.listaIDsProductos, // Devuelve la listaIDsProductos
+        
     },
 }

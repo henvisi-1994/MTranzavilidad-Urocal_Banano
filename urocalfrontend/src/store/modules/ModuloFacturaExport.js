@@ -5,7 +5,7 @@ export default {
 
     state: {
         listaFacturaExportStore: [],
-        factExportaStore: new FacturaExportacion(0, ' ', 0, 0, ' ', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', []),
+        factExportaStore: new FacturaExportacion(0, ' ', 0, 0, '', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', []),
         formFacturaExportValido: false, // Indica si el formulario de Finca es valido
         bloquearFacturaExport: false,
     },
@@ -18,7 +18,7 @@ export default {
 
         // Vacia el modelo Finca
         vaciarFacturaExport(state) {
-            state.factExportaStore = new FacturaExportacionFacturaExportacion(0, ' ', 0, 0, ' ', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', [])
+            state.factExportaStore = new FacturaExportacion(0, ' ', 0, 0, '', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', [])
         },
 
         // Cambia  el estado del Formulario FacturaExport
