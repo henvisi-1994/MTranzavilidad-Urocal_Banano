@@ -31,6 +31,7 @@ export default {
         asignarListaCosecha(state, newState) {
             state.listaCosechaStore = newState
         },
+        
     },
 
     getters: {

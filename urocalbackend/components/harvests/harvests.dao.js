@@ -10,8 +10,8 @@ module.exports = {
         //cosFecha, cosCantidad, cosUnidad, cosPesoTotal, cosObservacion, cosCodigo, tratamientoId, cultivoId 
         // Registro en tabla cosecha
         query = `INSERT INTO cosecha
-                    (cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cultivoid) VALUES 
-                    ('${harvest.cosfecha}','${harvest.coscantidad}','${harvest.cosunidad}','${harvest.cospesototal}','${harvest.cosobservacion}','${harvest.coscodigo}', '${harvest.cultivoid}')
+                    (cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid) VALUES 
+                    ('${harvest.cosfecha}','${harvest.coscantidad}','${harvest.cosunidad}','${harvest.cospesototal}','${harvest.cosobservacion}','${harvest.coscodigo}',null, '${harvest.cultivoid}')
                     RETURNING cosechaid;`;
                     console.log(query);
                     result = await pool.query(query);

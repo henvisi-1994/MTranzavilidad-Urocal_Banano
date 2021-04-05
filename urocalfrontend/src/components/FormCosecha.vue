@@ -135,6 +135,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-textarea
+            v-model="cosecha.cosobservacion"
             label="Observación"
             class="custom px-2"
             dense
