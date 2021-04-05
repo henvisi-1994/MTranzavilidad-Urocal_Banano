@@ -9,29 +9,7 @@ export default {
         listaloteStore: [],
         modeloPodaStore: new Poda('', '', '', '', '', '', '', ''), // Modelo Poda
         formPodaValido: false, // Indica si el formulario de Poda es valido
-<<<<<<< HEAD
         
-=======
-         editarPoda: false,
-         listaTipoStore: [
-            {
-              tipoid: 1,
-              podatipo: "Poda Formación",
-            },
-            {
-              tipoid: 2,
-              podatipo: "Poda Mantenimiento",
-            },
-            {
-              tipoid: 3,
-              podatipo: "Poda Fitosanitaria",
-            },
-            {
-              tipoid: 4,
-              podatipo: "Poda de Descope",
-            },
-          ],
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     },
 
     mutations: {

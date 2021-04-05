@@ -34,14 +34,8 @@ module.exports = {
     },
 
     async getTreatments() {
-<<<<<<< HEAD
         let query = `SELECT t.traobservacion,t.tratamientoid,traubicacion,TO_CHAR(t.trafecha, 'YYYY-MM-DD')as trafecha,t.cultivoid,concat(p.pronombre,' ',p.provariedad) as cultivo,t.productorid,concat(persona.pernombres,' ',persona.perapellidos) as productor,t.fincaid,f.finnombrefinca FROM tratamiento t 
         inner join cultivo c on t.cultivoid = c.cultivoid
-=======
-        let query = `SELECT t.traobservacion,t.tratamientoid,traubicacion,TO_CHAR(t.trafecha, 'YYYY-MM-DD')as trafecha,t.cultivoid,concat(p.pronombre,' ',p.provariedad) as cultivo,c.lotecultivadoid,t.productorid,concat(persona.pernombres,' ',persona.perapellidos) as productor,t.fincaid,f.finnombrefinca FROM tratamiento t 
-        inner join cultivo c on t.cultivoid = c.cultivoid
-		inner join lotecultivado l on l.lotecultivadoid = c.lotecultivadoid
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
         inner join producto p on c.productoid= p.productoid 
         inner join productor  on t.productorid = productor.productorid
         inner join persona  on productor.productorid=persona.personaid
@@ -51,22 +45,12 @@ module.exports = {
     },
 
     async getTreatment(id) {
-<<<<<<< HEAD
         let query = `SELECT t.traobservacion,t.tratamientoid,traubicacion,TO_CHAR(t.trafecha, 'YYYY-MM-DD')as trafecha,t.cultivoid,concat(p.pronombre,' ',p.provariedad) as cultivo,t.productorid,concat(persona.pernombres,' ',persona.perapellidos) as productor,t.fincaid,f.finnombrefinca FROM tratamiento t 
         inner join cultivo c on t.cultivoid = c.cultivoid
         inner join producto p on c.productoid= p.productoid 
         inner join productor  on t.productorid = productor.productorid
         inner join persona  on productor.productorid=persona.personaid
         inner join finca f on t.fincaid = f.fincaid  WHERE tratamientoId = ${id}`;
-=======
-        let query = `SELECT t.traobservacion,t.tratamientoid,traubicacion,TO_CHAR(t.trafecha, 'YYYY-MM-DD')as trafecha,t.cultivoid,concat(p.pronombre,' ',p.provariedad) as cultivo,c.lotecultivadoid,t.productorid,concat(persona.pernombres,' ',persona.perapellidos) as productor,t.fincaid,f.finnombrefinca FROM tratamiento t 
-        inner join cultivo c on t.cultivoid = c.cultivoid
-		inner join lotecultivado l on l.lotecultivadoid = c.lotecultivadoid
-        inner join producto p on c.productoid= p.productoid 
-        inner join productor  on t.productorid = productor.productorid
-        inner join persona  on productor.productorid=persona.personaid
-        inner join finca f on t.fincaid = f.fincaid  WHERE t.tratamientoId = ${id}`;
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
         let result = await pool.query(query);
         return result.rows[0]; // Devuelve el json del tratamiento encontrado
     },

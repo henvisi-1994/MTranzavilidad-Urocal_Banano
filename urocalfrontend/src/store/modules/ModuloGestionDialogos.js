@@ -127,18 +127,9 @@ export default {
         //Guia Remision
         dialogNuevoGuiaRemision: false,
         dialogMostrarGuiaRemision: false,
-<<<<<<< HEAD
 		//Tratamiento
 		dialogNuevoTratamiento: false,
         dialogMostrarTratamiento: false
-=======
-        //Tratamiento
-        dialogNuevoTratamiento: false,
-        dialogMostrarTratamiento: false,
-        // factura de exportación
-        dialogoNuevoFactExport: false,
-        dialogMostrarFactExport: false,
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     },
 
     mutations: {
@@ -505,28 +496,13 @@ export default {
         toggleDialogMostrarGuiaRemision(state, newState) {
             state.dialogMostrarGuiaRemision = newState;
         },
-<<<<<<< HEAD
 		 // Tratamiento
          toggleDialogoNuevoTratamiento(state, newState) {
-=======
-        // Tratamiento
-        toggleDialogoNuevoTratamiento(state, newState) {
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
             state.dialogNuevoTratamiento = newState;
         },
         toggleDialogoMostrarTratamiento(state, newState) {
             state.dialogMostrarTratamiento = newState;
         },
-<<<<<<< HEAD
-=======
-         // Factura de exportacion
-         toggleDialogoNuevoFactExport(state, newState) {
-            state.dialogoNuevoFactExport = newState;
-        },
-        toggleDialogoMostrarFactExport(state, newState) {
-            state.dialogMostrarFactExport = newState;
-        },
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     },
 
     getters: {
@@ -667,17 +643,8 @@ export default {
         // Guia Remision
         dialogNuevoGuiaRemision: (state) => state.dialogNuevoGuiaRemision,
         dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision,
-<<<<<<< HEAD
 		// Tratamiento
         dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
         dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento
-=======
-        // Tratamiento
-        dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
-        dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento,
-         //Factura de exportacion
-         dialogoNuevoFactExport: (state) => state.dialogoNuevoFactExport,
-         dialogoMostrarFactExport: (state) => state.dialogMostrarFactExport,
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     },
 }

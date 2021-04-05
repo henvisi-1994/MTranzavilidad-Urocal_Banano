@@ -34,11 +34,7 @@
         <!-- Tabla que muestra las Tratamientos -->
         <v-data-table
           :headers="cabeceraTablaTratamiento"
-<<<<<<< HEAD
           :items="listaTratamiento"
-=======
-          :items="listaTratamientoStore"
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
           :search="buscarTratamiento"
           sort-by="tratamientoid"
           :height="tablaResponsiva()"
@@ -79,11 +75,6 @@ import { mapMutations, mapState } from "vuex";
 import DialogoNuevoTratamiento from "../components/DialogoNuevoTratamiento";
 import DialogoMostrarTratamiento from "../components/DialogoMostrarTratamiento";
 import ServicioTratamiento from "../services/ServicioTratamiento";
-<<<<<<< HEAD
-=======
-import servicioLote from "../services/ServicioLote";
-import servicioCultivo from "../services/ServicioCultivo";
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -96,10 +87,7 @@ export default {
 
   data() {
     return {
-<<<<<<< HEAD
       listaTratamiento: [],
-=======
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
       nombre: "Gestión de Fermentación y secado",
       buscarTratamiento: "", // Guarda el texto de búsqueda
       cabeceraTablaTratamiento: [
@@ -196,42 +184,6 @@ export default {
         return this.$store.commit("moduloTratamiento/establecerEditarTratamiento", v);
       },
     },
-<<<<<<< HEAD
-=======
-        listaTratamientoStore: {
-      get() {
-        return this.$store.getters["moduloTratamiento/listaTratamientoStore"];
-      },
-      set(v) {
-        return this.$store.commit(
-          "moduloTratamiento/asignarListaTratamientoStore",
-          v
-        );
-      },
-    },
-    listaLoteStore: {
-      get() {
-        return this.$store.getters["moduloTratamiento/listaLoteStore"];
-      },
-      set(v) {
-        return this.$store.commit(
-          "moduloTratamiento/asignarListaLoteStore",
-          v
-        );
-      },
-    },
-    listaCultivoStore: {
-      get() {
-        return this.$store.getters["moduloTratamiento/listaCultivoStore"];
-      },
-      set(v) {
-        return this.$store.commit(
-          "moduloTratamiento/asignarListaCultivoStore",
-          v
-        );
-      },
-    },
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
   },
 
   methods: {
@@ -249,10 +201,6 @@ export default {
       this.modeloTratamientoStore = {
         cultivo: item.cultivo,
         cultivoid: item.cultivoid,
-<<<<<<< HEAD
-=======
-        lotecultivadoid: item.lotecultivadoid,
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
         fincaid: item.fincaid,
         finnombrefinca: item.finnombrefinca,
         productor: item.productor,
@@ -264,36 +212,16 @@ export default {
         detalle:resultado.data
       };
       this.$store.commit("moduloTratamiento/establecerEditarTratamiento", true);
-<<<<<<< HEAD
-=======
-      this.obtenerTodosLoteCultivadoDeFinca();
-      this.obtenerTodosListaCultivo();
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
       //his.editarTratamiento = true;
     },
 
     // Llena la listaSemilla con datos del servidor backend
     async obtenerTodosTratamiento() {
       let resultado = await ServicioTratamiento.obtenerTodosTratamiento();
-<<<<<<< HEAD
       this.listaTratamiento = resultado.data;
       //console.log(this.listaMalezaControl);
     },
 
-=======
-      this.listaTratamientoStore = resultado.data;
-    },
-    async obtenerTodosLoteCultivadoDeFinca() {
-      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
-        this.modeloTratamientoStore.fincaid
-      );
-      this.listaLoteStore = resultado.data;
-    },
-    async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloTratamientoStore.lotecultivadoid);
-      this.listaCultivoStore = resultado.data;
-    },
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     // Vacia el modelo siembra
     ...mapMutations("moduloTratamiento", [
       "vaciarModeloTratamientoStore",

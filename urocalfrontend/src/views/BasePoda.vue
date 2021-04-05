@@ -86,13 +86,6 @@ export default {
     DialogMostrarPoda,
   },
 
-<<<<<<< HEAD
-=======
-  mounted() {
-    this.cargarListaPoda();
-    // this.cargarListaCultivos();
-  },
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
 
   data() {
     return {
@@ -377,10 +370,6 @@ export default {
 
   created() {
     this.cargarListaPoda();
-<<<<<<< HEAD
-=======
-    // this.cargarListaFinca();
->>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     this.$store.commit("colocarLayout", "LayoutProductor");
     
   },
