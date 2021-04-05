@@ -4,7 +4,7 @@ export default {
     namespaced: true,
 
     state: {
-        siembra: new Siembra('', '', '', '', '', '', '', '', 0, 0), // Modelo siembra
+        siembra: new Siembra('', '', '', '', '', '', '', '', 0, 0, '', '', 0, ''), // Modelo siembra
         formSiembraValido: false, // Indica si el formulario de siembra es valido
         listaSiembra: [], // Lista de Controles de Siembra
         bloquearCamposFormSiembra: false, // Determina si se bloquean los campos del formulario
@@ -22,7 +22,7 @@ export default {
 
         // Vacia el modelo siembra
         vaciarSiembra(state) {
-            state.siembra = new Siembra('', '', '', '', '', '', '', '', 0, 0)
+            state.siembra = new Siembra('', '', '', '', '', '', '', '', 0, 0, '', '', 0, '')
         },
 
         cambiarEstadoFormSiembraValido(state, nuevoEstado) {

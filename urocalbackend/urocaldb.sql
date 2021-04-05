@@ -1216,7 +1216,7 @@ create table "public"."egresoinsumo"
   "egrinsparacontrolar" text,
   "egrinsdosis" text,
   "egrinscantidadentregada" numeric,
-  "egrencargado" text,
+  "egrinsencargado" text,
   "ingresoinsumosid" integer not null,
   "fincaid" integer default nextval('"finca_fincaid_seq"'::regclass)
 )

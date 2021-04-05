@@ -67,7 +67,8 @@ import { mapMutations } from "vuex";
 import DialogNuevoFertilizante from "@/components/DialogNuevoFertilizante";
 import DialogMostrarFertilizante from "@/components/DialogMostrarFertilizante";
 import ServicioFertilizantes from '../services/ServicioFertilizantes';
-
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioLote from "../services/ServicioLote";
 export default {
   name: "BaseFertilizante",
 
@@ -85,16 +86,16 @@ export default {
       nombre: "Gestión de Fertilización",      
       buscarFertilizante: "", // Guarda el texto de búsqueda
       cabeceraTablaFertilizante: [
-        // Detalla las cabeceras de la tabla
+        //Detalla las cabeceras de la tabla
         {
           text: "Código de finca",
-          value: "codigo_finca",
+          value: "fincodigo",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "lotnumero",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -203,6 +204,28 @@ export default {
         return this.$store.commit("moduloFertilizante/establecerListaFertilizantesStore", v);
       },
     },
+
+    listacultivoStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listacultivoStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerlistacultivoStore", v);
+      },
+    },
+
+    listaloteStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listaloteStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerlistaloteStore", v);
+      },
+    },
+
+
+  
+
     // Obtiene y modifica el estado de la variable dialogNuevoFertilizante
     dialogNuevoFertilizante: {
       get() {
@@ -232,8 +255,18 @@ export default {
         return this.$store.commit("moduloFertilizante/establecerModeloFertilizanteStore", v);
       },
     },
-  },
 
+    // Obtiene la variable bloquearCamposFormFertilizante
+    bloquearCamposFormFertilizante: {
+      get() {
+        return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", v);
+      },
+    },
+  },
+  
   methods: {
     async cargarListaFertilizante () {
       let listaFertilizantes = [];
@@ -288,20 +321,38 @@ export default {
     },
 
     // Carga el DialogMostrarFertilizante
-    abrirMostrarFertilizante(item) {
+      abrirMostrarFertilizante(item) {
       this.dialogMostrarFertilizante = !this.dialogMostrarFertilizante; // Abre el DialogMostrarFertilizante
       this.$refs.componentDialogMostrarFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation();
       this.vaciarModeloFertilizanteStore();
+      this.bloquearCamposFormFertilizante=true;
       this.modeloFertilizanteStore = item;
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
     },
 
     // Vacia el modelo fertilizante
     ...mapMutations("moduloFertilizante", ["vaciarModeloFertilizanteStore"]),
+   
+   
+      async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloFertilizanteStore.lotecultivadoid);
+      this.listacultivoStore = resultado.data; 
+
+    },
+
+      async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFertilizanteStore.fincaid);
+      this.listaloteStore = resultado.data; 
+      
+    },
+
 
     // Carga el DialogNuevoFertilizante
     cargarDialogNuevoFertilizante() {
       this.dialogNuevoFertilizante = !this.dialogNuevoFertilizante;
       this.$refs.componentDialogNuevoFertilizante.$refs.componentFormFertilizante.$refs.formFertilizante.resetValidation();
+      this.bloquearCamposFormFertilizante=false;
       this.vaciarModeloFertilizanteStore();
     },
   },

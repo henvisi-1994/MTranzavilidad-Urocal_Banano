@@ -6,10 +6,7 @@ export default {
     state: {
         cosecha: new Cosecha('', '', '', '', '', '','',null,''), // Modelo cosecha
         formCosechaValido: false, // Indica si el formulario de cosecha es valido
-        listaCosechaStore: [],
-        listaLoteStore: [],
-        listaCultivoStore: [],        
-        bloquearCamposFormCosecha: false, // Determina si se bloquean los campos del formulario
+        listaCosechaStore:[],
     },
 
     actions: {
@@ -31,37 +28,14 @@ export default {
             state.formCosechaValido = nuevoEstado
         },
         
-         // listaCosecha
-        eliminarCosechaLista(state, cosechaID) {
-            let indice = state.listaCosechaStore.indexOf(cosechaID); // Obtiene la posicion del elemento
-            state.listaCosechaStore.splice(indice, 1); // Elimina el elemento
-        },
-
         asignarListaCosecha(state, newState) {
             state.listaCosechaStore = newState
         },
-
-        asignarListaLote(state, newState) {
-            state.listaLoteStore = newState
-        },
-
-        asignarListaCultivo(state, newState) {
-            state.listaCultivoStore = newState
-        },
-
-        // Cambia el estado de la variable bloquearCamposFormCosecha
-        cambiarBloquearCamposFormCosecha(state, nuevoEstadoCosecha) {
-            state.bloquearCamposFormCosecha = nuevoEstadoCosecha
-        },
+        
     },
 
     getters: {
-        //cosecha: (state) => state.cosecha,
+        cosecha: (state) => state.cosecha,
         formCosechaValido: (state) => state.formCosechaValido, // Devuelve la variable formcosechaValido
-        cosecha: (state) => state.cosecha,        
-        bloquearCamposFormCosecha: (state) => state.bloquearCamposFormCosecha, 
-        listaCosechaStore: (state) => state.listaCosechaStore,
-        listaCultivoStore: (state) => state.listaCultivoStore,
-        listaLoteStore: (state) => state.listaLoteStore,
     },
 }

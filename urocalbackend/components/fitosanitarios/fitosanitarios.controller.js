@@ -16,15 +16,15 @@ module.exports = {
     async createFitosanitario(req, res) {
 
         // Añadir capa de validación
-
-        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid } = req.body;
+        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid } = req.body;
 
         try {
             await fitosanitariosModel.createFitosanitario({
-            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid
+            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid
             });
         } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
+            console.log(error);
+            return res.status(500).send({ message: "Registro fallido" , messagee:error });
         }
 
         return res.status(201).send({ message: "Registro exitoso" });
@@ -32,10 +32,10 @@ module.exports = {
 
     async updateFitosanitario(req, res) {
         const { id } = req.params;
-        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid } = req.body;
+        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid } = req.body;
 
         const rowCount = await fitosanitariosModel.updateFitosanitario(id, {
-        fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid
+            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });

@@ -16,7 +16,7 @@
           <v-btn icon @click="bloquearCamposFormCompra = false">
             <v-icon class="primary--text">mdi-pencil</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn icon @click="deleteCompra()">
             <v-icon class="primary--text">mdi-trash-can</v-icon>
           </v-btn>
           <v-btn icon @click="cerrarDialogMostrarCompra()">
@@ -74,7 +74,7 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
-
+import compraService from  './../services/ServicioCompra';
 import FormCompraCabecera from "@/components/FormCompraCabecera";
 import FormCompraPie from "@/components/FormCompraPie";
 import DatatableDetalleCompra from "@/components/DatatableDetalleCompra";
@@ -213,6 +213,20 @@ export default {
       let resultado = await servicioCompra.obtenerTodosCompra();
       this.listaCompra = resultado.data;
     },
+
+    deleteCompra() {
+
+      if (!window.confirm('¿Está seguro que desea eliminar esta compra?')) return;
+
+      compraService.deleteCompra(this.compra.compraid).then(res => {
+        if (res.data) {
+          this.obtenerTodosCompra();
+          this.$toast.success('Compra eliminada con éxito');
+          this.cerrarDialogMostrarCompra();
+
+        }
+      })
+    }
   },
 
   watch: {

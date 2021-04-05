@@ -13,6 +13,7 @@ const unicoOperarioPersona = (recurso) => ({
     pergenero: recurso.pergenero, 
     perfechanacimiento: recurso.perfechanacimiento, 
     opecargo: recurso.opecargo,
+    operario :recurso.operario,
     finca: {
         fincaid: recurso.fincaid,
         finnombrefinca: recurso.finnombrefinca

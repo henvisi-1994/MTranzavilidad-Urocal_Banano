@@ -30,7 +30,6 @@ module.exports = {
 
     //nuevo
     async obtenerCultivoDetalles(id) {
-        //console.log(id);
         let query = `Select cu.cultivoid, pr.productoid, cu.lotecultivadoid, concat(pr.pronombre, '   |  ', pr.provariedad) "detalles"
         FROM cultivo cu, producto pr
 		WHERE cu.productoid = pr.productoid AND cu.lotecultivadoid = ${id};`;

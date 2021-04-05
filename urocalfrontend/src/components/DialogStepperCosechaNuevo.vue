@@ -96,7 +96,7 @@ export default {
 
     async registrar() {
       try {
-        console.log(this.siembra);
+        console.log(this.cosecha);
         let respuestaServicioCosecha = await ServicioCosecha.crearCosecha(this.cosecha);
         if(respuestaServicioCosecha.status == 201){
           this.cerrarDialogStepperCosechaNuevo()

@@ -76,6 +76,8 @@ import { mapMutations } from "vuex";
 import DialogNuevoFitosanitario from "@/components/DialogNuevoFitosanitario";
 import DialogMostrarFitosanitario from "@/components/DialogMostrarFitosanitario";
 import ServicioFitosanitarios from "../services/ServicioFitosanitarios";
+import servicioLote from "../services/ServicioLote";
+import servicioCultivo from "../services/ServicioCultivo";
 
 export default {
   name: "BaseFitosanitario",
@@ -103,7 +105,7 @@ export default {
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "lotnumero",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -174,7 +176,7 @@ export default {
         },
         {
           text: "Área Aplicada",
-          value: "fitareaplicada",
+          value: "fitareaaplicada",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -202,7 +204,7 @@ export default {
         },
         {
           text: "Operario",
-          value: "fitoperario",
+          value: "operario",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -234,6 +236,42 @@ export default {
         );
       },
     },
+   
+    listaCultivoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/listaCultivoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/establecerListaCultivoStore",
+          v
+        );
+      },
+    },
+
+    listaLoteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/listaLoteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/establecerListaLoteStore",
+          v
+        );
+      },
+    },
+
+
+
+
     // Obtiene y modifica el estado de la variable dialogNuevoFitosanitario
     dialogNuevoFitosanitario: {
       get() {
@@ -284,28 +322,9 @@ export default {
       let fitosanitarios = await respuesta.data;
       this.$store.commit("moduloFitosanitario/vaciarLista", null);
       fitosanitarios.forEach((f) => {
-        this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",
-          {
-            fitosanitarioid: f.fitosanitarioid,
-            fincodigo: f.fincodigo,
-            lote: f.lotnumero,
-            loteid: f.loteid,
-            fitciclo: f.fitciclo,
-            fitfecha: this.convertirFecha(f.fitfecha),
-            fitnombrecomercial: f.fitnombrecomercial,
-            fitingredienteactivo: f.fitingredienteactivo,
-            fitautorizaciontecnica: f.fitautorizaciontecnica,
-            fitnombrecomun: f.fitnombrecomun,
-            fitdosis: f.fitdosis,
-            fitcantidadtotal: f.fitcantidadtotal,
-            fitareaplicada: f.fitareaaplicada,
-            fitequipoaplicacion:f.fitequipoaplicacion,
-            fitmetodo: f.fitmetodo,
-            fitplazoseguridad: f.fitplazoseguridad,
-            fitoperario: f.fitoperario,
-            cultivoid: f.cultivoid,
-            condicionclimaticaid: f.condicionclimaticaid,
-          }
+        this.$store.commit(
+          "moduloFitosanitario/updateListaFitosanitariosStore",
+          f
         );
       });
     },
@@ -361,6 +380,8 @@ export default {
       this.$refs.componentDialogMostrarFitosanitario.$refs.componentFormFitosanitario.$refs.formFitosanitario.resetValidation();
       this.vaciarModeloFitosanitarioStore();
       this.modeloFitosanitarioStore = item;
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
     },
 
     // Vacia el modelo Fitosanitario
@@ -372,10 +393,21 @@ export default {
       this.$refs.componentDialogNuevoFitosanitario.$refs.componentFormFitosanitario.$refs.formFitosanitario.resetValidation();
       this.vaciarModeloFitosanitarioStore();
     },
-    convertirFecha(fecha){
+    convertirFecha(fecha) {
       let fechaC = fecha.split("T")[0];
       return fechaC;
-    }
+    },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.modeloFitosanitarioStore.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFitosanitarioStore.fincaid);
+      this.listaLoteStore = resultado.data; 
+      
+    },
   },
 
   created() {

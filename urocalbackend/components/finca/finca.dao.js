@@ -35,7 +35,6 @@ module.exports = {
     async obtenerFincas() {
         let query = `SELECT * FROM finca`;
         let result = await pool.query(query);
-        console.log(result.rows);
         return result.rows; // Devuelve el array de json que contiene la tabla finca
     },
     

@@ -12,11 +12,12 @@ module.exports = {
         password: process.env.DBPASSWORD || '12345',
         port: process.env.DBPORT || '5432'
     },
-    
+
     // Email
     email: {
         provider: process.env.PROVIDER,
         user: process.env.EMAILUSER,
         password: process.env.EMAILPASSWD
+        
     }
 }
