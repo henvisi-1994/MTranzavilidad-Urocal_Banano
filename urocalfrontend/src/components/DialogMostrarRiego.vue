@@ -110,13 +110,13 @@ export default {
       get() {
         return JSON.parse(
           JSON.stringify(
-            this.$store.getters["moduloPoda/listaTipoStore"]
+            this.$store.getters["moduloRiego/listaTipoStore"]
           )
         );
       },
       set(v) {
         return this.$store.commit(
-          "moduloPoda/establecerlistaTipoStore",
+          "moduloRiego/establecerlistaTipoStore",
           v
         );
       },
@@ -168,7 +168,7 @@ export default {
     },
 
     cambiarEstadoEditar() {
-      this.$store.commit("moduloPoda/establecerEditarRiego", false);
+      this.$store.commit("moduloRiego/establecerEditarRiego", false);
     },
     
     ...mapMutations("moduloRiego", ["vaciarModeloRiegoStore"]),
