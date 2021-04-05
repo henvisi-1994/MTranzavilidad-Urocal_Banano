@@ -8,7 +8,7 @@ module.exports = {
         const { facnumero, compradorid, vendedorid, facfecha, facpuertoembarque, facpuertodestino, facvapor, facsubtotal12, facsubtotal0, facsubtotalsiniva, facsubtotalivaexcento, facsubtotalsinimpuestos, factotaldesc, facice, faciva12, facirbpn, facvalortotal, facformapago, facplazo, factiempo, facdae, facpesoneto, facpesobruto, faclote, faccontenedor, facsemana, facfechazarpe, facmarca, faccertificaciones } = req.body;
 
         try {
-            await modeloFacturaExport.crearExportador({
+            await modeloFacturaExport.crearFacturaExport({
                 facnumero, 
                 compradorid, 
                 vendedorid, 
@@ -41,6 +41,7 @@ module.exports = {
             });
             return res.status(201).send({ message: "Registro exitoso" });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
     },
@@ -56,9 +57,9 @@ module.exports = {
     // UPDATE: Actualiza un registro
     async actualizarFacturaExport(req, res) {
         const { id } = req.params;
-        const { perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimiento } = req.body;
+        const {facnumero, compradorid, vendedorid, facfecha, facpuertoembarque, facpuertodestino, facvapor, facsubtotal12, facsubtotal0, facsubtotalsiniva, facsubtotalivaexcento, facsubtotalsinimpuestos, factotaldesc, facice, faciva12, facirbpn, facvalortotal, facformapago, facplazo, factiempo, facdae, facpesoneto, facpesobruto, faclote, faccontenedor, facsemana, facfechazarpe, facmarca, faccertificaciones } = req.body;
 
-        const rowCount = await modeloFacturaExport.actualizarExportador(id, {
+        const rowCount = await modeloFacturaExport.actualizarFacturaExport(id, {
             facnumero, 
             compradorid, 
             vendedorid, 

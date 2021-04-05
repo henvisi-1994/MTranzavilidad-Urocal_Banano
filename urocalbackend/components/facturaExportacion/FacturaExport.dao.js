@@ -8,10 +8,10 @@ module.exports = {
         VALUES (${factexport.facnumero},
                 ${factexport.compradorid}, 
                 ${factexport.vendedorid}, 
-                ${factexport.facfecha}, 
-                ${factexport.facpuertoembarque}, 
-                ${factexport.facpuertodestino}, 
-                ${factexport.facvapor}, 
+                '${factexport.facfecha}', 
+                '${factexport.facpuertoembarque}', 
+                '${factexport.facpuertodestino}', 
+                '${factexport.facvapor}', 
                 ${factexport.facsubtotal12}, 
                 ${factexport.facsubtotal0},
                 ${factexport.facsubtotalsiniva},
@@ -22,18 +22,20 @@ module.exports = {
                 ${factexport.faciva12},
                 ${factexport.facirbpn}, 
                 ${factexport.facvalortotal}, 
-                ${factexport.facformapago}, }
+                '${factexport.facformapago}', 
                 ${factexport.facplazo}, 
-                ${factexport.factiempo}, 
-                ${factexport.facdae}, 
+                '${factexport.factiempo}', 
+                '${factexport.facdae}', 
                 ${factexport.facpesoneto}, 
                 ${factexport.facpesobruto}, 
-                ${factexport.faclote}, 
-                ${factexport.faccontenedor}, 
+                '${factexport.faclote}', 
+                '${factexport.faccontenedor}', 
                 ${factexport.facsemana}, 
-                ${factexport.facfechazarpe}, 
-                ${factexport.facmarca}, 
-                ${factexport.faccertificaciones});`
+                '${factexport.facfechazarpe}', 
+                '${factexport.facmarca}', 
+                '${factexport.faccertificaciones}');`
+                console.log(query);
+                let result = await pool.query(query);  
         return factexport;
     },
 
