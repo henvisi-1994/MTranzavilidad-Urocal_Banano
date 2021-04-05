@@ -217,6 +217,11 @@ const routes = [
     name: 'BaseRegistroEnvio',
     component: () => import('@/views/BaseRegistroEnvio.vue'),
   },
+  {
+    path: '/puerto/facturaExportacion',
+    name: 'BaseFactExport',
+    component: () => import('@/views/BaseFactExport.vue'),
+  },
   // -----------------------------------------------------------------------------------------
 ]
 

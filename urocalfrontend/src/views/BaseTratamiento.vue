@@ -34,7 +34,7 @@
         <!-- Tabla que muestra las Tratamientos -->
         <v-data-table
           :headers="cabeceraTablaTratamiento"
-          :items="listaTratamiento"
+          :items="listaTratamientoStore"
           :search="buscarTratamiento"
           sort-by="tratamientoid"
           :height="tablaResponsiva()"
@@ -75,6 +75,8 @@ import { mapMutations, mapState } from "vuex";
 import DialogoNuevoTratamiento from "../components/DialogoNuevoTratamiento";
 import DialogoMostrarTratamiento from "../components/DialogoMostrarTratamiento";
 import ServicioTratamiento from "../services/ServicioTratamiento";
+import servicioLote from "../services/ServicioLote";
+import servicioCultivo from "../services/ServicioCultivo";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -87,7 +89,6 @@ export default {
 
   data() {
     return {
-      listaTratamiento: [],
       nombre: "Gestión de Fermentación y secado",
       buscarTratamiento: "", // Guarda el texto de búsqueda
       cabeceraTablaTratamiento: [
@@ -184,6 +185,39 @@ export default {
         return this.$store.commit("moduloTratamiento/establecerEditarTratamiento", v);
       },
     },
+        listaTratamientoStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaTratamientoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaTratamientoStore",
+          v
+        );
+      },
+    },
+    listaLoteStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaLoteStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaLoteStore",
+          v
+        );
+      },
+    },
+    listaCultivoStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaCultivoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaCultivoStore",
+          v
+        );
+      },
+    },
   },
 
   methods: {
@@ -201,6 +235,7 @@ export default {
       this.modeloTratamientoStore = {
         cultivo: item.cultivo,
         cultivoid: item.cultivoid,
+        lotecultivadoid: item.lotecultivadoid,
         fincaid: item.fincaid,
         finnombrefinca: item.finnombrefinca,
         productor: item.productor,
@@ -212,16 +247,26 @@ export default {
         detalle:resultado.data
       };
       this.$store.commit("moduloTratamiento/establecerEditarTratamiento", true);
+      this.obtenerTodosLoteCultivadoDeFinca();
+      this.obtenerTodosListaCultivo();
       //his.editarTratamiento = true;
     },
 
     // Llena la listaSemilla con datos del servidor backend
     async obtenerTodosTratamiento() {
       let resultado = await ServicioTratamiento.obtenerTodosTratamiento();
-      this.listaTratamiento = resultado.data;
-      //console.log(this.listaMalezaControl);
+      this.listaTratamientoStore = resultado.data;
     },
-
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloTratamientoStore.fincaid
+      );
+      this.listaLoteStore = resultado.data;
+    },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloTratamientoStore.lotecultivadoid);
+      this.listaCultivoStore = resultado.data;
+    },
     // Vacia el modelo siembra
     ...mapMutations("moduloTratamiento", [
       "vaciarModeloTratamientoStore",

@@ -47,7 +47,7 @@ export default {
                     { texto: 'Riego', ruta: '/cacao/riego' },
                     { texto: 'Cosecha', ruta: '/cacao/cosecha' },
                     { texto: 'Guía de remisión', ruta: '/cacao/guiaremision' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                 ]
             },
             {
@@ -97,7 +97,7 @@ export default {
                 opcionesNivel1: [
                     { texto: 'Registro de envío', ruta: '#' },
                     { texto: 'Guía de remisión', ruta: '#' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -106,7 +106,7 @@ export default {
                 opcionesNivel1: [
                     { texto: 'Registro de envío', ruta: '/cacao/registroEnvio' },
                     { texto: 'Guía de remisión', ruta: '/cacao/remision' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             }
         ],
@@ -149,7 +149,7 @@ export default {
                     { texto: 'Despacho', ruta: '#' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '#' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -166,12 +166,12 @@ export default {
                     { texto: 'Cosecha', ruta: '/cacao/cosecha' },
                     { texto: 'Guía de remisión', ruta: '/cacao/remision' },
                     { texto: 'Comprobante de compra', ruta: '/centroacopio/compra' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                     { texto: 'Almacenamiento', ruta: '/centroacopio/almacenamiento' },
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '/cacao/registroEnvio' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -237,7 +237,7 @@ export default {
                     { texto: 'Despacho', ruta: '#' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '#' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
@@ -254,12 +254,12 @@ export default {
                     { texto: 'Cosecha', ruta: '/cacao/cosecha' },
                     { texto: 'Guía de remisión', ruta: '/cacao/guiaremision' },
                     { texto: 'Comprobante de compra', ruta: '/centroacopio/compra' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                     { texto: 'Almacenamiento', ruta: '/centroacopio/almacenamiento' },
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
                     //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '/cacao/registroEnvio' },
-                    { texto: 'Facturas de exportación', ruta: '#' }
+                    { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
             },
             {
