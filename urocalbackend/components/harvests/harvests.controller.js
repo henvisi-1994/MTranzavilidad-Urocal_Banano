@@ -24,11 +24,7 @@ module.exports = {
                 cosunidad: cosunidad,
                 cospesototal: cospesototal,
                 cosobservacion: cosobservacion,
-<<<<<<< HEAD
-                coscodigo: coscodigo,
-=======
                 coscodigo: coscodigo,                
->>>>>>> 2643a7dc1000ce2fdc138352346406de69b60d77
                 cultivoid: cultivoid
             });
         } catch (error) {
