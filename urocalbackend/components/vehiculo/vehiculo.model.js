@@ -11,5 +11,22 @@ module.exports = {
     async obtenerVehiculoFinca(id){
         return vehiculoDao.obtenerVehiculoFinca(id);
 
-    }
+    },
+    async obtenerVehiculo(id){
+        return vehiculoDao.obtenerVehiculo(id);
+    },
+
+    async createVehiculo(vehiculo){
+        return vehiculoDao.createVehiculo(vehiculo);
+    },
+
+    async updateVehiculo(id, vehiculo){
+        return vehiculoDao.updateVehiculo(id, vehiculo);
+    },
+
+    async deleteVehiculo(id){
+        return vehiculoDao.deleteVehiculo(id);
+    },
+
+
 }

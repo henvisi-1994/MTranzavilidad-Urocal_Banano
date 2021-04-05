@@ -1,5 +1,5 @@
 export default class GuiaRemision {
-    constructor(guiserie, guinumero, guifechaemision, guifechainicio, guihorainicio, guifechafin, guicomprobanteventa, guipuntoinicio, guipuntofin, guidestinatario, guimotivo, guiformapago, guiobservacion, guiemiteurocal, conductorid, vehiculoid, productorid, carga) {
+    constructor(guiserie, guinumero, guifechaemision, guifechainicio, guihorainicio, guifechafin, guicomprobanteventa, guipuntoinicio, guipuntofin, guidestinatario, guimotivo, guiformapago, guiobservacion,guiemiteurocal, conductorid, vehiculoid, productorid, carga) {
         this.guiserie = guiserie;
         this.guinumero = guinumero;
         this.guifechaemision = guifechaemision;
@@ -17,6 +17,6 @@ export default class GuiaRemision {
         this.conductorid = conductorid;
         this.vehiculoid = vehiculoid;
         this.productorid = productorid;
-        this.carga = carga;
+        this.carga= carga;
     }
 }

@@ -23,33 +23,27 @@
       </v-card-title>
 
       <v-card-text>
-        <v-data-table
+       <!--nuevo data table-->
+
+       <v-data-table
           :height="tablaResponsiva()"
           :headers="cabeceraTablaGuiaRemision"
           sort-by="guiserie"
           :items="listaGuiaRemisionStore"
           :search="buscarGuia"
           class="elevation-1"
+          dense
         >
           <template v-slot:top>
-            <DialogMostrarGuiaRemision ref="componentDialogMostrarGuiaRemision"></DialogMostrarGuiaRemision>
+          <DialogMostrarGuiaRemision ref="componentDialogMostrarGuiaRemision"></DialogMostrarGuiaRemision>
+            <!-- Dialog que muestra el formulario con toda la informacion de fertilizante -->
           </template>
-          <template v-slot:item.guifechaemision="{ item }">
-            {{new Date(item.guifechaemision).toISOString().substr(0, 10),}}
-          </template>
-          <template v-slot:item.guifechainicio="{ item }">
-            {{new Date(item.guifechainicio).toISOString().substr(0, 10),}}
-          </template>
-          <template v-slot:item.guifechafin="{ item }">
-            {{new Date(item.guifechafin).toISOString().substr(0, 10),}}
-          </template>
-          <template v-slot:item.guidestinatario="{ item }">
-            {{JSON.parse(item.guidestinatario).rucci}}
-          </template>
+
           <template v-slot:item.actions="{ item }">
             <v-icon color="primary" @click="abrirMostrarGuiaRemision(item)"> mdi-eye </v-icon>
           </template>
         </v-data-table>
+
       </v-card-text>
 
       <v-card-actions class="justify-center">
@@ -185,13 +179,13 @@ export default {
         },
         {
           text: "Conductor",
-          value: "conductorid",
+          value: "conductor",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Vehículo",
-          value: "vehiculoid",
+          value: "vehplaca",
           align: "center",
           class: "grey lighten-3",
         },
@@ -290,6 +284,48 @@ export default {
         listaGuiaRemision.push(f);
       });
       this.listaGuiaRemisionStore = listaGuiaRemision;
+    },
+
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
     },
 
     async cargarProductores(){

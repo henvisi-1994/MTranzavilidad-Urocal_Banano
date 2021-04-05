@@ -50,8 +50,8 @@ export default {
   },
 
   computed: {
-    ...mapState("moduloGuiaRemision", ["modeloGuiaRemisionStore"]),
-    // ...mapState('moduloGuiaRemision', ["modeloGuiaRemisionStore",'listaGuiaRemisionStore']),
+    //...mapState("moduloGuiaRemision", ["modeloGuiaRemisionStore"]),
+    ...mapState('moduloGuiaRemision', ["modeloGuiaRemisionStore",'listaGuiaRemisionStore']),
 
     dialogNuevoGuiaRemision: {
       get() {
@@ -62,14 +62,14 @@ export default {
       },
     },
 
-    // modeloGuiaRemisionStore: {
-    //   get() {
-    //     return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit("moduloGuiaRemision/establecerModeloGuiaRemisionStore", v);
-    //   },
-    // },
+    modeloGuiaRemisionStore: {
+       get() {
+        return this.$store.getters["moduloGuiaRemision/modeloGuiaRemisionStore"];
+       },
+      set(v) {
+         return this.$store.commit("moduloGuiaRemision/establecerModeloGuiaRemisionStore", v);
+       },
+     },
   },
 
   methods: {
@@ -77,21 +77,21 @@ export default {
 
     async agregarGuiaRemision(){
       let respuesta = await ServicioGuiaRemision.agregarGuiaRemision(this.modeloGuiaRemisionStore);
+      this.$toast.success('se ha registrado nueva guia remision');
       if (respuesta.status == 201) {
         this.cerrarDialogNuevoGuiaRemision();
         this.cargarListaGuiaRemision();
-        this.vaciarModeloRiegoStore();
+         this.vaciarGuiaRemision();
       }
     },
 
     async cargarListaGuiaRemision () {
-      let listaGuiaRemision = [];
       let respuesta = await ServicioGuiaRemision.obtenerTodosGuiaRemision();
-      let guiasRemision = await respuesta.data;
-      guiasRemision.forEach((f) => {
-        listaGuiaRemision.push(f);
-      });
-      this.listaGuiaRemisionStore = listaGuiaRemision;
+          let guiaremision = await respuesta.data;
+          this.$store.commit("moduloGuiaRemision/vaciarLista",null);
+            guiaremision.forEach((f) => {
+              this.$store.commit("moduloGuiaRemision/updateListaGuiaRemision",f);
+            });
     },
 
     cerrarDialogNuevoGuiaRemision() {

@@ -112,8 +112,9 @@ export default {
 
     async cargarListaTratamiento () {
       let listaTratamientos = [];
-      let respuesta = await ServicioTratamiento.obtenerTodosTratamientos();
+      let respuesta = await ServicioTratamiento.obtenerTodosTratamiento();
       let riegos = await respuesta.data;
+      this.$store.commit("moduloTratamiento/vaciarLista", null);
       riegos.forEach((f) => {
         listaTratamientos.push(f);
       });

@@ -5,6 +5,8 @@ export default {
 
     state: {
         listaFertilizantesStore: [],
+        listacultivoStore: [],
+        listaloteStore: [],
         modeloFertilizanteStore: new Fertilizante('', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fertilizante
         formFertilizanteValido: false, // Indica si el formulario de Fertilizante es valido
         bloquearCamposFormFertilizante: false, // Determina si se bloquean los campos del formulario
@@ -16,7 +18,12 @@ export default {
         establecerModeloFertilizanteStore(state, nuevoFertilizante) {
             state.modeloFertilizanteStore = nuevoFertilizante
         },
-        
+        establecerlistacultivoStore(state, newState) {
+            state.listacultivoStore = newState;
+        },
+        establecerlistaloteStore(state, newState) {
+            state.listaloteStore = newState;
+        },
         updateListaFertilizacion(state, newState) {
             state.listaFertilizantesStore.push(newState)
           },
@@ -46,8 +53,11 @@ export default {
     },
 
     getters: {
+
         formFertilizanteValido: (state) => state.formFertilizanteValido, // Devuelve la variable formFertilizanteValido
         listaFertilizantesStore: (state) => state.listaFertilizantesStore,
+        listacultivoStore: (state) => state.listacultivoStore,
+        listaloteStore: (state) => state.listaloteStore,
         modeloFertilizanteStore: (state) => state.modeloFertilizanteStore,
         bloquearCamposFormFertilizante: (state) => state.bloquearCamposFormFertilizante,        // Devuelve bloquearCamposFormFertilizante
     },

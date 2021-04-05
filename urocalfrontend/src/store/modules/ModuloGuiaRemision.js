@@ -5,7 +5,7 @@ export default {
 
     state: {
         listaGuiaRemisionStore: [],
-        modeloGuiaRemisionStore: new GuiaRemision('', '', '', '', '', '', '', '', '', {nombre: '', rucci: ''}, '', '', '', '', '', '', '', []),
+        modeloGuiaRemisionStore: new GuiaRemision('', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0,[]),
         formGuiaRemisionValido: false,
         editarGuiaRemision: false
     },
@@ -24,9 +24,17 @@ export default {
             state.editarGuiaRemision = newState;
         },
 
+        updateListaGuiaRemision(state, newState) {
+            state.listaGuiaRemisionStore.push(newState)
+          },
+
+        vaciarLista(state, newState){
+            state.listaGuiaRemisionStore.length = 0;
+        },
+
         // Vacia el modelo GuiaRemision
         vaciarGuiaRemision(state) {
-            state.modeloGuiaRemisionStore = new GuiaRemision('', '', '', '', '', '', '', '', '', {nombre: '', rucci: ''}, '', '', '', '', '', '', '', [])
+            state.modeloGuiaRemisionStore = new GuiaRemision('', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0,[]);
         },
 
         // Cambia  el estado del Formulario GuiaRemision
@@ -39,5 +47,6 @@ export default {
         formGuiaRemisionValido: (state) => state.formGuiaRemisionValido,
         listaGuiaRemisionStore: (state) => state.listaGuiaRemisionStore,
         editarGuiaRemision: (state) => state.editarGuiaRemision,
+        modeloGuiaRemisionStore: (state) => state.modeloGuiaRemisionStore,
     },
 }
