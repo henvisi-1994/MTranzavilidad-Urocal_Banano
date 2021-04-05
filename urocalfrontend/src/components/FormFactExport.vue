@@ -139,31 +139,17 @@
             :rules="[reglas.campoVacio(factExportaStore.facsubtotalsiniva)]"
           ></v-text-field>
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
+                <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="Subtotal Excento de IVA"
+            label="Subtotal execento de IVA"
             v-model="factExportaStore.facsubtotalivaexcento"
             :rules="[reglas.campoVacio(factExportaStore.facsubtotalivaexcento)]"
           ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Subtotal sin Impuestos"
-            v-model="factExportaStore.facsubtotalsinimpuestos"
-            :rules="[
-              reglas.campoVacio(factExportaStore.facsubtotalsinimpuestos),
-            ]"
-          ></v-text-field>
+          
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
@@ -173,13 +159,26 @@
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="Subtotal sin Impuestos"
+            label="Subtotal sin  Impuestos"
             v-model="factExportaStore.facsubtotalsinimpuestos"
+            :rules="[reglas.campoVacio(factExportaStore.facsubtotalsinimpuestos)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Descuentos"
+            v-model="factExportaStore.factotaldesc"
             :rules="[
-              reglas.campoVacio(factExportaStore.facsubtotalsinimpuestos),
+              reglas.campoVacio(factExportaStore.factotaldesc),
             ]"
           ></v-text-field>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -188,11 +187,11 @@
             dense
             label="ICE"
             v-model="factExportaStore.facice"
-            :rules="[reglas.campoVacio(factExportaStore.facice)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facice),
+            ]"
           ></v-text-field>
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -204,15 +203,28 @@
             :rules="[reglas.campoVacio(factExportaStore.faciva12)]"
           ></v-text-field>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="IRBPM"
+            label="IRBPN"
             v-model="factExportaStore.facirbpn"
             :rules="[reglas.campoVacio(factExportaStore.facirbpn)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Total"
+            v-model="factExportaStore.facvalortotal"
+            :rules="[reglas.campoVacio(factExportaStore.facvalortotal)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -223,9 +235,9 @@
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="Total"
-            v-model="factExportaStore.facvalortotal"
-            :rules="[reglas.campoVacio(factExportaStore.facvalortotal)]"
+            label="Plazo"
+            v-model="factExportaStore.facplazo"
+            :rules="[reglas.campoVacio(factExportaStore.facplazo)]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -256,24 +268,11 @@
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="Plazo"
-            v-model="factExportaStore.facplazo"
-            :rules="[reglas.campoVacio(factExportaStore.facplazo)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
             label="Tiempo"
             v-model="factExportaStore.factiempo"
             :rules="[reglas.campoVacio(factExportaStore.factiempo)]"
           ></v-text-field>
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -285,6 +284,8 @@
             :rules="[reglas.campoVacio(factExportaStore.facdae)]"
           ></v-text-field>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -296,8 +297,6 @@
             :rules="[reglas.campoVacio(factExportaStore.facpesoneto)]"
           ></v-text-field>
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -309,6 +308,8 @@
             :rules="[reglas.campoVacio(factExportaStore.facpesobruto)]"
           ></v-text-field>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -320,8 +321,6 @@
             :rules="[reglas.campoVacio(factExportaStore.faclote)]"
           ></v-text-field>
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -333,6 +332,8 @@
             :rules="[reglas.campoVacio(factExportaStore.faccontenedor)]"
           ></v-text-field>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
@@ -342,6 +343,17 @@
             label="Semana"
             v-model="factExportaStore.facsemana"
             :rules="[reglas.campoVacio(factExportaStore.facsemana)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Marca"
+            v-model="factExportaStore.facmarca"
+            :rules="[reglas.campoVacio(factExportaStore.facmarca)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -382,19 +394,6 @@
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="Marca"
-            v-model="factExportaStore.facmarca"
-            :rules="[reglas.campoVacio(factExportaStore.facmarca)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
             label="Certificaciones"
             v-model="factExportaStore.faccertificaciones"
             :rules="[reglas.campoVacio(factExportaStore.faccertificaciones)]"
@@ -417,6 +416,9 @@ export default {
   components: {
     vSelect,
   },
+  mounted() {
+    this.inicializarFecha();
+  },
 
   data() {
     return {
@@ -432,6 +434,7 @@ export default {
       ],
     };
   },
+
 
   computed: {
     // Obtiene la variable que indica si el formulario es valido
@@ -472,6 +475,11 @@ export default {
     ...mapState("validacionForm", ["reglas"]),
   },
 
-  methods: {},
+  methods: {
+    inicializarFecha(){
+      this.factExportaStore.facfecha = this.currentDate;
+      this.factExportaStore.facfechazarpe = this.currentDate;
+    }
+  },
 };
 </script>
