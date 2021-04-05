@@ -51,6 +51,13 @@ export default {
     FormRiego,
   },
 
+  data() {
+    return {};
+  },
+  mounted(){
+
+  },
+
   computed: {
     listaRiegoStore: {
       get() {
@@ -75,22 +82,36 @@ export default {
         return this.$store.getters["moduloRiego/modeloRiegoStore"];
       },
       set(v) {
-        return this.$store.commit("moduloRiego/establecerModeloRiegoStore", v);
+        return this.$store.commit("moduloPoda/establecerModeloRiegoStore", v);
       },
     },
 
+    listaRiegosStore: {
+      get() {
+        return this.$store.getters["moduloPoda/listaRiegoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaRiegoStore", v);
+      },
+    },
+  
+
     // Obtiene es estado de la variable formRiegoValido y el modelo Riego
-    ...mapState("moduloRiego", ["formRiegoValido", "modeloRiegoStore"]),
+    ...mapState("moduloRiego", ["formRiegoValido"]),
   },
 
   methods: {
     async agregarRiego() {
+      try{
       let respuesta = await SerivicioRiegos.agregarRiego(this.modeloRiegoStore);
-      if (respuesta.status == 201) {
+      this.$toast.success(respuesta.data.message);
         this.cerrarDialogNuevoRiego();
         this.cargarListaRiego();
         this.vaciarModeloRiegoStore();
+      }catch(error){
+        this.$toast.error(error.response.data.message);
       }
+      
     },
 
     async cargarListaRiego () {
@@ -105,7 +126,7 @@ export default {
 
     cerrarDialogNuevoRiego() {
       this.dialogNuevoRiego = !this.dialogNuevoRiego; // Cierra el dialogNuevoRiego
-      this.$refs.componentFormRiego.limpiarIds();
+      //this.$refs.componentFormRiego.limpiarIds();
       this.vaciarModeloRiegoStore();
     },
 
