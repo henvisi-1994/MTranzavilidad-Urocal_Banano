@@ -13,11 +13,19 @@ module.exports = {
     //     port: process.env.DBPORT || '5432'
     // },
     postgres: {
+<<<<<<< HEAD
         user: 'postgres',
         host: 'localhost',
         database: 'urocaldb',
         password: 'root',
         port: '5432'
+=======
+        user: process.env.DBUSER || 'postgres',
+        host: process.env.DBHOST || 'localhost',
+        database: process.env.DBNAME || 'urocaldb',
+        password: process.env.DBPASSWORD || '12345',
+        port: process.env.DBPORT || '5432'
+>>>>>>> 2643a7dc1000ce2fdc138352346406de69b60d77
     },
     
     // Email

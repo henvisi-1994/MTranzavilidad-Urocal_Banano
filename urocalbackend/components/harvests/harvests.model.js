@@ -34,6 +34,7 @@ module.exports = {
     },
 
     async deleteHarvest(id) {
+        //console.log(id);
         return harvestDao.deleteHarvest(id);
     },
 }

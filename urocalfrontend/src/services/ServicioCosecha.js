@@ -23,6 +23,21 @@ class ServicioCosecha {
     obtenerTodosCosecha() {
         return axios.get(`${API_URL}/harvests`);
     }
+
+     // SELECT: Devuelve una Siembra
+    obtenerCosecha(id) {
+        return axios.get(`${API_URL}/harvests/${id}`);
+    }
+
+    // UPDATE: Actualiza un Control de Maleza
+    actualizarCosecha(cosecha) {
+        return axios.put(`${API_URL}/harvests/${cosecha.cosechaid}`, cosecha);
+    }
+
+    // DELETE: Eliminar un Control de Maleza
+    eliminarCosecha(cosechaid) {
+        return axios.delete(`${API_URL}/harvests/${cosechaid}`);
+    }
 }
 
 export default new ServicioCosecha();
