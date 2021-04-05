@@ -57,7 +57,7 @@ export default {
   components: {
     FormFertilizante,
   },
-
+      
   data() {
     return {};
   },
@@ -128,6 +128,12 @@ export default {
     desbloquear() {
       this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", false);
     },
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
 
     ...mapMutations("moduloFertilizante", ["vaciarModeloFertilizanteStore"]),
   },

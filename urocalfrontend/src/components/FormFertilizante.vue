@@ -35,8 +35,13 @@
             class="style-chooser"
             label="lotnumero"
             @input="obtenerTodosListaCultivo" 
+<<<<<<< HEAD
             :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
+=======
+            :reduce="(listaloteStore) => listaloteStore.lotecultivadoid"
+            :options="listaloteStore"
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
 
           >
             <template v-slot:no-options="{ search, searching }">
@@ -58,8 +63,13 @@
             placeholder="Cultivo"
             class="style-chooser"
             label="detalles"
+<<<<<<< HEAD
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
+=======
+            :reduce="(listacultivoStore) => listacultivoStore.cultivoid"
+            :options="listacultivoStore"
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
             :rules="[reglas.campoVacio(modeloFertilizanteStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -145,7 +155,11 @@
             placeholder="Área aplicada (HA)"
             v-model="modeloFertilizanteStore.ferareaaplicada"
             :rules="[
+<<<<<<< HEAD
                       reglas.soloNumeros(modeloFertilizanteStore.ferareaaplicada),
+=======
+                      //reglas.soloNumeros(modeloFertilizanteStore.ferareaaplicada),
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
                       reglas.soloNumerosPositivos(modeloFertilizanteStore.ferareaaplicada),
                       reglas.campoVacio(modeloFertilizanteStore.ferareaaplicada),
                       ]"
@@ -158,7 +172,11 @@
             placeholder="Cantidad aplicada"
             v-model="modeloFertilizanteStore.fercantidadaplicada"
             :rules="[
+<<<<<<< HEAD
                       reglas.soloNumeros(modeloFertilizanteStore.fercantidadaplicada),
+=======
+                      //reglas.soloNumeros(modeloFertilizanteStore.fercantidadaplicada),
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
                       reglas.soloNumerosPositivos(modeloFertilizanteStore.fercantidadaplicada),
                       reglas.campoVacio(modeloFertilizanteStore.fercantidadaplicada),
                       ]"
@@ -212,7 +230,6 @@
 <script>
 import { mapState } from "vuex";
 import servicioCultivo from "../services/ServicioCultivo";
-import servicioFertilizantes from "../services/ServicioFertilizantes";
 import servicioLote from "../services/ServicioLote";
 import servicioFinca from "../services/ServicioFinca";
 import vSelect from "vue-select";
@@ -227,9 +244,13 @@ export default {
   },
   mounted() {
     this.obtenerTodosFincas();
+<<<<<<< HEAD
     this.obtenerTodosListaCultivo();
     this.obtenerTodosLoteCultivadoDeFinca();
 
+=======
+    
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
   },
   data() {
     return {
@@ -264,6 +285,30 @@ export default {
       },
     },
 
+<<<<<<< HEAD
+=======
+
+    listacultivoStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listacultivoStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerlistacultivoStore", v);
+      },
+    },
+
+    listaloteStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listaloteStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerlistaloteStore", v);
+      },
+    },
+
+
+
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
   bloquearCamposFormFertilizante: {
       get() {
         return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
@@ -280,8 +325,12 @@ export default {
   methods: {
       async obtenerTodosListaCultivo() {
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloFertilizanteStore.lotecultivadoid);
+<<<<<<< HEAD
       this.listaCultivo = resultado.data; 
 
+=======
+      this.listacultivoStore = resultado.data; 
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     },
     
       async obtenerTodosFincas() {
@@ -290,7 +339,7 @@ export default {
     },
       async obtenerTodosLoteCultivadoDeFinca() {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFertilizanteStore.fincaid);
-      this.listaLote = resultado.data; 
+      this.listaloteStore = resultado.data; 
       
     },
       

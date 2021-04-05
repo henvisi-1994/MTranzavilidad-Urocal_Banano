@@ -4,6 +4,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+<<<<<<< HEAD
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
@@ -13,18 +14,37 @@
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFinca"
             :rules="[reglas.campoVacio(modeloTratamientoStore.fincaid)]"
+=======
+            placeholder="Productor"
+            class="style-chooser"
+            label="productor"
+            @input="obtenerTodosFincas"
+            v-if="visible === true"
+            v-model="modeloTratamientoStore.productorid"
+            :disabled="editarTratamiento"
+            :reduce="(listaProductorPersona) => listaProductorPersona.id"
+            :options="listaProductorPersona"
+            :rules="[reglas.campoVacio(modeloTratamientoStore.productorid)]"
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
+<<<<<<< HEAD
               <em style="opacity: 0.5" v-else>Empiece a escribir una finca</em>
+=======
+              <em style="opacity: 0.5" v-else
+                >Empiece a escribir un Productor</em
+              >
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
             </template>
           </v-select>
         </v-col>
         <v-col cols="12" md="5">
           <v-select
+<<<<<<< HEAD
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
@@ -34,6 +54,52 @@
             :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
             :rules="[reglas.campoVacio(loteid)]"
+=======
+            placeholder="Finca"
+            class="style-chooser"
+            label="findescripcionfinca"
+            v-model="modeloTratamientoStore.fincaid"
+            :disabled="editarTratamiento"
+            @input="obtenerTodosLoteCultivadoDeFinca"
+            :reduce="(listaFincaStore) => listaFincaStore.fincaid"
+            :options="listaFincaStore"
+            :rules="[reglas.campoVacio(modeloTratamientoStore.fincaid)]"
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+<<<<<<< HEAD
+              <em
+                style="opacity: 0.5"
+                v-else-if="!modeloTratamientoStore.fincaid"
+                >Escoja una finca</em
+              >
+              <em style="opacity: 0.5" v-else>Empiece a escribir un lote</em>
+            </template>
+          </v-select>
+        </v-col>
+
+=======
+              <em style="opacity: 0.5" v-else>Empiece a escribir una finca</em>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-select
+            placeholder="Lote"
+            class="style-chooser"
+            label="lotnumero"
+            v-model="modeloTratamientoStore.lotecultivadoid"
+            :disabled="editarTratamiento"
+            @input="obtenerTodosListaCultivo"
+            :reduce="(listaLoteStore) => listaLoteStore.lotecultivadoid"
+            :options="listaLoteStore"
+            :rules="[reglas.campoVacio(modeloTratamientoStore.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -49,7 +115,7 @@
             </template>
           </v-select>
         </v-col>
-
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
         <v-col cols="12" md="5">
           <v-select
             placeholder="Cultivo"
@@ -57,8 +123,13 @@
             v-model="modeloTratamientoStore.cultivoid"
             label="detalles"
             :disabled="editarTratamiento"
+<<<<<<< HEAD
             :reduce="(listaCultivo) => listaCultivo.cultivoid"
             :options="listaCultivo"
+=======
+            :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
+            :options="listaCultivoStore"
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -68,6 +139,7 @@
               <em style="opacity: 0.5" v-else>Empiece a escribir un cultivo</em>
             </template>
           </v-select>
+<<<<<<< HEAD
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
@@ -117,6 +189,59 @@
           ></v-textarea>
         </v-col>
         <v-col cols="12" md="5"> </v-col>
+=======
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-text-field
+            v-model="modeloTratamientoStore.traubicacion"
+            :disabled="editarTratamiento"
+            label="Ubicación "
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-menu
+            v-model="menuMostrarCalendario"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                label="Fecha de Tratamiento"
+                v-model="modeloTratamientoStore.trafecha"
+                class="custom px-2"
+                filled
+                dense
+                :disabled="editarTratamiento"
+                :rules="[reglas.campoVacio(modeloTratamientoStore.trafecha)]"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="modeloTratamientoStore.trafecha"
+              @input="menuDateShowb = false"
+              :show-current="currentDate"
+              locale="es-419"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="10">
+          <v-textarea
+            v-model="modeloTratamientoStore.traobservacion"
+            :disabled="editarTratamiento"
+            label="Observación"
+          ></v-textarea>
+        </v-col>
+        <v-col cols="12" md="5"></v-col>
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
@@ -177,7 +302,11 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
+<<<<<<< HEAD
         <v-col cols="12" md="6">
+=======
+        <v-col cols="12" md="5">
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
           <v-menu
             v-model="menuMostrarCalendarioFi"
             :disabled="editarTratamiento"
@@ -208,7 +337,11 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
+<<<<<<< HEAD
         <v-col cols="12" md="6">
+=======
+        <v-col cols="12" md="5">
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
           <v-menu
             v-model="menuMostrarCalendarioFf"
             :nudge-right="40"
@@ -260,10 +393,25 @@
             no-data-text="No se han agregado detalle"
           >
             <template v-slot:item.actions="{ item }">
+<<<<<<< HEAD
               <v-icon color="primary" :disabled="editarTratamiento"  @click="eliminarDetalleTra(item)">
                 mdi-trash-can
               </v-icon>
               <v-icon color="primary" :disabled="editarTratamiento" @click="editarDetalleTra(item)">
+=======
+              <v-icon
+                color="primary"
+                :disabled="editarTratamiento"
+                @click="eliminarDetalleTra(item)"
+              >
+                mdi-trash-can
+              </v-icon>
+              <v-icon
+                color="primary"
+                :disabled="editarTratamiento"
+                @click="editarDetalleTra(item)"
+              >
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
                 mdi-eye
               </v-icon>
             </template>
@@ -282,6 +430,12 @@ import "vue-select/dist/vue-select.css";
 import servicioLote from "../services/ServicioLote";
 import servicioFinca from "../services/ServicioFinca";
 import servicioCultivo from "../services/ServicioCultivo";
+<<<<<<< HEAD
+=======
+import servicioProductorPersona from "../services/ServicioProductorPersona";
+import TheBarraNavegacionVue from "./TheBarraNavegacion.vue";
+import ServicioProductorPersona from "../services/ServicioProductorPersona";
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
 
 export default {
   name: "formTratamiento",
@@ -290,10 +444,19 @@ export default {
     vSelect,
   },
   mounted() {
+<<<<<<< HEAD
     this.obtenerTodosFincas();
   },
   data() {
     return {
+=======
+    this.obtenerTodosProductorPersona();
+    this.visibilidadProductor();
+  },
+  data() {
+    return {
+      visible: false,
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
       menuMostrarCalendario: "",
       menuMostrarCalendarioFi: "",
       menuMostrarCalendarioFf: "",
@@ -339,6 +502,10 @@ export default {
       listaLote: [],
       listaFinca: [],
       listaCultivo: [],
+<<<<<<< HEAD
+=======
+      listaProductorPersona: [],
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
       listaTipo: [
         { nombre: "Secado", descripcion: "SECADO" },
         { nombre: "Fermentacion", descripcion: "FERMENTACION" },
@@ -354,7 +521,10 @@ export default {
         dtrafechainicio: "",
         dtrafechafin: "",
       },
+<<<<<<< HEAD
       loteid: "",
+=======
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
       currentDate: new Date().toISOString().substr(0, 10),
     };
   },
@@ -400,11 +570,48 @@ export default {
         );
       },
     },
+<<<<<<< HEAD
+=======
+     listaLoteStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaLoteStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaLoteStore",
+          v
+        );
+      },
+    },
+    listaCultivoStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaCultivoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaCultivoStore",
+          v
+        );
+      },
+    },
+    listaFincaStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaFincaStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaFincaStore",
+          v
+        );
+      },
+    },
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
 
   methods: {
+<<<<<<< HEAD
     async obtenerTodosListaCultivo() {
       console.log(this.loteid);
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
@@ -419,6 +626,45 @@ export default {
         this.modeloTratamientoStore.fincaid
       );
       this.listaLote = resultado.data;
+=======
+
+  async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloTratamientoStore.fincaid
+      );
+      this.listaLoteStore = resultado.data;
+    },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloTratamientoStore.lotecultivadoid);
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosFincas() {
+      try {
+      let respuesta=null;
+      let id = 0;
+      if(localStorage.getItem('productor')!==null){
+        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+        id = usuariosesion.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
+      }else{
+        id = this.modeloTratamientoStore.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(id);
+      }
+        this.listaFincaStore = respuesta.data;
+      } catch (error) {
+
+      }
+    },
+    async obtenerTodosProductorPersona() {
+      let resultado = await servicioProductorPersona.obtenerTodosProductorPersona();
+      resultado.data.map((productor) => {
+        this.listaProductorPersona.push({
+          id: productor.personaid,
+          productor: `${productor.pernombres} ${productor.perapellidos} | RUC/CI. ${productor.percedula}`,
+        });
+      });
+      // this.listaProductorPersona = resultado.data;
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     },
     agregarDetalleTra() {
       this.modeloTratamientoStore.detalle.push(this.detalle);
@@ -435,13 +681,27 @@ export default {
         })
       );
     },
+<<<<<<< HEAD
+=======
+    visibilidadProductor() {
+      if (localStorage.getItem("productor") !== null) {
+        this.visible = false;
+      } else {
+        this.visible = true;
+      }
+    },
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
     eliminarDetalleTra(item) {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
       this.modeloTratamientoStore.detalle.splice(index, 1);
     },
     editarDetalleTra(item) {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
+<<<<<<< HEAD
        this.detalle = JSON.parse(
+=======
+      this.detalle = JSON.parse(
+>>>>>>> 8f2d20847df712c65189b6986e90c5e632f0850c
         JSON.stringify({
           dtratipo: item.dtratipo,
           dtraunidad: item.dtraunidad,
