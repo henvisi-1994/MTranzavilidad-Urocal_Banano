@@ -9,7 +9,7 @@ module.exports = {
         user: process.env.DBUSER || 'postgres',
         host: process.env.DBHOST || 'localhost',
         database: process.env.DBNAME || 'urocaldb',
-        password: process.env.DBPASSWORD || 'root',
+        password: process.env.DBPASSWORD || '12345',
         port: process.env.DBPORT || '5432'
     },
     
