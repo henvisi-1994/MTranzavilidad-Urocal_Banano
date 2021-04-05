@@ -180,7 +180,7 @@ export default {
     ...mapMutations("moduloCosecha", ["vaciarCosecha","asignarListaCosecha"]),
 
     // Vacia el modelo environment
-    ...mapMutations("moduloTratamiento", ["vaciarModeloTratamientoStore"]),
+    ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
 
     // Carga el dialogStepperCosechaTratamientoNuevo
     cargarDialogStepperCosechaNuevo() {
@@ -189,7 +189,7 @@ export default {
       //this.$refs.DialogStepperCosechaNuevo.$refs.componentFormCosecha.$refs.formCosecha.resetValidation(); // Reinicia las validaciones de formLote
       //this.$refs.DialogStepperCosechaNuevo.$refs.componentFormTratamiento.$refs.formTratamiento.resetValidation(); // Reinicia las validaciones de formMedioAmbiente
       this.vaciarCosecha(); // Vacia el modelo Lote
-      this.vaciarModeloTratamientoStore(); // Vacia el modelo MedioAmbiente
+      this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
     },
 
     abrirTabsMostrarCosecha() {
@@ -199,7 +199,7 @@ export default {
       //this.$refs.DialogTabMostrarCosecha.$refs.componentFormTratamiento.$refs.formTratamiento.resetValidation(); // Reinicia las validaciones de formMedioAmbiente
 
       this.vaciarCosecha(); // Vacia el modelo Lote
-      this.vaciarModeloTratamientoStore(); // Vacia el modelo MedioAmbiente
+      this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
     },
     async obtenerTodosCosecha() {
       let resultado = await ServicioCosecha.obtenerTodosCosecha();
