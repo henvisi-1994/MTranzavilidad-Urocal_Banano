@@ -25,8 +25,20 @@ class ServicioCultivo {
 
     // INSERT: Agrega un cultivo
     crearCultivo(cultivo) {
+
         return axios.post(`${API_URL}/cultivo`, cultivo);
     }
+
+    // UPDATE: Actualiza un cultivo
+    actualizarCultivo(cultivo) {
+        return axios.put(`${API_URL}/cultivo/${cultivo.lotecultivadoid}`, cultivo);
+    }
+
+    eliminarCultivo(lotecultivadoid) {
+        
+        return axios.delete(`${API_URL}/cultivo/${lotecultivadoid}`);
+    }
+
 }
 
 export default new ServicioCultivo();
