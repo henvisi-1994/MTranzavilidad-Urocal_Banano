@@ -6,7 +6,7 @@ module.exports = {
     async getAlmacenamiento() {
         let query = `SELECT a.almacenamientoid, a.almcontrato, a.almnumerobultos, a.almpesobulto, a.almpesototalingreso, 
                         a.almsaldo, a.almobservaciones, TO_CHAR(a.almfechaacopio, 'YYYY-MM-DD') as almfechaacopio, 
-                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid , t.traoperario, 
+                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid , 
                         c.centroacopioid , c.centroacopionombre 
                      FROM almacenamiento a, tratamiento t, centroacopio c
                      WHERE a.tratamientoid = t.tratamientoid and a.centroacopioid = c.centroacopioid`;
@@ -16,7 +16,7 @@ module.exports = {
     async getAlmacenamientos(id) {
         let query = `SELECT a.almacenamientoid, a.almcontrato, a.almnumerobultos, a.almpesobulto, a.almpesototalingreso, 
                         a.almsaldo, a.almobservaciones, TO_CHAR(a.almfechaacopio, 'YYYY-MM-DD') as almfechaacopio, 
-                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid , t.traoperario, 
+                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid ,  
                         c.centroacopioid , c.centroacopionombre 
                     FROM almacenamiento a, tratamiento t, centroacopio c
                     WHERE a.tratamientoid = t.tratamientoid and a.centroacopioid = c.centroacopioid and almacenamientoid = '${id}'`;

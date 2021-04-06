@@ -72,6 +72,8 @@ module.exports = {
         comobservaciones = '${compra.comobservaciones}', guiaremisionid = ${compra.guiaremisionid} ,
         organizacion='${compra.organizacion}', cod='${compra.cod}',lugar='${compra.lugar}'
         where compraid = ${id}`;
+        console.log(compra);
+        console.log(query);
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó la compra y 0 sino lo hizo.
     }

@@ -57,10 +57,9 @@ module.exports = {
     async updateCompra(req, res) {
         const { id } = req.params;
         const { compraid, comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores,
-            comtotal, comobservaciones, guiaremisionid, productor, organizacion, cod, transporte, lugar } = req.body;
+            comtotal, comobservaciones, guiaremisionid } = req.body;
         try {
             const rowCount = await compraModel.updateCompra(id, {
-                compraid: compraid,
                 comnumero: comnumero,
                 comfechaemision: comfechaemision,
                 comsubtotal: comsubtotal,
@@ -68,12 +67,7 @@ module.exports = {
                 comotrosvalores: comotrosvalores,
                 comtotal: comtotal,
                 comobservaciones: comobservaciones,
-                guiaremisionid: guiaremisionid,
-                productor,
-                organizacion,
-                cod,
-                transporte: transporte.vehplaca,
-                lugar
+                guiaremisionid: guiaremisionid
             });
             return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
         } catch (error) {
