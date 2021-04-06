@@ -138,7 +138,7 @@ export default {
         },
         {
           text: "Encargado",
-          value: "egrinsencargado",
+          value: "egrencargado",
           sortable: false,
           align: "center",
           class: "grey lighten-3",

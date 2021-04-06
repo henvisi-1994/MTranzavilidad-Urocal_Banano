@@ -113,8 +113,8 @@
         <v-col cols="12" md="6">
           <v-text-field class="custom px-2" filled dense
             label="Encargado"
-            v-model="modeloEgresoInsumoStore.egrinsencargado"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsencargado)]"
+            v-model="modeloEgresoInsumoStore.egrencargado"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>

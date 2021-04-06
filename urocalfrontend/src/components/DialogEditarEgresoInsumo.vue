@@ -126,9 +126,9 @@
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="noeditar"
-            v-model="modeloEgresoInsumoStore.egrinsencargado"
+            v-model="modeloEgresoInsumoStore.egrencargado"
             label="Encargado"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsencargado)]"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -326,7 +326,7 @@ export default {
         this.modeloEgresoInsumoStore.egrinsparacontrolar=this.preeditar.egrinsparacontrolar
         this.modeloEgresoInsumoStore.egrinsdosis=this.preeditar.egrinsdosis
         this.modeloEgresoInsumoStore.egrinscantidadentregada=this.preeditar.egrinscantidadentregada
-        this.modeloEgresoInsumoStore.egrinsencargado=this.preeditar.egrinsencargado
+        this.modeloEgresoInsumoStore.egrencargado=this.preeditar.egrencargado
         this.modeloEgresoInsumoStore.ingresoinsumosido=this.preeditar.ingresoinsumosid
         this.preeditar=null        
       }
@@ -343,7 +343,7 @@ export default {
           this.preeditar.egrinsparacontrolar=this.modeloEgresoInsumoStore.egrinsparacontrolar
           this.preeditar.egrinsdosis=this.modeloEgresoInsumoStore.egrinsdosis
           this.preeditar.egrinscantidadentregada=this.modeloEgresoInsumoStore.egrinscantidadentregada
-          this.preeditar.egrinsencargado=this.modeloEgresoInsumoStore.egrinsencargado
+          this.preeditar.egrencargado=this.modeloEgresoInsumoStore.egrencargado
           this.preeditar.ingresoinsumosid=this.modeloEgresoInsumoStore.ingresoinsumosid
           this.preeditar.fincaid=this.modeloEgresoInsumoStore.fincaid;
         }
