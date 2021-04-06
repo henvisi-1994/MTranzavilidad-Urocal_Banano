@@ -1,5 +1,5 @@
 export default class Cosecha {
-    constructor(cosechaid, cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid) {
+    constructor(cosechaid, cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid ) {
         this.cosechaid = cosechaid;
         this.cosfecha = cosfecha;
         this.coscantidad = coscantidad;
@@ -9,6 +9,5 @@ export default class Cosecha {
         this.coscodigo = coscodigo;
         this.tratamientoid = tratamientoid;
         this.cultivoid = cultivoid;
-        
     }
 }

@@ -24,7 +24,7 @@ module.exports = {
                 cosunidad: cosunidad,
                 cospesototal: cospesototal,
                 cosobservacion: cosobservacion,
-                coscodigo: coscodigo,
+                coscodigo: coscodigo,                
                 cultivoid: cultivoid
             });
         } catch (error) {
@@ -75,7 +75,7 @@ module.exports = {
             cosunidad: cosunidad,
             cospesototal: cospesototal,
             cosobservacion: cosobservacion,
-            coscodigo: coscodigo,
+            coscodigo: coscodigo,            
             cultivoid: cultivoid
         });
 
@@ -86,12 +86,13 @@ module.exports = {
     // Elimina una cosecha
     async deleteHarvest(req, res) {
         const { id } = req.params;
-
+        
         try {
             let rowCount = await harvestsModel.deleteHarvest(id);
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Cosecha no registrado", tipo: "error" });
 
         } catch (err) {
+            
             return res.json({ message: "Error al tratar de eliminar la cosecha", tipo: "error" });
         }
     }

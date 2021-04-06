@@ -35,7 +35,7 @@
         <v-data-table
           :height="tablaResponsiva()"
           :headers="cabeceraTablaCosecha"
-          sort-by="cosecha_id"
+          sort-by="cosechaid"
           :items="listaCosechaStore"
           :search="buscarCosecha"
           class="elevation-1"
@@ -43,12 +43,12 @@
           <template v-slot:top>
             <!-- Tabs que muestra la informacion detallada del cosecha -->
             <DialogTabMostrarCosecha
-              ref="dialogTabMostrarCosecha"
+              ref="DialogoMostrarCosecha"
             ></DialogTabMostrarCosecha>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirTabsMostrarCosecha()"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirTabsMostrarCosecha(item)"> mdi-eye </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -74,6 +74,8 @@ import DialogStepperCosechaNuevo from "../components/DialogStepperCosechaNuevo";
 import DialogTabMostrarCosecha from "../components/DialogTabMostrarCosecha";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 import ServicioCosecha from "../services/ServicioCosecha"
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioLote from "../services/ServicioLote";
 
 export default {
   name: "BaseCosecha",
@@ -92,7 +94,7 @@ export default {
 
         {
           text: "Cultivo",
-          value: "cultivoid",
+          value: "cultivo",
           align: "center",
           class: "grey lighten-3",
         },
@@ -146,11 +148,31 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      
     };
   },
 
   computed: {
+
+    bloquearCamposFormCosecha:{
+      get() {
+        return this.$store.getters["moduloCosecha/bloquearCamposFormCosecha"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCosecha/cambiarBloquearCamposFormCosecha", v);
+      },
+    },
+      cosecha: {
+      get() {
+        return this.$store.getters["moduloCosecha/cosecha"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloCosecha/setCosecha",
+          v
+        );
+      },
+    },
+
     // Obtiene y modifica el estado de la variable dialogStepperCosechaNuevo
     dialogStepperCosechaNuevo: {
       get() {
@@ -162,25 +184,46 @@ export default {
     },
 
     // Obtiene y modifica el estado de la variable dialogTabMostrarLote
-    dialogTabMostrarCosecha: {
+     dialogTabMostrarCosecha: {
       get() {
         return this.$store.getters["gestionDialogos/dialogTabMostrarCosecha"];
       },
       set(v) {
-        this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggledialogTabMostrarCosecha", v);
+        //this.n_step = 1;
+        return this.$store.commit("gestionDialogos/toggleDialogTabMostrarCosecha", v);
       },
     },
+
+    listaCultivoStore: {
+      get() {
+        return this.$store.getters["moduloCosecha/listaCultivoStore"];
+      },
+      set(v) {
+        //this.n_step = 1;
+        return this.$store.commit("moduloCosecha/asignarListaCultivo", v);
+      },
+    },
+
+    listaLoteStore: {
+      get() {
+        return this.$store.getters["moduloCosecha/listaLoteStore"];
+      },
+      set(v) {
+        //this.n_step = 1;
+        return this.$store.commit("moduloCosecha/asignarListaLote", v);
+      },
+    },
+
     ...mapState("moduloCosecha", ["listaCosechaStore"]),
   },
 
 
   methods: {
     // Vacia el modelo lot
-    ...mapMutations("moduloCosecha", ["vaciarCosecha","asignarListaCosecha"]),
+    ...mapMutations("moduloCosecha", ["vaciarCosecha", "asignarListaCosecha"]),
 
     // Vacia el modelo environment
-    ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
+    //...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
 
     // Carga el dialogStepperCosechaTratamientoNuevo
     cargarDialogStepperCosechaNuevo() {
@@ -189,10 +232,46 @@ export default {
       //this.$refs.DialogStepperCosechaNuevo.$refs.componentFormCosecha.$refs.formCosecha.resetValidation(); // Reinicia las validaciones de formLote
       //this.$refs.DialogStepperCosechaNuevo.$refs.componentFormTratamiento.$refs.formTratamiento.resetValidation(); // Reinicia las validaciones de formMedioAmbiente
       this.vaciarCosecha(); // Vacia el modelo Lote
-      this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
+      //this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
     },
 
-    abrirTabsMostrarCosecha() {
+   /* async cargarListaCosecha() {
+      let listaCosecha = []; // Limpiar la 'lista de datos'
+      let respuesta = await ServicioCosecha.obtenerTodosCosecha(); // Obtener respuesta de backend
+      let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
+      datosUsuario.forEach((cosecha) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaCosecha.push(cosecha);
+      });
+      this.listaCosechaStore = listaCosecha;
+      //console.log(this.listaEgresoInsumoStore);
+    },*/
+
+    /*abrirTabsMostrarCosecha(item) {
+      this.dialogTabMostrarCosecha = !this.dialogTabMostrarCosecha; // Abre el dialogStepperCosechaTratamientoNuevo
+      this.vaciarCosecha(); // Vacia el modelo Lote      
+      this.cosecha = item;
+      //this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente console.log(this.dialogTabMostrarCosecha);
+    },*/
+
+   async abrirTabsMostrarCosecha(item) {
+      try {
+        // Obtener datos de siembra
+        //console.log(cosecha)
+        let cosecha = await ServicioCosecha.obtenerCosecha(item.cosechaid);
+        // Se asignan los datos a los modelos
+        this.cosecha = cosecha.data;
+        this.ObtenerTodosLoteCultivadoDeFinca();
+        this.obtenerTodosListaCultivo();
+      } catch (error) {
+        this.$store.error(error.response.data.message);
+      }
+      this.dialogTabMostrarCosecha = true;
+      this.bloquearCamposFormCosecha=true;
+      //this.$refs.DialogTabsMostrarLote.$refs.componentTab.callSlider();
+    },
+
+    /*abrirTabsMostrarCosecha() {
       this.dialogTabMostrarCosecha = !this.dialogTabMostrarCosecha;
       this.$refs.DialogTabMostrarCosecha.$refs.componentTab.callSlider();
       //this.$refs.DialogTabMostrarCosecha.$refs.componentFormCosecha.$refs.formCosecha.resetValidation(); // Reinicia las validaciones de formLote
@@ -200,16 +279,32 @@ export default {
 
       this.vaciarCosecha(); // Vacia el modelo Lote
       this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
-    },
+    },*/
     async obtenerTodosCosecha() {
       let resultado = await ServicioCosecha.obtenerTodosCosecha();
       this.asignarListaCosecha(resultado.data);
       //console.log(this.listaMalezaControl);
     },
+    async ObtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.cosecha.fincaid
+      );
+      console.log(resultado.data);
+      this.listaLoteStore = resultado.data;
+    },
+    async obtenerTodosListaCultivo() {
+      console.log(this.cosecha.lotecultivadoid);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.cosecha.lotecultivadoid
+      );
+      console.log(resultado.data);
+      this.listaCultivoStore = resultado.data;
+    },
   },
   
   mounted() {
     this.obtenerTodosCosecha();
+    //this.cargarListaCosecha();
   },
 
 
