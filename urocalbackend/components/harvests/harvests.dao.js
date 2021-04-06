@@ -24,8 +24,6 @@ module.exports = {
         let query = `SELECT co.cosechaid, cu.cultivoid, TO_CHAR(cosfecha, 'YYYY-MM-DD') as cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cu.lotecultivadoid, lo.fincaid, CONCAT(pronombre, ' ',provariedad) AS cultivo
         FROM cosecha co INNER JOIN cultivo cu ON cu.cultivoid=co.cultivoid INNER JOIN lotecultivado lo ON lo.lotecultivadoid = cu.cultivoid INNER JOIN producto pr ON pr.productoid = cu.productoid;`;
 
-        /*let query = `SELECT co.cosechaid, TO_CHAR(co.cosfecha, 'YYYY-MM-DD') AS cosfecha, co.coscantidad, co.cosunidad, co.cospesototal, co.cosobservacion,
-        co.coscodigo, tr.tratamientoid, cu.cultivoid FROM cosecha co, tratamiento tr, cultivo cu WHERE co.cultivoid = cu.cultivoid AND co.tratamientoid = tr.tratamientoid`;      */
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todas las cosechas
     },
@@ -57,7 +55,7 @@ module.exports = {
     async deleteHarvest(id) {
         //Borrado logico        
         let query = `DELETE FROM cosecha WHERE cosechaid = ${id}`;
-        console.log(query);
+        
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró la cosecha y 0 sino lo hizo.
     },
