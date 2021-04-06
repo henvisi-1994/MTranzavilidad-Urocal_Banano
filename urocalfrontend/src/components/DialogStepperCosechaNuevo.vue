@@ -70,6 +70,21 @@ export default {
   },
 
   computed: {
+
+    listaCosechaStore:{
+       get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloCosecha/listaCosechaStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloCosecha/asignarListaCosecha",
+          v
+        );
+      },
+    },
+
     // Obtiene y modifica el estado de la variable dialogStepperLoteNuevo
     dialogStepperCosechaNuevo: {
       get() {
@@ -92,7 +107,7 @@ export default {
     ...mapMutations("moduloCosecha", ["vaciarCosecha","asignarListaCosecha"]),
 
     // Vacia el modelo environment
-    ...mapMutations("moduloTratamiento", ["vaciarTratamiento"]),
+    
 
     async registrar() {
       try {
@@ -120,9 +135,10 @@ export default {
     cerrarDialogoNuevaCosecha() {
       this.dialogStepperCosechaNuevo = false; // Cierra el DialogoNuevaSiembra
     },
-    async obtenerTodosCosecha() {
+     async obtenerTodosCosecha() {
       let resultado = await ServicioCosecha.obtenerTodosCosecha();
-      this.asignarListaCosecha(resultado.data);
+      //this.asignarListaCosecha(resultado.data);
+      this.listaCosechaStore = resultado.data;
       //console.log(this.listaMalezaControl);
     },
     // Registra dependiendo el tab donde se encuentre
@@ -154,7 +170,7 @@ export default {
       //this.$refs.componentFormCosecha.$refs.formCosecha.resetValidation(); // Reinicia las validaciones del formLot
       //this.$refs.componentFormTratamiento.$refs.formTratamiento.resetValidation(); // Reinicia las validaciones del formEnvironment
       this.vaciarCosecha(); // Vacia el modelo Lote
-      this.vaciarTratamiento(); // Vacia el modelo MedioAmbiente
+      
     },
 
     // Cambia el titulo del dialogo
