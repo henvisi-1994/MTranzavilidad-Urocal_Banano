@@ -152,6 +152,15 @@ export default {
   },
 
   computed: {
+
+    bloquearCamposFormCosecha:{
+      get() {
+        return this.$store.getters["moduloCosecha/bloquearCamposFormCosecha"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCosecha/cambiarBloquearCamposFormCosecha", v);
+      },
+    },
       cosecha: {
       get() {
         return this.$store.getters["moduloCosecha/cosecha"];
@@ -258,6 +267,7 @@ export default {
         this.$store.error(error.response.data.message);
       }
       this.dialogTabMostrarCosecha = true;
+      this.bloquearCamposFormCosecha=true;
       //this.$refs.DialogTabsMostrarLote.$refs.componentTab.callSlider();
     },
 
