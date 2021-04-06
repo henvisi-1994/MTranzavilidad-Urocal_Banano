@@ -10,7 +10,7 @@ module.exports = {
 
         //cosFecha, cosCantidad, cosUnidad, cosPesoTotal, cosObservacion, cosCodigo, tratamientoId, cultivoId 
         // Registro en tabla cosecha
-        query = `INSERT INTO cosecha
+        let query = `INSERT INTO cosecha
                     (cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid) VALUES 
                     ('${harvest.cosfecha}','${harvest.coscantidad}','${harvest.cosunidad}','${harvest.cospesototal}','${harvest.cosobservacion}','${harvest.coscodigo}',null, '${harvest.cultivoid}')
                     RETURNING cosechaid;`;

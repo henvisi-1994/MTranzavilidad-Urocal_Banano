@@ -139,7 +139,7 @@
           <v-text-field 
           v-model="cosecha.coscodigo"
           label="Código"
-          :disabled="bloquearCamposFormCosecha"
+          :disabled="true"
           >
           </v-text-field>
         </v-col>
@@ -271,7 +271,7 @@ export default {
       this.listaCultivoStore = resultado.data;
     },
     async obtenerCodigoCosecha(){
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.cosecha.loteid);
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.cosecha.lotecultivadoid);
       const finca = this.listaFinca.find( finca => finca.fincaid === this.cosecha.fincaid );
       const cultivo =resultado.data.find( cultivo=> cultivo.cultivoid === this.cosecha.cultivoid )
       let division = cultivo.detalles.split('|');

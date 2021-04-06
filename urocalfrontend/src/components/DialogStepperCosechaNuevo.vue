@@ -11,7 +11,7 @@
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
         <h5>
-          {{ $vuetify.breakpoint.xs ? tituloDialog() : "Registrar nuevo cosecha" }}
+          Registrar nuevo cosecha
         </h5>
         <v-spacer></v-spacer>
         <div v-if="n_step > 1">
