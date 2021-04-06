@@ -186,7 +186,7 @@ export default {
       listaunidad: ["Quintales", "Tachos"],
       preeditar:null,
       noeditar: true,
-      selecionado: "",    
+          
       };
   },
 
@@ -247,9 +247,7 @@ export default {
   },
 
   methods: {
-     async changeState(valor) {
-      this.selecionado = this.listaFinca[valor - 1];
-    },
+     
     async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
       this.listaFinca = resultado.data;
