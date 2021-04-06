@@ -184,16 +184,10 @@ export default {
       listaFinca: [],
       listaLote: [],
       listaunidad: ["Quintales", "Tachos"],
-<<<<<<< HEAD
       preeditar:null,
       noeditar: true,
-      selecionado: "",    
+          
       };
-=======
-      
-      
-    };
->>>>>>> main
   },
 
   computed: {
@@ -253,12 +247,7 @@ export default {
   },
 
   methods: {
-<<<<<<< HEAD
-     async changeState(valor) {
-      this.selecionado = this.listaFinca[valor - 1];
-    },
-=======
->>>>>>> main
+     
     async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
       this.listaFinca = resultado.data;
