@@ -135,6 +135,11 @@ const routes = [
     name: 'BaseGuiaRemision',
     component: () => import('@/views/BaseGuiaRemision.vue'),
   },
+  {
+    path: '/cacao/tratamiento',
+    name: 'BaseTratamiento',
+    component: () => import('@/views/BaseTratamiento.vue'),
+  },
   // -------------------------------- PRODUCTOR - FINCA ------------------------------------  
   {
     path: '/finca/lote',
@@ -211,6 +216,11 @@ const routes = [
     path: '/cacao/registroEnvio',
     name: 'BaseRegistroEnvio',
     component: () => import('@/views/BaseRegistroEnvio.vue'),
+  },
+  {
+    path: '/puerto/facturaExportacion',
+    name: 'BaseFactExport',
+    component: () => import('@/views/BaseFactExport.vue'),
   },
   // -----------------------------------------------------------------------------------------
 ]

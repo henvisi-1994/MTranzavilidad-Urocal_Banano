@@ -13,21 +13,47 @@ module.exports = {
                     ('${cleaningTool.limfecha}','${cleaningTool.limproducto}','${cleaningTool.limequipos}','${cleaningTool.limmaquinaria}','${cleaningTool.limherramientas}','${cleaningTool.limcajones}', '${cleaningTool.limtendales}', '${cleaningTool.limoperario}', '${cleaningTool.cultivoid}')
                     RETURNING limpiezaherramientaid;`;
         result = await pool.query(query);
-
         //sendEmail(PerEmail, temporal);        // No eliminar esta linea
         return cleaningTool;
     },
 
     async getCleaningTools() {
-        let query = `SELECT lim.limpiezaherramientaid, TO_CHAR(lim.limfecha, 'YYYY-MM-DD') as limfecha, lim.limproducto, lim.limequipos, lim.limmaquinaria,
-        lim.limherramientas, lim.limcajones, lim.limtendales, lim.limoperario, lim.cultivoid, c.productoid, p.pronombre FROM limpiezaherramienta lim, cultivo c, producto p
-         WHERE c.cultivoid = lim.cultivoid AND c.productoid = p.productoid`;
+
+        let query = `
+
+        SELECT lim.limpiezaherramientaid,TO_CHAR(lim.limfecha, 'YYYY-MM-DD') as limfecha, 
+        lim.limproducto, lim.limequipos, lim.limmaquinaria,
+                lim.limherramientas, lim.limcajones, lim.limtendales, lim.limoperario, 
+                lim.cultivoid, concat(pr.pronombre, ' ', pr.provariedad) as cultivo,
+                l.lotecultivadoid,f.fincaid
+                FROM limpiezaherramienta lim
+                INNER JOIN cultivo c ON c.cultivoid=lim.cultivoid
+                inner join producto pr on pr.productoid = c.productoid
+                inner join lotecultivado l on l.lotecultivadoid = c.lotecultivadoid
+                INNER JOIN finca f ON f.fincaid= l.fincaid      
+         `;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene la tabla limpieza herramienta
     },
 
-    async getProduct() {
-        let query = `SELECT  p.pronombre, c.cultivoid, c.productoid FROM producto p, cultivo c WHERE c.productoid = p.productoid`;
+    async getProduct(id) {
+        let query = `
+ 
+SELECT lim.limpiezaherramientaid,TO_CHAR(lim.limfecha, 'YYYY-MM-DD') as limfecha, 
+lim.limproducto, lim.limequipos, lim.limmaquinaria,
+        lim.limherramientas, lim.limcajones, lim.limtendales, lim.limoperario, 
+		lim.cultivoid, concat(pr.pronombre, ' ', pr.provariedad) as cultivo,
+		l.lotecultivadoid,f.fincaid
+		FROM limpiezaherramienta lim
+		INNER JOIN cultivo c ON c.cultivoid=lim.cultivoid
+		inner join producto pr on pr.productoid = c.productoid
+		inner join lotecultivado l on l.lotecultivadoid = c.lotecultivadoid
+		INNER JOIN finca f ON f.fincaid= l.fincaid                
+                WHERE lim.limpiezaherramientaid=${id}        
+         `;
+
+
+
         let result = await pool.query(query);
         return result.rows; // Devuelve el json del usuario encontrado
     },

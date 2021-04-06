@@ -1,6 +1,6 @@
 export default class Fertilizante {
     constructor(fertilizacionid, ferciclo, ferfecha, fernombrecomercial, ferelementos, ferconcentracion, ferareaaplicada,
-        fercantidadaplicada, ferunidadmedida, ferequipoaplicacion, fermetodoaplicacion, feroperario, cultivoid) {
+        fercantidadaplicada, ferunidadmedida, ferequipoaplicacion, fermetodoaplicacion, feroperario, cultivoid,lotecultivadoid) {
         this.fertilizacionid = fertilizacionid;
         this.ferciclo = ferciclo;
         this.ferfecha = ferfecha;
@@ -14,5 +14,7 @@ export default class Fertilizante {
         this.fermetodoaplicacion = fermetodoaplicacion;
         this.feroperario = feroperario;
         this.cultivoid = cultivoid;
+        this.lotecultivadoid = lotecultivadoid;
+
     }
 }

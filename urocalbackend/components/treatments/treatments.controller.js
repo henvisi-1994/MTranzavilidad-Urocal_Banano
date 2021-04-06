@@ -14,23 +14,21 @@ module.exports = {
     async createTreatment(req, res) {
 
         // Añadir capa de validación
-
-        const { traFechaInicioFermentacion, traFechaFinFermentacion, traTipoSecado, traFechaInicioSecado, traFechaFinSecado, traVolumenSeco, traConversion, traObservacion, traOperario } = req.body;
+        const { traobservacion, traubicacion, trafecha, cultivoid, productorid, fincaid, detalle } = req.body;
 
         try {
             await treatmentsModel.createTreatment({
-                traFechaInicioFermentacion: traFechaInicioFermentacion,
-                traFechaFinFermentacion: traFechaFinFermentacion,
-                traTipoSecado: traTipoSecado,
-                traFechaInicioSecado: traFechaInicioSecado,
-                traFechaFinSecado: traFechaFinSecado,
-                traVolumenSeco: traVolumenSeco,
-                traConversion: traConversion,
-                traObservacion: traObservacion,
-                traOperario: traOperario
+                traobservacion: traobservacion,
+                traubicacion: traubicacion,
+                trafecha: trafecha,
+                cultivoid: cultivoid,
+                productorid: productorid,
+                fincaid: fincaid,
+                detalle: detalle
                 
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
          }
 
@@ -43,6 +41,12 @@ module.exports = {
         const treatments = await treatmentsModel.getTreatments()
         return res.status(200).send(treatments); // <--
     },
+       //  Obtener detalletratamiento por id
+       async getDetalleTreatment(req, res) {
+        const { id } = req.params;
+        const rows = await treatmentsModel.getDetalleTreatment(id);
+        return rows != null ? res.status(200).send(rows) : res.status(404).send({ message: "Tratamiento no encontrado" });
+    },
 
     //  Obtener tratamiento por id
     async getTreatment(req, res) {
@@ -54,18 +58,16 @@ module.exports = {
     // Actualiza informacion de un tratamiento
     async updateTreatment(req, res) {
         const { id } = req.params;
-        const { traFechaInicioFermentacion, traFechaFinFermentacion, traTipoSecado, traFechaInicioSecado, traFechaFinSecado, traVolumenSeco, traConversion, traObservacion, traOperario } = req.body;
+        const { traobservacion, traubicacion, trafecha, cultivoid, productorid, fincaid, detalle } = req.body;
 
         const rowCount = await treatmentsModel.updateTreatment(id, {
-            traFechaInicioFermentacion: traFechaInicioFermentacion,
-            traFechaFinFermentacion: traFechaFinFermentacion,
-            traTipoSecado: traTipoSecado,
-            traFechaInicioSecado: traFechaInicioSecado,
-            traFechaFinSecado: traFechaFinSecado,
-            traVolumenSeco: traVolumenSeco,
-            traConversion: traConversion,
-            traObservacion: traObservacion,
-            traOperario: traOperario
+            traobservacion: traobservacion,
+            traubicacion: traubicacion,
+            trafecha: trafecha,
+            cultivoid: cultivoid,
+            productorid: productorid,
+            fincaid: fincaid,
+            detalle: detalle
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });

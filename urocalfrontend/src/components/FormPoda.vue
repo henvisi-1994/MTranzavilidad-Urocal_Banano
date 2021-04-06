@@ -1,15 +1,22 @@
 <template>
   <v-form ref="formPoda" v-model="formPodaValido">
     <v-container>
-      <v-row no-gutters justify-md="space-around" :class="$vuetify.breakpoint.xs ? '' : 'mb-5'">
+      <v-row
+        no-gutters
+        justify-md="space-around"
+        :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
+      >
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="modeloPodaStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
-            label="fincanombre"
+            label="findescripcionfinca"
+            @input="obtenerTodosLoteCultivadoDeFinca"
             :reduce="(listaFinca) => listaFinca.fincaid"
-            :options="listaFinca"
+            :options="listaFincaStore"
+            :rules="[reglas.campoVacio(modeloPodaStore.fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -20,20 +27,27 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-select
-            v-model="modeloPodaStore.loteid"
+          :disabled="editarPoda"
+            v-model="modeloPodaStore.lotecultivadoid"
             placeholder="Lote"
             class="style-chooser"
-            label="lotenombre"
-            :reduce="(listaLote) => listaLote.loteid"
-            :options="listaLote"
+            label="lotnumero"
+            @input="obtenerTodosListaCultivo"
+            :reduce="(listaloteStore) => listaloteStore.lotecultivadoid"
+            :options="listaloteStore"
+            :rules="[reglas.campoVacio(modeloPodaStore.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
+              <em style="opacity: 0.5" v-else-if="!modeloPodaStore.fincaid"
+                >Escoja una finca</em
+              >
               <em style="opacity: 0.5" v-else>Empiece a escribir un lote</em>
             </template>
           </v-select>
@@ -43,12 +57,14 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="modeloPodaStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
-            label="cultivonombre"
-            :reduce="(listaCultivo) => listaCultivo.cultivoid"
-            :options="listaCultivo"
+            label="detalles"
+            :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
+            :options="listaCultivoStore"
+            :rules="[reglas.campoVacio(modeloPodaStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -59,6 +75,7 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendario"
@@ -69,18 +86,18 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
+              :disabled="editarPoda"
                 label="Fecha de poda"
                 v-model="modeloPodaStore.podfecha"
-                :rules="[reglas.campoVacio(modeloPodaStore.podfecha)]"
+                :rules="[reglas.campoVacio(fecha)]"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="modeloPodaStore.podfecha"
+              v-model="fecha"
               @input="menuMostrarCalendario = false"
-              :show-current="fechaActual"
               locale="es-419"
             ></v-date-picker>
           </v-menu>
@@ -90,27 +107,34 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+          :disabled="editarPoda"
             v-model="modeloPodaStore.podtipo"
             placeholder="Tipo de poda"
             class="style-chooser"
             label="podatipo"
-            :reduce="(listaTipo) => listaTipo.tipoid"
-            :options="listaTipo"
+            :reduce="(listaTipoStore) => listaTipoStore.podatipo"
+            :options="listaTipoStore"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un tipo de poda</em>
+              <em style="opacity: 0.5" v-else
+                >Empiece a escribir un tipo de poda</em
+              >
             </template>
           </v-select>
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+          :disabled="editarPoda"
             placeholder="Hectáreas"
             v-model="modeloPodaStore.podhectareas"
-            :rules="[reglas.campoVacio(modeloPodaStore.podhectareas)]"
+            :rules="[
+              reglas.campoVacio(modeloPodaStore.podhectareas),
+              reglas.soloNumerosPositivos(modeloPodaStore.podhectareas),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -118,13 +142,18 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
+          :disabled="editarPoda"
             placeholder="Cantidad de plantas"
             v-model="modeloPodaStore.podcantidadplantas"
-            :rules="[reglas.campoVacio(modeloPodaStore.podcantidadplantas)]"
+            :rules="[
+              reglas.campoVacio(modeloPodaStore.podcantidadplantas),
+              reglas.soloNumerosPositivos(modeloPodaStore.podcantidadplantas),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
+          :disabled="editarPoda"
             placeholder="Herramienta"
             v-model="modeloPodaStore.podherramienta"
             :rules="[reglas.campoVacio(modeloPodaStore.podherramienta)]"
@@ -141,6 +170,10 @@ import { mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
+import servicioLote from "../services/ServicioLote";
+import servicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
+
 export default {
   name: "FormPoda",
 
@@ -148,73 +181,49 @@ export default {
     vSelect,
   },
 
+  mounted() {
+    this.obtenerTodosFincas();
+    // this.obtenerTodosListaCultivo();
+    // this.obtenerTodosLoteCultivadoDeFinca();
+  },
+
   data() {
     return {
-      listaFinca: [
-        {
-          fincaid: 1,
-          fincanombre: "Finca 1",
-        },
-        {
-          fincaid: 2,
-          fincanombre: "Finca 2",
-        },
-        {
-          fincaid: 3,
-          fincanombre: "Finca 3",
-        },
-      ],
-      listaLote: [
-        {
-          loteid: 1,
-          lotenombre: "Lote 1",
-        },
-        {
-          loteid: 2,
-          lotenombre: "Lote 2",
-        },
-        {
-          loteid: 3,
-          lotenombre: "Lote 3",
-        },
-      ],
-      listaCultivo: [
-        {
-          cultivoid: 1,
-          cultivonombre: "Cultivo 1",
-        },
-        {
-          cultivoid: 2,
-          cultivonombre: "Cultivo 2",
-        },
-        {
-          cultivoid: 3,
-          cultivonombre: "Cultivo 3",
-        },
-      ],
-      listaTipo: [
-        {
-          tipoid: 1,
-          podatipo: "Tipo 1",
-        },
-        {
-          tipoid: 2,
-          podatipo: "Tipo 2",
-        },
-        {
-          tipoid: 3,
-          podatipo: "Tipo 3",
-        },
-      ],
+      listaLote: [],
+      listaFinca: [],
+      // listaTipo: [
+      //   {
+      //     tipoid: 1,
+      //     podatipo: "Poda Formación",
+      //   },
+      //   {
+      //     tipoid: 2,
+      //     podatipo: "Poda Mantenimiento",
+      //   },
+      //   {
+      //     tipoid: 3,
+      //     podatipo: "Poda Fitosanitaria",
+      //   },
+      //   {
+      //     tipoid: 4,
+      //     podatipo: "Poda de Descope",
+      //   },
+      // ],
+
+
+      tipoid: "",
+      listaCultivo: [],
+      fecha: null,
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
     };
   },
-
+  watch: {
+    fecha(val) {
+      this.modeloPodaStore.podfecha = this.formatDate(this.fecha);
+    },
+  },
   computed: {
-    // Obtiene el modelo poda
-    ...mapState("moduloPoda", ["modeloPodaStore"]),
-
     // Obtiene la variable que indica si el formulario es valido
     formPodaValido: {
       get() {
@@ -233,11 +242,90 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
-
-    // Obtiene las reglas de validacion
+    listaPodasStore: {
+      get() {
+        return this.$store.getters["moduloPoda/listaPodasStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
+        listaCultivoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloPoda/listaCultivoStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaCultivoStore", v);
+      },
+    },
+    listaloteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaloteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaloteStore",
+          v
+        );
+      },
+    },
+        listaTipoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaTipoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaTipoStore",
+          v
+        );
+      },
+    },
+    // //DC f
+    ...mapState("moduloFinca", ["listaFincaStore"]),
+    ...mapState("moduloPoda", ["editarPoda","modeloPodaStore"]),
     ...mapState("validacionForm", ["reglas"]),
   },
 
-  methods: {},
+  methods: {
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloPodaStore.lotecultivadoid);
+      // this.listaCultivo = resultado.data;
+      this.listaCultivoStore=resultado.data;
+    },
+    async obtenerTodosFincas() {
+      let resultado = await servicioFinca.obtenerTodosFincas();
+      this.listaFinca = resultado.data;
+    },
+
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloPodaStore.fincaid
+      );
+      // this.listaLote = resultado.data;
+      this.listaloteStore = resultado.data; 
+    },
+    // limpiarIds() {
+    //   this.fincaid = "";
+    //   this.loteid = "";
+    //   this.tipoid = "";
+    // },
+
+    formatDate(fecha) {
+      if (!fecha) return null;
+
+      const [year, month, day] = fecha.split("-");
+      return `${day}/${month}/${year}`;
+    },
+  },
 };
 </script>
