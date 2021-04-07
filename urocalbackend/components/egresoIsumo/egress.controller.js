@@ -63,15 +63,15 @@ module.exports = {
     // Actualiza un egresso
     async updateegress(req, res) {
         const { id } = req.params;
-        const { egresoinsumosid, egrinsfechaegreso, egrinsparacontrolar, egrinsdosis,egrinscantidadentregada,egrencargado,ingresoinsumosid } = req.body;
+        const { egresoinsumosid, egrinsfechaegreso, egrinsparacontrolar, egrinsdosis,egrinscantidadentregada,egrencargado,ingresoinsumosid, fincaid } = req.body;
 
         if (validation.emptyField(egresoinsumosid) || validation.emptyField(egrinsfechaegreso) || validation.emptyField(egrinsparacontrolar)
         || validation.emptyField(egrinsdosis) || validation.emptyField(egrinscantidadentregada) || validation.emptyField(egrencargado) 
-        || validation.emptyField(ingresoinsumosid) ) {
+        || validation.emptyField(ingresoinsumosid) || validation.emptyField(fincaid)) {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         } else {
             try {
-                const rowCount = await egressModel.updateegress(id, { egresoinsumosid, egrinsfechaegreso, egrinsparacontrolar, egrinsdosis,egrinscantidadentregada,egrencargado,ingresoinsumosid })
+                const rowCount = await egressModel.updateegress(id, { egresoinsumosid, egrinsfechaegreso, egrinsparacontrolar, egrinsdosis,egrinscantidadentregada,egrencargado,ingresoinsumosid, fincaid })
 
                 return rowCount == 1 ? res.status(200).send({ message: "egresso actualizado" }) : res.status(400).send({ message: "egresso no registrado" });
             } catch (error) {

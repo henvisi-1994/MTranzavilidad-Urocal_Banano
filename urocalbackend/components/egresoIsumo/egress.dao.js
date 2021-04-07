@@ -38,7 +38,7 @@ module.exports = {
         let query = `UPDATE egresoinsumo SET 
         egresoinsumosid = '${egress.egresoinsumosid}', egrinsfechaegreso = '${egress.egrinsfechaegreso}', egrinsparacontrolar = '${egress.egrinsparacontrolar}',
         egrinsdosis = '${egress.egrinsdosis}', egrinscantidadentregada = '${egress.egrinscantidadentregada}', egrencargado = '${egress.egrencargado}',
-        ingresoinsumosid = '${egress.ingresoinsumosid}'
+        ingresoinsumosid = '${egress.ingresoinsumosid}', fincaid = ${egress.fincaid}
         WHERE egresoinsumosid = '${id}'`;
         console.log("Este id viene por parametro", id)
         console.log("Esto tiene query ...", query)
