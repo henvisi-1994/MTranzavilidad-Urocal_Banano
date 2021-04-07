@@ -265,15 +265,21 @@ export default {
     // INSERT: Agrega un usuario
     async guardarEgresoInsumo() {
       console.log("dataper:", this.modeloEgresoInsumoStore);
-      let respuesta = await ServicioEgresoInsumo.agregarEgresoInsumo(
+      try {
+        let respuesta = await ServicioEgresoInsumo.agregarEgresoInsumo(
         this.modeloEgresoInsumoStore
-      );
-      if (respuesta.status == 201) {        
-        this.cerrarDialogo();
-        this.$toast.success(respuesta.data.message);
-        this.cargarListaEgresoInsumo();
-        this.vaciarModeloEgresoInsumo();
+      );        
+        if (respuesta.status == 201) {        
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaEgresoInsumo();
+          this.vaciarModeloEgresoInsumo();
+        }             
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
+      
     },
 
     // SELECT: Carga todos los usuarios registrados

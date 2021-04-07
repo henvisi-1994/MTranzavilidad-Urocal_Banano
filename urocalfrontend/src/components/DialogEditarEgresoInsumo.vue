@@ -34,7 +34,7 @@
             v-model="modeloEgresoInsumoStore.ingresoinsumosid"
             placeholder="Insumo"
             class="style-chooser"
-            label="ingresoinsumosid"
+            label="inginsproducto"
             :reduce="(listaInsumoStore) => listaInsumoStore.ingresoinsumosid"
             :options="listaInsumoStore"
           >
@@ -100,7 +100,7 @@
             :disabled="noeditar"
             v-model="modeloEgresoInsumoStore.egrinsparacontrolar"
             label="Control de egreso"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsparacontrolar)]"
+            :rules="[reglas.soloLetras(modeloEgresoInsumoStore.egrinsparacontrolar), reglas.campoVacio(modeloEgresoInsumoStore.egrinsparacontrolar),]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -297,6 +297,7 @@ export default {
       if (respuesta.status == 200) {
         this.preeditar=null        
         this.cerrarDialogo();
+        this.$toast.success(respuesta.data.message);
         this.cargarListaEgresoInsumo();
         this.vaciarModeloEgresoInsumo();
       }
@@ -310,6 +311,7 @@ export default {
       );
       if (respuesta.status == 200) {
         this.cerrarDialogo();
+        this.$toast.warning(respuesta.data.message);
         this.cargarListaEgresoInsumo();
       }
     },
@@ -357,7 +359,7 @@ export default {
       return `${day}/${month}/${year}`;
     },
 
-    //...mapMutations("moduloEgresoInsumo", ["vaciarModeloEgresoInsumo"]),  // Vacia el modelo modeloEgresoInsumoStore
+    ...mapMutations("moduloEgresoInsumo", ["vaciarModeloEgresoInsumo"]),  // Vacia el modelo modeloEgresoInsumoStore
   },
 };
 </script>

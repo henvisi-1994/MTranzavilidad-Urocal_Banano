@@ -99,13 +99,13 @@ export default {
         },
         {
           text: "Insumo",
-          value: "ingresoinsumosid",
+          value: "inginsproducto",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Finca",
-          value: "fincaid",
+          value: "finnombrefinca",
           align: "center",
           class: "grey lighten-3",
         },
@@ -284,6 +284,7 @@ export default {
       this.vaciarModeloEgresoInsumo();
       const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
       this.modeloEgresoInsumoStore = item;
+      this.cargarListaInsumo();
     },
 
     // ###################
