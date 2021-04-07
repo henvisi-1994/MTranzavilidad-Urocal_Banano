@@ -268,8 +268,9 @@ export default {
       let respuesta = await ServicioEgresoInsumo.agregarEgresoInsumo(
         this.modeloEgresoInsumoStore
       );
-      if (respuesta.status == 201) {
+      if (respuesta.status == 201) {        
         this.cerrarDialogo();
+        this.$toast.success(respuesta.data.message);
         this.cargarListaEgresoInsumo();
         this.vaciarModeloEgresoInsumo();
       }
