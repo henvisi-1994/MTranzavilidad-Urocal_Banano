@@ -47,7 +47,7 @@ export default {
                     { texto: 'Riego', ruta: '/cacao/riego' },
                     { texto: 'Cosecha', ruta: '/cacao/cosecha' },
                     { texto: 'Guía de remisión', ruta: '/cacao/guiaremision' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                 ]
             },
             {
@@ -166,7 +166,7 @@ export default {
                     { texto: 'Cosecha', ruta: '/cacao/cosecha' },
                     { texto: 'Guía de remisión', ruta: '/cacao/remision' },
                     { texto: 'Comprobante de compra', ruta: '/centroacopio/compra' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                     { texto: 'Almacenamiento', ruta: '/centroacopio/almacenamiento' },
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
                     //{ texto: 'Kardex', ruta: '#' },
@@ -254,7 +254,7 @@ export default {
                     { texto: 'Cosecha', ruta: '/cacao/cosecha' },
                     { texto: 'Guía de remisión', ruta: '/cacao/guiaremision' },
                     { texto: 'Comprobante de compra', ruta: '/centroacopio/compra' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                     { texto: 'Almacenamiento', ruta: '/centroacopio/almacenamiento' },
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
                     //{ texto: 'Kardex', ruta: '#' },

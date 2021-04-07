@@ -16,12 +16,11 @@ module.exports = {
     async createFitosanitario(req, res) {
 
         // Añadir capa de validación
-        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid } = req.body;
+        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid } = req.body;
 
         try {
-            console.log("entro")
             await fitosanitariosModel.createFitosanitario({
-            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid
+            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid
             });
         } catch (error) {
             console.log(error);
@@ -33,10 +32,10 @@ module.exports = {
 
     async updateFitosanitario(req, res) {
         const { id } = req.params;
-        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid } = req.body;
+        const { fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid } = req.body;
 
         const rowCount = await fitosanitariosModel.updateFitosanitario(id, {
-        fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid, condicionclimaticaid
+            fitciclo, fitfecha, fitnombrecomercial, fitingredienteactivo, fitautorizaciontecnica, fitnombrecomun, fitdosis, fitcantidadtotal, fitareaaplicada, fitequipoaplicacion, fitmetodo, fitplazoseguridad, fitoperario, cultivoid
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });

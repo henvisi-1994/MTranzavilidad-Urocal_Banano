@@ -22,7 +22,8 @@ export default class Finca {
         },
         this.fincapropietario = {
             propietarioid: fincapropietario.propietarioid,
-            propietario: fincapropietario.propietario
+            propietario: fincapropietario.propietario,
+            
         },
         this.sitiofinca = {
             sitioid: sitiofinca.sitioid,

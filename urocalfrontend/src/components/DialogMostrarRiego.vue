@@ -16,7 +16,8 @@
           <v-icon class="white--text" @click="editarRiego = !editarRiego">mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
+          <v-icon class="white--text" @click="eliminarRegistro()"
+          >mdi-trash-can</v-icon>
         </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="cerrarDialogMostrarRiego()"
@@ -58,8 +59,15 @@ export default {
     FormRiego,
   },
 
+  data() {
+    return {};
+  },
+  mounted(){
+
+  },
+
   computed: {
-    ...mapState("moduloRiego", [, "modeloRiegoStore", "editarRiego"]),
+    ...mapState("moduloRiego", [, "modeloRiegoStore"]),
     
     dialogMostrarRiego: {
       get() {
@@ -80,6 +88,15 @@ export default {
       },
     },
 
+    listaRiegoStore: {
+      get() {
+        return this.$store.getters["moduloRiego/listaRiegoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRiego/establecerListaRiegoStore", v);
+      },
+    },
+
     editarRiego: {
       get() {
         return this.$store.getters["moduloRiego/editarRiego"];
@@ -88,16 +105,38 @@ export default {
         return this.$store.commit("moduloRiego/establecerEditarRiego", v);
       },
     },
+
+    listaTipoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloRiego/listaTipoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRiego/establecerlistaTipoStore",
+          v
+        );
+      },
+    },
+
   },
 
   methods: {
     async actualizarRegistro () {
-      const respuesta = await SerivicioRiegos.actualizarRiego(this.modeloRiegoStore.riegoid, this.modeloRiegoStore);
-      if (respuesta.status == 200) {
-        this.cerrarDialogMostrarRiego();
+      try{
+      const respuesta = await SerivicioRiegos.actualizarRiego(
+            this.modeloRiegoStore.riegoid,
+             this.modeloRiegoStore);
+        this.$toast.success(respuesta.data.message);
         this.cargarListaRiego();
-        this.vaciarModeloRiegoStore();
+        this.cerrarDialogMostrarRiego();
+      }catch(error){
+        this.$toast.error(error.response.data.message);
       }
+        
     },
 
     async cargarListaRiego () {
@@ -111,17 +150,25 @@ export default {
     },
 
     async eliminarRegistro() {
-      const respuesta = await SerivicioRiegos.eliminarRiego(this.modeloRiegoStore.riegoid);
-      if (respuesta.status == 200) {
-        this.cerrarDialogMostrarRiego();
+      try{
+      const respuesta = await SerivicioRiegos.eliminarRiego(
+          this.modeloRiegoStore.riegoid);
+      
         this.cargarListaRiego();
+        this.cerrarDialogMostrarRiego();
+      }catch(error){
+        this.$toast.error(error.response.data.message);
       } 
     },
     // Cierra el dialogo
     cerrarDialogMostrarRiego() {
       this.dialogMostrarRiego = !this.dialogMostrarRiego;
-      this.$refs.componentFormRiego.limpiarIds();
       this.vaciarModeloRiegoStore();
+      this.cargarListaRiego();
+    },
+
+    cambiarEstadoEditar() {
+      this.$store.commit("moduloRiego/establecerEditarRiego", false);
     },
     
     ...mapMutations("moduloRiego", ["vaciarModeloRiegoStore"]),

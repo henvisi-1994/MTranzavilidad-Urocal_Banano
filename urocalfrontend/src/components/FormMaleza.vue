@@ -10,14 +10,14 @@
 
         <v-col cols="12" md="5">
           <v-select
-                      
-            v-model="fincaid"
+            :disabled="bloquearCamposFormMalezaControl"          
+            v-model="maleza.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
             @input="obtenerTodosLoteCultivadoDeFinca" 
             :reduce="(listaFinca) => listaFinca.fincaid"
-            :options="listaFincaStore"
+            :options="listaFinca"
             :rules="[reglas.campoVacio(fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -31,14 +31,15 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-select
-            v-model="loteid"
+          :disabled="bloquearCamposFormMalezaControl"  
+            v-model="maleza.lotecultivadoid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
             @input="obtenerTodosListaCultivo" 
             :reduce="(listaLote) => listaLote.lotecultivadoid"
             :options="listaLote"
-            :rules="[reglas.campoVacio(loteid)]"
+            :rules="[reglas.campoVacio(maleza.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -54,6 +55,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+           :disabled="bloquearCamposFormMalezaControl"  
             v-model="maleza.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
@@ -176,6 +178,8 @@ export default {
   },
   mounted() {
       this.obtenerTodosFincas();
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
     },
   data() {
     return {
@@ -191,7 +195,7 @@ export default {
 
   computed: {
 
- ...mapState("moduloFinca", ["listaFincaStore"]),
+  
     // Obtiene el modelo Control Maleza
     maleza: {
       get() {
@@ -233,9 +237,8 @@ export default {
   methods: {
 
 
-     async obtenerTodosListaCultivo() {
-      console.log(this.loteid);
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
+     async obtenerTodosListaCultivo() {      
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.maleza.lotecultivadoid);
       this.listaCultivo = resultado.data; 
 
     },
@@ -245,7 +248,7 @@ export default {
        
     },
       async obtenerTodosLoteCultivadoDeFinca() {
-      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.fincaid);
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.maleza.fincaid);
       this.listaLote = resultado.data; 
       
     },
@@ -255,10 +258,10 @@ export default {
 
     
 
-     limpiarIds(){
+   /*  limpiarIds(){
       this.fincaid = '';
       this.loteid = '';
-    }
+    }*/
   },
 
 };
