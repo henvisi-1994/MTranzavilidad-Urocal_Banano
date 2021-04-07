@@ -116,7 +116,7 @@ export default {
         },
         {
           text: "Cultivo",
-          value: "pronombre",
+          value: "cultivo",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -216,6 +216,7 @@ export default {
         let maleza = await servicioMalezaControl.obtenerMalezaControl(controlmalezaid);
         // Se asignan los datos a los modelos
         this.maleza = maleza.data;
+        //console.log(this.maleza);
       } catch (error) {
         this.$store.error(error.response.data.message);
       }

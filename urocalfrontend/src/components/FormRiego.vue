@@ -82,7 +82,7 @@
             placeholder="Superficie"
             v-model="modeloRiegoStore.riesuperficie"
             :rules="[reglas.campoVacio(modeloRiegoStore.riesuperficie),
-            reglas.soloNumeros(modeloRiegoStore.riesuperficie)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.riesuperficie)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -94,7 +94,8 @@
             placeholder="Módulos"
             v-model="modeloRiegoStore.riemodulos"
             :rules="[reglas.campoVacio(modeloRiegoStore.riemodulos),
-            reglas.soloNumeros(modeloRiegoStore.riemodulos)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.riemodulos),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -103,7 +104,8 @@
             placeholder="Semana"
             v-model="modeloRiegoStore.riesemana"
             :rules="[reglas.campoVacio(modeloRiegoStore.riesemana),
-            reglas.soloNumeros(modeloRiegoStore.riesemana)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.riesemana),
+            ]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -115,7 +117,8 @@
             placeholder="Año"
             v-model="modeloRiegoStore.rieanio"
             :rules="[reglas.campoVacio(modeloRiegoStore.rieanio),
-            reglas.soloNumeros(modeloRiegoStore.rieanio)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.rieanio),
+            ]"
           ></v-text-field>
         </v-col>
 
@@ -163,7 +166,8 @@
             placeholder="Porcentaje de eficiencia"
             v-model="modeloRiegoStore.rieporcentajeeficiencia"
             :rules="[reglas.campoVacio(modeloRiegoStore.rieporcentajeeficiencia),
-            reglas.soloNumeros(modeloRiegoStore.rieporcentajeeficiencia)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.rieporcentajeeficiencia),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -172,7 +176,8 @@
             placeholder="Volumen de agua utilizado"
             v-model="modeloRiegoStore.rievolumenutilizado"
             :rules="[reglas.campoVacio(modeloRiegoStore.rievolumenutilizado),
-            reglas.soloNumeros(modeloRiegoStore.rievolumenutilizado)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.rievolumenutilizado),
+            ]"
           ></v-text-field
         ></v-col>
       </v-row>

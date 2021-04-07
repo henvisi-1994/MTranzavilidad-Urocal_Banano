@@ -19,10 +19,12 @@ module.exports = {
 
     // SELECT: Devuelve todos los registros
     async getMaleza() {
-        let query = `Select cm.controlmalezaid, TO_CHAR(cm.confecha, 'YYYY-MM-DD') as confecha, cm.conhectareas, cm.conmetodo, 
-                        cm.conoperario, cu.cultivoid, pr.pronombre, lc.lotnumero, fi.finnombrefinca 
-                    FROM controlmaleza cm, cultivo cu, producto pr, lotecultivado lc, finca fi
-                    WHERE cm.cultivoid = cu.cultivoid AND cu.productoid = pr.productoid AND cu.lotecultivadoid = lc.lotecultivadoid AND lc.fincaid = fi.fincaid;`;
+        let query = `Select cm.controlmalezaid, TO_CHAR(cm.confecha, 'YYYY-MM-DD') 
+        as confecha, cm.conhectareas, cm.conmetodo, 
+        cm.conoperario, cu.cultivoid,concat(pr.pronombre,' ',pr.provariedad) as cultivo,lc.lotecultivadoid, lc.lotnumero, fi.fincaid, fi.finnombrefinca 
+        FROM controlmaleza cm, cultivo cu, producto pr, lotecultivado lc, finca fi
+        WHERE cm.cultivoid = cu.cultivoid AND cu.productoid = pr.productoid 
+        AND cu.lotecultivadoid = lc.lotecultivadoid AND lc.fincaid = fi.fincaid;`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene todos los controles de maleza realizados
     },
@@ -30,8 +32,12 @@ module.exports = {
 
     async getIdMaleza(id) {
         //let query = `SELECT * FROM controlmaleza WHERE controlmalezaid = ${id}`;
-        let query = `Select controlmalezaid, TO_CHAR(confecha, 'YYYY-MM-DD') as confecha, conhectareas, conmetodo, conoperario, cultivoid
-                    FROM controlmaleza WHERE controlmalezaid = ${id}`;
+        let query = `Select cm.controlmalezaid, TO_CHAR(cm.confecha, 'YYYY-MM-DD') 
+        as confecha, cm.conhectareas, cm.conmetodo, 
+        cm.conoperario, cu.cultivoid,concat(pr.pronombre,' ',pr.provariedad) as cultivo,lc.lotecultivadoid, lc.lotnumero, fi.fincaid, fi.finnombrefinca 
+        FROM controlmaleza cm, cultivo cu, producto pr, lotecultivado lc, finca fi
+        WHERE cm.cultivoid = cu.cultivoid AND cu.productoid = pr.productoid 
+        AND cu.lotecultivadoid = lc.lotecultivadoid AND lc.fincaid = fi.fincaid and cm.controlmalezaid = ${id}`;
         let result = await pool.query(query);
         return result.rows[0]; // Devuelve el json del control de maleza encontrado
     },

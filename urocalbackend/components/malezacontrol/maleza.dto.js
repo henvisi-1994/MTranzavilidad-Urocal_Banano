@@ -7,8 +7,14 @@ const unicoMalezaControl = (recurso) => ({
     conhectareas : recurso.conhectareas, 
     conmetodo : recurso.conmetodo, 
     conoperario : recurso.conoperario, 
-    limcenmotivo : recurso.limcenmotivo,
-    cultivoid: recurso.cultivoid,
+    cultivoid : recurso.cultivoid,
+    cultivo : recurso.cultivo,
+    lotecultivadoid: recurso.lotecultivadoid,
+    lotnumero : recurso.lotnumero,
+    fincaid : recurso.fincaid,
+    nombrefinca: recurso.finnombrefinca
+    //limcenmotivo : recurso.limcenmotivo
+    
 });
 
 const multipleMalezaControl = (recurso) => recurso.map((recurso) => unicoMalezaControl(recurso));
