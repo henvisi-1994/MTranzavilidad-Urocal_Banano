@@ -25,55 +25,33 @@ module.exports = {
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },
     async deleteCompra(id) {
-        //Borrar mix 
+        //Borrar
         query = `DELETE FROM mix WHERE cosechaid = ${id}`;
         result = await pool.query(query);
-        //console.log(result);
-        //Borrar detalle de compra 
         query = `DELETE FROM detallecompra where compraid =  ${id}`;
         result = await pool.query(query);
-        //console.log(result);
-        //Borrar compra
         query = `DELETE FROM compra where compraid = '${id}'`;
         result = await pool.query(query);
-        //console.log(result);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
 
     },
     async createCompra(compra) {
-        //buscando la id de la guia remision
-        /*let query = `SELECT guiaremisionid FROM public.guiaremision WHERE guiserie = '${compra.guiaremisionid}'`;
-        let result = await pool.query(query);
-        var guia = result.rows[0].guiaremisionid
-        console.log(guia)
-        compra.comtotal = (parseInt(compra.comsubtotal) - parseInt(compra.comdescuentos) + parseInt(compra.comotrosvalores));*/
         // Registro en tabla compra
-        query = `INSERT INTO public.compra (comnumero, comfechaemision, comsubtotal, 
-            comdescuentos, comotrosvalores, comtotal, comobservaciones, guiaremisionid, organizacion, cod, lugar) VALUES
+        query = `compra(comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores, comtotal, comobservaciones, guiaremisionid, asociacionid, comcod, comlugar, vehiculoid, productorid) VALUES
                     (${compra.comnumero},'${compra.comfechaemision}',${compra.comsubtotal},
                     ${compra.comdescuentos},${compra.comotrosvalores},${compra.comtotal},'${compra.comobservaciones}',
-                    ${compra.guiaremisionid}, ${compra.organizacion},${compra.cod},${compra.lugar}) RETURNING compraid;`;
+                    ${compra.guiaremisionid}, ${compra.asociacionid},${compra.comcod},${compra.comlugar},${compra.vehiculoid},${compra.productorid}) RETURNING compraid;`;
         let result = await pool.query(query);
-        //console.log(query)
-        //console.log(result)
         return result.rows[0];
     },
     async updateCompra(id, compra) {
-        //buscando la id de la guia remision
-        /*let query = `SELECT guiaremisionid FROM public.guiaremision WHERE guiserie = '${compra.guiaremisionid}'`;
-        let result = await pool.query(query);
-        var guia = result.rows[0].guiaremisionid
-        console.log(guia)
-        compra.comtotal = (parseInt(compra.comsubtotal) - parseInt(compra.comdescuentos) + parseInt(compra.comotrosvalores));*/
         //modificando compra
         query = `UPDATE public.compra SET comnumero = '${compra.comnumero}', comfechaemision = '${compra.comfechaemision}', 
         comsubtotal = ${compra.comsubtotal} , comdescuentos = ${compra.comdescuentos},
         comotrosvalores = ${compra.comotrosvalores},comtotal = ${compra.comtotal},
         comobservaciones = '${compra.comobservaciones}', guiaremisionid = ${compra.guiaremisionid} ,
-        organizacion='${compra.organizacion}', cod='${compra.cod}',lugar='${compra.lugar}'
+        asociacionid='${compra.asociacionid}', comcod='${compra.comcod}',comlugar='${compra.comlugar}',vehiculoid=${compra.vehiculoid},productorid=${compra.productorid}
         where compraid = ${id}`;
-        console.log(compra);
-        console.log(query);
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó la compra y 0 sino lo hizo.
     }
