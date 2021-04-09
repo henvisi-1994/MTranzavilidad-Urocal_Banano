@@ -76,12 +76,16 @@ export default {
     ...mapMutations("moduloGuiaRemision", ["vaciarGuiaRemision"]),
 
     async agregarGuiaRemision(){
-      let respuesta = await ServicioGuiaRemision.agregarGuiaRemision(this.modeloGuiaRemisionStore);
-      this.$toast.success('se ha registrado nueva guia remision');
-      if (respuesta.status == 201) {
-        this.cerrarDialogNuevoGuiaRemision();
-        this.cargarListaGuiaRemision();
-         this.vaciarGuiaRemision();
+      try{
+          let respuesta = await ServicioGuiaRemision.agregarGuiaRemision(this.modeloGuiaRemisionStore);
+          this.$toast.success('se ha registrado nueva guia remision');
+          if (respuesta.status == 201) {
+            this.cerrarDialogNuevoGuiaRemision();
+            this.cargarListaGuiaRemision();
+            this.vaciarGuiaRemision();
+          }
+      }catch(error){
+        this.$toast.error('No se han ingresado todos los datos');
       }
     },
 
