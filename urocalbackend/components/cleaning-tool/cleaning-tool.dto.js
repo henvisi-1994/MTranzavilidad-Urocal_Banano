@@ -19,6 +19,7 @@ const unicoLimHerr = (recurso) => ({
     limcajones: recurso.limcajones,
     limtendales: recurso.limtendales,
     limoperario: recurso.limoperario,
+    cultivoid: recurso.cultivoid,
     cultivoproducto: {
         cultivoid: recurso.cultivoid,
         productoid: recurso.productoid,

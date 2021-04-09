@@ -20,4 +20,7 @@ module.exports = {
     async deletePoda(id){
         return podaDao.deletePoda(id);
     },
+    async getTiposPodas(){
+        return podaDao.getTiposPodas();
+    },
 }

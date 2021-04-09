@@ -21,15 +21,15 @@ export default {
         dialogEditarProductorPersona: false,                // Indica si se abre o cierra el dialogEditarProductorPersona     
         // Maleza
         dialogoNuevaMaleza: false,                          // Indica si se abre o cierra el dialogoNuevaMaleza
-        
+
         dialogEditarUsuarioPersona: false,                  // Indica si se abre o cierra el dialogEditarUsuarioPersona
-        
+
         dialogNuevoConductorPersona: false,                 // Indica si se abre o cierra el dialogEditarUsuarioPersona
         dialogEditarConductorPersona: false,                // Indica si se abre o cierra el dialogEditarUsuarioPersona
         dialogEditarProductorPersona: false,                // Indica si se abre o cierra el dialogEditarProductorPersona     
         dialogEditarLimpiezaVehiculo: false,                // Indica si se abre o cierra el dialogEditarLimpiezaVehiculo
         dialogEditarVehiculo: false,                        // Indica si se abre o cierra el dialogEditarVehiculo
-        
+
         dialogoMostrarMalezaControl: false,                 // Indica si se abre o cierra el dialogoMostrarMalezaControl
         // Siembra
         dialogoNuevaSiembra: false,                         // Indica si se abre o cierra el dialogoNuevaSiembra
@@ -116,17 +116,23 @@ export default {
         dialogoNuevoDespacho: false,                        // Indica si se abre o cierra el dialogoNuevoDespacho
         dialogoMostrarDespacho: false,                      // Indica si se abre o cierra el dialogoNuevoDespacho
         // Inspector
-        dialogNuevoInspectorPersona: false,                 
+        dialogNuevoInspectorPersona: false,
         dialogEditarInspectorPersona: false,
-        dialogStepperCosechaNuevo: false,          
+        dialogStepperCosechaNuevo: false,
         dialogMostrarRegistroEnvio: false,                  // Indica si se abre o cierra el dialogMostrarRegistroEnvio
         dialogNuevoRegistroEnvio: false,                  // Indica si se abre o cierra el dialogNuevoRegistroEnvio
         // Exportador
-        dialogNuevoExportadorPersona: false,                   
+        dialogNuevoExportadorPersona: false,
         dialogEditarExportadorPersona: false,
         //Guia Remision
         dialogNuevoGuiaRemision: false,
-        dialogMostrarGuiaRemision: false
+        dialogMostrarGuiaRemision: false,
+        //Tratamiento
+        dialogNuevoTratamiento: false,
+        dialogMostrarTratamiento: false,
+        // factura de exportación
+        dialogoNuevoFactExport: false,
+        dialogMostrarFactExport: false,
     },
 
     mutations: {
@@ -406,7 +412,7 @@ export default {
         toggleDialogMostrarSitio(state, newState) {
             state.dialogMostrarSitio = newState;
         },
-        
+
         /* Almacenamiento */
         toggleDialogNuevoAlmacenamiento(state, newState) {
             state.dialogNuevoAlmacenamiento = newState;
@@ -443,7 +449,7 @@ export default {
         toggleDialogMostrarDetalleCompra(state, newState) {
             state.dialogMostrarDetalleCompra = newState;
         },
-        
+
         /* Limpieza Centro Acopio */
         toggleDialogoNuevaLimpiezaCentroAcopio(state, newState) {
             state.dialogoNuevaLimpiezaCentroAcopio = newState;
@@ -492,7 +498,21 @@ export default {
         },
         toggleDialogMostrarGuiaRemision(state, newState) {
             state.dialogMostrarGuiaRemision = newState;
-        }
+        },
+        // Tratamiento
+        toggleDialogoNuevoTratamiento(state, newState) {
+            state.dialogNuevoTratamiento = newState;
+        },
+        toggleDialogoMostrarTratamiento(state, newState) {
+            state.dialogMostrarTratamiento = newState;
+        },
+         // Factura de exportacion
+         toggleDialogoNuevoFactExport(state, newState) {
+            state.dialogoNuevoFactExport = newState;
+        },
+        toggleDialogoMostrarFactExport(state, newState) {
+            state.dialogMostrarFactExport = newState;
+        },
     },
 
     getters: {
@@ -549,7 +569,7 @@ export default {
         dialogNuevoRiego: (state) => state.dialogNuevoRiego,                                                    // Devuelve la variable dialogNuevoRiego
         dialogMostrarRiego: (state) => state.dialogMostrarRiego,                                                // Devuelve la variable dialogMostrarRiego
         // ResponsableCentroAcopio
-        dialogNuevoRespacopio: (state) => state.dialogNuevoRespacopio,  
+        dialogNuevoRespacopio: (state) => state.dialogNuevoRespacopio,
         dialogEditarRespacopio: (state) => state.dialogNuevoRespacopio,                                        // Devuelve la variable dialogNuevoRespacopio
         dialogMostrarRespacopio: (state) => state.dialogMostrarRespacopio,                                      // Devuelve la variable dialogMostrarRespacopio                                             // Devuelve la variable dialogMostrarRiego
         // EgresoInsumo
@@ -560,24 +580,24 @@ export default {
         dialogNuevoIngresoInsumo: (state) => state.dialogNuevoIngresoInsumo,                                    // Devuelve la variable dialogNuevoIngresoInsumo
         dialogoNuevaSiembra: (state) => state.dialogoNuevaSiembra,                                              // Devuelve la variable dialogoNuevaSiembra
         dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza,                                                // Devuelve la variable dialogoNuevaMaleza
-        
+
         dialogEditarUsuarioPersona: (state) => state.dialogEditarUsuarioPersona,                                // Devuelve la variable dialogEditarUsuarioPersona
         dialogNuevoConductorPersona: (state) => state.dialogNuevoConductorPersona,                              // Devuelve la variable dialogEditarUsuarioPersona
         dialogEditarConductorPersona: (state) => state.dialogEditarConductorPersona,                            // Devuelve la variable dialogEditarUsuarioPersona
         dialogEditarProductorPersona: (state) => state.dialogEditarProductorPersona,                            // Devuelve la variable dialogEditarProductorPersona
         dialogEditarLimpiezaVehiculo: (state) => state.dialogEditarLimpiezaVehiculo,                            // Devuelve la variable dialogEditarLimpiezaVehiculo
         dialogEditarVehiculo: (state) => state.dialogEditarVehiculo,                                            // Devuelve la variable dialogEditarVehiculo
-        
+
         dialogoMostrarMalezaControl: (state) => state.dialogoMostrarMalezaControl,                              // Devuelve la variable dialogoMostrarMalezaControl
         dialogoMostrarSiembra: (state) => state.dialogoMostrarSiembra,                                          // Devuelve la variable dialogoMostrarSiembra
         dialogMostrarLimpiezaHerramienta: (state) => state.dialogMostrarLimpiezaHerramienta,                    // Devuelve la variable dialogoMostrarLimpiezaHerramienta
         dialogMostrarMonitoreoRoedorCentroAcopio: (state) => state.dialogMostrarMonitoreoRoedorCentroAcopio,    // Devuelve la variable dialogMostrarMonitoreoRoedorCentroAcopio
         dialogMostrarMonitoreoRoedorFinca: (state) => state.dialogMostrarMonitoreoRoedorFinca,                  // Devuelve la variable dialogMostrarMonitoreoRoedorFinca
-        dialogMostrarPoda: (state) => state.dialogMostrarPoda,       
+        dialogMostrarPoda: (state) => state.dialogMostrarPoda,
         dialogMostrarCentroacopio: (state) => state.dialogMostrarCentroacopio,                                                  // Devuelve la variable dialogMostrarCentroacopio
         dialogMostrarFertilizante: (state) => state.dialogMostrarFertilizante,                                  // Devuelve la variable dialogMostrarFertilizante
         dialogMostrarFitosanitario: (state) => state.dialogMostrarFitosanitario,                                // Devuelve la variable dialogMostrarFitosanitario
-        dialogMostrarRiego: (state) => state.dialogMostrarRiego,   
+        dialogMostrarRiego: (state) => state.dialogMostrarRiego,
         dialogMostrarRespacopio: (state) => state.dialogMostrarRespacopio,                                                // Devuelve la variable dialogMostrarRespacopio                                             // Devuelve la variable dialogMostrarRiego
         dialogMostrarEgresoInsumo: (state) => state.dialogMostrarEgresoInsumo,                                  // Devuelve la variable dialogMostrarEgresoInsumo
         dialogMostrarIngresoInsumo: (state) => state.dialogMostrarIngresoInsumo,                                // Devuelve la variable dialogMostrarIngresoInsumo
@@ -624,14 +644,20 @@ export default {
         // Inspector
         dialogNuevoInspectorPersona: (state) => state.dialogNuevoInspectorPersona,                              // Devuelve la variable dialogEditarUsuarioPersona
         dialogEditarInspectorPersona: (state) => state.dialogEditarInspectorPersona,
-    
+
         dialogMostrarRegistroEnvio: (state) => state.dialogMostrarRegistroEnvio,                                  // Devuelve la variable dialogMostrarRegistroEnvio
         dialogNuevoRegistroEnvio: (state) => state.dialogNuevoRegistroEnvio,                                      // Devuelve la variable dialogNuevoRegistroEnvio
         // Exportador
-        dialogNuevoExportadorPersona: (state) => state.dialogNuevoExportadorPersona,                              
+        dialogNuevoExportadorPersona: (state) => state.dialogNuevoExportadorPersona,
         dialogEditarExportadorPersona: (state) => state.dialogEditarExportadorPersona,
         // Guia Remision
         dialogNuevoGuiaRemision: (state) => state.dialogNuevoGuiaRemision,
-        dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision
+        dialogMostrarGuiaRemision: (state) => state.dialogMostrarGuiaRemision,
+        // Tratamiento
+        dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
+        dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento,
+         //Factura de exportacion
+         dialogoNuevoFactExport: (state) => state.dialogoNuevoFactExport,
+         dialogoMostrarFactExport: (state) => state.dialogMostrarFactExport,
     },
 }

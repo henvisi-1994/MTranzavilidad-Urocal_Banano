@@ -15,7 +15,10 @@ class ServicioLimpiezaVehiculo {
 
     // SELECT: Devuelve todos los sitios
     obtenerTodosLimpiezaVehiculo() {
-        return axios.get(`${API_URL}/v1/limpiezaVehiculo/`);
+        return axios.get(`${API_URL}/v1/limpiezaVehiculo/todos`);
+    }
+    obtenerProductorLimpiezaVehiculo(id) {
+        return axios.get(`${API_URL}/v1/limpiezaVehiculo/todos/${id}`);
     }
 
     //obtenerTodosCultivos() {

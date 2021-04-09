@@ -13,7 +13,7 @@
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text" >mdi-pencil</v-icon>
+          <v-icon class="white--text" @click="desbloquear()" >mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
@@ -57,7 +57,7 @@ export default {
   components: {
     FormFertilizante,
   },
-
+      
   data() {
     return {};
   },
@@ -82,9 +82,18 @@ export default {
         return this.$store.commit("moduloFertilizante/establecerModeloFertilizanteStore", v);
       },
     },
-
+// Obtiene la variable bloquearCamposFormFertilizante
+    bloquearCamposFormFertilizante: {
+      get() {
+        return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", v);
+      },
+    },
     ...mapState("moduloFertilizante", ["formFertilizanteValido", "modeloFertilizanteStore"]),
   },
+  
 
   methods: {
     async actualizarRegistro () {
@@ -116,6 +125,12 @@ export default {
     cerrarDialogMostrarFertilizante() {
       this.dialogMostrarFertilizante = !this.dialogMostrarFertilizante;
     },
+    desbloquear() {
+      this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", false);
+    },
+
+
+
 
     ...mapMutations("moduloFertilizante", ["vaciarModeloFertilizanteStore"]),
   },

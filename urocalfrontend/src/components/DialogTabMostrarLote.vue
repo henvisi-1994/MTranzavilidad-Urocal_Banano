@@ -402,7 +402,7 @@ export default {
             let respuesta = await servicioLote.eliminarLote(this.lote.lotecultivadoid);
             this.$toast.success(respuesta.data.message);
           } catch (error) {
-            this.$toast.error(error.response.data.message);
+            this.$toast.error();
           }
           break;
         case "formCultivo":

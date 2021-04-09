@@ -13,7 +13,9 @@ module.exports = {
     async getTreatments(page, limit){
         return treatmentDao.getTreatments(page, limit);
     },
-
+    async getDetalleTreatment(id){
+        return treatmentDao.getDetalleTreatment(id);
+    },
     async getTreatment(id){
         return treatmentDao.getTreatment(id);
     },
@@ -23,7 +25,7 @@ module.exports = {
     },
 
     async updateTreatment(id, treatment){
-        return treatmentDao.updateTreatment(id, Treatment);
+        return treatmentDao.updateTreatment(id, treatment);
     },
 
     async deleteTreatment(id){

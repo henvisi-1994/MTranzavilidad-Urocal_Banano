@@ -27,6 +27,7 @@
             </template>
           </v-select>
         </v-col>
+
         <v-col cols="12" md="5">
           <v-select
             :disabled="editarRiego"
@@ -49,6 +50,8 @@
             </template>
           </v-select>
         </v-col>
+
+
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
@@ -72,13 +75,14 @@
             </template>
           </v-select>
         </v-col>
+        
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="editarRiego"
             placeholder="Superficie"
             v-model="modeloRiegoStore.riesuperficie"
             :rules="[reglas.campoVacio(modeloRiegoStore.riesuperficie),
-            reglas.soloNumeros(modeloRiegoStore.riesuperficie)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.riesuperficie)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -90,7 +94,8 @@
             placeholder="Módulos"
             v-model="modeloRiegoStore.riemodulos"
             :rules="[reglas.campoVacio(modeloRiegoStore.riemodulos),
-            reglas.soloNumeros(modeloRiegoStore.riemodulos)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.riemodulos),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -99,7 +104,8 @@
             placeholder="Semana"
             v-model="modeloRiegoStore.riesemana"
             :rules="[reglas.campoVacio(modeloRiegoStore.riesemana),
-            reglas.soloNumeros(modeloRiegoStore.riesemana)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.riesemana),
+            ]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -111,17 +117,46 @@
             placeholder="Año"
             v-model="modeloRiegoStore.rieanio"
             :rules="[reglas.campoVacio(modeloRiegoStore.rieanio),
-            reglas.soloNumeros(modeloRiegoStore.rieanio)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.rieanio),
+            ]"
           ></v-text-field>
         </v-col>
+
         <v-col cols="12" md="5">
-          <v-text-field
+          <v-menu
             :disabled="editarRiego"
-            placeholder="Horas regadas (HH:MM:SS)"
-            v-model="modeloRiegoStore.riehorasregadas"
-            :rules="[reglas.campoVacio(modeloRiegoStore.riehorasregadas)]"
-          ></v-text-field
+            ref="menuHoraRiego"
+            v-model="menuHoraRiego"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+            :close-on-content-click="false"
+            
+          >  
+             <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                :disabled="editarRiego"
+                class="custom px-2"
+                v-model="modeloRiegoStore.riehorasregadas"
+                label="Horas regadas (HH:MM:SS)"
+                readonly
+                dense filled
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+              </template>
+            <v-time-picker
+              v-if="menuHoraRiego"
+              v-model="modeloRiegoStore.riehorasregadas"
+              full-width
+              @click:minute="$refs.menuHoraRiego.save(modeloRiegoStore.riehorasregadas)"
+            ></v-time-picker>
+       
+          </v-menu
+
         ></v-col>
+
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
@@ -131,7 +166,8 @@
             placeholder="Porcentaje de eficiencia"
             v-model="modeloRiegoStore.rieporcentajeeficiencia"
             :rules="[reglas.campoVacio(modeloRiegoStore.rieporcentajeeficiencia),
-            reglas.soloNumeros(modeloRiegoStore.rieporcentajeeficiencia)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.rieporcentajeeficiencia),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -140,7 +176,8 @@
             placeholder="Volumen de agua utilizado"
             v-model="modeloRiegoStore.rievolumenutilizado"
             :rules="[reglas.campoVacio(modeloRiegoStore.rievolumenutilizado),
-            reglas.soloNumeros(modeloRiegoStore.rievolumenutilizado)]"
+            reglas.soloNumerosPositivos(modeloRiegoStore.rievolumenutilizado),
+            ]"
           ></v-text-field
         ></v-col>
       </v-row>
@@ -195,6 +232,7 @@ export default {
       fincaid: '',
       loteid: '',
       listaCultivo: [],
+      menuHoraRiego: false,
     }
   },
 
@@ -251,10 +289,6 @@ export default {
       this.listaLote = resultado.data; 
       
     },
-    
-
-    
-
     limpiarIds(){
       this.fincaid = '';
       this.loteid = '';

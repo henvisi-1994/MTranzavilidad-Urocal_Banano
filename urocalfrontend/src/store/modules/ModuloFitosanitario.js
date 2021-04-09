@@ -5,7 +5,9 @@ export default {
 
     state: {
         listaFitosanitariosStore: [],
-        modeloFitosanitarioStore: new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fitosanitario
+        listaLoteStore:[],
+        ListaCultivoStore:[],
+        modeloFitosanitarioStore: new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fitosanitario
         formFitosanitarioValido: false, // Indica si el formulario de Fitosanitario es valido
     },
 
@@ -21,10 +23,15 @@ export default {
         updateListaFitosanitariosStore(state, newState) {
             state.listaFitosanitariosStore.push(newState)
         },
-
+        establecerListaLoteStore(state, newState) {
+            state.listaLoteStore = newState;
+        },
+        establecerListaCultivoStore(state, newState) {
+            state.ListaCultivoStore = newState;
+        },
         // Vacia el modelo Fitosanitario
         vaciarModeloFitosanitarioStore(state) {
-            state.modeloFitosanitarioStore = new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
+            state.modeloFitosanitarioStore = new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
         },
         vaciarLista(state, newState) {
             state.listaFitosanitariosStore.length = 0;
@@ -39,6 +46,8 @@ export default {
     getters: {
         formFitosanitarioValido: (state) => state.formFitosanitarioValido, // Devuelve la variable formFitosanitarioValido
         listaFitosanitariosStore: (state) => state.listaFitosanitariosStore,
+        listaLoteStore: (state) => state.listaLoteStore,
+        listaCultivoStore: (state) => state.ListaCultivoStore,
         modeloFitosanitarioStore: (state) => state.modeloFitosanitarioStore,
     },
 }

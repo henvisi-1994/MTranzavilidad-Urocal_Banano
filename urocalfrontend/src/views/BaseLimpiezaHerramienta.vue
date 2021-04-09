@@ -48,7 +48,10 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarLimpiezaHerramienta(item)">
+            <v-icon
+              color="primary"
+              @click="abrirMostrarLimpiezaHerramienta(item)"
+            >
               mdi-eye
             </v-icon>
           </template>
@@ -60,7 +63,8 @@
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
           width="300px"
-          large elevation="0"
+          large
+          elevation="0"
           color="primary"
           @click="cargarDialogNuevoLimpiezaHerramienta()"
           >Nuevo</v-btn
@@ -72,10 +76,14 @@
 <script>
 import { mapMutations } from "vuex";
 
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 import DialogNuevoLimpiezaHerramienta from "../components/DialogNuevoLimpiezaHerramienta";
 import DialogMostrarLimpiezaHerramienta from "../components/DialogMostrarLimpiezaHerramienta";
 import ServicioLimpiezaHerramienta from "../services/ServicioLimpiezaHerramienta";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+
+import ServicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioLote from "../services/ServicioLote";
 
 export default {
   name: "BaseLimpiezaHerramienta",
@@ -87,7 +95,7 @@ export default {
 
   mounted() {
     this.cargarListaLimpiezaHerramienta();
-    this.cargarListaCultivos();
+    // this.cargarListaCultivos();
   },
 
   data() {
@@ -98,7 +106,7 @@ export default {
         // Detalla las cabeceras de la tabla
         {
           text: "Cultivo",
-          value: "cultivoproducto.pronombre",
+          value: "cultivo",
           align: "center",
           class: "grey lighten-3",
         },
@@ -169,10 +177,26 @@ export default {
   },
 
   computed: {
+    editarLimpiezaHerramienta: {
+      get() {
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/editarLimpiezaHerramienta"
+        ];
+      },
+      set(v) {
+        //establecerEditarimpiezaHerramienta en vez de editar en caso de dar error
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
+          v
+        );
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogNuevoLimpiezaHerramienta
     dialogNuevoLimpiezaHerramienta: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogNuevoLimpiezaHerramienta"];
+        return this.$store.getters[
+          "gestionDialogos/dialogNuevoLimpiezaHerramienta"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -185,7 +209,9 @@ export default {
     // Obtiene y modifica el estado de la variable dialogMostrarLimpiezaHerramienta
     dialogMostrarLimpiezaHerramienta: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarLimpiezaHerramienta"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarLimpiezaHerramienta"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -199,7 +225,9 @@ export default {
       get() {
         return JSON.parse(
           JSON.stringify(
-            this.$store.getters["moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"]
+            this.$store.getters[
+              "moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"
+            ]
           )
         );
       },
@@ -210,10 +238,22 @@ export default {
         );
       },
     },
+    listaFincaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
 
     listaCultivoStore: {
       get() {
-        return this.$store.getters["moduloLimpiezaHerramienta/listaCultivoStore"];
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/listaCultivoStore"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -222,10 +262,27 @@ export default {
         );
       },
     },
+    listaloteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloLimpiezaHerramienta/listaloteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerlistaloteStore",
+          v
+        );
+      },
+    },
 
     modeloLimpiezaHerramientaStore: {
       get() {
-        return this.$store.getters["moduloLimpiezaHerramienta/limpiezaHerramienta"];
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/limpiezaHerramienta"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -248,40 +305,75 @@ export default {
       });
       this.listaLimpiezaHerramientaStore = listaLimpiezaHerramienta;
     },
-
-    async cargarListaCultivos() {
-      let listaCultivo = []; // Limpiar la 'lista de ciudades'
-      let respuesta = await ServicioLimpiezaHerramienta.obtenerTodosCultivos(); // Obtener respuesta de backend
-      let datosCultivo = await respuesta.data; // Rescatar datos de la respuesta
-      datosCultivo.forEach((Cultivo) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaCultivo.push(Cultivo);
+    async cargarListaFinca() {
+      let listaFinca = [];
+      let respuesta = await ServicioFinca.obtenerTodosFincas();
+      let datosFinca = await respuesta.data;
+      datosFinca.forEach((finca) => {
+        listaFinca.push(finca);
       });
-      this.listaCultivoStore = listaCultivo;
+      this.listaFincaStore = listaFinca;
     },
 
-    ...mapMutations("moduloLimpiezaHerramienta", ["establecerListaCultivoStore"]),
+    // async cargarListaCultivos() {
+    //   let listaCultivo = []; // Limpiar la 'lista de ciudades'
+    //   let respuesta = await ServicioLimpiezaHerramienta.obtenerTodosCultivos(); // Obtener respuesta de backend
+    //   let datosCultivo = await respuesta.data; // Rescatar datos de la respuesta
+    //   datosCultivo.forEach((Cultivo) => {
+    //     listaCultivo.push(Cultivo);
+    //   });
+    //   this.listaCultivoStore = listaCultivo;
+    // },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.modeloLimpiezaHerramientaStore.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloLimpiezaHerramientaStore.fincaid
+      );
+      this.listaloteStore = resultado.data;
+    },
+
+    ...mapMutations("moduloLimpiezaHerramienta", [
+      "establecerListaCultivoStore",
+    ]),
     // Vacia el modelo LimpiezaHerramienta
     ...mapMutations("moduloLimpiezaHerramienta", ["vaciarLimpiezaHerramienta"]),
 
     // Carga el DialogNuevoLimpiezaHerramienta
     cargarDialogNuevoLimpiezaHerramienta() {
-      this.dialogNuevoLimpiezaHerramienta = !this.dialogNuevoLimpiezaHerramienta; // Abre el DialogNuevoLimpiezaHerramienta
+      this.dialogNuevoLimpiezaHerramienta = !this
+        .dialogNuevoLimpiezaHerramienta; // Abre el DialogNuevoLimpiezaHerramienta
       this.$refs.DialogNuevoLimpiezaHerramienta.$refs.componentFormLimpiezaHerramienta.$refs.formLimpiezaHerramienta.resetValidation(); // Reinicia las validaciones de formLimpiezaHerramienta
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
+      this.editarLimpiezaHerramienta = false;
+      // this.$store.commit("moduloPoda/establecerEditarLimpiezaHerramienta", false);
     },
 
     abrirMostrarLimpiezaHerramienta(item) {
-      this.dialogMostrarLimpiezaHerramienta = !this.dialogMostrarLimpiezaHerramienta;
+      this.dialogMostrarLimpiezaHerramienta = !this
+        .dialogMostrarLimpiezaHerramienta;
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
-      const indiceEditar = this.listaLimpiezaHerramientaStore.indexOf(item);
+      this.$store.commit(
+        "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
+        true
+      );
       this.modeloLimpiezaHerramientaStore = item;
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
+
     },
   },
 
   mixins: [autenticacionMixin, myMixin],
 
   created() {
+    // this.cargarListaCultivos();
+    this.cargarListaFinca();
+
     let usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario.rol === "Administrador")
       this.$store.commit("colocarLayout", "LayoutAdministrador");

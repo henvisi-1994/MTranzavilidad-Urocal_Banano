@@ -9,6 +9,11 @@ module.exports = {
         return limpiezaVDao.getLimpiezaV(id);
     },
 
+    async getLimpiezasVProductor(id){
+        return limpiezaVDao.getLimpiezasVProductor(id);
+
+    },
+
     async createLimpiezaV(limpiezaV){
         return limpiezaVDao.createLimpiezaV(limpiezaV);
     },

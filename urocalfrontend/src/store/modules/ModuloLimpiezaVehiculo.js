@@ -4,8 +4,9 @@ export default {
     namespaced: true,
 
     state: {
+        listavehiculoStore:[],
         listaLimpiezaVe: [],
-        limpieza_vehiculo: new LimpiezaVehiculo(0, '', '', false, false, false, false, 0), // Modelo lote
+        limpieza_vehiculo: new LimpiezaVehiculo(0, '', '', false, false, false, false, 0, 0), // Modelo lote
         
         formLimpiezaVehiculoValido: false, // Indica si el formulario de lote es valido
     },
@@ -19,6 +20,10 @@ export default {
         nuevoLimpiezaVehiculo(state, nuevoLimpiezaVehiculo) {
             state.limpieza_vehiculo = nuevoLimpiezaVehiculo
         },
+        nuevoListaVehiculoStore(state, nuevoListaVehiculoStore) {
+            state.listavehiculoStore = nuevoListaVehiculoStore
+        },
+
         // Coloca un nuevo lot
         setLot(state, nuevaPersona) {
             state.limpieza_vehiculo = nuevaPersona
@@ -26,7 +31,7 @@ export default {
 
         // Vacia el modelo Persona
         vaciarLimpiezaVehiculo(state) {
-            state.limpieza_vehiculo= new LimpiezaVehiculo(0, '', '', false, false, false, false, 0) // Modelo lote
+            state.limpieza_vehiculo= new LimpiezaVehiculo(0, '', '', false, false, false, false, 0,0) // Modelo lote
         },
         vaciarLista(state, newState){
             state.listaLimpiezaVe.length = 0;
@@ -47,6 +52,7 @@ export default {
     getters: {
         formLimpiezaVehiculoValido: (state) => state.formLimpiezaVehiculoValido, // Devuelve la variable formUsuarioValido
         limpieza_vehiculo: (state) => state.limpieza_vehiculo,
+        listavehiculoStore:(state)=> state.listavehiculoStore,
         listaLimpiezaVehiculoStore: (state) => state.listaLimpiezaVe,
         clusterlist: (state) => state.clusterlist
     },

@@ -17,6 +17,10 @@ class ServicioFinca {
         return axios.get(`${API_URL}/v1/finca/`);
     }
 
+    obtenerFincaPropietario(id) {
+        return axios.get(`${API_URL}/v1/finca/${id}`);
+    }
+
     obtenerTodosPropietarios() {
         return axios.get(`${API_URL}/v1/finca/propietario/`);
     }

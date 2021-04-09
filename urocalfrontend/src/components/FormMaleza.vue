@@ -1,31 +1,105 @@
 <template>
   <v-form ref="formularioMaleza" v-model="formMalezaValido">
     <v-container>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12">
+      <v-row 
+      no-gutters 
+      justify-md="space-around"
+      :class="$vuetify.breakpoint.xs ? '' : 'mb-5'"
+      >
+
+
+        <v-col cols="12" md="5">
           <v-select
-            v-model="maleza.cultivoid"
-            placeholder="Seleccione un Cultivo"
+            :disabled="bloquearCamposFormMalezaControl"          
+            v-model="maleza.fincaid"
+            placeholder="Finca"
             class="style-chooser"
-            label="detalles"
-            :reduce="(listaCultivosDetalle) => listaCultivosDetalle.cultivoid"
-            :options="listaCultivosDetalle"
-            :disabled="bloquearCamposFormMalezaControl"
+            label="findescripcionfinca"
+            @input="obtenerTodosLoteCultivadoDeFinca" 
+            :reduce="(listaFinca) => listaFinca.fincaid"
+            :options="listaFinca"
+            :rules="[reglas.campoVacio(fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un Cultivo</em>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una finca</em>
             </template>
           </v-select>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-select
+          :disabled="bloquearCamposFormMalezaControl"  
+            v-model="maleza.lotecultivadoid"
+            placeholder="Lote"
+            class="style-chooser"
+            label="lotnumero"
+            @input="obtenerTodosListaCultivo" 
+            :reduce="(listaLote) => listaLote.lotecultivadoid"
+            :options="listaLote"
+            :rules="[reglas.campoVacio(maleza.lotecultivadoid)]"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else-if="!fincaid">Escoja una finca</em>
+              <em style="opacity: 0.5" v-else>Empiece a escribir un lote</em>
+            </template>
+          </v-select>
+        </v-col>        
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
+          <v-select
+           :disabled="bloquearCamposFormMalezaControl"  
+            v-model="maleza.cultivoid"
+            placeholder="Cultivo"
+            class="style-chooser"
+            label="detalles"
+            :reduce="(listaCultivo) => listaCultivo.cultivoid"
+            :options="listaCultivo"
+            :rules="[reglas.campoVacio(maleza.cultivoid)]"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>Empiece a escribir un cultivo</em>
+            </template>
+          </v-select>
+        </v-col>
+
+
+
+        
+        <v-col cols="12" md="5">
+          <v-text-field
+            label="Número de hectáreas"
+            type="Number"
+            v-model="maleza.conhectareas"
+            class="custom px-2"
+            filled
+            dense
+            :rules="[
+              reglas.campoVacio(maleza.conhectareas),
+              reglas.soloNumerosPositivos(maleza.conhectareas),
+            ]"
+            error-count="2"
+            :disabled="bloquearCamposFormMalezaControl"
+          ></v-text-field>
         </v-col>
         
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
+
+
+          <v-col cols="12" md="5">
           <v-menu
             v-model="menuDateShow"
             :nudge-right="40"
@@ -46,28 +120,14 @@
             <v-date-picker v-model="maleza.confecha" @input="menuDateShow = false" :show-current="currentDate" locale="es-419" ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            label="Número de hectáreas"
-            type="Number"
-            v-model="maleza.conhectareas"
-            class="custom px-2"
-            filled
-            dense
-            :rules="[
-              reglas.campoVacio(maleza.conhectareas),
-              reglas.soloNumerosPositivos(maleza.conhectareas),
-            ]"
-            error-count="2"
-            :disabled="bloquearCamposFormMalezaControl"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-
-      <v-row no-gutters justify-md="space-around">
 
 
-        <v-col cols="12" md="6">
+
+
+
+        
+
+        <v-col cols="12" md="5">
 
           <v-select
             v-model="maleza.conmetodo"
@@ -100,10 +160,13 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import servicioMalezaControl from "../services/ServicioMalezaControl";
+
+import servicioLote from "../services/ServicioLote";
+import servicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
 
 
 
@@ -113,10 +176,18 @@ export default {
   components: {
     vSelect,
   },
-
+  mounted() {
+      this.obtenerTodosFincas();
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
+    },
   data() {
     return {
-      listaCultivosDetalle: [],
+      listaLote: [],
+      listaFinca:[],
+      fincaid: '',
+      loteid: '',
+      listaCultivo: [],
       menuDateShow: "", // Variable de referencia para el menú de fecha toma muestra
       currentDate: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
     };
@@ -124,6 +195,7 @@ export default {
 
   computed: {
 
+  
     // Obtiene el modelo Control Maleza
     maleza: {
       get() {
@@ -165,14 +237,32 @@ export default {
   methods: {
 
 
-    async obtenerTodosListaCultivoDetalles() {
-      let resultado = await servicioMalezaControl.obtenerTodosListaCultivoDetalles();
-      this.listaCultivosDetalle = resultado.data;
+     async obtenerTodosListaCultivo() {      
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.maleza.lotecultivadoid);
+      this.listaCultivo = resultado.data; 
+
     },
+      async obtenerTodosFincas() {
+      let resultado = await servicioFinca.obtenerTodosFincas();
+      this.listaFinca = resultado.data;
+       
+    },
+      async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.maleza.fincaid);
+      this.listaLote = resultado.data; 
+      
+    },
+       
+
+   
+
+    
+
+   /*  limpiarIds(){
+      this.fincaid = '';
+      this.loteid = '';
+    }*/
   },
 
-  mounted() {
-    this.obtenerTodosListaCultivoDetalles();
-  },
 };
 </script>

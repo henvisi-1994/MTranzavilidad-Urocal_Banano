@@ -35,13 +35,18 @@ module.exports = {
     async obtenerFincas() {
         let query = `SELECT * FROM finca`;
         let result = await pool.query(query);
-        console.log(result.rows);
         return result.rows; // Devuelve el array de json que contiene la tabla finca
     },
     
 
     async obtenerPropietario() {
         let query = `SELECT p.productorid,  concat(pe.pernombres, ' ' , pe.perapellidos) "propietario" FROM  productor p, persona pe WHERE p.productorid = pe.personaid`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve el json de finca encontrado
+    },
+
+    async obtenerFincaProductor(id){
+        let query=`SELECT *from finca where propietarioid='${id}'`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el json de finca encontrado
     },
