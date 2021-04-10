@@ -74,7 +74,7 @@
 import { mapMutations, mapState } from "vuex";
 import DialogoNuevoFactExport from "../components/DialogoNuevoFactExport";
 import DialogoMostrarFactExport from "../components/DialogoMostrarFactExport";
-// import ServicioFactExport from "../services/ServicioFactExport";
+import ServicioFacturaExportacion from "../services/ServicioFacturaExportacion";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -84,10 +84,13 @@ export default {
     DialogoNuevoFactExport,
     DialogoMostrarFactExport,
   },
+  mounted() {
+    this.cargarListaFactExport();
+  },
 
   data() {
     return {
-      listaFactExport: [],
+      
       nombre: "Gestión de Factura de Exportación",
       buscarFactExport: "", // Guarda el texto de búsqueda
       cabeceraTablaFactExport: [
@@ -172,6 +175,21 @@ export default {
   },
 
   computed: {
+        listaFactExport: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFacturaExport/listaFacturaExportStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerListaFacturaExportStore",
+          v
+        );
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogoNuevaFactExport
     dialogoNuevoFactExport: {
       get() {
@@ -273,6 +291,58 @@ export default {
       // this.listaFactExport = resultado.data;
       //console.log(this.listaMalezaControl);
     },
+    async cargarListaFactExport() {
+      let respuesta = await ServicioFacturaExportacion.obtenerTodosFacturaExport();
+      let facturaexport = await respuesta.data;
+      this.$store.commit("moduloFacturaExport/vaciarLista", null);
+      facturaexport.forEach((f) => {
+        this.$store.commit(
+          "moduloFacturaExport/updateListaFacturaExportStore",
+          f
+        );
+      });
+    },
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
+    },
 
     // Vacia el modelo siembra
     // ...mapMutations("moduloFactExport", [
@@ -282,7 +352,7 @@ export default {
   },
 
   mounted() {
-    this.obtenerTodosFactExport();
+    this.cargarListaFactExport();
   },
 
   created() {

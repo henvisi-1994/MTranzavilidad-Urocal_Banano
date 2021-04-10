@@ -13,6 +13,7 @@ class ServicioFacturaExportacion{
 // SELECT: Devuelve todos los registros
 obtenerTodosFacturaExport() {
     return axios.get(`${API_URL}/v1/facturaExport/`);
+    
 }
 
 // UPDATE: Actualiza un registro

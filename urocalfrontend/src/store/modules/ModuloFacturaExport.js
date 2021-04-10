@@ -29,6 +29,12 @@ export default {
         cambiarEstadoBloquearFacturaExport(state, nuevoEstado) {
             state.bloquearFacturaExport = nuevoEstado
         },
+        updateListaFacturaExportStore(state, newState) {
+            state.listaFacturaExportStore.push(newState)
+        },
+        vaciarLista(state, newState) {
+            state.listaFacturaExportStore.length = 0;
+        },
 
         establecerListaFacturaExportStore(state, newState) {
             state.listaFacturaExportStore = newState;

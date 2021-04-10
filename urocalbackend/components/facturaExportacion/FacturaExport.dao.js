@@ -42,7 +42,13 @@ module.exports = {
 
     // SELECT: Devuelve todos los registros
     async obtenerFacturaExportes() {
-        
+        let query =`select facnumero, e.emprazonsocial as compradorid, em.emprazonsocial as vendedorid, TO_CHAR(facfecha, 'YYYY-MM-DD')as facfecha,
+        facpuertoembarque, facsubtotalsiniva, facsubtotalivaexcento, facsubtotalsinimpuestos,
+        factotaldesc, facvalortotal from facturaexportacion f join empresa e on e.empresaid = f.compradorid
+        join empresa em on em.empresaid =f.vendedorid`
+        let result = await pool.query(query);
+        console.log(result);
+        return result.rows; 
         // return result.rows;                     // Devuelve el array de json
     },
 
