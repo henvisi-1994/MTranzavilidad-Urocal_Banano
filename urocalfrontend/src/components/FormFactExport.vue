@@ -14,28 +14,45 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Comprador"
+          <v-select
             v-model="factExportaStore.compradorid"
-            :rules="[reglas.campoVacio(factExportaStore.compradorid)]"
-          ></v-text-field>
+            :disabled="bloquearFacturaExport"
+            placeholder="Comprador"
+            class="style-chooser"
+            label="emprazonsocial"
+            :reduce="(empresas) => empresas.empresaid"
+            :options="empresas"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir razon social</em>
+            </template>
+          </v-select>
+
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Vendedor"
+           <v-select
             v-model="factExportaStore.vendedorid"
-            :rules="[reglas.campoVacio(factExportaStore.vendedorid)]"
-          ></v-text-field>
+            :disabled="bloquearFacturaExport"
+            placeholder="Vendedor"
+            class="style-chooser"
+            label="emprazonsocial"
+            :reduce="(empresas) => empresas.empresaid"
+            :options="empresas"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir razon social</em>
+            </template>
+          </v-select>
         </v-col>
         <v-col cols="12" md="6">
           <v-menu
@@ -405,10 +422,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapMutations,mapState } from "vuex";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import servicioEmpresa from "../services/ServicioEmpresa";
 
 export default {
   name: "FormFactExporta",
@@ -418,6 +436,7 @@ export default {
   },
   mounted() {
     this.inicializarFecha();
+    this.getEmpresas();
   },
 
   data() {
@@ -432,6 +451,7 @@ export default {
         { nombre: "Tarjeta Prepago", descripcion: "Tarjeta Prepago" },
         { nombre: "Tarjeta de Crédito", descripcion: "Tarjeta de Crédito" },
       ],
+      empresas: [],
     };
   },
 
@@ -476,9 +496,15 @@ export default {
   },
 
   methods: {
+        // Vacia el modelo fertilizante
+    ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
     inicializarFecha(){
       this.factExportaStore.facfecha = this.currentDate;
       this.factExportaStore.facfechazarpe = this.currentDate;
+    },
+   async getEmpresas(){
+      let resultado= await servicioEmpresa.obtenerTodosEmpresa();
+      this.empresas= resultado.data;
     }
   },
 };

@@ -3,8 +3,9 @@ const controlador = require('./FacturaExport.controller');
 
 const router = express.Router();
 
-router.get('/', controlador.obtenerFacturaExportes);                          // Coleccion (plural)
-router.post('/', controlador.crearFacturaExport);                                 
+router.get('/', controlador.obtenerFacturaExportes);
+router.get('/:id', controlador.obtenerFacturaExportacion);                           // Coleccion (plural)
+router.post('/', controlador.crearFacturaExport);                                  
 router.put('/:id', controlador.actualizarFacturaExport);        
 router.delete('/:id', controlador.eliminarFacturaExport); 
 

@@ -42,12 +42,21 @@ module.exports = {
 
     // SELECT: Devuelve todos los registros
     async obtenerFacturaExportes() {
-        let query =`select facnumero, e.emprazonsocial as compradorid, em.emprazonsocial as vendedorid, TO_CHAR(facfecha, 'YYYY-MM-DD')as facfecha,
+        let query =`select  f.facturaexportacionid, facnumero, e.emprazonsocial as compradorid, em.emprazonsocial as vendedorid, TO_CHAR(facfecha, 'YYYY-MM-DD')as facfecha,
         facpuertoembarque, facsubtotalsiniva, facsubtotalivaexcento, facsubtotalsinimpuestos,
         factotaldesc, facvalortotal from facturaexportacion f join empresa e on e.empresaid = f.compradorid
         join empresa em on em.empresaid =f.vendedorid`
         let result = await pool.query(query);
-        console.log(result);
+        return result.rows; 
+        // return result.rows;                     // Devuelve el array de json
+    },
+       // SELECT: Devuelve todos los registros
+       async obtenerFacturaExportacion(id) {
+        let query =`select f.facturaexportacionid, facnumero, f.compradorid,e.emprazonsocial as comprador,f.vendedorid, em.emprazonsocial as vendedor, TO_CHAR(facfecha, 'YYYY-MM-DD')as facfecha,
+        facpuertoembarque, facpuertodestino, facvapor, facsubtotal12,facsubtotal0,facsubtotalsiniva, facsubtotalivaexcento, facsubtotalsinimpuestos,
+        factotaldesc,facice,faciva12,facirbpn,facvalortotal,facformapago,facplazo,factiempo,facdae,facpesoneto,faclote,facpesobruto,faccontenedor,facsemana,TO_CHAR(facfechazarpe, 'YYYY-MM-DD')as facfechazarpe,facmarca,faccertificaciones from facturaexportacion f join empresa e on e.empresaid = f.compradorid
+        join empresa em on em.empresaid =f.vendedorid where f.facturaexportacionid = ${id}`
+        let result = await pool.query(query);
         return result.rows; 
         // return result.rows;                     // Devuelve el array de json
     },

@@ -15,6 +15,10 @@ obtenerTodosFacturaExport() {
     return axios.get(`${API_URL}/v1/facturaExport/`);
     
 }
+obtenerFacturaExport(id) {
+    return axios.get(`${API_URL}/v1/facturaExport/${id}`);
+    
+}
 
 // UPDATE: Actualiza un registro
 actualizarFacturaExport(id, formData) {
