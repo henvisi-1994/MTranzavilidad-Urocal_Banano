@@ -16,7 +16,7 @@ module.exports = {
     },
     async getCompras(id) {
         let query = `SELECT c.compraid, c.comnumero, c.comsubtotal, c.comdescuentos, c.comotrosvalores, c.comtotal, 
-        c.comobservaciones, TO_CHAR(c.comfechaemision, 'YYYY-MM-DD') as comfechaemision, CONCAT(per.pernombres,' ',per.perapellidos) as productor, a.asonombre, c.comcod,v.vehplaca as transporte, c.comlugar 
+        c.comobservaciones, TO_CHAR(c.comfechaemision, 'YYYY-MM-DD') as comfechaemision, g.productorid, CONCAT(per.pernombres,' ',per.perapellidos) as productor,c.asociacionid, a.asonombre, c.comcod,g.vehiculoid,v.vehplaca as transporte, c.comlugar 
         FROM compra c
 		inner join asociacion a on a.asociacionid =c.asociacionid
         inner join guiaremision g on g.guiaremisionid = c.guiaremisionid
