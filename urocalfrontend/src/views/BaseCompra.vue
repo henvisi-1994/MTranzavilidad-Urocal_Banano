@@ -8,7 +8,11 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
@@ -37,7 +41,9 @@
         >
           <template v-slot:top>
             <!-- Tabs que muestra la informacion detallada de cada compra -->
-            <DialogMostrarCompra ref="DialogMostrarCompra"></DialogMostrarCompra>
+            <DialogMostrarCompra
+              ref="DialogMostrarCompra"
+            ></DialogMostrarCompra>
           </template>
 
           <template v-slot:item.actions="{ item }">
@@ -52,7 +58,9 @@
         <!-- Botón para agregar nueva compra -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="300px"
+          large
+          elevation="0"
           color="primary"
           @click="abrirDialogCompraNuevo()"
           >Nuevo</v-btn
@@ -68,6 +76,7 @@ import DialogNuevoCompra from "@/components/DialogNuevoCompra";
 import DialogMostrarCompra from "@/components/DialogMostrarCompra";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
+import servicioGuiaRemision from "../services/ServicioGuiaRemision";
 import servicioCompra from "../services/ServicioCompra";
 import servicioDetalleCompra from "../services/ServicioDetalleCompra";
 
@@ -156,7 +165,10 @@ export default {
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarCompra",
+          v
+        );
       },
     },
 
@@ -167,6 +179,14 @@ export default {
       },
       set(v) {
         return this.$store.commit("moduloCompra/asignarListaCompra", v);
+      },
+    },
+    listaGuiaRemisionStore: {
+      get() {
+        return this.$store.getters["moduloCompra/listaGuiaRemisionStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCompra/asignarListaGuiaRemision", v);
       },
     },
 
@@ -204,7 +224,10 @@ export default {
     // Abre el dialogMostrarCompra
     async abrirMostrarCompra(compraid) {
       try {
-        let respuestaServicioCompra = await servicioCompra.obtenerCompra(compraid);
+        let respuestaServicioCompra = await servicioCompra.obtenerCompra(
+          compraid
+        );
+        console.log(respuestaServicioCompra);
         this.compra = respuestaServicioCompra.data;
         this.obtenerDetalleCompra(compraid);
       } catch (error) {
@@ -218,7 +241,14 @@ export default {
       let resultado = await servicioCompra.obtenerTodosCompra();
       this.listaCompra = resultado.data;
     },
-
+    getGuiaRemision() {
+      servicioGuiaRemision.obtenerTodosGuiaRemision().then((res) => {
+        let guia = res.data.filter(
+          (guiaRemision) => guiaRemision.vehiculoid == this.compra.vehiculoid
+        );
+        this.listaGuiaRemisionStore = guia;
+      });
+    },
     async obtenerDetalleCompra(compraid) {
       let respuestaServicioDetalleCompra = await servicioDetalleCompra.obtenerDetalleCompra(
         compraid
