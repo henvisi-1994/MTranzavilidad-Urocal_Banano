@@ -18,7 +18,7 @@
             class="style-chooser"
             label="productor"
             v-model="compra.productorid"
-            :disabled="editarTratamiento"
+            :disabled="bloquearCamposFormCompra"
             :reduce="(listaProductorPersona) => listaProductorPersona.id"
             :options="listaProductorPersona"
             :rules="[reglas.campoVacio(compra.productorid)]"
@@ -234,7 +234,7 @@ export default {
     },
     getGuiaRemision(){
       servicioGuiaRemision.obtenerTodosGuiaRemision().then((res)=>{
-        let guia= res.data.filter(guiaRemision => guiaRemision.vehiculoid == this.compra.transporte);
+        let guia= res.data.filter(guiaRemision => guiaRemision.vehiculoid == this.compra.vehiculoid);
         this.listaGuiaRemision = guia;
       })
     },
