@@ -246,7 +246,7 @@ export default {
         let guia = res.data.filter(
           (guiaRemision) => guiaRemision.vehiculoid == this.compra.vehiculoid
         );
-        this.listaGuiaRemision = guia;
+        this.listaGuiaRemisionStore = guia;
       });
     },
     async obtenerDetalleCompra(compraid) {
