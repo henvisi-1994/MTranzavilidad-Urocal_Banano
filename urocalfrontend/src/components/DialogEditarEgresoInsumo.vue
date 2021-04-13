@@ -290,29 +290,39 @@ export default {
 
     // UPDATE: Actualiza un registro
     async actualizarRegistro() {
-      const respuesta = await ServicioEgresoInsumo.actualizarEgresoInsumo(
-        this.modeloEgresoInsumoStore.egresoinsumosid,
-        this.modeloEgresoInsumoStore
-      );
-      if (respuesta.status == 200) {
-        this.preeditar=null        
-        this.cerrarDialogo();
-        this.$toast.success(respuesta.data.message);
-        this.cargarListaEgresoInsumo();
-        this.vaciarModeloEgresoInsumo();
+      try {
+        const respuesta = await ServicioEgresoInsumo.actualizarEgresoInsumo(
+          this.modeloEgresoInsumoStore.egresoinsumosid,
+          this.modeloEgresoInsumoStore
+        );
+        if (respuesta.status == 200) {
+          this.preeditar=null        
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaEgresoInsumo();
+          this.vaciarModeloEgresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 
     // DELETE: Elimina un registro
     async eliminarRegistro() {
-      console.log(this.modeloEgresoInsumoStore);
-      const respuesta = await ServicioEgresoInsumo.eliminarEgresoInsumo(
-        this.modeloEgresoInsumoStore.egresoinsumosid
-      );
-      if (respuesta.status == 200) {
-        this.cerrarDialogo();
-        this.$toast.warning(respuesta.data.message);
-        this.cargarListaEgresoInsumo();
+      try {
+        console.log(this.modeloEgresoInsumoStore);
+        const respuesta = await ServicioEgresoInsumo.eliminarEgresoInsumo(
+          this.modeloEgresoInsumoStore.egresoinsumosid
+        );
+        if (respuesta.status == 200) {
+          this.cerrarDialogo();
+          this.$toast.warning(respuesta.data.message);
+          this.cargarListaEgresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 

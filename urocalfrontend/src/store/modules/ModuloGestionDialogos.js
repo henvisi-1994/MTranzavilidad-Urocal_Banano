@@ -315,7 +315,7 @@ export default {
 
         /* Ingreso Insumo*/
         toggleDialogNuevoIngresoInsumo(state, newState) {
-            state.dialogNuevoIngresoInsumo = newState;
+            state.dialogNuevoIngresoInsumo = newState; 
         },
 
         toggleDialogMostrarIngresoInsumo(state, newState) {
@@ -579,7 +579,8 @@ export default {
         // IngresoInsumo
         dialogNuevoIngresoInsumo: (state) => state.dialogNuevoIngresoInsumo,                                    // Devuelve la variable dialogNuevoIngresoInsumo
         dialogoNuevaSiembra: (state) => state.dialogoNuevaSiembra,                                              // Devuelve la variable dialogoNuevaSiembra
-        dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza,                                                // Devuelve la variable dialogoNuevaMaleza
+        dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza, 
+        dialogEditarIngresoInsumo: (state) => state.dialogEditarIngresoInsumo,                                                // Devuelve la variable dialogoNuevaMaleza
 
         dialogEditarUsuarioPersona: (state) => state.dialogEditarUsuarioPersona,                                // Devuelve la variable dialogEditarUsuarioPersona
         dialogNuevoConductorPersona: (state) => state.dialogNuevoConductorPersona,                              // Devuelve la variable dialogEditarUsuarioPersona

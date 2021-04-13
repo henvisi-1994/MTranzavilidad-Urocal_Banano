@@ -27,15 +27,14 @@
 
     <v-card-text>
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <!-- Buscador para Ingreso Insumo(ingresoinsumoid) -->
+        <v-col cols="12" md="6">
           <v-select
             :disabled="noeditar"
-            v-model="modeloIngresoInsumoStore.ingresoinsumosid"
+            v-model="modeloIngresoInsumoStore.centroacopioid"
             placeholder="Centro de Acopio"
             class="style-chooser"
             label="centroacopionombre"
-            :reduce="(listaCentroAcopios) => listaCentroAcopios.ingresoinsumosid"
+            :reduce="(listaCentroAcopios) => listaCentroAcopios.centroacopioid"
             :options="listaCentroAcopios"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -43,30 +42,12 @@
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un insumo</em>
-            </template>
-          </v-select>
-          <!-- Buscador para Finca(fincaid) -->
-          <v-select
-            :disabled="noeditar"
-            v-model="modeloIngresoInsumoStore.fincaid"
-            placeholder="Finca"
-            class="style-chooser"
-            label="finnombrefinca"
-            :reduce="(listaFincaStore) => listaFincaStore.fincaid"
-            :options="listaFincaStore"
-          >
-            <template v-slot:no-options="{ search, searching }">
-              <template v-if="searching">
-                No hay resultados para <em>{{ search }}</em
-                >.
-              </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir una finca</em>
+              <em style="opacity: 0.5" v-else>Empiece a escribir un codigo para Centro Acopio</em>
             </template>
           </v-select>
         </v-col>
-
-        <v-col cols="12" md="5">
+        
+        <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -75,18 +56,19 @@
             min-width="290px"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                label="Fecha de ingreso"
-                v-model="modeloIngresoInsumoStore.egrinsfechaingreso"
-                :rules="[reglas.campoVacio(modeloIngresoInsumoStore.egrinsfechaingreso)]"
+              <v-text-field class="custom px-2" filled dense
+                :disabled="noeditar"
+                label="Fecha del ingreso"
+                v-model="modeloIngresoInsumoStore.inginsfechaingreso"
+                :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsfechaingreso)]"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="modeloIngresoInsumoStore.egrinsfechaingreso"
-              @input="menuMostrarCalendario = true"
+              v-model="modeloIngresoInsumoStore.inginsfechaingreso"
+              @input="menuMostrarCalendario = false"
               :show-current="fechaActual"
               locale="es-419"
             ></v-date-picker>
@@ -95,40 +77,78 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             :disabled="noeditar"
-            v-model="modeloIngresoInsumoStore.egrinsparacontrolar"
-            label="Control de ingreso"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.egrinsparacontrolar)]"
+            label="Producto utilizado"
+            v-model="modeloIngresoInsumoStore.inginsproducto"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsproducto)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             :disabled="noeditar"
-            v-model="modeloIngresoInsumoStore.egrinsdosis"
-            label="Dosis"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.egrinsdosis)]"
+            label="Factura"
+            v-model="modeloIngresoInsumoStore.inginsfactura"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsfactura),
+                     reglas.soloNumerosPositivos(modeloIngresoInsumoStore.inginsfactura),
+                     ///reglas.soloNumeros(modeloIngresoInsumoStore.inginsfactura),  
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
- 
+
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             :disabled="noeditar"
-            v-model="modeloIngresoInsumoStore.egrinscantidadentregada"
-            label="Cantidad entregada"
-            type="number"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.egrinscantidadentregada)]"
+            label="Proveedor"
+            v-model="modeloIngresoInsumoStore.inginsproveedor"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsproveedor)]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
             :disabled="noeditar"
-            v-model="modeloIngresoInsumoStore.egrencargado"
+            label="Cantidad de ingresos"
+            v-model="modeloIngresoInsumoStore.inginscantidadingreso"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginscantidadingreso),
+                     //reglas.soloNumeros(modeloIngresoInsumoStore.inginscantidadingreso),
+                     reglas.soloNumerosPositivos(modeloIngresoInsumoStore.inginscantidadingreso),
+            ]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
+            :disabled="noeditar"
+            label="Unidad"
+            v-model="modeloIngresoInsumoStore.inginsunidad"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsunidad)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
+            :disabled="noeditar"
+            label="Saldo"
+            v-model="modeloIngresoInsumoStore.inginssaldo"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginssaldo),
+                     //reglas.soloNumeros(modeloIngresoInsumoStore.inginssaldo),
+                     reglas.soloNumerosPositivos(modeloIngresoInsumoStore.inginssaldo),
+            ]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field class="custom px-2" filled dense
+            :disabled="noeditar"
             label="Encargado"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.egrencargado)]"
+            v-model="modeloIngresoInsumoStore.ingencargado"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.ingencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -290,26 +310,39 @@ export default {
 
     // UPDATE: Actualiza un registro
     async actualizarRegistro() {
-      const respuesta = await ServicioIngresoInsumo.actualizarIngresoInsumo(
-        this.modeloIngresoInsumoStore.ingresoinsumosid,
-        this.modeloIngresoInsumoStore
-      );
-      if (respuesta.status == 200) {
-        this.cerrarDialogo();
-        this.cargarListaIngresoInsumo();
-        this.vaciarModeloIngresoInsumo();
+      try {
+        const respuesta = await ServicioIngresoInsumo.actualizarIngresoInsumo(
+          this.modeloIngresoInsumoStore.ingresoinsumosid,
+          this.modeloIngresoInsumoStore
+        );
+        if (respuesta.status == 200) {
+          this.preeditar=null
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaIngresoInsumo();
+          this.vaciarModeloIngresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 
     // DELETE: Elimina un registro
     async eliminarRegistro() {
-      console.log(this.modeloIngresoInsumoStore);
-      const respuesta = await ServicioIngresoInsumo.eliminarIngresoInsumo(
-        this.modeloIngresoInsumoStore.ingresoinsumosid
-      );
-      if (respuesta.status == 200) {
-        this.cerrarDialogo();
-        this.cargarListaIngresoInsumo();
+      try {
+        console.log(this.modeloIngresoInsumoStore);
+        const respuesta = await ServicioIngresoInsumo.eliminarIngresoInsumo(
+          this.modeloIngresoInsumoStore.ingresoinsumosid
+        );
+        if (respuesta.status == 200) {
+          this.cerrarDialogo();
+          this.$toast.warning(respuesta.data.message);
+          this.cargarListaIngresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 
@@ -356,7 +389,7 @@ export default {
       return `${day}/${month}/${year}`;
     },
 
-    //...mapMutations("moduloIngresoInsumo", ["vaciarModeloIngresoInsumo"]),  // Vacia el modelo modeloIngresoInsumoStore
+    ...mapMutations("moduloIngresoInsumo", ["vaciarModeloIngresoInsumo"]),  // Vacia el modelo modeloIngresoInsumoStore
   },
 };
 </script>
