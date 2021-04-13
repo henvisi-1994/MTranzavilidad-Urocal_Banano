@@ -74,7 +74,7 @@
 import { mapMutations, mapState } from "vuex";
 import DialogoNuevoFactExport from "../components/DialogoNuevoFactExport";
 import DialogoMostrarFactExport from "../components/DialogoMostrarFactExport";
-// import ServicioFactExport from "../services/ServicioFactExport";
+import ServicioFacturaExportacion from "../services/ServicioFacturaExportacion";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -84,10 +84,12 @@ export default {
     DialogoNuevoFactExport,
     DialogoMostrarFactExport,
   },
+  mounted() {
+    this.cargarListaFactExport();
+  },
 
   data() {
     return {
-      listaFactExport: [],
       nombre: "Gestión de Factura de Exportación",
       buscarFactExport: "", // Guarda el texto de búsqueda
       cabeceraTablaFactExport: [
@@ -172,6 +174,21 @@ export default {
   },
 
   computed: {
+    listaFactExport: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFacturaExport/listaFacturaExportStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerListaFacturaExportStore",
+          v
+        );
+      },
+    },
     // Obtiene y modifica el estado de la variable dialogoNuevaFactExport
     dialogoNuevoFactExport: {
       get() {
@@ -211,17 +228,14 @@ export default {
     },
 
     // // Obtiene el modelo Control Maleza
-    // modeloFactExportStore: {
-    //   get() {
-    //     return this.$store.getters["moduloFactExport/modeloFactExportStore"];
-    //   },
-    //   set(v) {
-    //     return this.$store.commit(
-    //       "moduloFactExport/establecerModeloFactExportStore",
-    //       v
-    //     );
-    //   },
-    // },
+    factExportaStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/factExportaStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+      },
+    },
     // editarFactExport: {
     //   get() {
     //     return this.$store.getters["moduloFactExport/editarFactExport"];
@@ -236,33 +250,22 @@ export default {
   },
 
   methods: {
+    ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
     // Carga el DialogoNuevaFactExport
     cargarDialogoNuevoFactExport() {
       this.dialogoNuevoFactExport = !this.dialogoNuevoFactExport; // Abre el DialogStepperFormNewFactExport
-      //this.vaciarModeloFactExportStore(); // Reinicia el modelo FactExport
+      this.vaciarFacturaExport(); // Reinicia el modelo FactExport
     },
 
     // Carga el TabsMostrarFactExport
     async abrirTabsMostrarFactExport(item) {
       this.dialogoMostrarFactExport = true; // Abre el DialogMostrarRiego
       this.bloquearFacturaExport = true;
-      // this.vaciarModeloFactExportStore(); // Vacia el modelo riego
-      // let resultado = await ServicioFactExport.obtenerDetalleFactExport(
-      //   item.tratamientoid
-      // );
-      // this.modeloFactExportStore = {
-      //   cultivo: item.cultivo,
-      //   cultivoid: item.cultivoid,
-      //   fincaid: item.fincaid,
-      //   finnombrefinca: item.finnombrefinca,
-      //   productor: item.productor,
-      //   productorid: item.productorid,
-      //   trafecha: item.trafecha,
-      //   traobservacion: item.traobservacion,
-      //   tratamientoid: item.tratamientoid,
-      //   traubicacion: item.traubicacion,
-      //   detalle: resultado.data,
-      // };
+      this.vaciarFacturaExport(); // Vacia el modelo riego
+      let resultado = await ServicioFacturaExportacion.obtenerFacturaExport(
+        item.facturaexportacionid
+      );
+      this.factExportaStore = resultado.data[0];
       // this.$store.commit("moduloFactExport/establecerEditarFactExport", true);
       //his.editarFactExport = true;
     },
@@ -273,16 +276,63 @@ export default {
       // this.listaFactExport = resultado.data;
       //console.log(this.listaMalezaControl);
     },
+    async cargarListaFactExport() {
+      let respuesta = await ServicioFacturaExportacion.obtenerTodosFacturaExport();
+      let facturaexport = await respuesta.data;
+      this.$store.commit("moduloFacturaExport/vaciarLista", null);
+      facturaexport.forEach((f) => {
+        this.$store.commit(
+          "moduloFacturaExport/updateListaFacturaExportStore",
+          f
+        );
+      });
+    },
+    tablaResponsiva() {
+      // Ajusta el tamaño de la tabla para pantallas pequeñas
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          if (
+            this.$vuetify.breakpoint.height >= 500 &&
+            this.$vuetify.breakpoint.height <= 550
+          ) {
+            return "41vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 551 &&
+            this.$vuetify.breakpoint.height <= 599
+          ) {
+            return "44vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 600 &&
+            this.$vuetify.breakpoint.height <= 650
+          ) {
+            return "51vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 651 &&
+            this.$vuetify.breakpoint.height <= 699
+          ) {
+            return "53vh";
+          }
+          if (
+            this.$vuetify.breakpoint.height >= 700 &&
+            this.$vuetify.breakpoint.height <= 799
+          ) {
+            return "57vh";
+          }
+          if (this.$vuetify.breakpoint.height >= 800) {
+            return "61vh";
+          }
+        default:
+          return "auto";
+      }
+    },
 
-    // Vacia el modelo siembra
-    // ...mapMutations("moduloFactExport", [
-    //   "vaciarModeloFactExportStore",
-    //   "asignarListaFactExport",
-    // ]),
   },
 
   mounted() {
-    this.obtenerTodosFactExport();
+    this.cargarListaFactExport();
   },
 
   created() {
