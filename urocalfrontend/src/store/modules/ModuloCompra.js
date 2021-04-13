@@ -4,7 +4,7 @@ export default {
     namespaced: true,
 
     state: {
-        compra: new Compra('','','','','','','','','',0,'',''), // Modelo Compra
+        compra: new Compra('','','','','','','','','',0,'','','',''), // Modelo Compra
         formCompraValidoCabecera: false, // Indica si el formulario de CompraCabecera es valido
         formCompraValidoPie: false, // Indica si el formulario de CompraPie es valido
         listaCompra: [], // Lista de compra
@@ -19,7 +19,7 @@ export default {
         },
 
         vaciarCompra(state) {
-            state.compra = new Compra('','','','','','','','','',0,'','')
+            state.compra = new Compra('','','','','','','','','',0,'','','','')
         },
 
         // formCompraValido
