@@ -133,6 +133,9 @@ export default {
         // factura de exportación
         dialogoNuevoFactExport: false,
         dialogMostrarFactExport: false,
+        //Empresa
+        dialogoNuevaEmpresa: false,
+        dialogoMostrarEmpresa: false,
     },
 
     mutations: {
@@ -506,12 +509,19 @@ export default {
         toggleDialogoMostrarTratamiento(state, newState) {
             state.dialogMostrarTratamiento = newState;
         },
-         // Factura de exportacion
-         toggleDialogoNuevoFactExport(state, newState) {
+        // Factura de exportacion
+        toggleDialogoNuevoFactExport(state, newState) {
             state.dialogoNuevoFactExport = newState;
         },
         toggleDialogoMostrarFactExport(state, newState) {
             state.dialogMostrarFactExport = newState;
+        },
+         //Empresa
+         toggleDialogoNuevaEmpresa(state, newState) {
+            state.dialogoNuevaEmpresa = newState;
+        },
+        toggleDialogoMostrarEmpresa(state, newState) {
+            state.dialogoMostrarEmpresa = newState;
         },
     },
 
@@ -656,8 +666,11 @@ export default {
         // Tratamiento
         dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
         dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento,
-         //Factura de exportacion
-         dialogoNuevoFactExport: (state) => state.dialogoNuevoFactExport,
-         dialogoMostrarFactExport: (state) => state.dialogMostrarFactExport,
+        //Factura de exportacion
+        dialogoNuevoFactExport: (state) => state.dialogoNuevoFactExport,
+        dialogoMostrarFactExport: (state) => state.dialogMostrarFactExport,
+        //Empresa
+        dialogoNuevaEmpresa: (state) => state.dialogoNuevaEmpresa,
+        dialogoMostrarEmpresa: (state) => state.dialogoMostrarEmpresa,
     },
 }

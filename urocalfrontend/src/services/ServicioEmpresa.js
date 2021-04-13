@@ -12,13 +12,8 @@ class ServicioEmpresa {
     obtenerTodosEmpresa() {
         return axios.get(`${API_URL}/empresa/`);
     }
-
-    // SELECT: Devuelve todas las ciudades
-    obtenerTodosInsumo() {
-        return axios.get(`${API_URL}/ingreso_insumo`);
-    }
-    obtenerTodosFinca() {
-        return axios.get(`${API_URL}/finca`);
+    obtenerEmpresa(id) {
+        return axios.get(`${API_URL}/empresa/${id}`);
     }
     // UPDATE: Actualiza un egreso
     actualizarEmpresa(id, formData) {

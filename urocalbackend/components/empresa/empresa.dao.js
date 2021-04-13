@@ -31,12 +31,11 @@ module.exports = {
         emprazonsocial = '${empresa.emprazonsocial}',
         empruc = '${empresa.empruc}', 
         emptipo = '${empresa.emptipo}',
-        egrinsdosis = '${empresa.egrinsdosis}',
         empdireccion = '${empresa.empdireccion}', 
         emptelefono = '${empresa.emptelefono}',
         empemail = '${empresa.empemail}',
         paisid = '${empresa.paisid}'
-        WHERE empresasid = '${id}'`;
+        WHERE empresaid = '${id}'`;
         let result = await pool.query(query);
         return result.rowCount; // Devuelve 1 si actualizó el empresao y 0 sino lo hizo.
     },
