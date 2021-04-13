@@ -303,7 +303,7 @@ export default {
                     { texto: 'Provincias', ruta: '/configuracion/provincia' },
                     { texto: 'Ciudades', ruta: '/configuracion/ciudad' },
                     { texto: 'Sitios', ruta: '/configuracion/sitio', },
-                    { texto: 'Empresas', ruta: '#', },
+                    { texto: 'Empresas', ruta: '/configuracion/Empresa', },
                     { texto: 'Marcas', ruta: '#', },
                     { texto: 'Certificaciones', ruta: '#', }
                 ]
