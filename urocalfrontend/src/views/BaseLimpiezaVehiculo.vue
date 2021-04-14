@@ -215,6 +215,15 @@ export default {
       this.dialogNuevoLimpiezaVehiculo = !this.dialogNuevoLimpiezaVehiculo; // Abre el DialogNuevoLimpiezaVehiculo
       this.vaciarLimpiezaVehiculo();
     },
+    conversion(params){
+      let resultado=false;
+      if(params=="Si"){
+        resultado=true;
+      }else if(params=="No"){
+        resultado=false;
+      }
+      return resultado;
+    },
     async cargarListaVehiculo()
     {
         let usuariosesion=JSON.parse(localStorage.getItem('productor'));
@@ -232,7 +241,17 @@ export default {
       this.dialogEditarLimpiezaVehiculo = !this.dialogEditarLimpiezaVehiculo;
       this.vaciarLimpiezaVehiculo();
       //this.limpiezaVehiculo=item;
-      this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo",item);
+      this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo", {limpiezavehiculoid:item.limpiezavehiculoid,
+    limvehfecha:item.limvehfecha,
+    limvehproductoutilizado:item.limvehproductoutilizado, 
+    limvehescobillon:this.conversion(item.limvehescobillon),
+    limvehescoba:this.conversion(item.limvehescoba),
+    limvehagua:this.conversion(item.limvehagua),
+    limvehaspiradora:this.conversion(item.limvehaspiradora),
+    vehiculoid:item.vehiculoid,
+    vehplaca:item.vehplaca,
+    fincaid: item.fincaid,
+    finnombrefinca: item.finnombrefinca,});
     },
   },
 

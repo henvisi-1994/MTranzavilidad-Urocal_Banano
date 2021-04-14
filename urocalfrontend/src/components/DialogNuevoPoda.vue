@@ -124,7 +124,7 @@ export default {
 
     cerrarDialogNuevoPoda() {
       this.dialogNuevoPoda = !this.dialogNuevoPoda; // Cierra el dialogNuevoPoda
-      this.$refs.componentFormPoda.limpiarIds();
+      // this.$refs.componentFormPoda.limpiarIds();
       this.vaciarModeloPodaStore();
     },
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),

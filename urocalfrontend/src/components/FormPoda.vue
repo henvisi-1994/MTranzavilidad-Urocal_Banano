@@ -36,8 +36,8 @@
             class="style-chooser"
             label="lotnumero"
             @input="obtenerTodosListaCultivo"
-            :reduce="(listaLote) => listaLote.lotecultivadoid"
-            :options="listaLote"
+            :reduce="(listaloteStore) => listaloteStore.lotecultivadoid"
+            :options="listaloteStore"
             :rules="[reglas.campoVacio(modeloPodaStore.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -62,8 +62,8 @@
             placeholder="Cultivo"
             class="style-chooser"
             label="detalles"
-            :reduce="(listaCultivo) => listaCultivo.cultivoid"
-            :options="listaCultivo"
+            :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
+            :options="listaCultivoStore"
             :rules="[reglas.campoVacio(modeloPodaStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -112,8 +112,8 @@
             placeholder="Tipo de poda"
             class="style-chooser"
             label="podatipo"
-            :reduce="(listaTipo) => listaTipo.tipoid"
-            :options="listaTipo"
+            :reduce="(listaTipoStore) => listaTipoStore.podatipo"
+            :options="listaTipoStore"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -183,32 +183,32 @@ export default {
 
   mounted() {
     this.obtenerTodosFincas();
-    this.obtenerTodosListaCultivo();
-    this.obtenerTodosLoteCultivadoDeFinca();
+    // this.obtenerTodosListaCultivo();
+    // this.obtenerTodosLoteCultivadoDeFinca();
   },
 
   data() {
     return {
       listaLote: [],
       listaFinca: [],
-      listaTipo: [
-        {
-          tipoid: 1,
-          podatipo: "Poda Formación",
-        },
-        {
-          tipoid: 2,
-          podatipo: "Poda Mantenimiento",
-        },
-        {
-          tipoid: 3,
-          podatipo: "Poda Fitosanitaria",
-        },
-        {
-          tipoid: 4,
-          podatipo: "Poda de Descope",
-        },
-      ],
+      // listaTipo: [
+      //   {
+      //     tipoid: 1,
+      //     podatipo: "Poda Formación",
+      //   },
+      //   {
+      //     tipoid: 2,
+      //     podatipo: "Poda Mantenimiento",
+      //   },
+      //   {
+      //     tipoid: 3,
+      //     podatipo: "Poda Fitosanitaria",
+      //   },
+      //   {
+      //     tipoid: 4,
+      //     podatipo: "Poda de Descope",
+      //   },
+      // ],
 
 
       tipoid: "",
@@ -242,13 +242,52 @@ export default {
         return this.$store.commit("moduloPoda/establecerModeloPodaStore", v);
       },
     },
-    // DC i
     listaPodasStore: {
       get() {
         return this.$store.getters["moduloPoda/listaPodasStore"];
       },
       set(v) {
         return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
+      },
+    },
+        listaCultivoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloPoda/listaCultivoStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaCultivoStore", v);
+      },
+    },
+    listaloteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaloteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaloteStore",
+          v
+        );
+      },
+    },
+        listaTipoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaTipoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaTipoStore",
+          v
+        );
       },
     },
     // //DC f
@@ -260,7 +299,8 @@ export default {
   methods: {
     async obtenerTodosListaCultivo() {
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloPodaStore.lotecultivadoid);
-      this.listaCultivo = resultado.data;
+      // this.listaCultivo = resultado.data;
+      this.listaCultivoStore=resultado.data;
     },
     async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
@@ -271,7 +311,8 @@ export default {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
         this.modeloPodaStore.fincaid
       );
-      this.listaLote = resultado.data;
+      // this.listaLote = resultado.data;
+      this.listaloteStore = resultado.data; 
     },
     // limpiarIds() {
     //   this.fincaid = "";
