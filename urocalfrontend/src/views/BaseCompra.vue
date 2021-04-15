@@ -230,6 +230,7 @@ export default {
         console.log(respuestaServicioCompra);
         this.compra = respuestaServicioCompra.data;
         this.obtenerDetalleCompra(compraid);
+        this.getGuiaRemision();
       } catch (error) {
         this.$store.error(error.response.data.message);
       }

@@ -94,8 +94,8 @@
           class="style-chooser"
           v-model="compra.guiaremisionid"
           label="guinumero"
-          :reduce="(listaGuiaRemision) => listaGuiaRemision.guiaremisionid"
-          :options="listaGuiaRemision"
+          :reduce="(listaGuiaRemisionStore) => listaGuiaRemisionStore.guiaremisionid"
+          :options="listaGuiaRemisionStore"
         >
           <template v-slot:no-options="{ search, searching }">
             <template v-if="searching">
@@ -176,7 +176,6 @@ export default {
     return {
       transportes: [],
       asociaciones: [],
-      listaGuiaRemision:[],
       listaProductorPersona: [],
       menuMostrarFechaEmision: "", // Variable de referencia para el menuMostrarFechaEmision
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
@@ -201,6 +200,14 @@ export default {
           "moduloCompra/cambiarEstadoValidoFormCompraCabecera",
           v
         );
+      },
+    },
+      listaGuiaRemisionStore: {
+      get() {
+        return this.$store.getters["moduloCompra/listaGuiaRemisionStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCompra/asignarListaGuiaRemision", v);
       },
     },
 
@@ -235,7 +242,7 @@ export default {
     getGuiaRemision(){
       servicioGuiaRemision.obtenerTodosGuiaRemision().then((res)=>{
         let guia= res.data.filter(guiaRemision => guiaRemision.vehiculoid == this.compra.vehiculoid);
-        this.listaGuiaRemision = guia;
+       this.listaGuiaRemisionStore = guia;
       })
     },
      async obtenerTodosProductorPersona() {

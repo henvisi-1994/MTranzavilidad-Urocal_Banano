@@ -20,7 +20,9 @@
       <v-card-text style="padding: 0px">
         <v-container>
           <!-- Formulario para registrar DetalleCompra -->
-          <FormDetalleCompra ref="componentFormDetalleCompra"></FormDetalleCompra>
+          <FormDetalleCompra
+            ref="componentFormDetalleCompra"
+          ></FormDetalleCompra>
         </v-container>
       </v-card-text>
 
@@ -43,6 +45,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormDetalleCompra from "@/components/FormDetalleCompra";
+import servicioCosecha from "../services/ServicioCosecha";
 
 export default {
   name: "DialogNuevoDetalleCompra",
@@ -52,7 +55,10 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      cantidadAC:0,
+      valido: true,
+    };
   },
 
   computed: {
@@ -62,7 +68,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoDetalleCompra"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoDetalleCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoDetalleCompra",
+          v
+        );
       },
     },
 
@@ -79,7 +88,9 @@ export default {
     // Obtiene la variable que indica si el formulario es valido
     formDetalleCompraValido: {
       get() {
-        return this.$store.getters["moduloDetalleCompra/formDetalleCompraValido"];
+        return this.$store.getters[
+          "moduloDetalleCompra/formDetalleCompraValido"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -92,7 +103,9 @@ export default {
     // Obtiene la variable bloquearCamposFormDetalleCompra
     bloquearCamposFormDetalleCompra: {
       get() {
-        return this.$store.getters["moduloDetalleCompra/bloquearCamposFormDetalleCompra"];
+        return this.$store.getters[
+          "moduloDetalleCompra/bloquearCamposFormDetalleCompra"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -119,28 +132,51 @@ export default {
 
     // Registra nuevo DetalleCompra
     registrar() {
-      this.detCompra.detarticulo = `Cacao _______ ${this.detCompra.detestado}`
+      this.detCompra.detarticulo = `Cacao _______ ${this.detCompra.detestado}`;
       this.agregarListaDetalleCompra(this.detCompra);
       let posicionAuxiliar = this.listaDetalleCompra.length - 1;
       this.listaDetalleCompra[posicionAuxiliar].idAuxiliar = posicionAuxiliar;
-      //console.log(this.listaDetalleCompra);
       this.cerrarDialogNuevoDetalleCompra();
+    },
+    async cantidadActual() {
+      try {
+        if (
+          typeof this.detCompra.detallecompraid !== "undefined" ||
+          this.detCompra.detallecompraid !== ""
+        ) {
+          let respuestaServicioCosecha = await servicioCosecha.obtenerCosechasSinDetalleCompra();
+          this.listaCosechaSinDetalle = respuestaServicioCosecha.data.filter(
+            (cosecha) => cosecha.cosechaid == this.detCompra.detallecompraid
+          );
+          let cantActCosecha = parseInt(
+            this.listaCosechaSinDetalle[0].coscantidad
+          );
+          this.cantidadAC = cantActCosecha;
+        } else {
+          this.cantidadAC = 0;
+        }
+      } catch(error) {
+        this.cantidadAC = 0;
+      }
     },
 
     // Cierra el DialogNuevoDetalleCompra
     cerrarDialogNuevoDetalleCompra() {
       this.dialogNuevoDetalleCompra = false;
     },
-
     validarRegistroDetalleCompra() {
-      return this.formDetalleCompraValido &&
+      this.cantidadActual();
+      if(this.formDetalleCompraValido &&
         this.fermentacion.length !== 0 &&
         this.detCompra.detestado !== "" &&
         this.detCompra.detestado !== null &&
         this.detCompra.detunidad !== "" &&
-        this.detCompra.detunidad !== null
-        ? false
-        : true;
+        this.detCompra.detunidad !== null &&
+        this.detCompra.detcantidadunidades <  this.cantidadAC){
+          return false;
+        } else {
+          return true;
+        }
     },
   },
 
