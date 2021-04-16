@@ -8,11 +8,16 @@ export default {
         factExportaStore: new FacturaExportacion(0, ' ', 0, 0, '', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', []),
         formFacturaExportValido: false, // Indica si el formulario de Finca es valido
         bloquearFacturaExport: false,
+        editarFacturaExport:false,
     },
 
     mutations: {
         // Coloca un nuevo FacturaExport
         nuevaFacturaExport(state, nuevoFacturaExport) {
+            state.factExportaStore = nuevoFacturaExport
+        },
+
+        establecerModeloFacturaExportStore(state, nuevoFacturaExport) {
             state.factExportaStore = nuevoFacturaExport
         },
 
@@ -39,6 +44,12 @@ export default {
         establecerListaFacturaExportStore(state, newState) {
             state.listaFacturaExportStore = newState;
         },
+        asignarListaFacturaExportStore(state, nuevaListaFacturaExport) {
+            state.listaFacturaExportStore = nuevaListaFacturaExport;
+        },
+        establecerEditarFacturaExport(state, newState) {
+            state.editarFacturaExport = newState;
+        },
     },
 
     getters: {
@@ -46,5 +57,6 @@ export default {
         factExportaStore: (state) => state.factExportaStore,
         listaFacturaExportStore: (state) => state.listaFacturaExportStore,
         bloquearFacturaExport: (state) => state.bloquearFacturaExport,
+        editarFacturaExport:(state)=>state.editarFacturaExport,
     },
 }

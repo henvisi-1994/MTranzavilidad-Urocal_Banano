@@ -15,6 +15,9 @@ obtenerTodosFacturaExport() {
     return axios.get(`${API_URL}/v1/facturaExport/`);
     
 }
+obtenerDetalleFacturaExport(id) {
+    return axios.get(`${API_URL}/facturaExport/detalle/${id}`);
+}
 obtenerFacturaExport(id) {
     return axios.get(`${API_URL}/v1/facturaExport/${id}`);
     

@@ -36,7 +36,7 @@
           :headers="cabeceraTablaFactExport"
           :items="listaFactExport"
           :search="buscarFactExport"
-          sort-by="tratamientoid"
+          sort-by="facturaexportacionid"
           :height="tablaResponsiva()"
           class="elevation-1"
         >
@@ -233,7 +233,7 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+        return this.$store.commit("moduloFacturaExport/establecerModeloFacturaExportStore", v);
       },
     },
     // editarFactExport: {
@@ -250,22 +250,57 @@ export default {
   },
 
   methods: {
-    ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
+    ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport", "asignarListaFacturaExportStore"]),
     // Carga el DialogoNuevaFactExport
     cargarDialogoNuevoFactExport() {
       this.dialogoNuevoFactExport = !this.dialogoNuevoFactExport; // Abre el DialogStepperFormNewFactExport
-      this.vaciarFacturaExport(); // Reinicia el modelo FactExport
+      this.bloquearFacturaExport = false;
+      this.vaciarFacturaExport; // Reinicia el modelo FactExport
     },
 
     // Carga el TabsMostrarFactExport
     async abrirTabsMostrarFactExport(item) {
       this.dialogoMostrarFactExport = true; // Abre el DialogMostrarRiego
-      this.bloquearFacturaExport = true;
+      //this.bloquearFacturaExport = true;
       this.vaciarFacturaExport(); // Vacia el modelo riego
       let resultado = await ServicioFacturaExportacion.obtenerFacturaExport(
         item.facturaexportacionid
       );
-      this.factExportaStore = resultado.data[0];
+      this.factExportaStore = {
+        facnumero: item.facnumero,
+        compradorid: item.compradorid,
+        vendedorid: item.vendedorid,
+        facfecha: item.facfecha,
+        facpuertoembarque: item.facpuertoembarque,
+        facpuertodestino: item.facpuertodestino,
+        facvapor: item.facvapor,
+        facsubtotal12: item.facsubtotal12,
+        facsubtotal0: item.facsubtotal0,
+        facsubtotalsiniva: item.facsubtotalsiniva,
+        facsubtotalivaexcento: item.facsubtotalivaexcento,
+        facsubtotalsinimpuestos: item.facsubtotalsinimpuestos,
+        factotaldesc: item.factotaldesc,
+        facice: item.facice,
+        faciva12: item.faciva12,
+        facirbpn: item.facirbpn,
+        facvalortotal: item.facvalortotal,
+        facformapago: item.facformapago,
+        facplazo: item.facplazo,
+        factiempo: item.factiempo,
+        facdae: item.facdae,
+        facpesoneto: item.facpesoneto,
+        facpesobruto: item.facpesobruto,
+        faclote: item.faclote,
+        faccontenedor: item.faccontenedor,
+        facsemana: item.facsemana,
+        facfechazarpe: item.facfechazarpe,
+        facmarca: item.facmarca,
+        faccertificaciones: item.faccertificaciones,
+        detalle:resultado.data
+      };
+      this.$store.commit("moduloFacturaExport/establecerEditarFacturaExport", true);
+      this.cargarListaFactExport();
+      //this.factExportaStore = resultado.data[0];
       // this.$store.commit("moduloFactExport/establecerEditarFactExport", true);
       //his.editarFactExport = true;
     },

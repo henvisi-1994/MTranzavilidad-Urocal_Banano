@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="formFactExporta">
+  <v-form ref="formFactExporta" v-model="formFacturaExportValido">
     <v-container>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
@@ -417,6 +417,121 @@
           ></v-text-field>
         </v-col>
       </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="2">
+          Detalle de Factura
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            filled
+            dense
+            v-model="detalle.detcodigoprincipal"
+            :disabled="bloquearFacturaExport"
+            label="Código Principal"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            filled
+            dense
+            v-model="detalle.detcantidad"
+            :disabled="bloquearFacturaExport"
+            label="Cantidad"
+          >
+          </v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            filled
+            dense
+            v-model="detalle.detdescripcion"
+            :disabled="bloquearFacturaExport"
+            label="Descripción"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            filled
+            dense
+            v-model="detalle.detpreciounitario"
+            :disabled="bloquearFacturaExport"
+            label="Precio Unitario"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            filled
+            dense
+            v-model="detalle.detporcentajedesc"
+            :disabled="bloquearFacturaExport"
+            label="Porcentaje Descuento"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            filled
+            dense
+            v-model="detalle.detpreciototal"
+            :disabled="bloquearFacturaExport"
+            label="Precio Total"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row class="justify-center">
+        <v-btn
+          elevation="0"
+          large
+          :block="$vuetify.breakpoint.xs ? true : false"
+          width="420px"
+          color="primary"
+          :disabled="bloquearFacturaExport"
+          @click="agregarDetalleFactura()"
+          >Agregar Detalle de Factura de Exportación</v-btn
+        >
+      </v-row>
+      <v-row no-gutters justify-md="space-around" class="mt-10">
+        <v-col cols="11">
+          <v-data-table
+            :headers="cabeceraTablaDetalleFacturaExport"
+            :items="factExportaStore.detalle"
+            class="elevation-1"
+            no-data-text="No se han agregado detalle"
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                color="primary"
+                :disabled="bloquearFacturaExport"
+                @click="eliminarDetalleFctura(item)"
+              >
+                mdi-trash-can
+              </v-icon>
+              <v-icon
+                color="primary"
+                :disabled="bloquearFacturaExport"
+                @click="editarDetalleFactura(item)"
+              >
+                mdi-eye
+              </v-icon>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+      
     </v-container>
   </v-form>
 </template>
@@ -427,6 +542,7 @@ import { mapMutations,mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import servicioEmpresa from "../services/ServicioEmpresa";
+import ServicioFacturaExportacion from '../services/ServicioFacturaExportacion';
 
 export default {
   name: "FormFactExporta",
@@ -437,6 +553,7 @@ export default {
   mounted() {
     this.inicializarFecha();
     this.getEmpresas();
+    this.obtenerTodosFacturaExport();
   },
 
   data() {
@@ -452,6 +569,60 @@ export default {
         { nombre: "Tarjeta de Crédito", descripcion: "Tarjeta de Crédito" },
       ],
       empresas: [],
+      listaFacturasExport:[],
+      detalle: {
+        detcodigoprincipal: "",
+        detcantidad: "",
+        detdescripcion: "",
+        detpreciounitario: "",
+        detporcentajedesc: "",
+        detpreciototal:"",
+      },
+      cabeceraTablaDetalleFacturaExport: [
+        {
+          text: "Código Principal",
+          value: "detcodigoprincipl",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Cantidad",
+          value: "detcantidad",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Descripción",
+          value: "detdescripcion",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Precio Unitario",
+          value: "detpreciounitario",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Porcentaje Descuento",
+          value: "detporcentajedesc",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Precio Total",
+          value: "detpreciototal",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Detalles",
+          value: "actions",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+      ],
     };
   },
 
@@ -477,7 +648,7 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+        return this.$store.commit("moduloFacturaExport/establecerEditarFacturaExport", v);
       },
     },
        bloquearFacturaExport: {
@@ -486,6 +657,17 @@ export default {
       },
       set(v) {
         return this.$store.commit("moduloFacturaExport/cambiarEstadoBloquearFacturaExport", v);
+      },
+    },
+    editarFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/editarFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerEditarFacturaExport",
+          v
+        );
       },
     },
 
@@ -505,7 +687,44 @@ export default {
    async getEmpresas(){
       let resultado= await servicioEmpresa.obtenerTodosEmpresa();
       this.empresas= resultado.data;
-    }
+    },
+    async obtenerTodosFacturaExport() {
+      let resultado = await ServicioFacturaExportacion.obtenerTodosFacturaExport();
+       this.listaFacturasExport = resultado.data;
+    },
+     agregarDetalleFactura() {
+      this.factExportaStore.detalle.push(this.detalle);
+      this.vaciarDetalleFactura();
+    },
+    vaciarDetalleFactura() {
+      this.detalle = JSON.parse(
+        JSON.stringify({
+          detcodigoprincipal: "",
+          detcantidad: "",
+          detdescripcion: "",
+          detpreciounitario: "",
+          detporcentajedesc: "",
+          detpreciototal:"",
+        })
+      );
+    },
+    eliminarDetalleFctura(item) {
+      const index = this.factExportaStore.detalle.indexOf(item);
+      this.factExportaStore.detalle.splice(index, 1);
+    },
+    editarDetalleFactura(item) {
+      const index = this.factExportaStore.detalle.indexOf(item);
+      this.detalle = JSON.parse(
+        JSON.stringify({
+          detcodigoprincipal: item.detcodigoprincipal,
+          detcantidad: item.detcantidad,
+          detdescripcion: item.detdescripcion,
+          detpreciounitario: item.detpreciounitario,
+          detporcentajedesc: item.detporcentajedesc,
+          detpreciototal:item.detpreciototal,
+        })
+      );
+    },
   },
 };
 </script>

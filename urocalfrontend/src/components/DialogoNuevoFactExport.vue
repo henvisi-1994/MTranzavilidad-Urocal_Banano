@@ -70,12 +70,23 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+        return this.$store.commit("moduloFacturaExport/establecerModeloFacturaStore", v);
+      },
+    },
+    listaFacturaExportStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/listaFacturaExportStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/asignarListaFacturaExportStore",
+          v
+        );
       },
     },
 
     // // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
-    ...mapState("moduloFacturaExport", ["formFacturaExportValido"]),
+    ...mapState("moduloFacturaExport", ["formFacturaExportValido","factExportaStore"]),
   },
 
   methods: {
@@ -84,24 +95,26 @@ export default {
         if (respuesta.status == 201) {
           this.cerrarDialogNuevoFactExport();
           this.cargarListaFactExport();
-          this.vaciarModeloFactExportStore();
+          this.vaciarFacturaExport();
         }
     },
 
     async cargarListaFactExport() {
-      //   let listaFactExports = [];
-      //   let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
-      //   let riegos = await respuesta.data;
-      //   riegos.forEach((f) => {
-      //     listaFactExports.push(f);
-      //   });
-      //   this.listaFactExportStore = listaFactExports;
+         let listaFactExports = [];
+         let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
+         let riegos = await respuesta.data;
+         this.$store.commit("moduloFacturaExport/vaciarLista", null);
+         riegos.forEach((f) => {
+           listaFactExports.push(f);
+         });
+         this.listaFactExportStore = listaFactExports;
     },
 
     cerrarDialogNuevoFactExport() {
       this.dialogoNuevoFactExport = !this.dialogoNuevoFactExport; // Cierra el dialogNuevoFactExport
       //   this.$refs.componentFormFactExport.limpiarIds();
       //   this.vaciarModeloFactExportStore();
+      this.vaciarFacturaExport();
     },
 
      ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),

@@ -16,6 +16,9 @@ module.exports = {
     async obtenerFacturaExportacion(id) {
         return facturaExportDao.obtenerFacturaExportacion(id);
     },
+    async obtenerDetalleFacturaExportacion(id){
+        return facturaExportDao.obtenerDetalleFacturaExportacion(id);
+    },
 
     // UPDATE: Actualiza un registro
     async actualizarFacturaExport(id, objeto) {

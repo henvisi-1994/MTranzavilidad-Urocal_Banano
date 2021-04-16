@@ -34,8 +34,23 @@ module.exports = {
                 '${factexport.facfechazarpe}', 
                 '${factexport.facmarca}', 
                 '${factexport.faccertificaciones}');`
-                console.log(query);
+                //console.log(query);
                 let result = await pool.query(query);  
+                if (result.rows) {
+                    const newdetalleFacturaExport = factexport.detalle.map(det => {
+                        return [
+                            det.detcodigoprincipal,
+                            det.detcantidad,
+                            det.detdescripcion,
+                            det.detpreciounitario,
+                            det.detporcentajedesc,
+                            det.detpreciototal,
+                            result.rows[0].facturaexportacionid
+                        ]
+                    })
+                    query = format('INSERT INTO detallefacturaexportacion (detcodigoprincipal, detcantidad, detdescripcion, detpreciounitario, detporcentajedesc, detpreciototal, facturaexportacionid) VALUES %L', newdetalleFacturaExport);
+                    result = await pool.query(query);
+                }
         return factexport;
     },
 
@@ -59,6 +74,11 @@ module.exports = {
         let result = await pool.query(query);
         return result.rows; 
         // return result.rows;                     // Devuelve el array de json
+    },
+    async obtenerDetalleFacturaExportacion(id) {
+        let query = `SELECT detallefacturaexportacion,detcodigoprincipal,detcantidad,detdescripcion,detpreciounitario,detporcentajedesc,detpreciototal,facturaexportacionid FROM detallefacturaexportacion WHERE facturaexportacionid = ${id}`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve el json del tratamiento encontrado
     },
 
 
@@ -97,6 +117,35 @@ module.exports = {
         faccertificaciones=${factexport.faccertificaciones}
         WHERE facturaexportacionid= '${id}'`;
         let result = await pool.query(query);
+        let queryd = `SELECT * FROM public.detallefacturaexportacion where facturaexportacionid= ${id}`;
+        let resultd = await pool.query(queryd);
+        let actualizar = ''; 
+        if (resultd.rows) {
+            factexport.detalle.map(async det  =>  {
+
+                      
+                if (typeof det.detallefacturaexportacion === 'undefined') {
+                actualizar = `Insert into public.detallefacturaexportacion (detcodigoprincipal, detcantidad, detdescripcion, detpreciounitario, detporcentajedesc, detpreciototal, facturaexportacionid) values ('${dt.detcodigoprincipal}','${dt.detcantidad}',${dt.detdescripcion},'${dt.detpreciounitario}','${dt.detporcentajedesc}', '${dt.detpreciototal}', ${id})`
+                }else{
+                actualizar = `UPDATE public.detallefacturaexportacion SET detcodigoprincipal='${dt.detcodigoprincipal}', detcantidad='${dt.detcantidad}', detdescripcion=${dt.detdescripcion}, detpreciounitario='${dt.detpreciounitario}', detporcentajedesc='${dt.detporcentajedesc}', detpreciototal=${dt.detpreciototal},facturaexportacionid=${id} WHERE detallefacturaexportacion=${dt.deta}`
+                
+                resultd.rows.forEach(function(x){
+                   
+                    if(x.dtraid!=dt.dtraid && dt.dtraid!= 'undefined'){
+                    
+                    let detdelete = `DELETE FROM public.detalletratamiento where dtraid=${x.dtraid}`
+                    console.log(detdelete)
+                    pool.query(detdelete)
+                    }
+                })
+
+                }
+
+                console.log(actualizar)
+                pool.query(actualizar)
+                
+            })
+        }
 
         return result.rowCount;                 // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó al usuario y 0 sino lo hizo.
     },
@@ -104,7 +153,11 @@ module.exports = {
 
     // DELETE: Elimina un registro
     async eliminarFacturaExport(id) {
-
+        queryd = `DELETE FROM detallefacturaexportacion WHERE facturaexportacionid = '${id}'`
+        query = `DELETE FROM facturaexportacion WHERE facturaexportacionid = '${id}'`;
+        resultd = await pool.query(queryd);
+        result = await pool.query(query);
+        return result.rowCount;
 
         //return result.rowCount;                 // Devuelve la cantidad de filas afectadas.
     },
