@@ -227,7 +227,6 @@ export default {
         let respuestaServicioCompra = await servicioCompra.obtenerCompra(
           compraid
         );
-        console.log(respuestaServicioCompra);
         this.compra = respuestaServicioCompra.data;
         this.obtenerDetalleCompra(compraid);
         this.getGuiaRemision();

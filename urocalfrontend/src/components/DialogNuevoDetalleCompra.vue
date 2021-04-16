@@ -152,6 +152,9 @@ export default {
             this.listaCosechaSinDetalle[0].coscantidad
           );
           this.cantidadAC = cantActCosecha;
+          if(this.detCompra.detcantidadunidades >  this.cantidadAC){
+            this.$toast.error('Stock insuficiente porfavor ingrese cantidades menores a '+this.cantidadAC);
+          }
         } else {
           this.cantidadAC = 0;
         }

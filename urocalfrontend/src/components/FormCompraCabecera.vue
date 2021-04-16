@@ -5,7 +5,7 @@
         <v-text-field
           label="Número"
           v-model="compra.comnumero"
-          :rules="[reglas.campoVacio(compra.comnumero)]"
+          :rules="[reglas.campoVacio(compra.comnumero),reglas.soloNumerosPositivos(compra.comnumero)]"
           class="custom px-2"
           dense
           filled

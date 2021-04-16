@@ -162,6 +162,7 @@
           :reduce="(listaUnidad) => listaUnidad.unidadid"
           :options="listaUnidad"
           :disabled="bloquearCamposFormDetalleCompra"
+          :rules="[reglas.soloNumerosPositivos(detCompra.detunidad)]"
           @input="establecerUnidad()"
         >
           <template v-slot:no-options="{ search, searching }">
