@@ -129,7 +129,14 @@ export default {
       "almacenamiento",
       "cosecha",
     ]),
-    ...mapState("moduloRevisionHumedad",["revisionHumedad"]),
+      revisionHumedad: {
+      get() {
+        return this.$store.getters["moduloRevisionHumedad/revisionHumedad"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRevisionHumedad/nuevoRevisionHumedad", v);
+      },
+    },
 
     // Obtiene y modifica el estado de la variable dialogMostrarAlmacenamiento
     dialogMostrarAlmacenamiento: {
@@ -163,6 +170,15 @@ export default {
           "moduloAlmacenamiento/cambiarBloquearCamposFormAlmacenamiento",
           v
         );
+      },
+    },
+        // Obtiene y modifica la variable listaAlmacenamiento
+    listaAlmacenamiento: {
+      get() {
+        return this.$store.getters["moduloAlmacenamiento/listaAlmacenamiento"];
+      },
+      set(v) {
+        return this.$store.commit("moduloAlmacenamiento/asignarListaAlmacenamiento", v);
       },
     },
      bloquearCamposFormRevisionHumedad: {
