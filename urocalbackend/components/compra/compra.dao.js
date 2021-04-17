@@ -27,18 +27,19 @@ module.exports = {
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },
     async deleteCompra(id) {
-        //Borrar mix 
-        query = `DELETE FROM mix WHERE cosechaid = ${id}`;
-        result = await pool.query(query);
-        //console.log(result);
-        //Borrar detalle de compra 
+        //Borrar detalle de compra
+        detalleCompra = `select detallecompraid from  detallecompra where compraid = ${id}`
+        result = await pool.query(detalleCompra);
+        let detalle = result.rows;
+        detalle.map(dt => {
+            let queryd = `DELETE FROM mix where cosechaid = ${dt.detallecompraid}`;
+            result =  pool.query(queryd);
+        });
         query = `DELETE FROM detallecompra where compraid =  ${id}`;
         result = await pool.query(query);
-        //console.log(result);
-        //Borrar compra
+        // //Borrar compra
         query = `DELETE FROM compra where compraid = '${id}'`;
         result = await pool.query(query);
-        //console.log(result);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
 
     },
@@ -55,7 +56,7 @@ module.exports = {
             (${compra.comnumero},'${compra.comfechaemision}',${compra.comsubtotal},
             ${compra.comdescuentos},${compra.comotrosvalores},${compra.comtotal},'${compra.comobservaciones}',
             ${compra.guiaremisionid}, ${compra.asociacionid},${compra.comcod},'${compra.comlugar}',${compra.vehiculoid},${compra.productorid}) RETURNING compraid;`;
-        
+
         let result = await pool.query(query);
         //console.log(query)
         //console.log(result)
