@@ -34,6 +34,7 @@ class ServicioLote {
 
     // DELETE: Eliminar un lote
     eliminarLote(lotecultivadoid) {
+        
         return axios.delete(`${API_URL}/lote/${lotecultivadoid}`);
     }
 }

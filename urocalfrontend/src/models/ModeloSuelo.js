@@ -5,9 +5,9 @@ export default class Suelo {
         this.suecolor = suecolor;
         this.suetextura = suetextura;
         this.sueph = sueph;
-        this.suetipoanalisis = suetipoanalisis;
-        this.suetomamuestras = suetomamuestras;
+        this.suetipoanalisis = suetipoanalisis;        
         this.sueresultados = sueresultados;
+        this.suetomamuestras = suetomamuestras;
         this.lotecultivadoid = lotecultivadoid;
     }
 }

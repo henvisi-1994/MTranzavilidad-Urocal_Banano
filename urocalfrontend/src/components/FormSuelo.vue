@@ -87,13 +87,13 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="suelo.suetomamuestra"
+                label="Fecha toma muestra"
+                v-model="suelo.suetomamuestras"
                 class="custom px-2"
                 filled
                 dense
-                label="Fecha toma muestra"
-                readonly
-                :rules="[reglas.campoVacio(suelo.suetomamuestras)]"
+                :rules="[reglas.campoVacio(suelo.suetomamuestras)]"                
+                readonly                
                 v-bind="attrs"
                 v-on="on"
                 :disabled="bloquearCamposFormSuelo"
@@ -136,6 +136,15 @@ export default {
         return this.$store.commit("moduloSuelo/agregarSuelo", v);
       },
     },
+
+    /*sueloo: {
+      get() {
+        return this.$store.getters["moduloMedioAmbiente/medAmbiente"];
+      },
+      set(v) {
+        return this.$store.commit("moduloMedioAmbiente/agregarMedioAmbiente", v);
+      },
+    },*/
 
     // Obtiene la variable que indica si el formulario es valido
     formSueloValido: {
