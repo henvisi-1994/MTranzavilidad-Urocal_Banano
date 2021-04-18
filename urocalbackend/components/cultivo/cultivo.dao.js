@@ -1,6 +1,7 @@
 // Data Access Object
 // Se comunica con la base de datos
 const pool = require('../../services/postgresql/index');
+const ConductorPersonaController = require('../conductorpersona/ConductorPersona.controller');
 
 module.exports = {
     async crearCultivo(cultivo) {
@@ -44,8 +45,11 @@ module.exports = {
     },
 
     async actualizarCultivo(id, cultivo) {
-        let query = `UPDATE cultivo SET lotecultivadoid = '${cultivo.lotecultivadoid}', productoid = '${cultivo.productoid}'
-        WHERE cultivoid = ${id}`;
+        let query = `UPDATE cultivo SET productoid = '${cultivo.productoid}'
+        WHERE lotecultivadoid = ${id};`;
+
+        console.log("iddddd "+id);
+        console.log("productoiddd "+cultivo.productoid);
         let result = await pool.query(query);
 
         return result.rowCount; // Devuelve 1 si actualizó el cultivo y 0 sino lo hizo.
@@ -53,6 +57,12 @@ module.exports = {
 
     async eliminarCultivo(id) {
         let query = `DELETE FROM cultivo WHERE cultivoid = ${id}`;
+        let result = await pool.query(query);
+
+        return result.rowCount; // Devuelve 1 si borró el cultivo y 0 sino lo hizo.
+    },
+    async eliminarCultivolotecultivadoid(id) {
+        let query = `DELETE FROM cultivo WHERE lotecultivadoid = ${id}`;
         let result = await pool.query(query);
 
         return result.rowCount; // Devuelve 1 si borró el cultivo y 0 sino lo hizo.

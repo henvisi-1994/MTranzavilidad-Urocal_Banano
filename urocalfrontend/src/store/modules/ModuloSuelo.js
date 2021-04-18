@@ -21,7 +21,7 @@ export default {
 
         // Vacia el modelo suelo
         vaciarSuelo(state) {
-            state.suelo = new Suelo('', '', '', '', '', '', '', '', '');
+            state.suelo = new Suelo('', '', '', '', '', '', '', '', '')
         },
 
         // Modifica el estado de la variable formSueloValido
