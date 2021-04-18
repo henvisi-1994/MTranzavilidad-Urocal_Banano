@@ -8,15 +8,16 @@
             placeholder="Seleccione un centro de acopio"
             class="style-chooser"
             label="centroacopionombre"
-            :reduce="(listaAcopioStore) => listaAcopioStore.centroacopioid"
-            :options="listaAcopioStore"
+            @input="obtenerTodosCentroAcopio" 
+            :reduce="(listaCentroAcopio) => listaCentroAcopio.centroacopioid"
+            :options="listaCentroAcopio"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
-                No hay resultados para <em>{{ search }}</em
+                No hay resultados para <em>{{ search }}</em 
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>Empiece a escribir un  centro de acopio</em>
+              <em style="opacity: 0.5" v-else>Empiece a escribir una centro de Acopio</em>
             </template>
           </v-select>
         </v-col>
@@ -122,6 +123,9 @@ import { mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
+import servicioCentroAcopio from '../services/ServicioCentroAcopio';
+import servicioCultivo from "../services/ServicioCultivo";
+
 export default {
   name: "FormMonitoreoRoedorCentroAcopio",
 
@@ -129,8 +133,13 @@ export default {
     vSelect,
   },
 
+  mounted() {
+    this.obtenerTodosCentroAcopio();
+  },
+
   data() {
     return {
+      listaCentroAcopio: [],
       acopio: null,
       fecha: null,
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
@@ -150,7 +159,7 @@ export default {
 
   computed: {
     // Obtiene el modelo MonitoreoRoedorCentroAcopio
-    ...mapState("moduloMonitoreoRoedorCentroAcopio", ["monitoreoRoedorCentroAcopio"]),
+    ...mapState("moduloMonitoreoRoedorCentroAcopio", ["monitoreoRoedorCentroAcopio"], ["listaAcopioStore"]),
 
     // Obtiene la variable que indica si el formulario es valido
     formMonitoreoRoedorCentroAcopioValido: {
@@ -167,9 +176,10 @@ export default {
         return JSON.parse(JSON.stringify(this.$store.getters["moduloMonitoreoRoedorCentroAcopio/listaAcopioStore"]));
       },
       set(v) {
-        return this.$store.commit("moduloMonitoreoRoedorCentroAcopio/establecerListaAcopioaStore", v);
+        return this.$store.commit("moduloMonitoreoRoedorCentroAcopio/establecerListaAcopioStore", v);
       },
     },
+
 
     modeloMonitoreoRoedorCentroAcopioStore: {
       get() {
@@ -194,6 +204,15 @@ export default {
         const [year, month, day] = fecha.split('-')
         return `${day}/${month}/${year}`
     },
+    //Obtiene el centro de acopio
+      async obtenerTodosCentroAcopio() {
+      let resultado = await servicioCentroAcopio.obtenerTodosCentroAcopio();
+      this.listaCentroAcopio = resultado.data; 
+      
+    },
+    limpiarIds(){
+      this.centroacopioid = '';
+    }
   },
 };
 </script>
