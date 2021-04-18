@@ -233,7 +233,7 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/establecerModeloFacturaExportStore", v);
+        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
       },
     },
     // editarFactExport: {

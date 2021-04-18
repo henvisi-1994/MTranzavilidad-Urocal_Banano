@@ -24,7 +24,6 @@ module.exports = {
         try {
             let rowCount = await compraModel.deleteCompra(id);
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Compra no registrado", tipo: "error" });
-
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar la compra", tipo: "error" });
         }
@@ -32,18 +31,23 @@ module.exports = {
     // Crear un nuevo revision humedad
     async createCompra(req, res) {
         // Añadir capa de validación
-        const { compraid, comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores,
-            comtotal, comobservaciones, guiaremisionid } = req.body;
+        const {comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores, comtotal,
+            comobservaciones, guiaremisionid,asociacionid, comcod, comlugar, vehiculoid,productorid } = req.body;
         try {
             let result = await compraModel.createCompra({
-                comnumero: comnumero,
-                comfechaemision: comfechaemision,
-                comsubtotal: comsubtotal,
-                comdescuentos: comdescuentos,
-                comotrosvalores: comotrosvalores,
-                comtotal: comtotal,
-                comobservaciones: comobservaciones,
-                guiaremisionid: guiaremisionid
+                comnumero : comnumero,
+                comfechaemision : comfechaemision,
+                comsubtotal : comsubtotal,
+                comdescuentos : comdescuentos,
+                comotrosvalores : comotrosvalores,
+                comtotal : comtotal,
+                comobservaciones : comobservaciones,
+                guiaremisionid : guiaremisionid,
+                asociacionid : asociacionid,
+                comcod : comcod,
+                comlugar : comlugar,
+                vehiculoid: vehiculoid,
+                productorid:productorid
             });
 
             return res.status(201).send({ message: "Compra registrada", compraid: result.compraid });
@@ -56,24 +60,23 @@ module.exports = {
     // Actualiza informacion de una revision humedad
     async updateCompra(req, res) {
         const { id } = req.params;
-        const { compraid, comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores,
-            comtotal, comobservaciones, guiaremisionid, productor, organizacion, cod, transporte, lugar } = req.body;
+        const { comnumero, comfechaemision, comsubtotal, comdescuentos, comotrosvalores, comtotal,
+            comobservaciones, guiaremisionid,asociacionid, comcod, comlugar, vehiculoid,productorid } = req.body;
         try {
             const rowCount = await compraModel.updateCompra(id, {
-                compraid: compraid,
-                comnumero: comnumero,
-                comfechaemision: comfechaemision,
-                comsubtotal: comsubtotal,
-                comdescuentos: comdescuentos,
-                comotrosvalores: comotrosvalores,
-                comtotal: comtotal,
-                comobservaciones: comobservaciones,
-                guiaremisionid: guiaremisionid,
-                productor,
-                organizacion,
-                cod,
-                transporte: transporte.vehplaca,
-                lugar
+                comnumero : comnumero,
+                comfechaemision : comfechaemision,
+                comsubtotal : comsubtotal,
+                comdescuentos : comdescuentos,
+                comotrosvalores : comotrosvalores,
+                comtotal : comtotal,
+                comobservaciones : comobservaciones,
+                guiaremisionid : guiaremisionid,
+                asociacionid : asociacionid,
+                comcod : comcod,
+                comlugar : comlugar,
+                vehiculoid: vehiculoid,
+                productorid:productorid
             });
             return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
         } catch (error) {

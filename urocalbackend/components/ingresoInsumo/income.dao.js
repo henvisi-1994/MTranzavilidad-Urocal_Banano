@@ -5,12 +5,12 @@ const pool = require('../../services/postgresql/index');
 module.exports = {
     async createincome(income) {
         // Registro en tabla incomeo
-        console.log("Esto tiene income ...", income)
-        query = `INSERT INTO ingresoinsumo (ingresoinsumosid, inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, ingencargado) VALUES 
-                    ('${income.ingresoinsumosid}','${income.inginsfechaingreso}','${income.inginsproducto}','
+        //console.log("Esto tiene income ...", income)
+        query = `INSERT INTO ingresoinsumo (inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, ingencargado, centroacopioid) VALUES 
+                    ('${income.inginsfechaingreso}','${income.inginsproducto}','
                     ${income.inginsfactura}','${income.inginsproveedor}','${income.inginscantidadingreso}','
-                    ${income.inginsunidad}','${income.inginssaldo}','${income.ingencargado}')`;
-                    console.log("Esto tiene query ...", query)
+                    ${income.inginsunidad}','${income.inginssaldo}','${income.ingencargado}', '${income.centroacopioid}')`;
+                    //console.log("Esto tiene query ...", query)
                     result = await pool.query(query);
 
        
@@ -31,9 +31,9 @@ module.exports = {
 
     async updateincome(id, income) {
         let query = `UPDATE ingresoinsumo SET 
-        ingresoinsumosid = '${income.ingresoinsumosid}', inginsfechaingreso = '${income.inginsfechaingreso}', inginsproducto = '${income.inginsproducto}',
+        inginsfechaingreso = '${income.inginsfechaingreso}', inginsproducto = '${income.inginsproducto}',
         inginsfactura = '${income.inginsfactura}', inginsproveedor = '${income.inginsproveedor}', inginscantidadingreso = '${income.inginscantidadingreso}',
-        inginsunidad = '${income.inginsunidad}', inginssaldo = '${income.inginssaldo}', ingencargado = '${income.ingencargado}'
+        inginsunidad = '${income.inginsunidad}', inginssaldo = '${income.inginssaldo}', ingencargado = '${income.ingencargado}', centroacopioid = '${income.centroacopioid}'
         WHERE ingresoinsumosid = '${id}'`;
         let result = await pool.query(query);
 

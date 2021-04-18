@@ -77,7 +77,10 @@
           <v-text-field class="custom px-2" filled dense
             label="Factura"
             v-model="modeloIngresoInsumoStore.inginsfactura"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsfactura)]"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsfactura),
+                    reglas.soloNumerosPositivos(modeloIngresoInsumoStore.inginsfactura),
+                    //reglas.soloNumeros(modeloIngresoInsumoStore.inginsfactura),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -94,7 +97,10 @@
           <v-text-field class="custom px-2" filled dense
             label="Cantidad de ingresos"
             v-model="modeloIngresoInsumoStore.inginscantidadingreso"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginscantidadingreso)]"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginscantidadingreso),
+                     //reglas.soloNumeros(modeloIngresoInsumoStore.inginscantidadingreso),
+                     reglas.soloNumerosPositivos(modeloIngresoInsumoStore.inginscantidadingreso),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -111,7 +117,10 @@
           <v-text-field class="custom px-2" filled dense
             label="Saldo"
             v-model="modeloIngresoInsumoStore.inginssaldo"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginssaldo)]"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginssaldo),
+                     //reglas.soloNumeros(modeloIngresoInsumoStore.inginssaldo),
+                     reglas.soloNumerosPositivos(modeloIngresoInsumoStore.inginssaldo),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -120,8 +129,8 @@
         <v-col cols="12" md="6">
           <v-text-field class="custom px-2" filled dense
             label="Encargado"
-            v-model="modeloIngresoInsumoStore.inginsencargado"
-            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.inginsencargado)]"
+            v-model="modeloIngresoInsumoStore.ingencargado"
+            :rules="[reglas.campoVacio(modeloIngresoInsumoStore.ingencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -160,9 +169,7 @@ export default {
       fecha: new Date().toISOString().substr(0, 10),
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
-     listaCentroAcopios:[
-      {centroacopioind:"1", centroacopionombre:"centro1"},
-    ]
+      //listaCentroAcopios:[],
     };
   },
 
@@ -183,7 +190,7 @@ export default {
     // ###########################
     // #  MANIPULACIÓN DE DATOS  #
     // ###########################
-    listaCentroAcopiosx: {
+    listaCentroAcopios: {
       get() {
         return JSON.parse(
           JSON.stringify(
@@ -274,13 +281,19 @@ export default {
     // INSERT: Agrega un usuario
     async guardarIngresoInsumo() {
       console.log("dataper:", this.modeloIngresoInsumoStore);
-      let respuesta = await ServicioIngresoInsumo.agregarIngresoInsumo(
+      try {
+        let respuesta = await ServicioIngresoInsumo.agregarIngresoInsumo(
         this.modeloIngresoInsumoStore
       );
-      if (respuesta.status == 201) {
-        this.cerrarDialogo();
-        this.cargarListaIngresoInsumo();
-        this.vaciarModeloIngresoInsumo();
+        if (respuesta.status == 201) {
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaIngresoInsumo();
+          this.vaciarModeloIngresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 

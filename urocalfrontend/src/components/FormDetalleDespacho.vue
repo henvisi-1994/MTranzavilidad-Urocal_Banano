@@ -35,7 +35,6 @@
             dense
             :rules="[
               reglas.campoVacio(detalledespacho.detdesnumerobultos),
-              reglas.soloNumeros(detalledespacho.detdesnumerobultos),
               reglas.soloNumerosPositivos(detalledespacho.detdesnumerobultos),
             ]"
             error-count="3"
@@ -54,7 +53,6 @@
             dense
             :rules="[
               reglas.campoVacio(detalledespacho.detdespesounitario),
-              reglas.soloNumeros(detalledespacho.detdespesounitario),
               reglas.soloNumerosPositivos(detalledespacho.detdespesounitario),]"
             error-count="3"
              
@@ -73,7 +71,6 @@
             dense
             :rules="[
               reglas.campoVacio(detalledespacho.detdespesototal),
-              reglas.soloNumeros(detalledespacho.detdespesototal),
               reglas.soloNumerosPositivos(detalledespacho.detdespesototal),
               ]"
             error-count="3"

@@ -34,7 +34,6 @@
             dense
             :rules="[
               reglas.campoVacio(despacho.desnumero),
-              reglas.soloNumeros(despacho.desnumero),
               reglas.soloNumerosPositivos(despacho.desnumero),
               //reglas.soloDiezDigitos(despacho.desnumero),
             ]"

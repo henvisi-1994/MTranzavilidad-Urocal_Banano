@@ -162,6 +162,7 @@
           :reduce="(listaUnidad) => listaUnidad.unidadid"
           :options="listaUnidad"
           :disabled="bloquearCamposFormDetalleCompra"
+          :rules="[reglas.soloNumerosPositivos(detCompra.detunidad)]"
           @input="establecerUnidad()"
         >
           <template v-slot:no-options="{ search, searching }">
@@ -229,7 +230,7 @@
           class="style-chooser custom px-2"
           dense
           filled
-          label="cosechaid"
+          label="coscodigo"
           :reduce="(listaCosechaSinDetalle) => listaCosechaSinDetalle.cosechaid"
           :options="listaCosechaSinDetalle"
           :disabled="bloquearCamposFormDetalleCompra"
@@ -292,18 +293,25 @@ export default {
     // Obtiene y modifica el estado de la variable dialogMostrarDetalleCompra
     dialogMostrarDetalleCompra: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarDetalleCompra"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarDetalleCompra"
+        ];
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarDetalleCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarDetalleCompra",
+          v
+        );
       },
     },
 
     // Obtiene la variable que indica si el formulario es valido
     formDetalleCompraValido: {
       get() {
-        return this.$store.getters["moduloDetalleCompra/formDetalleCompraValido"];
+        return this.$store.getters[
+          "moduloDetalleCompra/formDetalleCompraValido"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -316,7 +324,9 @@ export default {
     // Obtiene la variable bloquearCamposFormDetalleCompra
     bloquearCamposFormDetalleCompra: {
       get() {
-        return this.$store.getters["moduloDetalleCompra/bloquearCamposFormDetalleCompra"];
+        return this.$store.getters[
+          "moduloDetalleCompra/bloquearCamposFormDetalleCompra"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -342,17 +352,25 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoDetalleCompra"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoDetalleCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoDetalleCompra",
+          v
+        );
       },
     },
 
     // Obtiene y modifica el estado de la variable listaCosechaSinDetalle
     listaCosechaSinDetalle: {
       get() {
-        return this.$store.getters["moduloDetalleCompra/listaCosechaSinDetalle"];
+        return this.$store.getters[
+          "moduloDetalleCompra/listaCosechaSinDetalle"
+        ];
       },
       set(v) {
-        return this.$store.commit("moduloDetalleCompra/asignarListaCosechaSinDetalle", v);
+        return this.$store.commit(
+          "moduloDetalleCompra/asignarListaCosechaSinDetalle",
+          v
+        );
       },
     },
 
@@ -431,7 +449,6 @@ export default {
           break;
       }
     },
-
     async obtenerCosechasSinDetalle() {
       let respuestaServicioCosecha = await servicioCosecha.obtenerCosechasSinDetalleCompra();
       this.listaCosechaSinDetalle = respuestaServicioCosecha.data;
@@ -452,13 +469,15 @@ export default {
                 { unidadid: "1", unidad: "Libras" },
                 { unidadid: "2", unidad: "Quintales" },
               ];
-              if (this.detCompra.detunidad === "Libras") this.detCompra.detunidad = "1";
+              if (this.detCompra.detunidad === "Libras")
+                this.detCompra.detunidad = "1";
               if (this.detCompra.detunidad === "Quintales")
                 this.detCompra.detunidad = "2";
               break;
             case "2":
               this.listaUnidad = [{ unidadid: "1", unidad: "Tachos" }];
-              if (this.detCompra.detunidad === "Tachos") this.detCompra.detunidad = "1";
+              if (this.detCompra.detunidad === "Tachos")
+                this.detCompra.detunidad = "1";
               break;
           }
         }, 100);

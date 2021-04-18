@@ -3,15 +3,15 @@
     <v-container>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guiserie" class="custom px-2" dense filled label="Serie" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guiserie)]"></v-text-field>
+          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guiserie" class="custom px-2" dense filled label="Serie" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guiserie),reglas.serie(modeloGuiaRemisionStore.guiserie)]"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guinumero" class="custom px-2" dense filled label="Número" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guinumero)]"></v-text-field>
+          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guinumero" class="custom px-2" dense filled label="Número" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guinumero),reglas.soloNumeros(modeloGuiaRemisionStore.guinumero)]"></v-text-field>
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guicomprobanteventa" class="custom px-2" dense filled label="Número del comprobante de venta" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guicomprobanteventa)]"></v-text-field>
+          <v-text-field :disabled="editarGuiaRemision" v-model="modeloGuiaRemisionStore.guicomprobanteventa" class="custom px-2" dense filled label="Número del comprobante de venta" :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guicomprobanteventa),reglas.soloNumeros(modeloGuiaRemisionStore.guicomprobanteventa)]"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-menu
@@ -92,6 +92,7 @@
                 dense filled
                 v-bind="attrs"
                 v-on="on"
+                :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guihorainicio)]"
               ></v-text-field>
             </template>
             <v-time-picker
@@ -153,6 +154,7 @@
                 dense filled
                 v-bind="attrs"
                 v-on="on"
+                :rules="[reglas.campoVacio(modeloGuiaRemisionStore.guihorafin)]"
               ></v-text-field>
             </template>
             <v-time-picker
@@ -315,15 +317,35 @@
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" type="number" min="0" v-model="bien.carcantidad" class="custom px-2" dense filled label="Cantidad" :rules="[reglas.campoVacio(bien.carcantidad)]"></v-text-field>
+          <v-text-field :disabled="editarGuiaRemision" v-model="bien.carcantidad" class="custom px-2" dense filled label="Cantidad" :rules="[reglas.campoVacio(bien.carcantidad),reglas.soloNumeros(bien.carcantidad)]"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="bien.carunidad" class="custom px-2" dense filled label="Unidad" :rules="[reglas.campoVacio(bien.carunidad)]"></v-text-field>
+          <v-text-field :disabled="editarGuiaRemision" v-model="bien.carunidad" class="custom px-2" dense filled label="Unidad" :rules="[reglas.campoVacio(bien.carunidad),reglas.soloLetras(bien.carunidad)]"></v-text-field>
         </v-col>
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" md="6">
-          <v-text-field :disabled="editarGuiaRemision" v-model="bien.cosechaid" class="custom px-2" dense filled label="Código de cosecha" :rules="[reglas.campoVacio(bien.cosechaid)]"></v-text-field>
+            
+            <v-select
+            v-model="bien.cosechaid"
+            placeholder="Seleccione un codigo de cosecha"
+            class="style-chooser"
+            label="coscodigo"
+            :reduce="(listaCosechas) => listaCosechas.cosechaid"
+            :options="listaCosechas"
+            :disabled="editarGuiaRemision"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else>empiece a escribir un codigo de coscha</em>
+            </template>
+          </v-select>
+
+
+
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field :disabled="editarGuiaRemision" v-model="bien.cardescripcion" class="custom px-2" dense filled label="Descripción" :rules="[reglas.campoVacio(bien.cardescripcion)]"></v-text-field>
@@ -365,6 +387,7 @@ import {mapState} from 'vuex';
 import ServicioVehiculo from "../services/ServicioVehiculo";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import ServicioCosecha from "../services/ServicioCosecha";
 
 export default {
   name: 'FormGuiaRemision',
@@ -392,6 +415,7 @@ export default {
         cosechaid: '',
       },
       listaVehiculos:[],
+      listaCosechas:[],
       cabeceraTablaBienes: [
         {
           text: "Cantidad",
@@ -516,6 +540,7 @@ export default {
   
   mounted(){
     this.listaVehiculo();
+    this.listaCosecha();
   },
   methods: {
     agregarBien() {
@@ -568,6 +593,11 @@ export default {
     async listaVehiculo (){
       let respuesta= await ServicioVehiculo.obtenerTodosVehiculos();
       this.listaVehiculos= respuesta.data;
+    },
+
+     async listaCosecha (){
+      let respuesta= await ServicioCosecha.obtenerTodosCosecha();
+      this.listaCosechas= respuesta.data;
     },
 
     eliminarBien(item){
