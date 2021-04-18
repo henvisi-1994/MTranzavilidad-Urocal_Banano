@@ -136,6 +136,9 @@ export default {
         //Empresa
         dialogoNuevaEmpresa: false,
         dialogoMostrarEmpresa: false,
+        //Certificaciones
+        dialogoNuevaCertificacion: false,
+        dialogoMostrarCertificacion: false,
     },
 
     mutations: {
@@ -318,7 +321,7 @@ export default {
 
         /* Ingreso Insumo*/
         toggleDialogNuevoIngresoInsumo(state, newState) {
-            state.dialogNuevoIngresoInsumo = newState; 
+            state.dialogNuevoIngresoInsumo = newState;
         },
 
         toggleDialogMostrarIngresoInsumo(state, newState) {
@@ -516,12 +519,19 @@ export default {
         toggleDialogoMostrarFactExport(state, newState) {
             state.dialogMostrarFactExport = newState;
         },
-         //Empresa
-         toggleDialogoNuevaEmpresa(state, newState) {
+        //Empresa
+        toggleDialogoNuevaEmpresa(state, newState) {
             state.dialogoNuevaEmpresa = newState;
         },
         toggleDialogoMostrarEmpresa(state, newState) {
             state.dialogoMostrarEmpresa = newState;
+        },
+        //Certificaciones
+        toggleDialogoNuevaCertificacion(state, newState) {
+            state.dialogoNuevaCertificacion = newState;
+        },
+        toggleDialogoMostrarCertificacion(state, newState) {
+            state.dialogoMostrarCertificacion = newState;
         },
     },
 
@@ -589,7 +599,7 @@ export default {
         // IngresoInsumo
         dialogNuevoIngresoInsumo: (state) => state.dialogNuevoIngresoInsumo,                                    // Devuelve la variable dialogNuevoIngresoInsumo
         dialogoNuevaSiembra: (state) => state.dialogoNuevaSiembra,                                              // Devuelve la variable dialogoNuevaSiembra
-        dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza, 
+        dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza,
         dialogEditarIngresoInsumo: (state) => state.dialogEditarIngresoInsumo,                                                // Devuelve la variable dialogoNuevaMaleza
 
         dialogEditarUsuarioPersona: (state) => state.dialogEditarUsuarioPersona,                                // Devuelve la variable dialogEditarUsuarioPersona
@@ -673,5 +683,8 @@ export default {
         //Empresa
         dialogoNuevaEmpresa: (state) => state.dialogoNuevaEmpresa,
         dialogoMostrarEmpresa: (state) => state.dialogoMostrarEmpresa,
+         //Certificaciones
+         dialogoNuevaCertificacion: (state) => state.dialogoNuevaCertificacion,
+         dialogoMostrarCertificacion: (state) => state.dialogoMostrarCertificacion,
     },
 }
