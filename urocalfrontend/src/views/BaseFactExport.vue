@@ -102,14 +102,14 @@ export default {
         },
         {
           text: "Comprador",
-          value: "compradorid",
+          value: "comprador",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Vendeddor",
-          value: "vendedorid",
+          value: "vendedor",
           align: "center",
           class: "grey lighten-3",
         },
@@ -263,10 +263,11 @@ export default {
       this.dialogoMostrarFactExport = true; // Abre el DialogMostrarRiego
       //this.bloquearFacturaExport = true;
       this.vaciarFacturaExport(); // Vacia el modelo riego
-      let resultado = await ServicioFacturaExportacion.obtenerFacturaExport(
+      let resultado = await ServicioFacturaExportacion.obtenerDetalleFacturaExport(
         item.facturaexportacionid
       );
       this.factExportaStore = {
+        facturaexportacionid:item.facturaexportacionid,
         facnumero: item.facnumero,
         compradorid: item.compradorid,
         vendedorid: item.vendedorid,

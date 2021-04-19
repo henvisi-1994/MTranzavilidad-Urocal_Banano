@@ -110,12 +110,12 @@ export default {
 
   methods: {
     async actualizarRegistro(){
-      let respuesta = SerivicioFactExport.actualizarFacturaExport(this.factExportaStore);
+      let respuesta = await SerivicioFactExport.actualizarFacturaExport(this.factExportaStore.facturaexportacionid,this.factExportaStore);
        if(respuesta.status == 200){
          this.cerrarDialogMostrarFacturaExport();
          this.cargarListaFactExport();
          this.vaciarFacturaExport();         
-         //this.$toast.success(respuesta.data.message);
+         this.$toast.success(respuesta.data.message);
        }
       
     },

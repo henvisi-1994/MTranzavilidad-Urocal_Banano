@@ -96,6 +96,7 @@ export default {
           this.cerrarDialogNuevoFactExport();
           this.cargarListaFactExport();
           this.vaciarFacturaExport();
+          this.$toast.success(respuesta.data.message);
         }
     },
 
