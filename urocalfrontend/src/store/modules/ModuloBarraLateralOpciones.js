@@ -310,7 +310,7 @@ export default {
                     { texto: 'Sitios', ruta: '/configuracion/sitio', },
                     { texto: 'Empresas', ruta: '/configuracion/Empresa', },
                     { texto: 'Marcas', ruta: '#', },
-                    { texto: 'Certificaciones', ruta: '#', }
+                    { texto: 'Certificaciones', ruta: '/configuracion/Certificaciones', }
                 ]
             },
         ]

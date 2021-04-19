@@ -228,6 +228,12 @@ const routes = [
       name: 'BaseEmpresa',
       component: () => import('@/views/BaseEmpresa.vue'),
     },
+      /// Certificaciones
+  {
+    path: '/configuracion/Certificaciones',
+    name: 'BaseEmpresa',
+    component: () => import('@/views/BaseCertificaciones.vue'),
+  },
   // -----------------------------------------------------------------------------------------
 ]
 

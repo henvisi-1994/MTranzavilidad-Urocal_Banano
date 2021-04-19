@@ -80,7 +80,7 @@ module.exports = {
         try {
             let rowCount = await rodentMonitoringGatheringCenterModel.deleteRodentMonitoringGatheringCenter(id);
             if (rowCount == 1) {
-                return res.status(200).send({ message: "Eliminado exitosamente" });
+                return res.status(400).send({ message: "Eliminado exitosamente" });
             } else {
                 return res.status(400).send({ message: "Monitoreo roedor no registrado" });
             }               
