@@ -235,6 +235,23 @@ const routes = [
     component: () => import('@/views/BaseCertificaciones.vue'),
   },
   // -----------------------------------------------------------------------------------------
+// --------------------------- REPORTES -----------------------------
+   {
+    path: '/reporte/reporteCompra',
+    name: 'BaseReporteCompra',
+    component: () => import('@/views/BaseReporteCompra.vue'),
+  },
+  {
+    path: '/reporte/reporteKardexProductos',
+    name: 'BaseReporteKardexProductos',
+    component: () => import('@/views/BaseReporteKardexProductos.vue'),
+  },
+
+  {
+    path: '/reporte/reporteKardexIngresosEgresos',
+    name: 'BaseReporteKardexIngresosEgresos',
+    component: () => import('@/views/BaseReporteKardexIngresosEgresos.vue'),
+  },
 ]
 
 const router = new VueRouter({
