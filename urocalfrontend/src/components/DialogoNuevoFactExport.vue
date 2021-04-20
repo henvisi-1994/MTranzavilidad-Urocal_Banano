@@ -84,6 +84,17 @@ export default {
         );
       },
     },
+        bloquearFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/cambiarEstadoBloquearFacturaExport",
+          v
+        );
+      },
+    },
 
     // // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
     ...mapState("moduloFacturaExport", ["formFacturaExportValido","factExportaStore"]),
@@ -91,13 +102,19 @@ export default {
 
   methods: {
     async agregarFactExport() {
-        let respuesta = await serivicioFactExport.agregarFacturaExport(this.factExportaStore);
+     let resultado = this.listaFacturaExportStore.find(factura => factura.faclote===this.factExportaStore.faclote);
+      if(typeof resultado === 'undefined'){
+      let respuesta = await serivicioFactExport.agregarFacturaExport(this.factExportaStore);
         if (respuesta.status == 201) {
           this.cerrarDialogNuevoFactExport();
           this.cargarListaFactExport();
           this.vaciarFacturaExport();
           this.$toast.success(respuesta.data.message);
         }
+      } else{
+        this.$toast.error('Porfavor ingrese un  lote diferente');
+      }
+
     },
 
     async cargarListaFactExport() {
