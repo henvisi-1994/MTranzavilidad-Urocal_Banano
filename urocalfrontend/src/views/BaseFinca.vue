@@ -8,14 +8,21 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
           </v-col>
           <v-col cols="12" md="6">
             <!-- Caja de búsqueda -->
             <v-text-field
               v-model="buscarFinca"
               append-icon="mdi-magnify"
-              label="Buscar" class="custom" filled dense
+              label="Buscar"
+              class="custom"
+              filled
+              dense
             ></v-text-field>
           </v-col>
         </v-row>
@@ -29,14 +36,17 @@
           sort-by="fincaid"
           :items="listaFincaStore"
           :search="buscarFinca"
-          class="elevation-1">
+          class="elevation-1"
+        >
           <template v-slot:top>
             <!-- Tabs que muestra la informacion detallada de Finca -->
             <DialogMostrarFinca ref="DialogMostrarFinca"></DialogMostrarFinca>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirMostrarFinca(item)"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirMostrarFinca(item)">
+              mdi-eye
+            </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -45,7 +55,9 @@
         <!-- Botón para agregar nuevo Finca -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="300px"
+          large
+          elevation="0"
           color="primary"
           @click="cargarDialogNuevoFinca()"
           >Nuevo</v-btn
@@ -170,7 +182,10 @@ export default {
         return this.$store.getters["moduloFinca/listaAsociacionStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFinca/establecerListaAsociacionStore", v);
+        return this.$store.commit(
+          "moduloFinca/establecerListaAsociacionStore",
+          v
+        );
       },
     },
 
@@ -179,7 +194,10 @@ export default {
         return this.$store.getters["moduloFinca/listaPropietarioStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFinca/establecerListaPropietarioStore", v);
+        return this.$store.commit(
+          "moduloFinca/establecerListaPropietarioStore",
+          v
+        );
       },
     },
 
@@ -210,7 +228,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogMostrarFinca"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarFinca", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarFinca",
+          v
+        );
       },
     },
 
@@ -286,11 +307,41 @@ export default {
       this.vaciarFinca(); // Vacia el modelo Finca
     },
 
-    abrirMostrarFinca(item) {
+    async abrirMostrarFinca(item) {
       this.dialogMostrarFinca = !this.dialogMostrarFinca;
       this.vaciarFinca(); // Vacia el modelo Finca
-      const indiceEditar = this.listaFincaStore.indexOf(item);
-      this.modeloFincaStore = item;
+      let respuesta = await ServicioFinca.obtenerDetalleFinca(item.fincaid);
+      let detalle = respuesta.data;
+      this.modeloFincaStore = {
+        fincaid : item.fincaid,
+        fincodigo : item.fincodigo,
+        finnombrefinca : item.finnombrefinca,
+        finsuperficietotal : item.finsuperficietotal,
+        finsuperficiecultivada : item.finsuperficiecultivada,
+        fincoordenadax : item.fincoordenadax,
+        fincoordenaday : item.fincoordenaday,
+        finproductosprohibidos : item.finproductosprohibidos,
+        finprimerainspeccion : item.finprimerainspeccion,
+        finultimainspeccion : item.finultimainspeccion,
+        finnoconformidades : item.finnoconformidades,
+        fincertificacioneu : item.fincertificacioneu,
+        fincertificacionnop : item.fincertificacionnop,
+        fincertificacionjas : item.fincertificacionjas,
+        finobservacion : item.finobservacion,
+        asociacionfinca : {
+            asociacionid: item.asociacionfinca.asociacionid,
+            asonombre: item.asociacionfinca.asonombre
+        },
+        fincapropietario : {
+            propietarioid: item.fincapropietario.propietarioid,
+            propietario: item.fincapropietario.propietario
+        },
+        sitiofinca : {
+            sitioid: item.sitiofinca.sitioid,
+            sitionombre: item.sitiofinca.sitionombre
+        },
+        detalle : detalle
+      };
     },
   },
 

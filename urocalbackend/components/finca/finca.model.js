@@ -11,7 +11,12 @@ module.exports = {
     async obtenerPropietario(){
         return fincaDao.obtenerPropietario();
     },
-
+    async obtenerDetalleFinca(id){
+        return fincaDao.obtenerDetalleFinca(id);
+    },
+    async eliminarDetalle(id){
+        return fincaDao.eliminarDetalle(id);
+    },
     async crearFinca(finca){
         return fincaDao.crearFinca(finca);
     },
