@@ -44,7 +44,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormFactExport from "@/components/FormFactExport";
-import SerivicioFactExport from '../services/ServicioFacturaExportacion';
+import serivicioFactExport from '../services/ServicioFacturaExportacion';
 
 export default {
   name: "DialogoNuevaFactExport",
@@ -91,7 +91,7 @@ export default {
 
   methods: {
     async agregarFactExport() {
-        let respuesta = await SerivicioFactExport.agregarFacturaExport(this.factExportaStore);
+        let respuesta = await serivicioFactExport.agregarFacturaExport(this.factExportaStore);
         if (respuesta.status == 201) {
           this.cerrarDialogNuevoFactExport();
           this.cargarListaFactExport();
@@ -101,14 +101,10 @@ export default {
     },
 
     async cargarListaFactExport() {
-         let listaFactExports = [];
-         let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
-         let riegos = await respuesta.data;
+         let respuesta = await serivicioFactExport.obtenerTodosFacturaExport();
+         let facturas = await respuesta.data;
          this.$store.commit("moduloFacturaExport/vaciarLista", null);
-         riegos.forEach((f) => {
-           listaFactExports.push(f);
-         });
-         this.listaFactExportStore = listaFactExports;
+         this.listaFactExportStore = facturas;
     },
 
     cerrarDialogNuevoFactExport() {

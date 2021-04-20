@@ -177,7 +177,6 @@
             filled
             dense
             v-model="detalle.detcantidad"
-            @change="calcularTotalDetalle"
             :disabled="bloquearFacturaExport"
             label="Cantidad"
           >
@@ -201,7 +200,6 @@
             class="custom px-2"
             filled
             dense
-            @change="calcularTotalDetalle"
             v-model="detalle.detpreciounitario"
             :disabled="bloquearFacturaExport"
             label="Precio Unitario"
@@ -385,7 +383,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
-            :disabled="bloquearFacturaExport"
+            :disabled="true"
             filled
             dense
             label="Total"
@@ -591,7 +589,7 @@ export default {
       cabeceraTablaDetalleFacturaExport: [
         {
           text: "Código Principal",
-          value: "detcodigoprincipl",
+          value: "detcodigoprincipal",
           align: "center",
           class: "grey lighten-3",
         },
@@ -697,6 +695,7 @@ export default {
       });
       this.factExportaStore.facsubtotal0 = subtotal;
       this.factExportaStore.facsubtotalsinimpuestos = subtotal;
+      this.factExportaStore.facvalortotal = subtotal;
       return this.factExportaStore.facsubtotal0;
     },
     // Obtiene el modelo Ciudad
@@ -735,10 +734,6 @@ export default {
           detpreciototal: "",
         })
       );
-    },
-    calcularTotal() {
-      this.detalle.detpreciototal =
-        this.detalle.detpreciounitario * this.detalle.detcantidad;
     },
     eliminarDetalleFctura(item) {
       const index = this.factExportaStore.detalle.indexOf(item);
