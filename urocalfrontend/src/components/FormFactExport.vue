@@ -14,6 +14,19 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Vapor"
+            v-model="factExportaStore.facvapor"
+            :rules="[reglas.campoVacio(factExportaStore.facvapor)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
           <v-select
             v-model="factExportaStore.compradorid"
             :disabled="bloquearFacturaExport"
@@ -28,15 +41,14 @@
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>empiece a escribir razon social</em>
+              <em style="opacity: 0.5" v-else
+                >empiece a escribir razon social</em
+              >
             </template>
           </v-select>
-
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
-           <v-select
+          <v-select
             v-model="factExportaStore.vendedorid"
             :disabled="bloquearFacturaExport"
             placeholder="Vendedor"
@@ -50,10 +62,14 @@
                 No hay resultados para <em>{{ search }}</em
                 >.
               </template>
-              <em style="opacity: 0.5" v-else>empiece a escribir razon social</em>
+              <em style="opacity: 0.5" v-else
+                >empiece a escribir razon social</em
+              >
             </template>
           </v-select>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendario"
@@ -84,297 +100,6 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Puerto de Embarque"
-            v-model="factExportaStore.facpuertoembarque"
-            :rules="[reglas.campoVacio(factExportaStore.facpuertoembarque)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Puerto de Destino"
-            v-model="factExportaStore.facpuertodestino"
-            :rules="[reglas.campoVacio(factExportaStore.facpuertodestino)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Vapor"
-            v-model="factExportaStore.facvapor"
-            :rules="[reglas.campoVacio(factExportaStore.facvapor)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Subtotal 12%"
-            v-model="factExportaStore.facsubtotal12"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotal12)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Subtotal 0%"
-            v-model="factExportaStore.facsubtotal0"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotal0)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Subtotal sin IVA"
-            v-model="factExportaStore.facsubtotalsiniva"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotalsiniva)]"
-          ></v-text-field>
-        </v-col>
-                <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Subtotal execento de IVA"
-            v-model="factExportaStore.facsubtotalivaexcento"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotalivaexcento)]"
-          ></v-text-field>
-          
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Subtotal sin  Impuestos"
-            v-model="factExportaStore.facsubtotalsinimpuestos"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotalsinimpuestos)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Descuentos"
-            v-model="factExportaStore.factotaldesc"
-            :rules="[
-              reglas.campoVacio(factExportaStore.factotaldesc),
-            ]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="ICE"
-            v-model="factExportaStore.facice"
-            :rules="[
-              reglas.campoVacio(factExportaStore.facice),
-            ]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="IVA 12%"
-            v-model="factExportaStore.faciva12"
-            :rules="[reglas.campoVacio(factExportaStore.faciva12)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="IRBPN"
-            v-model="factExportaStore.facirbpn"
-            :rules="[reglas.campoVacio(factExportaStore.facirbpn)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Total"
-            v-model="factExportaStore.facvalortotal"
-            :rules="[reglas.campoVacio(factExportaStore.facvalortotal)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Plazo"
-            v-model="factExportaStore.facplazo"
-            :rules="[reglas.campoVacio(factExportaStore.facplazo)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-           <v-select
-            v-model="factExportaStore.facformapago"
-            :disabled="bloquearFacturaExport"
-            placeholder="Seleccione una forma de pago"
-            class="style-chooser"
-            label="descripcion"
-            :reduce="(forma_pago) => forma_pago.nombre"
-            :options="forma_pago"
-          >
-            <template v-slot:no-options="{ search, searching }">
-              <template v-if="searching">
-                No hay resultados para <em>{{ search }}</em
-                >.
-              </template>
-              <em style="opacity: 0.5" v-else>empiece a escribir una forma de pago</em>
-            </template>
-          </v-select>
-
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Tiempo"
-            v-model="factExportaStore.factiempo"
-            :rules="[reglas.campoVacio(factExportaStore.factiempo)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="DAE"
-            v-model="factExportaStore.facdae"
-            :rules="[reglas.campoVacio(factExportaStore.facdae)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Peso Neto"
-            v-model="factExportaStore.facpesoneto"
-            :rules="[reglas.campoVacio(factExportaStore.facpesoneto)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Peso Bruto"
-            v-model="factExportaStore.facpesobruto"
-            :rules="[reglas.campoVacio(factExportaStore.facpesobruto)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Lote"
-            v-model="factExportaStore.faclote"
-            :rules="[reglas.campoVacio(factExportaStore.faclote)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Contenedor"
-            v-model="factExportaStore.faccontenedor"
-            :rules="[reglas.campoVacio(factExportaStore.faccontenedor)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Semana"
-            v-model="factExportaStore.facsemana"
-            :rules="[reglas.campoVacio(factExportaStore.facsemana)]"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            class="custom px-2"
-            :disabled="bloquearFacturaExport"
-            filled
-            dense
-            label="Marca"
-            v-model="factExportaStore.facmarca"
-            :rules="[reglas.campoVacio(factExportaStore.facmarca)]"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-menu
             v-model="menuMostrarCalendarioZarpe"
@@ -405,22 +130,34 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
             :disabled="bloquearFacturaExport"
             filled
             dense
-            label="Certificaciones"
-            v-model="factExportaStore.faccertificaciones"
-            :rules="[reglas.campoVacio(factExportaStore.faccertificaciones)]"
+            label="Puerto de Embarque"
+            v-model="factExportaStore.facpuertoembarque"
+            :rules="[reglas.campoVacio(factExportaStore.facpuertoembarque)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Puerto de Destino"
+            v-model="factExportaStore.facpuertodestino"
+            :rules="[reglas.campoVacio(factExportaStore.facpuertodestino)]"
           ></v-text-field>
         </v-col>
       </v-row>
+
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="2">
-          Detalle de Factura
-        </v-col>
+        <v-col cols="12" md="2"> Detalle de Factura </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="6">
@@ -486,12 +223,14 @@
             class="custom px-2"
             filled
             dense
-            v-model="detalle.detpreciototal"
-            :disabled="bloquearFacturaExport"
+            v-model="calcularTotalDetalle"
+            :disabled="true"
             label="Precio Total"
           ></v-text-field>
         </v-col>
+        <v-row no-gutters justify-md="space-around"> </v-row>
       </v-row>
+
       <v-row class="justify-center">
         <v-btn
           elevation="0"
@@ -504,7 +243,7 @@
           >Agregar Detalle de Factura de Exportación</v-btn
         >
       </v-row>
-      <v-row no-gutters justify-md="space-around" class="mt-10">
+      <v-row no-gutters justify-md="space-around" class="mt-10 mb-2">
         <v-col cols="11">
           <v-data-table
             :headers="cabeceraTablaDetalleFacturaExport"
@@ -531,18 +270,287 @@
           </v-data-table>
         </v-col>
       </v-row>
-      
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="true"
+            filled
+            dense
+            label="Subtotal sin  Impuestos"
+            v-model="factExportaStore.facsubtotalsinimpuestos"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facsubtotalsinimpuestos),
+            ]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Descuentos"
+            v-model="factExportaStore.factotaldesc"
+            :rules="[reglas.campoVacio(factExportaStore.factotaldesc)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Subtotal 12%"
+            v-model="factExportaStore.facsubtotal12"
+            :rules="[reglas.campoVacio(factExportaStore.facsubtotal12)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="true"
+            filled
+            dense
+            label="Subtotal 0%"
+            v-model="calcularTotal"
+            :rules="[reglas.campoVacio(factExportaStore.facsubtotal0)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Subtotal sin IVA"
+            v-model="factExportaStore.facsubtotalsiniva"
+            :rules="[reglas.campoVacio(factExportaStore.facsubtotalsiniva)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Subtotal execento de IVA"
+            v-model="factExportaStore.facsubtotalivaexcento"
+            :rules="[reglas.campoVacio(factExportaStore.facsubtotalivaexcento)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="ICE"
+            v-model="factExportaStore.facice"
+            :rules="[reglas.campoVacio(factExportaStore.facice)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="IVA 12%"
+            v-model="factExportaStore.faciva12"
+            :rules="[reglas.campoVacio(factExportaStore.faciva12)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="IRBPN"
+            v-model="factExportaStore.facirbpn"
+            :rules="[reglas.campoVacio(factExportaStore.facirbpn)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="true"
+            filled
+            dense
+            label="Total"
+            v-model="factExportaStore.facvalortotal"
+            :rules="[reglas.campoVacio(factExportaStore.facvalortotal)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Plazo"
+            v-model="factExportaStore.facplazo"
+            :rules="[reglas.campoVacio(factExportaStore.facplazo)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-select
+            v-model="factExportaStore.facformapago"
+            :disabled="bloquearFacturaExport"
+            placeholder="Forma de Pago"
+            class="style-chooser"
+            label="descripcion"
+            :reduce="(forma_pago) => forma_pago.nombre"
+            :options="forma_pago"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else
+                >empiece a escribir una forma de pago</em
+              >
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Tiempo"
+            v-model="factExportaStore.factiempo"
+            :rules="[reglas.campoVacio(factExportaStore.factiempo)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="3"> Informacion Adicional </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="DAE"
+            v-model="factExportaStore.facdae"
+            :rules="[reglas.campoVacio(factExportaStore.facdae)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Peso Neto"
+            v-model="factExportaStore.facpesoneto"
+            :rules="[reglas.campoVacio(factExportaStore.facpesoneto)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Peso Bruto"
+            v-model="factExportaStore.facpesobruto"
+            :rules="[reglas.campoVacio(factExportaStore.facpesobruto)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Lote"
+            v-model="factExportaStore.faclote"
+            :rules="[reglas.campoVacio(factExportaStore.faclote)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+         <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Contenedor"
+            v-model="factExportaStore.faccontenedor"
+            :rules="[reglas.campoVacio(factExportaStore.faccontenedor)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Semana"
+            v-model="factExportaStore.facsemana"
+            :rules="[reglas.campoVacio(factExportaStore.facsemana)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+          <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Marca"
+            v-model="factExportaStore.facmarca"
+            :rules="[reglas.campoVacio(factExportaStore.facmarca)]"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            class="custom px-2"
+            :disabled="bloquearFacturaExport"
+            filled
+            dense
+            label="Certificaciones"
+            v-model="factExportaStore.faccertificaciones"
+            :rules="[reglas.campoVacio(factExportaStore.faccertificaciones)]"
+          ></v-text-field>
+        </v-col>
+      </v-row>
     </v-container>
   </v-form>
 </template>
 
 <script>
-import { mapMutations,mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import servicioEmpresa from "../services/ServicioEmpresa";
-import ServicioFacturaExportacion from '../services/ServicioFacturaExportacion';
+import ServicioFacturaExportacion from "../services/ServicioFacturaExportacion";
 
 export default {
   name: "FormFactExporta",
@@ -569,19 +577,19 @@ export default {
         { nombre: "Tarjeta de Crédito", descripcion: "Tarjeta de Crédito" },
       ],
       empresas: [],
-      listaFacturasExport:[],
+      listaFacturasExport: [],
       detalle: {
         detcodigoprincipal: "",
         detcantidad: "",
         detdescripcion: "",
         detpreciounitario: "",
         detporcentajedesc: "",
-        detpreciototal:"",
+        detpreciototal: "",
       },
       cabeceraTablaDetalleFacturaExport: [
         {
           text: "Código Principal",
-          value: "detcodigoprincipl",
+          value: "detcodigoprincipal",
           align: "center",
           class: "grey lighten-3",
         },
@@ -626,7 +634,6 @@ export default {
     };
   },
 
-
   computed: {
     // Obtiene la variable que indica si el formulario es valido
     formFacturaExportValido: {
@@ -648,15 +655,21 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/establecerEditarFacturaExport", v);
+        return this.$store.commit(
+          "moduloFacturaExport/establecerEditarFacturaExport",
+          v
+        );
       },
     },
-       bloquearFacturaExport: {
+    bloquearFacturaExport: {
       get() {
         return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/cambiarEstadoBloquearFacturaExport", v);
+        return this.$store.commit(
+          "moduloFacturaExport/cambiarEstadoBloquearFacturaExport",
+          v
+        );
       },
     },
     editarFacturaExport: {
@@ -670,7 +683,21 @@ export default {
         );
       },
     },
-
+    calcularTotalDetalle() {
+      let total = this.detalle.detpreciounitario * this.detalle.detcantidad;
+      this.detalle.detpreciototal = total;
+      return this.detalle.detpreciototal;
+    },
+    calcularTotal() {
+      let subtotal = 0;
+      this.factExportaStore.detalle.forEach((detalle) => {
+        subtotal = subtotal + parseFloat(detalle.detpreciototal);
+      });
+      this.factExportaStore.facsubtotal0 = subtotal;
+      this.factExportaStore.facsubtotalsinimpuestos = subtotal;
+      this.factExportaStore.facvalortotal = subtotal;
+      return this.factExportaStore.facsubtotal0;
+    },
     // Obtiene el modelo Ciudad
     // ...mapState("moduloFactExporta", ["finca"]),
     // Obtiene las reglas de validacion
@@ -678,21 +705,21 @@ export default {
   },
 
   methods: {
-        // Vacia el modelo fertilizante
+    // Vacia el modelo fertilizante
     ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
-    inicializarFecha(){
+    inicializarFecha() {
       this.factExportaStore.facfecha = this.currentDate;
       this.factExportaStore.facfechazarpe = this.currentDate;
     },
-   async getEmpresas(){
-      let resultado= await servicioEmpresa.obtenerTodosEmpresa();
-      this.empresas= resultado.data;
+    async getEmpresas() {
+      let resultado = await servicioEmpresa.obtenerTodosEmpresa();
+      this.empresas = resultado.data;
     },
     async obtenerTodosFacturaExport() {
       let resultado = await ServicioFacturaExportacion.obtenerTodosFacturaExport();
-       this.listaFacturasExport = resultado.data;
+      this.listaFacturasExport = resultado.data;
     },
-     agregarDetalleFactura() {
+    agregarDetalleFactura() {
       this.factExportaStore.detalle.push(this.detalle);
       this.vaciarDetalleFactura();
     },
@@ -704,7 +731,7 @@ export default {
           detdescripcion: "",
           detpreciounitario: "",
           detporcentajedesc: "",
-          detpreciototal:"",
+          detpreciototal: "",
         })
       );
     },
@@ -721,7 +748,7 @@ export default {
           detdescripcion: item.detdescripcion,
           detpreciounitario: item.detpreciounitario,
           detporcentajedesc: item.detporcentajedesc,
-          detpreciototal:item.detpreciototal,
+          detpreciototal: item.detpreciototal,
         })
       );
     },

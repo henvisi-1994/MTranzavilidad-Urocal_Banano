@@ -261,7 +261,7 @@ export default {
     // Carga el TabsMostrarFactExport
     async abrirTabsMostrarFactExport(item) {
       this.dialogoMostrarFactExport = true; // Abre el DialogMostrarRiego
-      //this.bloquearFacturaExport = true;
+      this.bloquearFacturaExport = true;
       this.vaciarFacturaExport(); // Vacia el modelo riego
       let resultado = await ServicioFacturaExportacion.obtenerDetalleFacturaExport(
         item.facturaexportacionid

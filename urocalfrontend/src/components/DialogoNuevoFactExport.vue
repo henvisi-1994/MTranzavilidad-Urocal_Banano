@@ -44,7 +44,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormFactExport from "@/components/FormFactExport";
-import SerivicioFactExport from '../services/ServicioFacturaExportacion';
+import serivicioFactExport from '../services/ServicioFacturaExportacion';
 
 export default {
   name: "DialogoNuevaFactExport",
@@ -84,6 +84,17 @@ export default {
         );
       },
     },
+        bloquearFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/cambiarEstadoBloquearFacturaExport",
+          v
+        );
+      },
+    },
 
     // // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
     ...mapState("moduloFacturaExport", ["formFacturaExportValido","factExportaStore"]),
@@ -91,24 +102,26 @@ export default {
 
   methods: {
     async agregarFactExport() {
-        let respuesta = await SerivicioFactExport.agregarFacturaExport(this.factExportaStore);
+     let resultado = this.listaFacturaExportStore.find(factura => factura.faclote===this.factExportaStore.faclote);
+      if(typeof resultado === 'undefined'){
+      let respuesta = await serivicioFactExport.agregarFacturaExport(this.factExportaStore);
         if (respuesta.status == 201) {
           this.cerrarDialogNuevoFactExport();
           this.cargarListaFactExport();
           this.vaciarFacturaExport();
           this.$toast.success(respuesta.data.message);
         }
+      } else{
+        this.$toast.error('Porfavor ingrese un  lote diferente');
+      }
+
     },
 
     async cargarListaFactExport() {
-         let listaFactExports = [];
-         let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
-         let riegos = await respuesta.data;
+         let respuesta = await serivicioFactExport.obtenerTodosFacturaExport();
+         let facturas = await respuesta.data;
          this.$store.commit("moduloFacturaExport/vaciarLista", null);
-         riegos.forEach((f) => {
-           listaFactExports.push(f);
-         });
-         this.listaFactExportStore = listaFactExports;
+         this.listaFactExportStore = facturas;
     },
 
     cerrarDialogNuevoFactExport() {
