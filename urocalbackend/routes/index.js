@@ -51,6 +51,8 @@ const carga = require('../components/carga/carga.routes');
 const facturaExportacion = require('../components/facturaExportacion/FacturaExport.routes');
 const empresa = require('../components/empresa/empresa.routes');
 const certificacion = require('../components/certificaciones/certificaciones.routes')
+const reportefincaproductor = require('../components/reportefincaproductor/reportefincaproductor.routes');
+const productorreporte = require('../components/productorreporte/productorreporte.routes');
 
 const VERSION = "/v1";
 router.use(VERSION + '/', auth);
@@ -103,5 +105,7 @@ router.use(VERSION + '/vehiculo', vehiculo);
 router.use(VERSION + '/facturaExport',facturaExportacion);
 router.use(VERSION + '/empresa',empresa);
 router.use(VERSION + '/certificacion', certificacion)
+router.use(VERSION + '/reportefincaproductor', reportefincaproductor);
+router.use(VERSION + '/productorreporte', productorreporte);
 
 module.exports = router;
