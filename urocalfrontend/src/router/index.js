@@ -252,6 +252,11 @@ const routes = [
     name: 'BaseReporteKardexIngresosEgresos',
     component: () => import('@/views/BaseReporteKardexIngresosEgresos.vue'),
   },
+  {
+    path: "/reportes/ventas",
+    name: "BaseReporteVentas",
+    component: () => import("@/views/BaseReporteVentas.vue"),
+  },
 ]
 
 const router = new VueRouter({
