@@ -32,6 +32,15 @@ export default {
                             { texto: 'Envases vacíos de fitosanitarios', ruta: '#' },
                         ]
                     },
+                     {
+                icono: 'mdi-folder',
+                texto: 'Reportes',
+                opcionesNivel1: [
+                    { texto: 'Egreso insumo', ruta: '/reportes/egreso-insumo' },
+                    { texto: 'Ingreso insumo', ruta: '/reportes/ingreso-insumo' },
+
+                ]
+            },
                 ]
             },
             {
