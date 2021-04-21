@@ -166,7 +166,7 @@
           class="style-chooser custom px-2"
           dense
           filled
-          label="pronombre"
+          label="coscodigo"
           :reduce="(listaCosecha) => listaCosecha.cosechaid"
           :options="listaCosecha"
           multiple
@@ -328,7 +328,7 @@ export default {
     },
 
     async obtenerTodosCosecha() {
-      let respuestaServicioCosecha = await servicioCosecha.obtenerCosechasConDetalleCompra();
+      let respuestaServicioCosecha = await servicioCosecha.obtenerTodosCosecha();
       this.listaCosecha = respuestaServicioCosecha.data;
     },
   },

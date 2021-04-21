@@ -71,6 +71,7 @@
             :block="$vuetify.breakpoint.xs ? true : false"
             width="200px"
             color="primary"
+            :disabled="validarBoton()"
             :hidden="tab == 'tabDatatableRevisionHumedad' ? true : false"
             @click="registrar()"
             >{{ textoBotonRevisionHumedad }}</v-btn
