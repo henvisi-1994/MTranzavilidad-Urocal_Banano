@@ -3,32 +3,19 @@
     <v-row no-gutters>
       <v-col cols="12" md="6">
         <v-text-field
-          label="Almacenamiento"
-          v-model="revisionHumedad.almacenamientoid"
-          class="custom px-2"
-          dense
-          filled
-          :rules="[reglas.campoVacio(revisionHumedad.almacenamientoid)]"
-          :disabled="true"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field
           label="Porcentaje de humedad"
           type="Number"
           v-model="revisionHumedad.revporcentajehumedad"
           class="custom px-2"
           dense
           filled
-          :rules="[reglas.campoVacio(revisionHumedad.revporcentajehumedad)]"
+          :rules="[reglas.campoVacio(revisionHumedad.revporcentajehumedad),
+           reglas.soloNumerosPositivos(revisionHumedad.revporcentajehumedads)]"
           error-count="2"
           :disabled="bloquearCamposFormRevisionHumedad"
         ></v-text-field>
       </v-col>
-    </v-row>
-
-    <v-row no-gutters>
-      <v-col cols="12" md="6">
+            <v-col cols="12" md="6">
         <v-menu
           v-model="menuMostrarFechaIngresoSecadora"
           :nudge-right="40"
@@ -61,6 +48,9 @@
           ></v-date-picker>
         </v-menu>
       </v-col>
+    </v-row>
+
+    <v-row no-gutters>
       <v-col cols="12" md="6">
         <v-text-field
           type="time"
@@ -74,10 +64,7 @@
           :disabled="bloquearCamposFormRevisionHumedad"
         ></v-text-field>
       </v-col>
-    </v-row>
-
-    <v-row no-gutters>
-      <v-col cols="12" md="6">
+            <v-col cols="12" md="6">
         <v-menu
           v-model="menuMostrarFechaSalidaSecadora"
           :nudge-right="40"
@@ -109,6 +96,9 @@
           ></v-date-picker>
         </v-menu>
       </v-col>
+    </v-row>
+
+    <v-row no-gutters>
       <v-col cols="12" md="6">
         <v-text-field
           type="time"

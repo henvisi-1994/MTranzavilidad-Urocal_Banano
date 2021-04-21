@@ -7,6 +7,7 @@ export default {
         listaFitosanitariosStore: [],
         listaLoteStore:[],
         ListaCultivoStore:[],
+        bloquearFitosanitarioStore: false,
         modeloFitosanitarioStore: new Fitosanitario('', '', '', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Fitosanitario
         formFitosanitarioValido: false, // Indica si el formulario de Fitosanitario es valido
     },
@@ -36,10 +37,13 @@ export default {
         vaciarLista(state, newState) {
             state.listaFitosanitariosStore.length = 0;
         },
-
-        // Cambia  el estado del Formulario Fitosanitario
         cambiarEstadoValidoFormFitosanitario(state, nuevoEstado) {
             state.formFitosanitarioValido = nuevoEstado
+        },
+
+        // Cambia  el estado del Formulario Fitosanitario
+        cambiarbloquearFitosanitarioStore(state, nuevoEstado) {
+            state.bloquearFitosanitarioStore = nuevoEstado
         },
     },
 
@@ -48,6 +52,7 @@ export default {
         listaFitosanitariosStore: (state) => state.listaFitosanitariosStore,
         listaLoteStore: (state) => state.listaLoteStore,
         listaCultivoStore: (state) => state.ListaCultivoStore,
+        bloquearFitosanitarioStore: (state) => state.bloquearFitosanitarioStore,
         modeloFitosanitarioStore: (state) => state.modeloFitosanitarioStore,
     },
 }

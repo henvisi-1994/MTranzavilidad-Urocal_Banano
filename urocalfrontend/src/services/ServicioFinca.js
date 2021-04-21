@@ -6,7 +6,7 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000';
 
 class ServicioFinca {
-    
+
     // INSERT: Agrega un sitio
     agregarFinca(formData) {
         return axios.post(`${API_URL}/v1/finca`, formData);
@@ -33,6 +33,9 @@ class ServicioFinca {
     obtenerTodosAsociaciones() {
         return axios.get(`${API_URL}/v1/asociacion`);
     }
+    obtenerDetalleFinca(id) {
+        return axios.get(`${API_URL}/v1/finca/detalle/${id}`);
+    }
 
     // UPDATE: Actualiza un sitio
     actualizarFinca(id, formData) {
@@ -42,6 +45,10 @@ class ServicioFinca {
     // DELETE: Elimina un sitio
     eliminarFinca(id) {
         return axios.delete(`${API_URL}/v1/finca/${id}`);
+    }
+    // DELETE: Elimina un sitio
+    eliminarDetalleFinca(id) {
+        return axios.delete(`${API_URL}/v1/finca/detalle/${id}`);
     }
 }
 

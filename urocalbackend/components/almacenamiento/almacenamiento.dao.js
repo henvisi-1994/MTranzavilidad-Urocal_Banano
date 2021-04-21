@@ -24,10 +24,22 @@ module.exports = {
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },
     async deleteAlmacenamiento(id) {
-        query = `DELETE FROM public.almacenamiento WHERE almacenamientoid = '${id}'`;
-        result = await pool.query(query);
-        return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
+        let mixQuery = `DELETE FROM mix WHERE almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
 
+        mixQuery = `DELETE FROM mix WHERE almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
+
+        query = `DELETE FROM public.revisionhumedad WHERE almacenamientoid = '${id}'`;
+    
+        result = await pool.query(query);
+
+        mixQuery = `DELETE FROM detalledespacho where almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
+
+        mixQuery = `DELETE FROM almacenamiento where almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
+        return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
     },
     async createAlmacenamiento(almacenamiento) {
         /*//buscando la id de la centroacopio

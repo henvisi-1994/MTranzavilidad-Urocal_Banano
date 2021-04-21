@@ -330,10 +330,11 @@ export default {
   mounted() {
     this.obtenerTodosProductorPersona();
     this.visibilidadProductor();
+    //this.editarTratamiento=false;
   },
   data() {
     return {
-      visible: false,
+      visible: true,
       menuMostrarCalendario: "",
       menuMostrarCalendarioFi: "",
       menuMostrarCalendarioFf: "",

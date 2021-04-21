@@ -1,24 +1,32 @@
+const { obtenerFacturaExportacion } = require('./FacturaExport.dao');
 const facturaExportDao = require('./FacturaExport.dao');
 
 // CRUD: Create (Insert) - Read (Select) - Update (Update) - Delete (Delete)
 module.exports = {
     // INSERT: Agrega un registro
-    async crearFacturaExport(objeto){
+    async crearFacturaExport(objeto) {
         return facturaExportDao.crearFacturaExport(objeto);
     },
 
     // SELECT: Devuelve todos los registros
-    async obtenerFacturaExportes(){
+    async obtenerFacturaExportes() {
         return facturaExportDao.obtenerFacturaExportes();
+    },
+    // SELECT: Devuelve todos los registros
+    async obtenerFacturaExportacion(id) {
+        return facturaExportDao.obtenerFacturaExportacion(id);
+    },
+    async obtenerDetalleFacturaExportacion(id){
+        return facturaExportDao.obtenerDetalleFacturaExportacion(id);
     },
 
     // UPDATE: Actualiza un registro
-    async actualizarFacturaExport(id, objeto){
+    async actualizarFacturaExport(id, objeto) {
         return facturaExportDao.actualizarFacturaExport(id, objeto);
     },
 
     // DELETE: Elimina un registro
-    async eliminarFacturaExport(id){
+    async eliminarFacturaExport(id) {
         return facturaExportDao.eliminarFacturaExport(id);
     },
 }

@@ -1,5 +1,5 @@
 export default class IngresoInsumo {
-    constructor(ingresoinsumoid, inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, inginsencargado, centroacopioid) {
+    constructor(ingresoinsumoid, inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, ingencargado, centroacopioid) {
         this.ingresoinsumoid = ingresoinsumoid;
         this.inginsfechaingreso = inginsfechaingreso;
         this.inginsproducto = inginsproducto;
@@ -8,7 +8,7 @@ export default class IngresoInsumo {
         this.inginscantidadingreso = inginscantidadingreso;
         this.inginsunidad = inginsunidad;
         this.inginssaldo = inginssaldo;
-        this.inginsencargado = inginsencargado;
+        this.ingencargado = ingencargado;
         this.centroacopioid = centroacopioid;
     }
 }

@@ -236,7 +236,7 @@ export default {
         );
       },
     },
-   
+
     listaCultivoStore: {
       get() {
         return JSON.parse(
@@ -269,8 +269,23 @@ export default {
       },
     },
 
-
-
+    bloquearFitosanitarioStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters[
+              "moduloFitosanitario/bloquearFitosanitarioStore"
+            ]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/cambiarbloquearFitosanitarioStore",
+          v
+        );
+      },
+    },
 
     // Obtiene y modifica el estado de la variable dialogNuevoFitosanitario
     dialogNuevoFitosanitario: {
@@ -382,6 +397,7 @@ export default {
       this.modeloFitosanitarioStore = item;
       this.obtenerTodosListaCultivo();
       this.obtenerTodosLoteCultivadoDeFinca();
+      this.bloquearFitosanitarioStore= true;
     },
 
     // Vacia el modelo Fitosanitario
@@ -404,9 +420,10 @@ export default {
       this.listaCultivoStore = resultado.data;
     },
     async obtenerTodosLoteCultivadoDeFinca() {
-      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFitosanitarioStore.fincaid);
-      this.listaLoteStore = resultado.data; 
-      
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloFitosanitarioStore.fincaid
+      );
+      this.listaLoteStore = resultado.data;
     },
   },
 

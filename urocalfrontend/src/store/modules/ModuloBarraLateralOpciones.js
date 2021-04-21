@@ -81,9 +81,14 @@ export default {
                 opcionesNivel1: [
                     { texto: 'Guía de remisión', ruta: '/cacao/remision' },
                     { texto: 'Comprobante de compra', ruta: '/centroacopio/compra' },
-                    { texto: 'Fermentación y secado', ruta: '#' },
+                    { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
                     { texto: 'Almacenamiento', ruta: '/centroacopio/almacenamiento' },
                     { texto: 'Despacho', ruta: '/centroacopio/despacho' },
+                    { texto: 'Limpieza de vehículos', ruta: '/centroacopio/limpiezavehiculo' },
+                    { texto: 'Limpieza del centro de acopio', ruta: '/centroacopio/limpiezacentroacopio' },
+                    { texto: 'Egresos de insumos', ruta: '/centroacopio/insumosEgresos' },
+                    { texto: 'Ingresos de insumos', ruta: '/centroacopio/insumosIngresos' },
+              
                     //{ texto: 'Kardex', ruta: '#' }
                 ]
             },            
@@ -301,9 +306,9 @@ export default {
                     { texto: 'Provincias', ruta: '/configuracion/provincia' },
                     { texto: 'Ciudades', ruta: '/configuracion/ciudad' },
                     { texto: 'Sitios', ruta: '/configuracion/sitio', },
-                    { texto: 'Empresas', ruta: '#', },
+                    { texto: 'Empresas', ruta: '/configuracion/Empresa', },
                     { texto: 'Marcas', ruta: '#', },
-                    { texto: 'Certificaciones', ruta: '#', }
+                    { texto: 'Certificaciones', ruta: '/configuracion/Certificaciones', }
                 ]
             },
         ]

@@ -51,8 +51,10 @@ import ModuloInspectorPersona from './modules/ModuloInspectorPersona';
 import ModuloExportadorPersona from './modules/ModuloExportadorPersona';
 import ModuloGuiaRemision from './modules/ModuloGuiaRemision';
 import ModuloFacturaExport from './modules/ModuloFacturaExport';
-
+import ModuloEmpresa from './modules/ModuloEmpresa';
+import ModuloCertificacion from './modules/ModuloCertificacion';
 import ModuloCultivo from './modules/ModuloCultivo';
+
 
 export default new Vuex.Store({
   state: {
@@ -137,5 +139,7 @@ export default new Vuex.Store({
     moduloExportadorPersona: ModuloExportadorPersona,                       // Instancia al ModuloExportadorPersona
     moduloGuiaRemision: ModuloGuiaRemision,
     moduloFacturaExport: ModuloFacturaExport,
+    moduloEmpresa: ModuloEmpresa, 
+    moduloCertificaciones: ModuloCertificacion,
   }
 })

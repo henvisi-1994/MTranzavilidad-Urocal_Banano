@@ -222,6 +222,18 @@ const routes = [
     name: 'BaseFactExport',
     component: () => import('@/views/BaseFactExport.vue'),
   },
+    /// Empresa
+    {
+      path: '/configuracion/Empresa',
+      name: 'BaseEmpresa',
+      component: () => import('@/views/BaseEmpresa.vue'),
+    },
+      /// Certificaciones
+  {
+    path: '/configuracion/Certificaciones',
+    name: 'BaseEmpresa',
+    component: () => import('@/views/BaseCertificaciones.vue'),
+  },
   // -----------------------------------------------------------------------------------------
 ]
 

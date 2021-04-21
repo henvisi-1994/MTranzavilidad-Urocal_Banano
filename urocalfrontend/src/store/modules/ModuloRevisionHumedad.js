@@ -4,7 +4,7 @@ export default {
     namespaced: true,
 
     state: {
-        revisionHumedad: new RevisionHumedad('', '', '', '', '', '', ''), // Modelo RevisionHumedad
+        revisionHumedad: new RevisionHumedad(0, '', '', '', '', '', ''), // Modelo RevisionHumedad
         formRevisionHumedadValido: false, // Indica si el formulario de RevisionHumedad es valido
         textoBotonRevisionHumedad: "Registrar", // Almacena el texto del boton del formulario
         listaRevisionHumedad: [], // Almacena objetos revisionHumedad
@@ -18,7 +18,7 @@ export default {
         },
 
         vaciarRevisionHumedad(state) {
-            state.revisionHumedad = new RevisionHumedad('', '', '', '', '', '', '')
+            state.revisionHumedad = new RevisionHumedad(0, '', '', '', '', '', '')
         },
 
         // Cambia  el estado del Formulario RevisionHumedad

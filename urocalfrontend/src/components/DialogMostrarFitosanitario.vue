@@ -13,7 +13,7 @@
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text">mdi-pencil</v-icon>
+          <v-icon class="white--text" @click="cambiarEstado()">mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
           <v-icon class="white--text" @click="eliminarRegistro()"
@@ -100,6 +100,21 @@ export default {
         );
       },
     },
+     bloquearFitosanitarioStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/bloquearFitosanitarioStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/cambiarbloquearFitosanitarioStore",
+          v
+        );
+      },
+    },
     listaFitosanitarioStore: {
       get() {
         return this.$store.getters[
@@ -157,10 +172,14 @@ export default {
         this.$emit("delete", true);
       }
     },
+    cambiarEstado(){
+      this.bloquearFitosanitarioStore = !this.bloquearFitosanitarioStore;
+    },
 
     // Cierra el dialogo
     cerrarDialogMostrarFitosanitario() {
       this.dialogMostrarFitosanitario = !this.dialogMostrarFitosanitario; // Cierra el dialogMostrarFitosanitario
+      this.bloquearFitosanitarioStore = false;
     },
 
     ...mapMutations("moduloFitosanitario", ["vaciarModeloFitosanitarioStore"]),

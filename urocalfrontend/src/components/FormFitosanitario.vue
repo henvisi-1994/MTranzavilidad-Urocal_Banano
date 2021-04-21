@@ -13,6 +13,7 @@
             class="style-chooser"
             label="findescripcionfinca"
             @input="obtenerTodosLoteCultivadoDeFinca"
+            :disabled="bloquearFitosanitarioStore"
             :reduce="(listaFinca) => listaFinca.fincaid"
             :options="listaFinca"
           >
@@ -31,6 +32,7 @@
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
+            :disabled="bloquearFitosanitarioStore"
             @input="obtenerTodosListaCultivo"
             :reduce="(listaLoteStore) => listaLoteStore.lotecultivadoid"
             :options="listaLoteStore"
@@ -53,6 +55,7 @@
             placeholder="Cultivo"
             class="style-chooser"
             label="detalles"
+            :disabled="bloquearFitosanitarioStore"
             :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
             :options="listaCultivoStore"
           >
@@ -68,6 +71,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Ciclo"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitciclo"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitciclo),
@@ -90,6 +94,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 label="Fecha"
+                :disabled="bloquearFitosanitarioStore"
                 v-model="modeloFitosanitarioStore.fitfecha"
                 :rules="[reglas.campoVacio(modeloFitosanitarioStore.fitfecha)]"
                 readonly
@@ -108,6 +113,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Nombre comercial"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitnombrecomercial"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitnombrecomercial),
@@ -120,6 +126,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Ingrediente activo"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitingredienteactivo"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitingredienteactivo),
@@ -129,6 +136,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Autorización Técnica"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitautorizaciontecnica"
             :rules="[
               reglas.campoVacio(
@@ -146,6 +154,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Nombre común"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitnombrecomun"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitnombrecomun),
@@ -156,6 +165,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Dosis"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitdosis"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitdosis),
@@ -170,6 +180,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Cantidad total (Kg)"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitcantidadtotal"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitcantidadtotal),
@@ -184,6 +195,7 @@
           <v-text-field
             type="number"
             placeholder="Área aplicada"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitareaaplicada"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitareaaplicada),
@@ -200,6 +212,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Equipo de aplicación"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitequipoaplicacion"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitequipoaplicacion),
@@ -209,6 +222,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Método de aplicación"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitmetodo"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitmetodo),
@@ -222,6 +236,7 @@
         <v-col cols="12" md="5">
           <v-text-field
             placeholder="Plazo de seguridad"
+            :disabled="bloquearFitosanitarioStore"
             v-model="modeloFitosanitarioStore.fitplazoseguridad"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitplazoseguridad),
@@ -235,6 +250,7 @@
         <v-col cols="12" md="5">
           <v-select
             v-model="modeloFitosanitarioStore.fitoperario"
+            :disabled="bloquearFitosanitarioStore"
             placeholder="Operario"
             class="style-chooser"
             label="operario"
@@ -346,6 +362,21 @@ export default {
       set(v) {
         return this.$store.commit(
           "moduloFitosanitario/establecerListaLoteStore",
+          v
+        );
+      },
+    },
+    bloquearFitosanitarioStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/bloquearFitosanitarioStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/cambiarbloquearFitosanitarioStore",
           v
         );
       },

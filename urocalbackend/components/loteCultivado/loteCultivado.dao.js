@@ -44,7 +44,25 @@ module.exports = {
     },
 
     async eliminarLoteCultivado(id) {
-        let query = `DELETE FROM loteCultivado WHERE lotecultivadoid = ${id}`;
+        let query = `DELETE FROM lotecultivado WHERE lotecultivadoid = ${id}`;
+        let result = await pool.query(query);
+
+        return result.rowCount; // Devuelve 1 si borró el lote cultivado y 0 sino lo hizo.
+    },
+    async eliminarLoteCultivadodeCultivo(id) {        
+        let query = `DELETE FROM cultivo WHERE lotecultivadoid = ${id}`;
+        let result = await pool.query(query);
+
+        return result.rowCount; // Devuelve 1 si borró el lote cultivado y 0 sino lo hizo.
+    },
+    async eliminarLoteCultivadodemedioambiente(id) {        
+        let query = `DELETE FROM medioambiente WHERE lotecultivadoid = ${id}`;
+        let result = await pool.query(query);
+
+        return result.rowCount; // Devuelve 1 si borró el lote cultivado y 0 sino lo hizo.
+    },
+    async eliminarLoteCultivadodesuelo(id) {        
+        let query = `DELETE FROM suelo WHERE lotecultivadoid = ${id}`;
         let result = await pool.query(query);
 
         return result.rowCount; // Devuelve 1 si borró el lote cultivado y 0 sino lo hizo.

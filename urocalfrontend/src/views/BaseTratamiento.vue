@@ -224,6 +224,7 @@ export default {
     // Carga el DialogoNuevaTratamiento
     cargarDialogoNuevoTratamiento() {
       this.dialogoNuevoTratamiento = !this.dialogoNuevoTratamiento; // Abre el DialogStepperFormNewTratamiento
+      this.editarTratamiento=true;
       this.vaciarModeloTratamientoStore(); // Reinicia el modelo Tratamiento
     },
 

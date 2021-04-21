@@ -24,7 +24,6 @@ module.exports = {
         try {
             let rowCount = await compraModel.deleteCompra(id);
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Compra no registrado", tipo: "error" });
-
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar la compra", tipo: "error" });
         }

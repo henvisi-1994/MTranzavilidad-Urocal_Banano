@@ -133,6 +133,12 @@ export default {
         // factura de exportación
         dialogoNuevoFactExport: false,
         dialogMostrarFactExport: false,
+        //Empresa
+        dialogoNuevaEmpresa: false,
+        dialogoMostrarEmpresa: false,
+        //Certificaciones
+        dialogoNuevaCertificacion: false,
+        dialogoMostrarCertificacion: false,
     },
 
     mutations: {
@@ -506,12 +512,26 @@ export default {
         toggleDialogoMostrarTratamiento(state, newState) {
             state.dialogMostrarTratamiento = newState;
         },
-         // Factura de exportacion
-         toggleDialogoNuevoFactExport(state, newState) {
+        // Factura de exportacion
+        toggleDialogoNuevoFactExport(state, newState) {
             state.dialogoNuevoFactExport = newState;
         },
         toggleDialogoMostrarFactExport(state, newState) {
             state.dialogMostrarFactExport = newState;
+        },
+        //Empresa
+        toggleDialogoNuevaEmpresa(state, newState) {
+            state.dialogoNuevaEmpresa = newState;
+        },
+        toggleDialogoMostrarEmpresa(state, newState) {
+            state.dialogoMostrarEmpresa = newState;
+        },
+        //Certificaciones
+        toggleDialogoNuevaCertificacion(state, newState) {
+            state.dialogoNuevaCertificacion = newState;
+        },
+        toggleDialogoMostrarCertificacion(state, newState) {
+            state.dialogoMostrarCertificacion = newState;
         },
     },
 
@@ -579,7 +599,8 @@ export default {
         // IngresoInsumo
         dialogNuevoIngresoInsumo: (state) => state.dialogNuevoIngresoInsumo,                                    // Devuelve la variable dialogNuevoIngresoInsumo
         dialogoNuevaSiembra: (state) => state.dialogoNuevaSiembra,                                              // Devuelve la variable dialogoNuevaSiembra
-        dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza,                                                // Devuelve la variable dialogoNuevaMaleza
+        dialogoNuevaMaleza: (state) => state.dialogoNuevaMaleza,
+        dialogEditarIngresoInsumo: (state) => state.dialogEditarIngresoInsumo,                                                // Devuelve la variable dialogoNuevaMaleza
 
         dialogEditarUsuarioPersona: (state) => state.dialogEditarUsuarioPersona,                                // Devuelve la variable dialogEditarUsuarioPersona
         dialogNuevoConductorPersona: (state) => state.dialogNuevoConductorPersona,                              // Devuelve la variable dialogEditarUsuarioPersona
@@ -656,8 +677,14 @@ export default {
         // Tratamiento
         dialogoNuevoTratamiento: (state) => state.dialogNuevoTratamiento,
         dialogoMostrarTratamiento: (state) => state.dialogMostrarTratamiento,
-         //Factura de exportacion
-         dialogoNuevoFactExport: (state) => state.dialogoNuevoFactExport,
-         dialogoMostrarFactExport: (state) => state.dialogMostrarFactExport,
+        //Factura de exportacion
+        dialogoNuevoFactExport: (state) => state.dialogoNuevoFactExport,
+        dialogoMostrarFactExport: (state) => state.dialogMostrarFactExport,
+        //Empresa
+        dialogoNuevaEmpresa: (state) => state.dialogoNuevaEmpresa,
+        dialogoMostrarEmpresa: (state) => state.dialogoMostrarEmpresa,
+         //Certificaciones
+         dialogoNuevaCertificacion: (state) => state.dialogoNuevaCertificacion,
+         dialogoMostrarCertificacion: (state) => state.dialogoMostrarCertificacion,
     },
 }

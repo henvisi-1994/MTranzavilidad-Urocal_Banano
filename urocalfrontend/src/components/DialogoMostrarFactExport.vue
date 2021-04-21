@@ -10,7 +10,7 @@
     <v-card class="rounded-0">
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
-        <h5>Actualizar Eliminar Factura de Exportacion</h5>
+        <h5>Actualizar / Eliminar Factura de Exportacion</h5>
         <v-spacer></v-spacer>
          <v-btn icon >
           <v-icon class="white--text" @click="bloquearFacturaExport = !bloquearFacturaExport">mdi-pencil</v-icon>
@@ -19,7 +19,7 @@
           <v-icon class="white--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogNuevoFactExport()">mdi-close</v-icon>
+          <v-icon class="white--text" @click="cerrarDialogMostrarFacturaExport()">mdi-close</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -36,8 +36,8 @@
           :block="$vuetify.breakpoint.xs ? true : false"
           width="200px"
           color="primary"
-          @click="guardarFactExport()"
-          >Registrar</v-btn
+          @click="actualizarRegistro()"
+          >Guardar Cambios</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -58,6 +58,7 @@ export default {
   },
 
   computed: {
+    ...mapState("moduloFacturaExport", ["formFactExportValido", "factExportaStore","editarFacturaExport"]),
     
     dialogoMostrarFactExport: {
       get() {
@@ -77,8 +78,25 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+        return this.$store.commit("moduloFacturaExport/establecerModeloFacturaExportStore", v);
       },
+    },
+    editarFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/editarFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit("moduloFacturaExport/establecerEditarFacturaExport", v);
+      },
+    },
+
+    listaFacturaExportStore:{
+      get(){
+        return this.$store.getters["moduloFacturaExport/listaFacturaExportStore"];
+      },
+      set(v){
+        return this.$store.commit("moduloFacturaExport/asignarListaFacturaExportStore", v);
+      }
     },
     bloquearFacturaExport: {
       get() {
@@ -88,40 +106,39 @@ export default {
         return this.$store.commit("moduloFacturaExport/cambiarEstadoBloquearFacturaExport", v);
       },
     },
-
-    // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
-    ...mapState("moduloFactExport", ["formFactExportValido", "modeloFactExportStore"]),
   },
 
   methods: {
-    async eliminarRegistro() {
-    },
-    async guardarFactExport(){
-      let respuesta = SerivicioFactExport.guardarFactExport(this.factExportaStore);
-       if(respuesta.status == 201){
-         this.cerrarDialogNuevoFactExport();
-         this.vaciarFacturaExport();
+    async actualizarRegistro(){
+      let respuesta = await SerivicioFactExport.actualizarFacturaExport(this.factExportaStore.facturaexportacionid,this.factExportaStore);
+       if(respuesta.status == 200){
+         this.cerrarDialogMostrarFacturaExport();
          this.cargarListaFactExport();
+         this.vaciarFacturaExport();         
          this.$toast.success(respuesta.data.message);
-       }else{
-          console.log(error.response.data.message);
-        }
+       }
       
     },
-    async cargarListaFactExport () {
-    //   let listaFactExports = [];
-    //   let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
-    //   let riegos = await respuesta.data;
-    //   riegos.forEach((f) => {
-    //     listaFactExports.push(f);
-    //   });
-    //   this.listaFactExportStore = listaFactExports;
+    cerrarDialogMostrarFacturaExport() {
+      this.dialogoMostrarFactExport = !this.dialogoMostrarFactExport;
+      this.vaciarFacturaExport();
     },
-
-    cerrarDialogNuevoFactExport() {
-      this.dialogoMostrarFactExport = !this.dialogoMostrarFactExport; // Cierra el dialogNuevoFactExport    
-    //   this.$refs.componentFormFactExport.limpiarIds();
-    //   this.vaciarModeloFactExportStore();
+    async cargarListaFactExport () {
+       let listaFactExports = [];
+       let respuesta = await SerivicioFactExport.obtenerTodosFacturaExport();
+       let riegos = await respuesta.data;
+       this.$store.commit("moduloFacturaExport/vaciarLista", null);
+       riegos.forEach((f) => {
+         listaFactExports.push(f);
+       });
+       this.listaFactExportStore = listaFactExports;
+    },
+    async eliminarRegistro() {
+      const respuesta = await SerivicioFactExport.eliminarFacturaExport(this.factExportaStore.facturaexportacionid);
+      if (respuesta.status == 200) {
+        this.cerrarDialogMostrarFacturaExport();
+        this.cargarListaFactExport();
+      } 
     },
 
     ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),

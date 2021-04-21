@@ -44,7 +44,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormFactExport from "@/components/FormFactExport";
-import SerivicioFactExport from '../services/ServicioFacturaExportacion';
+import serivicioFactExport from '../services/ServicioFacturaExportacion';
 
 export default {
   name: "DialogoNuevaFactExport",
@@ -70,38 +70,65 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
+        return this.$store.commit("moduloFacturaExport/establecerModeloFacturaStore", v);
+      },
+    },
+    listaFacturaExportStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/listaFacturaExportStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/asignarListaFacturaExportStore",
+          v
+        );
+      },
+    },
+        bloquearFacturaExport: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/cambiarEstadoBloquearFacturaExport",
+          v
+        );
       },
     },
 
     // // Obtiene es estado de la variable formFactExportValido y el modelo FactExport
-    ...mapState("moduloFacturaExport", ["formFacturaExportValido"]),
+    ...mapState("moduloFacturaExport", ["formFacturaExportValido","factExportaStore"]),
   },
 
   methods: {
     async agregarFactExport() {
-        let respuesta = await SerivicioFactExport.agregarFacturaExport(this.factExportaStore);
+     let resultado = this.listaFacturaExportStore.find(factura => factura.faclote===this.factExportaStore.faclote);
+      if(typeof resultado === 'undefined'){
+      let respuesta = await serivicioFactExport.agregarFacturaExport(this.factExportaStore);
         if (respuesta.status == 201) {
           this.cerrarDialogNuevoFactExport();
           this.cargarListaFactExport();
-          this.vaciarModeloFactExportStore();
+          this.vaciarFacturaExport();
+          this.$toast.success(respuesta.data.message);
         }
+      } else{
+        this.$toast.error('Porfavor ingrese un  lote diferente');
+      }
+
     },
 
     async cargarListaFactExport() {
-      //   let listaFactExports = [];
-      //   let respuesta = await SerivicioFactExports.obtenerTodosFactExports();
-      //   let riegos = await respuesta.data;
-      //   riegos.forEach((f) => {
-      //     listaFactExports.push(f);
-      //   });
-      //   this.listaFactExportStore = listaFactExports;
+         let respuesta = await serivicioFactExport.obtenerTodosFacturaExport();
+         let facturas = await respuesta.data;
+         this.$store.commit("moduloFacturaExport/vaciarLista", null);
+         this.listaFactExportStore = facturas;
     },
 
     cerrarDialogNuevoFactExport() {
       this.dialogoNuevoFactExport = !this.dialogoNuevoFactExport; // Cierra el dialogNuevoFactExport
       //   this.$refs.componentFormFactExport.limpiarIds();
       //   this.vaciarModeloFactExportStore();
+      this.vaciarFacturaExport();
     },
 
      ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),

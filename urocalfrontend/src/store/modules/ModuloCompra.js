@@ -4,10 +4,11 @@ export default {
     namespaced: true,
 
     state: {
-        compra: new Compra('','','','','','','','','',0,'',''), // Modelo Compra
+        compra: new Compra('','','','','','','','','',0,'','','',''), // Modelo Compra
         formCompraValidoCabecera: false, // Indica si el formulario de CompraCabecera es valido
         formCompraValidoPie: false, // Indica si el formulario de CompraPie es valido
         listaCompra: [], // Lista de compra
+        listaGuiaRemisionStore:[],
         bloquearCamposFormCompra: false, // Determina si se bloquean los campos del formulario
         estaActualizandoCompra: false, // Indica si estaActualizandoCompra
     },
@@ -19,7 +20,7 @@ export default {
         },
 
         vaciarCompra(state) {
-            state.compra = new Compra('','','','','','','','','',0,'','')
+            state.compra = new Compra('','','','','','','','','',0,'','','','')
         },
 
         // formCompraValido
@@ -34,6 +35,9 @@ export default {
         // listaCompra
         asignarListaCompra(state, nuevaListaCompra) {
             state.listaCompra = nuevaListaCompra;
+        },
+        asignarListaGuiaRemision(state, nuevaListaGuia) {
+            state.listaGuiaRemisionStore = nuevaListaGuia;
         },
 
         // Cambia el estado de la variable bloquearCamposFormCompra
@@ -52,6 +56,8 @@ export default {
         formCompraValidoPie: (state) => state.formCompraValidoPie, // Devuelve la variable formCompraValidoPie
         bloquearCamposFormCompra: (state) => state.bloquearCamposFormCompra,    // Devuelve bloquearCamposFormCompra
         listaCompra: (state) => state.listaCompra,    // Devuelve listaCompra
+        listaGuiaRemisionStore: (state) => state.listaGuiaRemisionStore,
         estaActualizandoCompra: (state) => state.estaActualizandoCompra,    // Devuelve estaActualizandoCompra
+        compra: (state) => state.compra,
     },
 }

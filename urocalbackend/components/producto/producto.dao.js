@@ -10,9 +10,13 @@ module.exports = {
                     '${producto.procaracteristica}', '${producto.procodigo}')`;
         result = await pool.query(query);
     },
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async obtenerTodosProducto() {
-        let query = `SELECT * FROM producto`;
+        //let query = `SELECT * FROM producto`;
+        let query = `Select pr.productoid,concat(pr.pronombre,' ',pr.provariedad) as pronombre,pr.procaracteristica, pr.procodigo 
+        FROM producto pr;`;
+       
+        
         let result = await pool.query(query);
         return result.rows; // Devuelve array de productos
     },
