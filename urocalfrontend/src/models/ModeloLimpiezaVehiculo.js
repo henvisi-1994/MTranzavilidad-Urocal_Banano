@@ -1,5 +1,5 @@
 export default class LimpiezaVehiculo {
-    constructor(limpiezavehiculoid, limvehfecha, limvehproductoutilizado, limvehescobillon, limvehescoba, limvehagua, limvehaspiradora, vehiculoid) {
+    constructor(limpiezavehiculoid, limvehfecha, limvehproductoutilizado, limvehescobillon, limvehescoba, limvehagua, limvehaspiradora, vehiculoid,fincaid) {
         this.limpiezavehiculoid = limpiezavehiculoid;
         this.limvehfecha = limvehfecha;
         this.limvehproductoutilizado = limvehproductoutilizado;
@@ -8,5 +8,6 @@ export default class LimpiezaVehiculo {
         this.limvehagua = limvehagua;
         this.limvehaspiradora = limvehaspiradora;
         this.vehiculoid = vehiculoid;
+        this.fincaid = fincaid;
     }
 }
