@@ -1,7 +1,9 @@
 <template>
   <v-container fluid>
     <!-- Dialog para registrar nuevo usuario -->
-    <DialogNuevoEgresoInsumo ref="DialogNuevoEgresoInsumo"></DialogNuevoEgresoInsumo>
+    <DialogNuevoEgresoInsumo
+      ref="DialogNuevoEgresoInsumo"
+    ></DialogNuevoEgresoInsumo>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
     <v-card elevation="0" class="mt-5">
@@ -14,50 +16,73 @@
               v-text="nombre"
             ></div>
           </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              class="custom"
-              filled
-              v-model="buscarEgresoInsumo"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              dense
-            ></v-text-field>
-          </v-col>
         </v-row>
       </v-card-title>
 
       <v-card-text>
-        <v-data-table
-          :headers="cabeceraTablaEgresoInsumo"
-          :items="listaEgresoInsumo"
-          :search="buscarEgresoInsumo"
-          sort-by="id_lote"
-          :height="tablaResponsiva()"
-          class="elevation-1"
-        >
-          <template v-slot:top>
-            <DialogEditarEgresoInsumo
-              ref="DialogEditarEgresoInsumo"
-            ></DialogEditarEgresoInsumo>
-          </template>
-
-          <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="cargarDialogEditarEgresoInsumo(item)"
-              >mdi-eye</v-icon
-            >
-          </template>
-        </v-data-table>
+        <div>
+          <v-row>
+            <v-col cols="12" sm="6" md="4">
+              <v-menu
+                v-model="menu1"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date1"
+                    label="Fecha desde"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date1"
+                  @input="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date2"
+                    label="Fecha hasta"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date2"
+                  @input="menu2 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </div>
       </v-card-text>
-
-      <v-card-actions class="justify-center">
+      <v-card-actions class="justify-left">
         <v-btn
           large
           :block="$vuetify.breakpoint.xs ? true : false"
           width="200px"
-          color="primary"
-          @click="cargarDialogNuevoEgresoInsumo()"
-          >Nuevo</v-btn
+          class="cyan"
+          @click="createPDF()"
+          >GENERAR REPORTE</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -88,7 +113,11 @@ export default {
 
   data() {
     return {
-      nombre: "Gestión de Egreso Insumo",
+      nombre: "Reportes de Egreso Insumo",
+      date1: new Date().toISOString().substr(0, 10),
+      date2: new Date().toISOString().substr(0, 10),
+      menu1: false,
+      menu2: false,
       buscarEgresoInsumo: "", // Guarda el texto de búsqueda
       cabeceraTablaEgresoInsumo: [
         // Detalla las cabeceras de la tabla
@@ -152,8 +181,8 @@ export default {
           class: "grey lighten-3",
         },
       ],
-
-    listaEgresoInsumo: [
+      // listaEgresoInsumo: [], // Almacena una lista de EgresoInsumo con llave foranea ingresoinsumoid, la misma se muestra en tabla
+      listaEgresoInsumo: [
         {
           egresoinsumosid: "1001",
           ingresoinsumosid: "Abono organico",
@@ -163,9 +192,9 @@ export default {
           egrinsdosis: "3",
           egrinscantidadentregada: "10",
           egrinsencargado: "Milton",
-          actions: "Ninguno"
+          actions: "Ninguno",
         },
-               {
+        {
           egresoinsumosid: "1002",
           ingresoinsumosid: "Fertilizante",
           fincaid: "002",
@@ -174,11 +203,9 @@ export default {
           egrinsdosis: "8",
           egrinscantidadentregada: "22",
           egrinsencargado: "Bryan",
-          actions: "Ninguno"
-        }
-      
+          actions: "Ninguno",
+        },
       ],
-
     };
   },
 
@@ -189,7 +216,9 @@ export default {
     listaEgresoInsumoStore: {
       get() {
         return JSON.parse(
-          JSON.stringify(this.$store.getters["moduloEgresoInsumo/listaEgresoInsumoStore"])
+          JSON.stringify(
+            this.$store.getters["moduloEgresoInsumo/listaEgresoInsumoStore"]
+          )
         );
       },
       set(v) {
@@ -205,7 +234,10 @@ export default {
         return this.$store.getters["moduloEgresoInsumo/listaInsumoStore"];
       },
       set(v) {
-        return this.$store.commit("moduloEgresoInsumo/establecerListaInsumoStore", v);
+        return this.$store.commit(
+          "moduloEgresoInsumo/establecerListaInsumoStore",
+          v
+        );
       },
     },
     listaFincaStore: {
@@ -213,7 +245,10 @@ export default {
         return this.$store.getters["moduloEgresoInsumo/listaFincaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloEgresoInsumo/establecerListaFincaStore", v);
+        return this.$store.commit(
+          "moduloEgresoInsumo/establecerListaFincaStore",
+          v
+        );
       },
     },
     // ##############
@@ -224,7 +259,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoEgresoInsumo"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoEgresoInsumo", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoEgresoInsumo",
+          v
+        );
       },
     },
 
@@ -233,7 +271,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogEditarEgresoInsumo"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogEditarEgresoInsumo", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogEditarEgresoInsumo",
+          v
+        );
       },
     },
 
@@ -242,7 +283,9 @@ export default {
     // #############
     modeloEgresoInsumoStore: {
       get() {
-        return this.$store.getters["moduloEgresoInsumo/modeloEgresoInsumoStore"];
+        return this.$store.getters[
+          "moduloEgresoInsumo/modeloEgresoInsumoStore"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -260,8 +303,8 @@ export default {
     async cargarListaEgresoInsumo() {
       this.listaEgresoInsumo = []; // Limpiar la 'lista de datos'
       let respuesta = await ServicioEgresoInsumo.obtenerTodosEgresoInsumo(); // Obtener respuesta de backend
-      let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
-      datosUsuario.forEach((egresoinsumo) => {
+      let datosEgresoInsumo = await respuesta.data; // Rescatar datos de la respuesta
+      datosEgresoInsumo.forEach((egresoinsumo) => {
         // Guardar cada registro en la 'lista de datos'
         this.listaEgresoInsumo.push(egresoinsumo);
       });
@@ -312,6 +355,77 @@ export default {
       const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
       this.modeloEgresoInsumoStore = item;
     },
+    createPDF() {
+      let pdfName = "test";
+      var doc = new jsPDF("p", "pt", "A4");
+      var img = require("../assets/urocal.png");
+      var hoy = new Date();
+      var dd = hoy.getDate();
+      var mm = hoy.getMonth() + 1;
+      var yyyy = hoy.getFullYear();
+      var hh = hoy.getHours();
+      var hm = hoy.getMinutes();
+      var date = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + hm;
+
+      doc.addImage(img, "PNG", 40, 60, 80, 80);
+      doc.setFontSize(12);
+      doc.text(
+        "UNIÓN REGIONAL DE ORGANIZACIONES CAMPESINAS DEL LITORAL",
+        150,
+        80
+      );
+      doc.setFontSize(28);
+      doc.setFont("italic");
+      doc.text("UROCAL", 280, 110);
+
+      doc.setFontSize(14);
+
+      doc.text("Reporte Egreso Insumo", 40, 200);
+      doc.setFontSize(12);
+
+      doc.text("Registros generados " + date, 40, 215);
+      doc.text("Fecha inicio: " + this.date1, 40, 230);
+      doc.text("Fecha final: " + this.date2, 40, 245);
+      doc.text("Encargado: Milton Garcia", 40, 260);
+      //PARA DAR ESPACIO
+      var datas = this.listaEgresoInsumo;
+      var prebody = [];
+      for (let index = 0; index < datas.length; index++) {
+        prebody[index] = [
+          datas[index].egresoinsumosid,
+          datas[index].ingresoinsumosid,
+          datas[index].fincaid,
+          datas[index].egrinsfechaegreso,
+          datas[index].egrinsparacontrolar,
+          datas[index].egrinsdosis,
+          datas[index].egrinscantidadentregada,
+          datas[index].egrinsencargado,
+          datas[index].actions,
+        ];
+      }
+      for (let index = 0; index < 13; index++) {
+        doc.autoTable({});
+      }
+      doc.autoTable({
+        head: [
+          [
+            "Codigo egreso",
+            "Insumo",
+            "Finca",
+            "Fecha de egreso",
+            "Control de egreso",
+            "Dosis",
+            "Cantidad entregada",
+            "Encargado",
+            "Detalles",
+          ],
+        ],
+        body: prebody,
+      });
+
+      doc.save("reporteegresoinsumo-" + date + ".pdf");
+    },
+
     // ###################
     // #  TIENDA DE VUE  #
     // ###################

@@ -32,6 +32,15 @@ export default {
                             { texto: 'Envases vacíos de fitosanitarios', ruta: '#' },
                         ]
                     },
+                     {
+                icono: 'mdi-folder',
+                texto: 'Reportes',
+                opcionesNivel1: [
+                    { texto: 'Egreso insumo', ruta: '/reportes/egreso-insumo' },
+                    { texto: 'Ingreso insumo', ruta: '/reportes/ingreso-insumo' },
+
+                ]
+            },
                 ]
             },
             {
@@ -288,6 +297,7 @@ export default {
                     { texto: 'Egresos de insumos', ruta: '/centroacopio/insumosEgresos' },
                     { texto: 'Ingresos de insumos', ruta: '/centroacopio/insumosIngresos' },
                     { texto: 'Fermentación y secado', ruta: '/cacao/tratamiento' },
+                    { texto: 'Guía de remisión', ruta: '/cacao/guiaremision' },
                 ]
             },
             {

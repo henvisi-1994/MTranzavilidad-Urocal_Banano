@@ -41,7 +41,7 @@ module.exports = {
                 carga: carga
             });
         } catch (error) {
-            
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 

@@ -234,6 +234,19 @@ const routes = [
     name: 'BaseEmpresa',
     component: () => import('@/views/BaseCertificaciones.vue'),
   },
+     // ------------------------------------- REPORTES ----------------------------------------
+  // -------------------------------- INGRESO INSUMO ------------------------------------
+  // -------------------------------- EGRESO INSUMO -------------------------------------
+  {
+    path: '/reportes/ingreso-insumo',
+    name: 'BaseIngresoInsumo',
+    component: () => import('@/views/BaseReporteIngresoInsumo.vue'),
+  },
+  {
+    path: '/reportes/egreso-insumo',
+    name: 'BaseEgresoInsumo',
+    component: () => import('@/views/BaseReporteEgresoInsumo.vue'),
+  },
   // -----------------------------------------------------------------------------------------
 // --------------------------- REPORTES -----------------------------
    {

@@ -62,7 +62,8 @@
             class="custom px-2"
             filled
             dense
-            :rules="[reglas.campoVacio(despacho.desmotivo)]"
+            :rules="[reglas.campoVacio(despacho.desmotivo),
+                    reglas.soloLetras(despacho.desmotivo)]"
             :disabled="bloquearCamposFormDespacho"
           ></v-text-field>
         </v-col>
