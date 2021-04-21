@@ -54,7 +54,9 @@ import ModuloFacturaExport from './modules/ModuloFacturaExport';
 import ModuloEmpresa from './modules/ModuloEmpresa';
 import ModuloCertificacion from './modules/ModuloCertificacion';
 import ModuloCultivo from './modules/ModuloCultivo';
-
+import ModuloReporteDatosProductor from './modules/ModuloReporteDatosProductor';
+import ModuloReporteFinca from './modules/ModuloReporteFinca';
+import ModuloReporteFincasProductor from './modules/ModuloReporteFincasProductor';
 
 export default new Vuex.Store({
   state: {
@@ -141,5 +143,9 @@ export default new Vuex.Store({
     moduloFacturaExport: ModuloFacturaExport,
     moduloEmpresa: ModuloEmpresa, 
     moduloCertificaciones: ModuloCertificacion,
+    moduloReporteDatosProductor: ModuloReporteDatosProductor,
+    moduloReporteFinca: ModuloReporteFinca,
+    moduloReporteFincasProductor: ModuloReporteFincasProductor,
+
   }
 })

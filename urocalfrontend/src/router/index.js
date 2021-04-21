@@ -257,6 +257,11 @@ const routes = [
     name: "BaseReporteVentas",
     component: () => import("@/views/BaseReporteVentas.vue"),
   },
+  {
+    path: '/reporte/fincaproductor',
+    name: 'BaseReporteFincaProductor',
+    component: () => import('@/views/BaseReporteFincaProductor.vue'),
+  },
 ]
 
 const router = new VueRouter({
