@@ -3,8 +3,13 @@ const limpiezaVeh = require('./limpiezaV.dto');
 
 module.exports = {
     async getLimpiezasV(req, res) {
+        const limpiezasV = await limpiezaVModel.getLimpiezasV();
+        return res.status(200).send(limpiezaVeh.LimpiezaVe(limpiezasV)); //<--
+    },
+
+    async getLimpiezasVProductor(req, res) {
         const { id } = req.params;
-        const limpiezasV = await limpiezaVModel.getLimpiezasV(id);
+        const limpiezasV = await limpiezaVModel.getLimpiezasVProductor(id);
         return res.status(200).send(limpiezaVeh.LimpiezaVe(limpiezasV)); //<--
     },
 
