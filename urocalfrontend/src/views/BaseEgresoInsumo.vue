@@ -30,7 +30,7 @@
       <v-card-text>
         <v-data-table
           :headers="cabeceraTablaEgresoInsumo"
-          :items="listaEgresoInsumo"
+          :items="listaEgresoInsumoStore"
           :search="buscarEgresoInsumo"
           sort-by="id_lote"
           :height="tablaResponsiva()"
@@ -100,13 +100,13 @@ export default {
         },
         {
           text: "Insumo",
-          value: "ingresoinsumosid",
+          value: "inginsproducto",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Finca",
-          value: "fincaid",
+          value: "finnombrefinca",
           align: "center",
           class: "grey lighten-3",
         },
@@ -139,7 +139,7 @@ export default {
         },
         {
           text: "Encargado",
-          value: "egrinsencargado",
+          value: "egrencargado",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -152,33 +152,6 @@ export default {
           class: "grey lighten-3",
         },
       ],
-
-    listaEgresoInsumo: [
-        {
-          egresoinsumosid: "1001",
-          ingresoinsumosid: "Abono organico",
-          fincaid: "0001",
-          egrinsfechaegreso: "2020-02-01",
-          egrinsparacontrolar: "305",
-          egrinsdosis: "3",
-          egrinscantidadentregada: "10",
-          egrinsencargado: "Milton",
-          actions: "Ninguno"
-        },
-               {
-          egresoinsumosid: "1002",
-          ingresoinsumosid: "Fertilizante",
-          fincaid: "002",
-          egrinsfechaegreso: "2021-02-01",
-          egrinsparacontrolar: "306",
-          egrinsdosis: "8",
-          egrinscantidadentregada: "22",
-          egrinsencargado: "Bryan",
-          actions: "Ninguno"
-        }
-      
-      ],
-
     };
   },
 
@@ -258,12 +231,12 @@ export default {
     // #  MANIPULACIÓN DE DATOS  #
     // ###########################
     async cargarListaEgresoInsumo() {
-      this.listaEgresoInsumo = []; // Limpiar la 'lista de datos'
+      let listaEgresoInsumo = []; // Limpiar la 'lista de datos'
       let respuesta = await ServicioEgresoInsumo.obtenerTodosEgresoInsumo(); // Obtener respuesta de backend
       let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
       datosUsuario.forEach((egresoinsumo) => {
         // Guardar cada registro en la 'lista de datos'
-        this.listaEgresoInsumo.push(egresoinsumo);
+      listaEgresoInsumo.push(egresoinsumo);
       });
       this.listaEgresoInsumoStore = listaEgresoInsumo;
       //console.log(this.listaEgresoInsumoStore);
@@ -311,6 +284,7 @@ export default {
       this.vaciarModeloEgresoInsumo();
       const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
       this.modeloEgresoInsumoStore = item;
+      this.cargarListaInsumo();
     },
     // ###################
     // #  TIENDA DE VUE  #

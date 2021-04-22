@@ -32,14 +32,14 @@ module.exports = {
                     fincaid: fincaid, 
                 })
 
-                return res.status(201).send({ message: 'egresso registrado' });
+                return res.status(201).send({ message: 'Egreso registrado' });
             } catch (error) {
                 console.log(error);
                 if (error.code == '23505') {
                     res.status(400).send({ message: "Ya existe un egresso con el código que ha ingresado" });
                 } else {
                     console.log("error en el catch: ", error)
-                    return res.status(500).send({ message: "Error al registrar egresso" });
+                    return res.status(500).send({ message: "Error al registrar Egreso" });
                 }
             }
         }
@@ -73,13 +73,13 @@ module.exports = {
             try {
                 const rowCount = await egressModel.updateegress(id, { egresoinsumosid, egrinsfechaegreso, egrinsparacontrolar, egrinsdosis,egrinscantidadentregada,egrencargado,ingresoinsumosid, fincaid })
 
-                return rowCount == 1 ? res.status(200).send({ message: "egresso actualizado" }) : res.status(400).send({ message: "egresso no registrado" });
+                return rowCount == 1 ? res.status(200).send({ message: "Egreso actualizado" }) : res.status(400).send({ message: "Egreso no registrado" });
             } catch (error) {
                 if (error.code == '23505') {
-                    return res.status(400).send({ message: "Ya existe un egresso con el código que ha ingresado" });
+                    return res.status(400).send({ message: "Ya existe un Egreso con el código que ha ingresado" });
                 }
                 console.log("Esto contiene error ..", error)
-                return res.status(400).send({ message: "Error al actualizar egresso" });
+                return res.status(400).send({ message: "Error al actualizar Egreso" });
             }
         }
     },
@@ -91,17 +91,17 @@ module.exports = {
         try {
             let rowCount = await egressModel.deleteegress(id);
             if (rowCount == 1) {
-                return res.status(200).send({ message: "egresso eliminado" });
+                return res.status(200).send({ message: "Egreso eliminado" });
             } else {
-                return res.status(400).send({ message: "egresso no registrado" });
+                return res.status(400).send({ message: "Egreso no registrado" });
             }
 
         } catch (err) {
             if (err.code == '23503') {
-                res.status(400).send({ message: "El egresso a eliminar tiene relaciones con otros registros en la base de datos" });
+                res.status(400).send({ message: "El Egreso a eliminar tiene relaciones con otros registros en la base de datos" });
             } else {
                 console.log("Esto contiene err ...", err)
-                return res.status(400).send({ message: "Error al eliminar egresso" });
+                return res.status(400).send({ message: "Error al eliminar Egreso" });
             }
         }
     }
