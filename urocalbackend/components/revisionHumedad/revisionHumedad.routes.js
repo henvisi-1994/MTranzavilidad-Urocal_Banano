@@ -7,7 +7,7 @@ router.get('/almacenamiento/:id', controller.getRevisionHumedadByAlmacenamientoI
 router.get('/:id', controller.getRevisionHumedads);                                 // Documento (singular)  
 router.delete('/:id', controller.deleteRevisionHumedad);
 router.post('/', controller.createRevisionHumedad); 
-router.put('/:id', controller.updateRevisionHumedad);        
+router.put('/', controller.updateRevisionHumedad);        
 
 
 module.exports = router;

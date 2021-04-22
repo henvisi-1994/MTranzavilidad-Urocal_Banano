@@ -35,10 +35,10 @@ class ServicioAlmacenamiento {
         return axios.put(`${API_URL}/almacenamiento/${almacenamiento.almacenamientoid}`, almacenamiento);
     }
 
-    /*// DELETE: Eliminar un lote
-    eliminarLote(lotecultivadoid) {
-        return axios.delete(`${API_URL}/lote/${lotecultivadoid}`);
-    }*/
+    // DELETE: Eliminar un lote
+    eliminarAlmacenamiento(idAlmacenamiento) {
+        return axios.delete(`${API_URL}/almacenamiento/${idAlmacenamiento}`);
+    }
 }
 
 export default new ServicioAlmacenamiento();

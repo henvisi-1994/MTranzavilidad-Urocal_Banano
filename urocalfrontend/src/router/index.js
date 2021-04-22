@@ -217,6 +217,36 @@ const routes = [
     name: 'BaseRegistroEnvio',
     component: () => import('@/views/BaseRegistroEnvio.vue'),
   },
+  {
+    path: '/puerto/facturaExportacion',
+    name: 'BaseFactExport',
+    component: () => import('@/views/BaseFactExport.vue'),
+  },
+    /// Empresa
+    {
+      path: '/configuracion/Empresa',
+      name: 'BaseEmpresa',
+      component: () => import('@/views/BaseEmpresa.vue'),
+    },
+      /// Certificaciones
+  {
+    path: '/configuracion/Certificaciones',
+    name: 'BaseEmpresa',
+    component: () => import('@/views/BaseCertificaciones.vue'),
+  },
+     // ------------------------------------- REPORTES ----------------------------------------
+  // -------------------------------- INGRESO INSUMO ------------------------------------
+  // -------------------------------- EGRESO INSUMO -------------------------------------
+  {
+    path: '/reportes/ingreso-insumo',
+    name: 'BaseIngresoInsumo',
+    component: () => import('@/views/BaseReporteIngresoInsumo.vue'),
+  },
+  {
+    path: '/reportes/egreso-insumo',
+    name: 'BaseEgresoInsumo',
+    component: () => import('@/views/BaseReporteEgresoInsumo.vue'),
+  },
   // -----------------------------------------------------------------------------------------
 ]
 

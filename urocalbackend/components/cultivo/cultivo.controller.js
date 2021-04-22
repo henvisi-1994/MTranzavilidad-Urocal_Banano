@@ -57,13 +57,16 @@ module.exports = {
         const { id } = req.params;
         const { lotecultivadoid, productoid } = req.body;
 
+        console.log("reqqqq"+productoid);
+        console.log("res"+lotecultivadoid);
+
         if (validation.emptyField(lotecultivadoid) || validation.emptyField(productoid)) {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         } else {
             try {
-                const rowCount = await modeloCultivo.actualizarCultivo(id, { lotecultivadoid, productoid })
+                const rowCount = await modeloCultivo.actualizarCultivo(lotecultivadoid, { lotecultivadoid, productoid })
 
-                return rowCount == 1 ? res.status(200).send({ message: "Cultivo actualizado" }) : res.status(400).send({ message: "Cultivo no registrado" });
+                return rowCount >= 1 ? res.status(200).send({ message: "Cultivo actualizado" }) : res.status(400).send({ message: "Cultivo no registrado" });
             } catch (error) {
                 return res.status(400).send({ message: "Error al actualizar cultivo" });
             }
@@ -75,7 +78,7 @@ module.exports = {
         const { id } = req.params;
 
         try {
-            let rowCount = await modeloCultivo.eliminarCultivo(id);
+            let rowCount = await modeloCultivo.eliminarCultivolotecultivadoid(id);
             if (rowCount == 1) {
                 return res.status(200).send({ message: "Cultivo eliminado" });
             } else {

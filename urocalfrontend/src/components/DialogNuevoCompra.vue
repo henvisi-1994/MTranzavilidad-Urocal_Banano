@@ -153,6 +153,7 @@ export default {
         this.listaDetalleCompra.forEach(async (detalleCompra) => {
           detalleCompra.compraid = respuestaServicioCompra.data.compraid;
           await servicioDetalleCompra.crearDetalleCompra(detalleCompra);
+          
         });
 
         this.$toast.success(respuestaServicioCompra.data.message);

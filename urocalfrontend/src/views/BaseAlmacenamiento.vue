@@ -171,7 +171,15 @@ export default {
         return this.$store.commit("moduloRevisionHumedad/nuevoRevisionHumedad", v);
       },
     },
-
+   // Obtiene la listaRevisionHumedad
+    listaRevisionHumedad: {
+      get() {
+        return this.$store.getters["moduloRevisionHumedad/listaRevisionHumedad"];
+      },
+      set(v) {
+        return this.$store.commit("moduloRevisionHumedad/asignarListaRevisionHumedad", v);
+      },
+    },
 
     // Obtiene y modifica el estado de la variable dialogNuevoAlmacenamiento
     dialogNuevoAlmacenamiento: {
@@ -235,7 +243,7 @@ export default {
         this.agregarCosecha(mix.cosechaid);
       });
       let respuestaServicioRevisionHumedad = await servicioRevisionHumedad.obtenerRevisionHumedadPorAlmacenamiento(item.almacenamientoid);
-      this.humedad = respuestaServicioRevisionHumedad.data[0];
+      this.listaRevisionHumedad = respuestaServicioRevisionHumedad.data;
     },
 
     // Llena la listaAlmacenamiento con datos del servidor backend

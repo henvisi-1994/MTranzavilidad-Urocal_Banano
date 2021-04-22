@@ -1,4 +1,4 @@
-export default class LimpiezaVehiculo {
+export default class Vehiculo {
     constructor(vehiculoid, vehplaca, vehmarca, vehdescripcion, vehlona, vehcaseta, vehpuerta, fincaid) {
         this.vehiculoid = vehiculoid;
         this.vehplaca = vehplaca;

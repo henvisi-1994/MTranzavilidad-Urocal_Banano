@@ -194,6 +194,7 @@ export default {
       },
     },
 
+
     // Obtiene la lista de IDs de productos
     listaIDsProductos: {
       get() {
@@ -273,8 +274,9 @@ export default {
           this.bloqueoBotonCambios();
           break;
         case "formCultivo":
-          //this.bloquearCamposFormCultivo = false;
-          //this.bloqueoBotonCambios();
+          /////////////////////////////////////////////////////////////
+          this.bloquearCamposFormCultivo = false;
+          this.bloqueoBotonCambios();
           break;
         case "formMedioAmbiente":
           this.bloquearCamposFormMedioAmbiente = false;
@@ -294,7 +296,7 @@ export default {
           return !this.bloquearCamposFormLote && this.formLoteValido ? false : true;
           break;
         case "formCultivo":
-          return this.bloquearCamposFormCultivo ? true : false;
+          return !this.bloquearCamposFormCultivo ? true : false;
           break;
         case "formMedioAmbiente":
           return !this.bloquearCamposFormMedioAmbiente && this.formMedioAmbienteValido
@@ -315,21 +317,31 @@ export default {
             let respuesta = await servicioLote.actualizarLote(this.lote);
             this.$toast.success(respuesta.data.message);
             this.obtenerTodosLote();
-            this.bloquearCamposFormLote = true;
-            this.bloqueoBotonCambios();
+            this.bloquearCamposFormLote = false;
+            //this.bloqueoBotonCambios();
+            this.closeDialogTabsMostrarLote();
           } catch (error) {
             this.$toast.error(error.response.data.message);
           }
           break;
         case "formCultivo":
-          try {
-            //let respuesta = await servicioCultivo.actualizarLote(this.lote);
-            //this.$toast.success(respuesta.data.message);
-            this.bloquearCamposFormCultivo = true;
-            this.bloqueoBotonCambios();
-          } catch (error) {
-            this.$toast.error(error.response.data.message);
-          }
+          
+            this.listaIDsProductos.forEach(async (productoID) => {
+              let cultivo = {
+                lotecultivadoid: this.lote.lotecultivadoid,
+                productoid: productoID,
+              };
+              try {
+                let respuesta = await servicioCultivo.actualizarCultivo(cultivo);
+                this.$toast.success(respuesta.data.message);
+              } catch (error) {
+              this.$toast.error(error.response.data.message);
+            }
+            });
+            this.bloquearCamposFormCultivo = false;
+            //this.bloqueoBotonCambios();
+            this.closeDialogTabsMostrarLote();
+          
           break;
         case "formMedioAmbiente":
           // Si no existe un registro de medioAmbiente para este lote, registra, caso contrario actualiza su informacion
@@ -342,8 +354,9 @@ export default {
               );
 
               this.$toast.success(respuesta.data.message);
-              this.bloquearCamposFormMedioAmbiente = true;
-              this.bloqueoBotonCambios();
+              this.bloquearCamposFormMedioAmbiente = false;
+              //this.bloqueoBotonCambios();
+              this.closeDialogTabsMostrarLote();
             } catch (error) {
               this.$toast.error(error.response.data.message);
             }
@@ -353,8 +366,9 @@ export default {
                 this.medAmbiente
               );
               this.$toast.success(respuesta.data.message);
-              this.bloquearCamposFormMedioAmbiente = true;
-              this.bloqueoBotonCambios();
+              this.bloquearCamposFormMedioAmbiente = false;
+              //this.bloqueoBotonCambios();
+              this.closeDialogTabsMostrarLote();
             } catch (error) {
               this.$toast.error(error.response.data.message);
             }
@@ -369,8 +383,9 @@ export default {
               let respuesta = await servicioSuelo.crearSuelo(this.suelo);
 
               this.$toast.success(respuesta.data.message);
-              this.bloquearCamposFormSuelo = true;
-              this.bloqueoBotonCambios();
+              this.bloquearCamposFormSuelo = false;
+              //this.bloqueoBotonCambios();
+              this.closeDialogTabsMostrarLote();
             } catch (error) {
               this.$toast.error(error.response.data.message);
             }
@@ -378,8 +393,9 @@ export default {
             try {
               let respuesta = await servicioSuelo.actualizarSuelo(this.suelo);
               this.$toast.success(respuesta.data.message);
-              this.bloquearCamposFormSuelo = true;
-              this.bloqueoBotonCambios();
+              this.bloquearCamposFormSuelo = false;
+              //this.bloqueoBotonCambios();
+              this.closeDialogTabsMostrarLote();
             } catch (error) {
               this.$toast.error(error.response.data.message);
             }
@@ -400,13 +416,30 @@ export default {
         case "formLote":
           try {
             let respuesta = await servicioLote.eliminarLote(this.lote.lotecultivadoid);
+            console.log("respuesstaaa  "+respuesta);
             this.$toast.success(respuesta.data.message);
+            this.obtenerTodosLote();
+            this.bloquearCamposFormLote = false;
+            //this.bloqueoBotonCambios();
+            this.closeDialogTabsMostrarLote();
           } catch (error) {
-            this.$toast.error(error.response.data.message);
+            this.$toast.error();
           }
           break;
         case "formCultivo":
-          //
+            try {
+            let respuesta = await servicioCultivo.eliminarCultivo(
+              this.medAmbiente.lotecultivadoid
+            );
+            this.$toast.success(respuesta.data.message);
+            this.medAmbiente = {};
+             this.obtenerTodosLote();
+            this.bloquearCamposFormCultivo = false;
+            //this.bloqueoBotonCambios();
+            this.closeDialogTabsMostrarLote();
+          } catch (error) {
+            this.$toast.error(error.response.data.message);
+          }
           break;
         case "formMedioAmbiente":
           try {
@@ -416,6 +449,10 @@ export default {
             this.$toast.success(respuesta.data.message);
             this.medAmbiente = {};
             this.$refs.componentFormMedioAmbiente.$refs.formMedioAmbiente.resetValidation();
+            this.obtenerTodosLote();
+            this.bloquearCamposFormMedioAmbiente = false;
+            //this.bloqueoBotonCambios();
+            this.closeDialogTabsMostrarLote();
           } catch (error) {
             this.$toast.error(error.response.data.message);
           }
@@ -426,6 +463,10 @@ export default {
             this.$toast.success(respuesta.data.message);
             this.suelo = {};
             this.$refs.componentFormSuelo.$refs.formSuelo.resetValidation();
+            this.obtenerTodosLote();
+            this.bloquearCamposFormSuelo = false;
+            //this.bloqueoBotonCambios();
+            this.closeDialogTabsMostrarLote();
           } catch (error) {
             this.$toast.error(error.response.data.message);
           }

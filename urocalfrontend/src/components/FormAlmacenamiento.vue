@@ -87,7 +87,9 @@
           class="custom px-2"
           dense
           filled
-          :rules="[reglas.campoVacio(almacenamiento.almnumerobultos)]"
+          :rules="[reglas.campoVacio(almacenamiento.almnumerobultos),
+              reglas.soloNumerosPositivos(almacenamiento.almnumerobultos),
+            ]"
           error-count="2"
           :disabled="bloquearCamposFormAlmacenamiento"
         ></v-text-field>
@@ -103,7 +105,7 @@
           class="custom px-2"
           dense
           filled
-          :rules="[reglas.campoVacio(almacenamiento.almpesobulto)]"
+          :rules="[reglas.campoVacio(almacenamiento.almpesobulto),reglas.soloNumerosPositivos(almacenamiento.almpesobulto)]"
           :disabled="bloquearCamposFormAlmacenamiento"
         ></v-text-field>
       </v-col>
@@ -129,7 +131,7 @@
           class="custom px-2"
           dense
           filled
-          :rules="[reglas.campoVacio(almacenamiento.almsaldo)]"
+          :rules="[reglas.campoVacio(almacenamiento.almsaldo),reglas.soloNumerosPositivos(almacenamiento.almsaldo)]"
           :disabled="bloquearCamposFormAlmacenamiento"
         ></v-text-field>
       </v-col>
@@ -164,7 +166,7 @@
           class="style-chooser custom px-2"
           dense
           filled
-          label="pronombre"
+          label="coscodigo"
           :reduce="(listaCosecha) => listaCosecha.cosechaid"
           :options="listaCosecha"
           multiple
@@ -315,7 +317,7 @@ export default {
     async obtenerTodosTratamiento() {
       let respuestaServicioTratamiento = await servicioTratamiento.obtenerTodosTratamiento();
       respuestaServicioTratamiento.data.forEach((tratamiento) => {
-        tratamiento.tratamientoOperario = `Tipo secado: ${tratamiento.tratiposecado} | Operario: ${tratamiento.traoperario}`;
+        tratamiento.tratamientoOperario = ` ${tratamiento.tratamientoid} |  ${tratamiento.traobservacion}`;
       });
       this.listaTratamiento = respuestaServicioTratamiento.data;
     },

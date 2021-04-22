@@ -5,6 +5,8 @@ export default {
 
     state: {
         listaRiegoStore: [],
+        listaCultivoStore: [],
+        listaloteStore: [],
         modeloRiegoStore: new Riego('', '', '', '', '', '', '', '', ''), // Modelo Riego
         formRiegoValido: false, // Indica si el formulario de Riego es valido
         editarRiego: false
@@ -20,11 +22,7 @@ export default {
             state.listaRiegoStore = newState;
         },
 
-        establecerEditarRiego(state, newState) {
-            state.editarRiego = newState;
-        },
-
-        // Vacia el modelo Riego
+         // Vacia el modelo Riego
         vaciarModeloRiegoStore(state) {
             state.modeloRiegoStore = new Riego('', '', '', '', '', '', '', '', '')
         },
@@ -33,6 +31,33 @@ export default {
         cambiarEstadoValidoFormRiego(state, nuevoEstado) {
             state.formRiegoValido = nuevoEstado
         },
+
+        establecerEditarRiego(state, newState) {
+            state.editarRiego = newState;
+        },
+        
+        establecerlistaloteStore(state, newState) {
+            state.listaloteStore = newState;
+        },
+
+        nuevoRiego(state,nuevoRiego){
+            state.modeloRiegoStore=nuevoRiego
+        },
+
+        establecerListaCultivoStore(state, newState) {
+            state.listaCultivoStore = newState;
+        },
+
+        establecerlistaTipoStore(state, newState) {
+            state.listaTipoStore = newState;
+        },
+
+        limpiarListaCultivoStore(state) {
+            state.listaCultivoStore = [];
+        },
+       
+
+        
     },
 
     getters: {
@@ -40,5 +65,8 @@ export default {
         listaRiegoStore: (state) => state.listaRiegoStore,
         modeloRiegoStore: (state) => state.modeloRiegoStore,
         editarRiego: (state) => state.editarRiego,
+        listaCultivoStore: (state) => state.listaCultivoStore,
+        listaloteStore: (state) => state.listaloteStore,
+        listaTipoStore:(state) => state.listaTipoStore,
     },
 }

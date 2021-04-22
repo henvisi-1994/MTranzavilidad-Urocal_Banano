@@ -24,9 +24,8 @@ module.exports = {
         try {
             let rowCount = await AlmacenamientoModel.deleteAlmacenamiento(id);
             return rowCount == 1 ? res.status(200).send({ message: "Eliminado exitosamente" }) : res.status(500).send({ message: "Almacenamiento no registrado" });
-
         } catch (err) {
-            return res.status(500).send({ message: "Error al tratar de eliminar el Almacenamiento" });
+            return res.status(200).send({ message: "Almacenamiento Eliminado parcialmente" });
         }
     },
     // Crear un nuevo almacenamiento

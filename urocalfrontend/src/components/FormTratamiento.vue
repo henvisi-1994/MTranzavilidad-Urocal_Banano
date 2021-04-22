@@ -4,14 +4,38 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
+            placeholder="Productor"
+            class="style-chooser"
+            label="productor"
+            @input="obtenerTodosFincas"
+            v-if="visible === true"
+            v-model="modeloTratamientoStore.productorid"
+            :disabled="editarTratamiento"
+            :reduce="(listaProductorPersona) => listaProductorPersona.id"
+            :options="listaProductorPersona"
+            :rules="[reglas.campoVacio(modeloTratamientoStore.productorid)]"
+          >
+            <template v-slot:no-options="{ search, searching }">
+              <template v-if="searching">
+                No hay resultados para <em>{{ search }}</em
+                >.
+              </template>
+              <em style="opacity: 0.5" v-else
+                >Empiece a escribir un Productor</em
+              >
+            </template>
+          </v-select>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-select
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
             v-model="modeloTratamientoStore.fincaid"
             :disabled="editarTratamiento"
             @input="obtenerTodosLoteCultivadoDeFinca"
-            :reduce="(listaFinca) => listaFinca.fincaid"
-            :options="listaFinca"
+            :reduce="(listaFincaStore) => listaFincaStore.fincaid"
+            :options="listaFincaStore"
             :rules="[reglas.campoVacio(modeloTratamientoStore.fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -23,17 +47,19 @@
             </template>
           </v-select>
         </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
-            v-model="loteid"
+            v-model="modeloTratamientoStore.lotecultivadoid"
             :disabled="editarTratamiento"
             @input="obtenerTodosListaCultivo"
-            :reduce="(listaLote) => listaLote.lotecultivadoid"
-            :options="listaLote"
-            :rules="[reglas.campoVacio(loteid)]"
+            :reduce="(listaLoteStore) => listaLoteStore.lotecultivadoid"
+            :options="listaLoteStore"
+            :rules="[reglas.campoVacio(modeloTratamientoStore.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -49,7 +75,6 @@
             </template>
           </v-select>
         </v-col>
-
         <v-col cols="12" md="5">
           <v-select
             placeholder="Cultivo"
@@ -57,8 +82,8 @@
             v-model="modeloTratamientoStore.cultivoid"
             label="detalles"
             :disabled="editarTratamiento"
-            :reduce="(listaCultivo) => listaCultivo.cultivoid"
-            :options="listaCultivo"
+            :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
+            :options="listaCultivoStore"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -69,7 +94,9 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="5">
           <v-text-field
             v-model="modeloTratamientoStore.traubicacion"
             :disabled="editarTratamiento"
@@ -77,7 +104,7 @@
           >
           </v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendario"
             :nudge-right="40"
@@ -109,14 +136,14 @@
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="10">
           <v-textarea
             v-model="modeloTratamientoStore.traobservacion"
             :disabled="editarTratamiento"
             label="Observación"
           ></v-textarea>
         </v-col>
-        <v-col cols="12" md="5"> </v-col>
+        <v-col cols="12" md="5"></v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
@@ -177,7 +204,7 @@
       </v-row>
 
       <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendarioFi"
             :disabled="editarTratamiento"
@@ -208,7 +235,7 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5">
           <v-menu
             v-model="menuMostrarCalendarioFf"
             :nudge-right="40"
@@ -260,10 +287,18 @@
             no-data-text="No se han agregado detalle"
           >
             <template v-slot:item.actions="{ item }">
-              <v-icon color="primary" :disabled="editarTratamiento"  @click="eliminarDetalleTra(item)">
+              <v-icon
+                color="primary"
+                :disabled="editarTratamiento"
+                @click="eliminarDetalleTra(item)"
+              >
                 mdi-trash-can
               </v-icon>
-              <v-icon color="primary" :disabled="editarTratamiento" @click="editarDetalleTra(item)">
+              <v-icon
+                color="primary"
+                :disabled="editarTratamiento"
+                @click="editarDetalleTra(item)"
+              >
                 mdi-eye
               </v-icon>
             </template>
@@ -282,6 +317,9 @@ import "vue-select/dist/vue-select.css";
 import servicioLote from "../services/ServicioLote";
 import servicioFinca from "../services/ServicioFinca";
 import servicioCultivo from "../services/ServicioCultivo";
+import servicioProductorPersona from "../services/ServicioProductorPersona";
+import TheBarraNavegacionVue from "./TheBarraNavegacion.vue";
+import ServicioProductorPersona from "../services/ServicioProductorPersona";
 
 export default {
   name: "formTratamiento",
@@ -290,10 +328,12 @@ export default {
     vSelect,
   },
   mounted() {
-    this.obtenerTodosFincas();
+    this.obtenerTodosProductorPersona();
+    this.visibilidadProductor();
   },
   data() {
     return {
+      visible: false,
       menuMostrarCalendario: "",
       menuMostrarCalendarioFi: "",
       menuMostrarCalendarioFf: "",
@@ -339,6 +379,7 @@ export default {
       listaLote: [],
       listaFinca: [],
       listaCultivo: [],
+      listaProductorPersona: [],
       listaTipo: [
         { nombre: "Secado", descripcion: "SECADO" },
         { nombre: "Fermentacion", descripcion: "FERMENTACION" },
@@ -354,7 +395,6 @@ export default {
         dtrafechainicio: "",
         dtrafechafin: "",
       },
-      loteid: "",
       currentDate: new Date().toISOString().substr(0, 10),
     };
   },
@@ -400,25 +440,81 @@ export default {
         );
       },
     },
+     listaLoteStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaLoteStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaLoteStore",
+          v
+        );
+      },
+    },
+    listaCultivoStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaCultivoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaCultivoStore",
+          v
+        );
+      },
+    },
+    listaFincaStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaFincaStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaFincaStore",
+          v
+        );
+      },
+    },
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
 
   methods: {
-    async obtenerTodosListaCultivo() {
-      console.log(this.loteid);
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
-      this.listaCultivo = resultado.data;
-    },
-    async obtenerTodosFincas() {
-      let resultado = await servicioFinca.obtenerTodosFincas();
-      this.listaFinca = resultado.data;
-    },
-    async obtenerTodosLoteCultivadoDeFinca() {
+
+  async obtenerTodosLoteCultivadoDeFinca() {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
         this.modeloTratamientoStore.fincaid
       );
-      this.listaLote = resultado.data;
+      this.listaLoteStore = resultado.data;
+    },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloTratamientoStore.lotecultivadoid);
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosFincas() {
+      try {
+      let respuesta=null;
+      let id = 0;
+      if(localStorage.getItem('productor')!==null){
+        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+        id = usuariosesion.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
+      }else{
+        id = this.modeloTratamientoStore.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(id);
+      }
+        this.listaFincaStore = respuesta.data;
+      } catch (error) {
+
+      }
+    },
+    async obtenerTodosProductorPersona() {
+      let resultado = await servicioProductorPersona.obtenerTodosProductorPersona();
+      resultado.data.map((productor) => {
+        this.listaProductorPersona.push({
+          id: productor.personaid,
+          productor: `${productor.pernombres} ${productor.perapellidos} | RUC/CI. ${productor.percedula}`,
+        });
+      });
+      // this.listaProductorPersona = resultado.data;
     },
     agregarDetalleTra() {
       this.modeloTratamientoStore.detalle.push(this.detalle);
@@ -435,13 +531,20 @@ export default {
         })
       );
     },
+    visibilidadProductor() {
+      if (localStorage.getItem("productor") !== null) {
+        this.visible = false;
+      } else {
+        this.visible = true;
+      }
+    },
     eliminarDetalleTra(item) {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
       this.modeloTratamientoStore.detalle.splice(index, 1);
     },
     editarDetalleTra(item) {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
-       this.detalle = JSON.parse(
+      this.detalle = JSON.parse(
         JSON.stringify({
           dtratipo: item.dtratipo,
           dtraunidad: item.dtraunidad,

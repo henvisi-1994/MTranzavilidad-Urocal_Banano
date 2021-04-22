@@ -63,6 +63,7 @@ module.exports = {
         detestimulo = ${detalleCompra.detestimulo}, dettara = ${detalleCompra.dettara}, detestado = '${detalleCompra.detestado}',
         detunidad = '${detalleCompra.detunidad}', detpreciounidad = ${detalleCompra.detpreciounidad}, detcantidadunidades = ${detalleCompra.detcantidadunidades},
         detpreciototal = ${detalleCompra.detpreciototal} where detallecompraid =  ${id}`;
+        console.log(query);
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó al usuario y 0 sino lo hizo.
     }

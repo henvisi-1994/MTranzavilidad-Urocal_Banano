@@ -41,6 +41,7 @@ module.exports = {
                 carga: carga
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 
@@ -49,7 +50,7 @@ module.exports = {
 
     async updateGuiaRemision(req, res) {
         const { id } = req.params;
-        const { guiserie, guinumero, guifechaemision, guifechainicio, guihorainicio, guifechafin, guihorafin, guipuntoinicio, guipuntofin, guicomprobanteventa, guimotivo, guidestinatario, guiformapago, guiobservacion, guiemiteurocal, conductorid, vehiculoid, productorid } = req.body;
+        const { guiserie, guinumero, guifechaemision, guifechainicio, guihorainicio, guifechafin, guihorafin, guipuntoinicio, guipuntofin, guicomprobanteventa, guimotivo, guidestinatario, guiformapago, guiobservacion, guiemiteurocal, conductorid, vehiculoid, productorid, carga} = req.body;
 
         const rowCount = await guiaremisionModel.updateGuiaRemision(id, {
             guiserie: guiserie,
@@ -68,7 +69,8 @@ module.exports = {
             guiemiteurocal: guiemiteurocal,
             conductorid: conductorid,
             vehiculoid: vehiculoid,
-            productorid: productorid
+            productorid: productorid,
+            carga: carga
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
@@ -83,7 +85,7 @@ module.exports = {
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "GuiaRemision no registrado", tipo: "error" });
             
         } catch (err) {
-            return res.json({ message: "Error al tratar de eliminar fertilizacion", tipo: "error" });
+            return res.json({ message: "Error al tratar de eliminar guia remisiom", tipo: "error" });
         }
     },
 }

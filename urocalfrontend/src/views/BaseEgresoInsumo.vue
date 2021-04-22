@@ -70,6 +70,7 @@ import DialogNuevoEgresoInsumo from "../components/DialogNuevoEgresoInsumo"; // 
 import DialogEditarEgresoInsumo from "../components/DialogEditarEgresoInsumo"; // Dialogo para editar usuario
 import ServicioEgresoInsumo from "../services/ServicioEgresoInsumo"; // Interactuar con el Backend
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import jsPDF from "jspdf";
 
 export default {
   name: "BaseEgresoInsumo",
@@ -99,13 +100,13 @@ export default {
         },
         {
           text: "Insumo",
-          value: "ingresoinsumosid",
+          value: "inginsproducto",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Finca",
-          value: "fincaid",
+          value: "finnombrefinca",
           align: "center",
           class: "grey lighten-3",
         },
@@ -138,7 +139,7 @@ export default {
         },
         {
           text: "Encargado",
-          value: "egrinsencargado",
+          value: "egrencargado",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -151,7 +152,6 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaEgresoInsumo: [], // Almacena una lista de EgresoInsumo con llave foranea ingresoinsumoid, la misma se muestra en tabla
     };
   },
 
@@ -236,7 +236,7 @@ export default {
       let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
       datosUsuario.forEach((egresoinsumo) => {
         // Guardar cada registro en la 'lista de datos'
-        listaEgresoInsumo.push(egresoinsumo);
+      listaEgresoInsumo.push(egresoinsumo);
       });
       this.listaEgresoInsumoStore = listaEgresoInsumo;
       //console.log(this.listaEgresoInsumoStore);
@@ -284,8 +284,8 @@ export default {
       this.vaciarModeloEgresoInsumo();
       const indiceEditar = this.listaEgresoInsumoStore.indexOf(item);
       this.modeloEgresoInsumoStore = item;
+      this.cargarListaInsumo();
     },
-
     // ###################
     // #  TIENDA DE VUE  #
     // ###################

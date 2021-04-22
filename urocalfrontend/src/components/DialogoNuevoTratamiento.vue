@@ -13,7 +13,9 @@
         <h5>Registrar Fermentación y Secado</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogNuevoTratamiento()">mdi-close</v-icon>
+          <v-icon class="white--text" @click="cerrarDialogNuevoTratamiento()"
+            >mdi-close</v-icon
+          >
         </v-btn>
       </v-card-title>
 
@@ -42,7 +44,7 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormTratamiento from "@/components/FormTratamiento";
-import ServicioTratamiento from '../services/ServicioTratamiento';
+import ServicioTratamiento from "../services/ServicioTratamiento";
 
 export default {
   name: "DialogNuevoTratamiento",
@@ -52,14 +54,16 @@ export default {
   },
 
   computed: {
-
-       // Obtiene y modifica el estado de la variable dialogoNuevaTratamiento
+    // Obtiene y modifica el estado de la variable dialogoNuevaTratamiento
     dialogoNuevoTratamiento: {
       get() {
         return this.$store.getters["gestionDialogos/dialogoNuevoTratamiento"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogoNuevoTratamiento", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogoNuevoTratamiento",
+          v
+        );
       },
     },
 
@@ -68,36 +72,59 @@ export default {
         return this.$store.getters["moduloTratamiento/modeloTratamientoStore"];
       },
       set(v) {
-        return this.$store.commit("moduloTratamiento/establecerModeloTratamientoStore", v);
+        return this.$store.commit(
+          "moduloTratamiento/establecerModeloTratamientoStore",
+          v
+        );
+      },
+    },
+    listaTratamientoStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaTratamientoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaTratamientoStore",
+          v
+        );
       },
     },
 
     // Obtiene es estado de la variable formTratamientoValido y el modelo Tratamiento
-    ...mapState("moduloTratamiento", ["formTratamientoValido", "modeloTratamientoStore"]),
+    ...mapState("moduloTratamiento", [
+      "formTratamientoValido",
+      "modeloTratamientoStore",
+    ]),
   },
 
   methods: {
     async agregarTratamiento() {
-      let productor = JSON.parse(localStorage.getItem('productor'));
-      this.modeloTratamientoStore.productorid = productor.productorid
-     let respuesta = await ServicioTratamiento.agregarTratamiento(this.modeloTratamientoStore);
-      if (respuesta.status == 201) {
-        this.cerrarDialogNuevoTratamiento();
-        this.cargarListaTratamiento();
-        this.vaciarModeloTratamientoStore();
-      }
+      try {
+        if (localStorage.getItem("productor") !== null) {
+          let productor = JSON.parse(localStorage.getItem("productor"));
+          this.modeloTratamientoStore.productorid = productor.productorid;
+        }
+        let respuesta = await ServicioTratamiento.agregarTratamiento(
+          this.modeloTratamientoStore
+        );
+        if (respuesta.status == 201) {
+          this.cerrarDialogNuevoTratamiento();
+          this.cargarListaTratamiento();
+          this.vaciarModeloTratamientoStore();
+        }
+      } catch (error) {}
     },
 
-    async cargarListaTratamiento () {
+    async cargarListaTratamiento() {
       let listaTratamientos = [];
       let respuesta = await ServicioTratamiento.obtenerTodosTratamiento();
       let riegos = await respuesta.data;
+      this.$store.commit("moduloTratamiento/vaciarLista", null);
       riegos.forEach((f) => {
         listaTratamientos.push(f);
       });
       this.listaTratamientoStore = listaTratamientos;
     },
-
 
     cerrarDialogNuevoTratamiento() {
       this.dialogoNuevoTratamiento = !this.dialogoNuevoTratamiento; // Cierra el dialogNuevoTratamiento

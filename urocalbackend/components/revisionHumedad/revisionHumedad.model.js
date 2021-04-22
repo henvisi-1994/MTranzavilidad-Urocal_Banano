@@ -14,8 +14,8 @@ module.exports = {
     async createRevisionHumedad(revisionHumedad) {
         return revisionHumedadDao.createRevisionHumedad(revisionHumedad);
     },
-    async updateRevisionHumedad(id, revisionHumedad) {
-        return revisionHumedadDao.updateRevisionHumedad(id, revisionHumedad);
+    async updateRevisionHumedad(revisionHumedad) {
+        return revisionHumedadDao.updateRevisionHumedad(revisionHumedad);
     },
 
 }

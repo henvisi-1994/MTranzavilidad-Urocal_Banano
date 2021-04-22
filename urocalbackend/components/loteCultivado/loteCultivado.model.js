@@ -26,5 +26,14 @@ module.exports = {
 
     async eliminarLoteCultivado(id) {
         return loteCultivadoDao.eliminarLoteCultivado(id);
+    },
+    async eliminarLoteCultivadodeCultivo(id) {
+        return loteCultivadoDao.eliminarLoteCultivadodeCultivo(id);
+    },
+    async eliminarLoteCultivadodemedioambiente(id) {
+        return loteCultivadoDao.eliminarLoteCultivadodemedioambiente(id);
+    },
+    async eliminarLoteCultivadodesuelo(id) {
+        return loteCultivadoDao.eliminarLoteCultivadodesuelo(id);
     }
 }

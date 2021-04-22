@@ -34,7 +34,7 @@
             v-model="modeloEgresoInsumoStore.ingresoinsumosid"
             placeholder="Insumo"
             class="style-chooser"
-            label="ingresoinsumosid"
+            label="inginsproducto"
             :reduce="(listaInsumoStore) => listaInsumoStore.ingresoinsumosid"
             :options="listaInsumoStore"
           >
@@ -100,7 +100,7 @@
             :disabled="noeditar"
             v-model="modeloEgresoInsumoStore.egrinsparacontrolar"
             label="Control de egreso"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsparacontrolar)]"
+            :rules="[reglas.soloLetras(modeloEgresoInsumoStore.egrinsparacontrolar), reglas.campoVacio(modeloEgresoInsumoStore.egrinsparacontrolar),]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
@@ -126,9 +126,9 @@
         <v-col cols="12" md="5">
           <v-text-field
             :disabled="noeditar"
-            v-model="modeloEgresoInsumoStore.egrinsencargado"
+            v-model="modeloEgresoInsumoStore.egrencargado"
             label="Encargado"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsencargado)]"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -290,27 +290,39 @@ export default {
 
     // UPDATE: Actualiza un registro
     async actualizarRegistro() {
-      const respuesta = await ServicioEgresoInsumo.actualizarEgresoInsumo(
-        this.modeloEgresoInsumoStore.egresoinsumosid,
-        this.modeloEgresoInsumoStore
-      );
-      if (respuesta.status == 200) {
-        this.preeditar=null        
-        this.cerrarDialogo();
-        this.cargarListaEgresoInsumo();
-        this.vaciarModeloEgresoInsumo();
+      try {
+        const respuesta = await ServicioEgresoInsumo.actualizarEgresoInsumo(
+          this.modeloEgresoInsumoStore.egresoinsumosid,
+          this.modeloEgresoInsumoStore
+        );
+        if (respuesta.status == 200) {
+          this.preeditar=null        
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaEgresoInsumo();
+          this.vaciarModeloEgresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 
     // DELETE: Elimina un registro
     async eliminarRegistro() {
-      console.log(this.modeloEgresoInsumoStore);
-      const respuesta = await ServicioEgresoInsumo.eliminarEgresoInsumo(
-        this.modeloEgresoInsumoStore.egresoinsumosid
-      );
-      if (respuesta.status == 200) {
-        this.cerrarDialogo();
-        this.cargarListaEgresoInsumo();
+      try {
+        console.log(this.modeloEgresoInsumoStore);
+        const respuesta = await ServicioEgresoInsumo.eliminarEgresoInsumo(
+          this.modeloEgresoInsumoStore.egresoinsumosid
+        );
+        if (respuesta.status == 200) {
+          this.cerrarDialogo();
+          this.$toast.warning(respuesta.data.message);
+          this.cargarListaEgresoInsumo();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
     },
 
@@ -326,7 +338,7 @@ export default {
         this.modeloEgresoInsumoStore.egrinsparacontrolar=this.preeditar.egrinsparacontrolar
         this.modeloEgresoInsumoStore.egrinsdosis=this.preeditar.egrinsdosis
         this.modeloEgresoInsumoStore.egrinscantidadentregada=this.preeditar.egrinscantidadentregada
-        this.modeloEgresoInsumoStore.egrinsencargado=this.preeditar.egrinsencargado
+        this.modeloEgresoInsumoStore.egrencargado=this.preeditar.egrencargado
         this.modeloEgresoInsumoStore.ingresoinsumosido=this.preeditar.ingresoinsumosid
         this.preeditar=null        
       }
@@ -343,7 +355,7 @@ export default {
           this.preeditar.egrinsparacontrolar=this.modeloEgresoInsumoStore.egrinsparacontrolar
           this.preeditar.egrinsdosis=this.modeloEgresoInsumoStore.egrinsdosis
           this.preeditar.egrinscantidadentregada=this.modeloEgresoInsumoStore.egrinscantidadentregada
-          this.preeditar.egrinsencargado=this.modeloEgresoInsumoStore.egrinsencargado
+          this.preeditar.egrencargado=this.modeloEgresoInsumoStore.egrencargado
           this.preeditar.ingresoinsumosid=this.modeloEgresoInsumoStore.ingresoinsumosid
           this.preeditar.fincaid=this.modeloEgresoInsumoStore.fincaid;
         }
@@ -357,7 +369,7 @@ export default {
       return `${day}/${month}/${year}`;
     },
 
-    //...mapMutations("moduloEgresoInsumo", ["vaciarModeloEgresoInsumo"]),  // Vacia el modelo modeloEgresoInsumoStore
+    ...mapMutations("moduloEgresoInsumo", ["vaciarModeloEgresoInsumo"]),  // Vacia el modelo modeloEgresoInsumoStore
   },
 };
 </script>

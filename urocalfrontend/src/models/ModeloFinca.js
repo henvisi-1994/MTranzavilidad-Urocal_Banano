@@ -1,6 +1,6 @@
 export default class Finca {
     constructor(fincaid, fincodigo, finnombrefinca, finsuperficietotal, finsuperficiecultivada, fincoordenadax, fincoordenaday, finproductosprohibidos, 
-                finprimerainspeccion, finultimainspeccion, finnoconformidades, fincertificacioneu, fincertificacionnop, fincertificacionjas, finobservacion, asociacionfinca, sitiofinca, fincapropietario) {
+                finprimerainspeccion, finultimainspeccion, finnoconformidades, fincertificacioneu, fincertificacionnop, fincertificacionjas, finobservacion, asociacionfinca, sitiofinca, fincapropietario, detalle) {
         this.fincaid = fincaid;
         this.fincodigo = fincodigo;
         this.finnombrefinca = finnombrefinca;
@@ -28,5 +28,6 @@ export default class Finca {
             sitioid: sitiofinca.sitioid,
             sitionombre: sitiofinca.sitionombre
         }
+        this.detalle = detalle;
     }
 }

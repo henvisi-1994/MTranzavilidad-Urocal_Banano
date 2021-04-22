@@ -27,7 +27,8 @@ class ServicioRevisionHumedad {
 
     // UPDATE: Actualiza una revisionHumedad
     actualizarRevisionHumedad(revisionHumedad) {
-        return axios.put(`${API_URL}/revisionHumedad/${revisionHumedad.revisionhumedadid}`, revisionHumedad);
+        console.log(revisionHumedad);
+        return axios.put(`${API_URL}/revisionHumedad`, revisionHumedad);
     }
 
     // DELETE: Eliminar una revisionHumedad
