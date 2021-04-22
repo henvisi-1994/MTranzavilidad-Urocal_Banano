@@ -77,6 +77,7 @@ import DialogoMostrarTratamiento from "../components/DialogoMostrarTratamiento";
 import ServicioTratamiento from "../services/ServicioTratamiento";
 import servicioLote from "../services/ServicioLote";
 import servicioCultivo from "../services/ServicioCultivo";
+import servicioFinca from "../services/ServicioFinca";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -218,13 +219,23 @@ export default {
         );
       },
     },
+    listaFincaStore: {
+      get() {
+        return this.$store.getters["moduloTratamiento/listaFincaStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloTratamiento/asignarListaFincaStore",
+          v
+        );
+      },
+    },
   },
 
   methods: {
     // Carga el DialogoNuevaTratamiento
     cargarDialogoNuevoTratamiento() {
       this.dialogoNuevoTratamiento = !this.dialogoNuevoTratamiento; // Abre el DialogStepperFormNewTratamiento
-      this.editarTratamiento=true;
       this.vaciarModeloTratamientoStore(); // Reinicia el modelo Tratamiento
     },
 
@@ -248,6 +259,7 @@ export default {
         detalle:resultado.data
       };
       this.$store.commit("moduloTratamiento/establecerEditarTratamiento", true);
+      this.obtenerTodosFincas();
       this.obtenerTodosLoteCultivadoDeFinca();
       this.obtenerTodosListaCultivo();
       //his.editarTratamiento = true;
@@ -267,6 +279,17 @@ export default {
     async obtenerTodosListaCultivo() {
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloTratamientoStore.lotecultivadoid);
       this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosFincas() {
+      try {
+      let respuesta=null;
+      let id = 0;
+        id = this.modeloTratamientoStore.productorid;
+        respuesta = await servicioFinca.obtenerFincaPropietario(id);
+        this.listaFincaStore = respuesta.data;
+      } catch (error) {
+
+      }
     },
     // Vacia el modelo siembra
     ...mapMutations("moduloTratamiento", [
