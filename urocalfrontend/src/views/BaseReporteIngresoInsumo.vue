@@ -16,52 +16,74 @@
               v-text="nombre"
             ></div>
           </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              class="custom"
-              filled
-              v-model="buscarIngresoInsumo"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              dense
-            ></v-text-field>
-          </v-col>
         </v-row>
       </v-card-title>
 
       <v-card-text>
-        <v-data-table
-          :headers="cabeceraTablaIngresoInsumo"
-          :items="listaIngresoInsumo"
-          :search="buscarIngresoInsumo"
-          sort-by="id_lote"
-          :height="tablaResponsiva()"
-          class="elevation-1"
-        >
-          <template v-slot:top>
-            <DialogEditarIngresoInsumo
-              ref="DialogEditarIngresoInsumo"
-            ></DialogEditarIngresoInsumo>
-          </template>
-
-          <template v-slot:item.actions="{ item }">
-            <v-icon
-              color="primary"
-              @click="cargarDialogEditarIngresoInsumo(item)"
-              >mdi-eye</v-icon
-            >
-          </template>
-        </v-data-table>
+        <div>
+          <v-row>
+            <v-col cols="12" sm="6" md="4">
+              <v-menu
+                v-model="menu1"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date1"
+                    label="Fecha desde"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date1"
+                  @input="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date2"
+                    label="Fecha hasta"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date2"
+                  @input="menu2 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </div>
       </v-card-text>
 
-      <v-card-actions class="justify-center">
+      <v-card-actions class="justify-left">
         <v-btn
           large
           :block="$vuetify.breakpoint.xs ? true : false"
           width="200px"
-          color="primary"
-          @click="cargarDialogNuevoIngresoInsumo()"
-          >Nuevo</v-btn
+          class="cyan"
+          @click="createPDF()"
+          >GENERAR REPORTE</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -74,6 +96,7 @@ import DialogNuevoIngresoInsumo from "../components/DialogNuevoIngresoInsumo"; /
 import DialogEditarIngresoInsumo from "../components/DialogEditarIngresoInsumo"; // Dialogo para editar usuario
 import ServicioIngresoInsumo from "../services/ServicioIngresoInsumo"; // Interactuar con el Backend
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import jsPDF from "jspdf";
 export default {
   name: "BaseIngresoInsumo",
 
@@ -94,7 +117,11 @@ export default {
 
   data() {
     return {
-      nombre: "Gestión de Ingreso Insumo",
+      nombre: "Reportes de Ingreso Insumo",
+      date1: new Date().toISOString().substr(0, 10),
+      date2: new Date().toISOString().substr(0, 10),
+      menu1: false,
+      menu2: false,
       buscarIngresoInsumo: "", // Guarda el texto de búsqueda
       cabeceraTablaIngresoInsumo: [
         // Detalla las cabeceras de la tabla
@@ -294,15 +321,14 @@ export default {
     async cargarListaIngresoInsumo() {
       this.listaIngresoInsumo = []; // Limpiar la 'lista de datos'
       let respuesta = await ServicioIngresoInsumo.obtenerTodosIngresoInsumo(); // Obtener respuesta de backend
-      let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
-      datosUsuario.forEach((ingresoinsumo) => {
+      let datosIngresoInsumo = await respuesta.data; // Rescatar datos de la respuesta
+      datosIngresoInsumo.forEach((ingresoinsumo) => {
         // Guardar cada registro en la 'lista de datos'
         this.listaIngresoInsumo.push(ingresoinsumo);
       });
       this.listaIngresoInsumoStore = this.listaIngresoInsumo;
       //console.log(this.listaIngresoInsumoStore);
     },
-
     async cargarInsumoAcopios() {
       let listaInsumo = [];
       console.log("datainsumo> buscando"); // Rescatar datos de la respuesta
@@ -345,6 +371,79 @@ export default {
       this.vaciarModeloIngresoInsumo();
       const indiceEditar = this.listaIngresoInsumoStore.indexOf(item);
       this.modeloIngresoInsumoStore = item;
+    },
+    createPDF() {
+      let pdfName = "test";
+      var doc = new jsPDF("p", "pt", "A4");
+      var img = require("../assets/urocal.png");
+      var hoy = new Date();
+      var dd = hoy.getDate();
+      var mm = hoy.getMonth() + 1;
+      var yyyy = hoy.getFullYear();
+      var hh = hoy.getHours();
+      var hm = hoy.getMinutes();
+      var date = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + hm;
+      doc.addImage(img, "PNG", 40, 60, 80, 80);
+      doc.setFontSize(12);
+      doc.text(
+        "UNIÓN REGIONAL DE ORGANIZACIONES CAMPESINAS DEL LITORAL",
+        150,
+        80
+      );
+      doc.setFontSize(28);
+      doc.setFont("italic");
+      doc.text("UROCAL", 280, 110);
+
+      doc.setFontSize(14);
+
+      doc.text("Reporte Ingreso Insumo", 40, 200);
+      doc.setFontSize(12);
+
+      doc.text("Registros generados " + date, 40, 215);
+      doc.text("Fecha inicio: " + this.date1, 40, 230);
+      doc.text("Fecha final: " + this.date2, 40, 245);
+      doc.text("Encargado: Milton Garcia", 40, 260);
+
+      //PARA DAR parseo
+var datas = this.listaIngresoInsumo;
+      var prebody = [];
+      for (let index = 0; index < datas.length; index++) {
+        prebody[index] = [
+          datas[index].ingresoinsumoid,
+          datas[index].inginsfechaingreso,
+          datas[index].inginsproducto,
+          datas[index].inginsfactura,
+          datas[index].inginsproveedor,
+          datas[index].inginscantidadingreso,
+          datas[index].inginsunidad,
+          datas[index].inginssaldo,
+          datas[index].inginsencargado,
+          datas[index].centroacopioid,
+        ];
+      }
+
+      for (let index = 0; index < 13; index++) {
+        //PARA DAR ESPACIO
+        doc.autoTable({});
+      }
+
+      doc.autoTable({
+        head: [
+          [
+            "Centro de acopio",
+            "Fecha del ingreso",
+            "Producto utilizado",
+            "Factura",
+            "Proveedor",
+            "Cantidad de ingresos",
+            "Unidad",
+            "Saldo",
+          ],
+        ],
+        body: prebody
+      });
+
+      doc.save("reporteingresoinsumo-" + date + ".pdf");
     },
 
     // ###################

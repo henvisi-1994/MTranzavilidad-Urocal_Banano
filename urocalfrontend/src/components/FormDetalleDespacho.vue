@@ -75,7 +75,7 @@
               ]"
             error-count="3"
             
-            :disabled="bloquearCamposFormDetalleDespacho"
+            :disabled=1
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">

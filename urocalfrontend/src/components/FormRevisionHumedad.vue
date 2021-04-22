@@ -10,7 +10,7 @@
           dense
           filled
           :rules="[reglas.campoVacio(revisionHumedad.revporcentajehumedad),
-           reglas.soloNumerosPositivos(revisionHumedad.revporcentajehumedads)]"
+           reglas.soloNumerosPositivos(revisionHumedad.revporcentajehumedad)]"
           error-count="2"
           :disabled="bloquearCamposFormRevisionHumedad"
         ></v-text-field>

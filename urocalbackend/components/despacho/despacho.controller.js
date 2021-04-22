@@ -21,7 +21,7 @@ module.exports = {
 
                 return res.status(201).send({ message: 'Despacho registrado', despachoid: result.despachoid });
             } catch (error) {
-                return res.status(500).send({ message: "Error al registrar el Despacho" });
+                return res.status(500).send({ message: "Error al registrar el Despacho o bultos insuficientes" });
             }
         }
     },

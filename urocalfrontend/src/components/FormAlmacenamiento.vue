@@ -166,7 +166,7 @@
           class="style-chooser custom px-2"
           dense
           filled
-          label="pronombre"
+          label="coscodigo"
           :reduce="(listaCosecha) => listaCosecha.cosechaid"
           :options="listaCosecha"
           multiple
@@ -317,7 +317,7 @@ export default {
     async obtenerTodosTratamiento() {
       let respuestaServicioTratamiento = await servicioTratamiento.obtenerTodosTratamiento();
       respuestaServicioTratamiento.data.forEach((tratamiento) => {
-        tratamiento.tratamientoOperario = `Tipo secado: ${tratamiento.tratiposecado} | Operario: ${tratamiento.traoperario}`;
+        tratamiento.tratamientoOperario = ` ${tratamiento.tratamientoid} |  ${tratamiento.traobservacion}`;
       });
       this.listaTratamiento = respuestaServicioTratamiento.data;
     },
