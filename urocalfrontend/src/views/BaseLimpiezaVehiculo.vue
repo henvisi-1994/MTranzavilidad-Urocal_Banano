@@ -45,7 +45,9 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="cargarDialogEditarLimpiezaVehiculo(item)"
+            <v-icon
+              color="primary"
+              @click="cargarDialogEditarLimpiezaVehiculo(item)"
               >mdi-eye</v-icon
             >
           </template>
@@ -56,7 +58,8 @@
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
           width="300px"
-          large elevation="0"
+          large
+          elevation="0"
           color="primary"
           @click="cargarDialogNuevoLimpiezaVehiculo()"
           >Nuevo LimpiezaVehiculo</v-btn
@@ -67,13 +70,12 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations } from "vuex";
 
 import DialogNuevoLimpiezaVehiculo from "../components/DialogNuevoLimpiezaVehiculo";
 import DialogEditarLimpiezaVehiculo from "../components/DialogEditarLimpiezaVehiculo";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
-import ServicioLimpiezaVehiculo from '../services/ServicioLimpiezaVehiculo';
-import ServicioVehiculo from '../services/ServicioVehiculo';
+import ServicioLimpiezaVehiculo from "../services/ServicioLimpiezaVehiculo";
 
 export default {
   name: "BaseLimpiezaVehiculo",
@@ -84,8 +86,10 @@ export default {
   },
 
   data() {
-
     return {
+      listaLimpiezaVehiculos: this.$store.getters[
+        "moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"
+      ],
       nombre: "Limpieza de Vehículo",
       buscarLimpiezaVehiculo: "", // Guarda el texto de búsqueda
       cabeceraTablaLimpiezaVehiculos: [
@@ -132,7 +136,7 @@ export default {
           align: "center",
           class: "grey lighten-3",
         },
-                {
+        {
           text: "Finca",
           value: "finnombrefinca",
           align: "center",
@@ -154,38 +158,63 @@ export default {
           class: "grey lighten-3",
         },
       ],
-    listaLimpiezaVehiculos: this.$store.getters["moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"],
     };
   },
-
+  mounted() {
+    this.cargarListaVehiculo();
+  },
   computed: {
-
-//...mapState("moduloLimpiezaVehiculo", ["limpieza_vehiculo"]),   // Modulo LimpiezaVehiculo
     /* Obtiene y establece el estado de la variable dialogNuevoLimpiezaVehiculo
     que muestra u oculta el dialogo*/
     dialogNuevoLimpiezaVehiculo: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogNuevoLimpiezaVehiculo"];
+        return this.$store.getters[
+          "gestionDialogos/dialogNuevoLimpiezaVehiculo"
+        ];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoLimpiezaVehiculo", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoLimpiezaVehiculo",
+          v
+        );
       },
     },
-    listaVehiculoStore: {
+    listaLimpiezaVehiculoStore: {
       get() {
-        return this.$store.getters["moduloLimpiezaVehiculo/listavehiculoStore"];
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters[
+              "moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"
+            ]
+          )
+        );
       },
       set(v) {
-        return this.$store.commit("moduloLimpiezaVehiculo/nuevoListaVehiculoStore", v);
+        return this.$store.commit(
+          "moduloLimpiezaVehiculo/establecerListaLimpiezaVehiculoStore",
+          v
+        );
       },
     },
-
+    limpiezaVehiculo: {
+      get() {
+        return this.$store.getters["moduloLimpiezaVehiculo/limpieza_vehiculo"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo",
+          v
+        );
+      },
+    },
 
     /* Obtiene y modifica el estado de la variable dialogTabMostrarLote
     que muestra u oculta el dialogo*/
     dialogEditarLimpiezaVehiculo: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogEditarLimpiezaVehiculo"];
+        return this.$store.getters[
+          "gestionDialogos/dialogEditarLimpiezaVehiculo"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -194,12 +223,6 @@ export default {
         );
       },
     },
-  },
-
-     mounted()
-  {
-    this.cargarListaVehiculo();
-
   },
 
   methods: {
@@ -211,69 +234,56 @@ export default {
       this.dialogNuevoLimpiezaVehiculo = !this.dialogNuevoLimpiezaVehiculo; // Abre el DialogNuevoLimpiezaVehiculo
       this.vaciarLimpiezaVehiculo();
     },
-    async cargarListaVehiculoPlaca(){
-      let limpiezavehiculo=this.$store.getters["moduloLimpiezaVehiculo/limpieza_vehiculo"];
-            
-      let respuesta = await ServicioVehiculo.obtenerVehiculoFinca(limpiezavehiculo.fincaid);  // Obtener respuesta de backend
-      console.log(respuesta);
-      this.listaVehiculoStore = await respuesta.data;     
-    },
-
-    conversion(params){
-      let resultado=false;
-      if(params=="Si"){
-        resultado=true;
-      }else if(params=="No"){
-        resultado=false;
+    conversion(params) {
+      let resultado = false;
+      if (params == "Si") {
+        resultado = true;
+      } else if (params == "No") {
+        resultado = false;
       }
       return resultado;
     },
-    async cargarListaVehiculo()
-    {
+    async cargarListaVehiculo() {
       try {
-        
-        let respuesta=null;
-      if(localStorage.getItem('productor')!==null){
-        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
-        respuesta = await ServicioLimpiezaVehiculo.obtenerProductorLimpiezaVehiculo(usuariosesion.productorid);  // Obtener respuesta de backend
-
-
-      }else{
-        respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();  // Obtener respuesta de backend
-
-      }
+        let respuesta = null;
+        if (localStorage.getItem("productor") !== null) {
+          let usuariosesion = JSON.parse(localStorage.getItem("productor"));
+          respuesta = await ServicioLimpiezaVehiculo.obtenerProductorLimpiezaVehiculo(
+            usuariosesion.productorid
+          );
+        } else {
+          respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();
+        }
         let datosLimpiezaVehiculo = await respuesta.data;
-        this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);                                    // Rescatar datos de la respuesta
-        datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
-        this.$store.commit("moduloLimpiezaVehiculo/addListaLimpiezaVe",LimpiezaVehiculo);
-      });
-        
-      } catch (error) {
-        
-      }
-      
-
-      
+        this.$store.commit("moduloLimpiezaVehiculo/vaciarLista", null);
+        datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {
+          // Guardar cada registro en la 'lista de datos'
+          this.$store.commit(
+            "moduloLimpiezaVehiculo/addListaLimpiezaVe",
+            LimpiezaVehiculo
+          );
+        });
+      } catch (error) {}
     },
 
     // Dialogo Editar LimpiezaVehiculo
-        // Dialogo Editar LimpiezaVehiculo
     cargarDialogEditarLimpiezaVehiculo(item) {
       this.dialogEditarLimpiezaVehiculo = !this.dialogEditarLimpiezaVehiculo;
       this.vaciarLimpiezaVehiculo();
       //this.limpiezaVehiculo=item;
-      this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo", {limpiezavehiculoid:item.limpiezavehiculoid,
-    limvehfecha:item.limvehfecha,
-    limvehproductoutilizado:item.limvehproductoutilizado, 
-    limvehescobillon:this.conversion(item.limvehescobillon),
-    limvehescoba:this.conversion(item.limvehescoba),
-    limvehagua:this.conversion(item.limvehagua),
-    limvehaspiradora:this.conversion(item.limvehaspiradora),
-    vehiculoid:item.vehiculoid,
-    vehplaca:item.vehplaca,
-    fincaid: item.fincaid,
-    finnombrefinca: item.finnombrefinca,});
-    this.cargarListaVehiculoPlaca();
+      this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo", {
+        limpiezavehiculoid: item.limpiezavehiculoid,
+        limvehfecha: item.limvehfecha,
+        limvehproductoutilizado: item.limvehproductoutilizado,
+        limvehescobillon: this.conversion(item.limvehescobillon),
+        limvehescoba: this.conversion(item.limvehescoba),
+        limvehagua: this.conversion(item.limvehagua),
+        limvehaspiradora: this.conversion(item.limvehaspiradora),
+        vehiculoid: item.vehiculoid,
+        vehplaca: item.vehplaca,
+        fincaid: item.fincaid,
+        finnombrefinca: item.finnombrefinca,
+      });
     },
   },
 

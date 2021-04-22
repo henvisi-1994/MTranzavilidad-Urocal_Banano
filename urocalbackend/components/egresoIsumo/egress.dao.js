@@ -31,6 +31,7 @@ module.exports = {
         FROM egresoinsumo eg INNER JOIN finca fi ON fi.fincaid = eg.fincaid INNER JOIN ingresoinsumo ig 
         ON ig.ingresoinsumosid = eg.ingresoinsumosid WHERE eg.egresoinsumosid = ${id}`;
         let result = await pool.query(query);
+        console.log(result)
         return result.rows[0]; // Devuelve objeto de egresso
     },
 

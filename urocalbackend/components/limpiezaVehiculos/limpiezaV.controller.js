@@ -38,7 +38,6 @@ module.exports = {
                 fincaid:fincaid,
             });
         } catch (error) {
-           
             return res.status(500).send({ message: "Registro fallido" });
         }
 
@@ -72,6 +71,7 @@ module.exports = {
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Eliminado exitosamente", tipo: "error" });
             
         } catch (err) {
+            console.log(err);
             return res.json({ message: "Error al tratar de eliminar Limpieza de Vehiculo", tipo: "error" });
         }
     },

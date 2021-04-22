@@ -12,7 +12,6 @@ module.exports = {
     async getLimpiezasVProductor(id) {
         let query = `SELECT * FROM limpiezavehiculo inner join vehiculo on limpiezavehiculo.vehiculoid=vehiculo.vehiculoid 
         inner join finca on vehiculo.fincaid=finca.fincaid where finca.propietarioid=${id}`;
-        console.log(query);
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
     },
@@ -28,6 +27,7 @@ module.exports = {
         query = `INSERT INTO limpiezavehiculo
                     (limvehfecha, limvehproductoutilizado, limvehescobillon, limvehescoba, limvehagua, limvehaspiradora, vehiculoid) VALUES
                     ('${limpiezaV.limvehfecha}', '${limpiezaV.limvehproductoutilizado}','${limpiezaV.limvehescobillon}','${limpiezaV.limvehescoba}','${limpiezaV.limvehagua}','${limpiezaV.limvehaspiradora}','${limpiezaV.vehiculoid}') RETURNING limpiezavehiculoid;`
+        
         result = await pool.query(query);
         
         return limpiezaV;
@@ -36,7 +36,6 @@ module.exports = {
     async updateLimpiezaV(id, limpiezaV) {
         let query = `UPDATE limpiezavehiculo SET limvehfecha = '${limpiezaV.limvehfecha}', limvehproductoutilizado = '${limpiezaV.limvehproductoutilizado}', limvehescobillon = '${limpiezaV.limvehescobillon}', limvehescoba = '${limpiezaV.limvehescoba}', limvehagua = '${limpiezaV.limvehagua}', limvehaspiradora = '${limpiezaV.limvehaspiradora}', vehiculoid = '${limpiezaV.vehiculoid}' WHERE limpiezavehiculoid = ${id}`;
         let result = await pool.query(query);
-
         return result.rowCount;
     },
     
