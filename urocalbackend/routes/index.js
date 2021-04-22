@@ -54,7 +54,7 @@ const certificacion = require('../components/certificaciones/certificaciones.rou
 const reportefincaproductor = require('../components/reportefincaproductor/reportefincaproductor.routes');
 const productorreporte = require('../components/productorreporte/productorreporte.routes');
 const ingegrreporte = require('../components/reporte-kardex-prods/reporteIngeg.routes');
-
+const reporteVentas = require("../components/reporteVentas/reporteVentas.routes");
 
 const VERSION = "/v1";
 router.use(VERSION + '/', auth);
@@ -110,4 +110,5 @@ router.use(VERSION + '/certificacion', certificacion)
 router.use(VERSION + '/reportefincaproductor', reportefincaproductor);
 router.use(VERSION + '/productorreporte', productorreporte);
 router.use(VERSION + '/ingegreporte', ingegrreporte);
+router.use(VERSION + "/reporteVentas", reporteVentas);
 module.exports = router;
