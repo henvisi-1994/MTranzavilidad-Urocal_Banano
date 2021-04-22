@@ -53,6 +53,7 @@ const empresa = require('../components/empresa/empresa.routes');
 const certificacion = require('../components/certificaciones/certificaciones.routes')
 const reportefincaproductor = require('../components/reportefincaproductor/reportefincaproductor.routes');
 const productorreporte = require('../components/productorreporte/productorreporte.routes');
+const reporteVentas = require("../components/reporteVentas/reporteVentas.routes");
 
 const VERSION = "/v1";
 router.use(VERSION + '/', auth);
@@ -107,5 +108,6 @@ router.use(VERSION + '/empresa',empresa);
 router.use(VERSION + '/certificacion', certificacion)
 router.use(VERSION + '/reportefincaproductor', reportefincaproductor);
 router.use(VERSION + '/productorreporte', productorreporte);
+router.use(VERSION + "/reporteVentas", reporteVentas);
 
 module.exports = router;
