@@ -1,341 +1,397 @@
 <template>
-  <v-container fluid>
-
-    <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0" class="mt-5">
-      <v-card-title class="py-2">
-        <v-row no-gutters justify-md="space-between">
-          <v-col cols="12" md="6">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
-          </v-col>
-          <v-col cols="12" md="6">
-              <v-select
-                v-model="propietarios"
-                placeholder="Seleccione un centro de acopio"
-                class="style-chooser"
-                label="propietario"
-                :reduce="(listaCentroacopioStore) => listaCentroacopioStore.centroacopio"
-                :options="listaCentroacopioStore"
-              >
-                <template v-slot:no-options="{ search, searching }">
-                  <template v-if="searching">
-                    No hay resultados para <em>{{ search }}</em
-                    >.
-                  </template>
-                  <em style="opacity: 0.5" v-else>Empiece a escribir un centro de acopio</em>
-                </template>
-              </v-select>
+  <v-container fluid class="pa-3 justify-center" fill-height>
+        <v-row>
+          <v-col class="d-flex py-3" cols='12'>
+            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="'Kardex de Ingresos y Egresos de cacao'"></div>
           </v-col>
         </v-row>
-      </v-card-title>
-
-      <v-card-text>
-        <!-- Tabla que muestra los Finca -->
-        <v-data-table
-          :height="tablaResponsiva()"
-          :headers="cabeceraTablaFinca"
-          sort-by="fincaid"
-          :items="listaFincaStore"
-          :search="propietarios"
-          class="elevation-1">
-          <template v-slot:top>
-          </template>
-        </v-data-table>
-      </v-card-text>
-
-      <v-card-actions class="justify-center">
-        <!-- Botón para agregar nuevo Finca -->
-        <v-btn
-          :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
-          color="primary"
-          @click="download()"
-          >GENERAR PDF</v-btn
-        >
-      </v-card-actions>
-    </v-card>
+        <v-row class="justify-center">
+          <v-col cols=12 md=10 class="py-0">
+            <v-select
+              :disabled="reporte"
+              :items="opcionesFecha"
+              v-model="opcionFecha"
+              item-value="id"
+              item-text="tipo"
+              label="Selecciona filtro de fecha"
+            ></v-select>
+          </v-col>
+          <v-col cols=12 md=10 v-if="opcionFecha == 1" class="py-0">
+            <v-menu
+                :disabled="reporte"
+                v-model="menuMes"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="mesSeleccionado"
+                    label="Escoja un mes"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="mesSeleccionado"
+                  @input="menuMes = false"
+                  :show-current="fechaActual"
+                  type="month"
+                  locale="es-419"
+                ></v-date-picker>
+              </v-menu>
+          </v-col>
+          <v-col cols=12 md=10 v-if="opcionFecha == 2" class="py-0">
+            <v-select
+              :disabled="reporte"
+              :items="years"
+              label="Seleccione un año"
+              v-model="anioSeleccionado"
+            ></v-select>
+          </v-col>
+          <v-col cols="12" md=10 v-if="opcionFecha === 3" class="py-0">
+            <v-menu
+              :disabled="reporte"
+              v-model="menuFechaDesde"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="fechaDesde"
+                  label="Desde"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="fechaDesde"
+                @input="menuFechaDesde = false"
+                :show-current="fechaActual"
+                locale="es-419"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="12" md=10 v-if="opcionFecha === 3" class="py-0">
+            <v-menu
+              :disabled="reporte"
+              v-model="menuFechaHasta"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="fechaHasta"
+                  label="Hasta"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="fechaHasta"
+                @input="menuFechaHasta = false"
+                :show-current="fechaActual"
+                locale="es-419"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols=12 md=5 v-if="!reporte">
+            <v-btn :disabled="reporte" color="primary ml-auto" @click="generateReport" block>
+              <v-icon class="pr-2">mdi-file-document</v-icon>
+              Generar Reporte
+            </v-btn>
+          </v-col>
+          <v-col cols=12 md=5 v-if="reporte">
+            <v-btn color="success ml-auto" @click="descargarReporte" block>
+              <v-icon class="pr-2">mdi-download</v-icon>
+              Descargar Reporte
+            </v-btn>
+          </v-col>
+          <v-col cols=12 md=5 v-if="reporte">
+            <v-btn color="info ml-auto" @click="nuevoReporte" block>
+              <v-icon class="pr-2">mdi-text-box-plus</v-icon>
+              Nuevo Reporte
+            </v-btn>
+          </v-col>
+        </v-row>
   </v-container>
 </template>
+
 <script>
-import { mapMutations } from "vuex";
-import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
 
-import ServicioReporteFincaProductor from "../services/ServicioReporteFincaProductor";
-import ServicioFinca from "../services/ServicioFinca";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import ServicioCentroAcopio from '../services/ServicioCentroAcopio';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
+import servicioReporteKardexProductos from "../services/ServicioReporteKardexProductos";
+
+import logo from '@/assets/logo.js';
+//logo.js contiene el logo en base64
 export default {
-  name: "BaseFinca",
-
-  components: {
-    vSelect,
-  },
-
-  mounted() {
-    this.cargarListaFinca();
-    this.cargarListaCentroacopio();
-  },
-
+  name: 'BaseReporteKardexProductos',
   data() {
     return {
-      propietarios: "",
-      idproductor: 0,
-      nombre: "Gestión de kardex de Ingresos y egresos de cacao",
-      totalfincas: "0",
-      cabeceraTablaFinca: [
-        // Detalla las cabeceras de la tabla
+      reporte: false,
+      pdfGenerado: undefined,
+      menuFechaDesde: false,
+      menuFechaHasta: false,
+      menuMes: false,
+      menuAnio: false,
+      fechaDesde: '',
+      fechaHasta: '',
+      mesSeleccionado: '',
+      anioSeleccionado: '',
+      exportadorSeleccionado: '',
+      loteSeleccionado: '',
+      opcionFecha: 0,
+      fechaActual: new Date().toISOString().substr(0, 10),
+      opcionesFecha: [
         {
-          text: "Nombre",
-          value: "finnombrefinca",
-          align: "center",
-          class: "grey lighten-3",
+          id: 1,
+          tipo: 'Mes'
         },
         {
-          text: "Superficie total",
-          value: "finsuperficietotal",
-          align: "center",
-          class: "grey lighten-3",
+          id: 2,
+          tipo: 'Año'
         },
         {
-          text: "Superficie cultivada",
-          value: "finsuperficiecultivada",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Fecha primera inspección",
-          value: "finprimerainspeccion",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Fecha ultima inspección",
-          value: "finultimainspeccion",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Observación",
-          value: "finobservacion",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Asociación",
-          value: "asonombre",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Propietario",
-          value: "propietario",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Sitio",
-          value: "sitionombre",
-          sortable: false,
-          align: "center",
-          class: "grey lighten-3",
+          id: 3,
+          tipo: 'Rango de fecha'
         },
       ],
-    };
+      meses: {
+        1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
+        7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre', 
+      },
+      years: [],
+
+    }
   },
 
-  watch: {
-      centrosacopio (val) { 
-      this.Buscarcentroacopio();
-      },
-  },
-    
-  computed: {
-
-    listaCentroacopioStore: {
-      get() {
-        return this.$store.getters["moduloFinca/listaCentroacopioStore"];
-      },
-      set(v) {
-        return this.$store.commit("moduloFinca/establecerListaCentroacopioStore", v);
-      },
-    },
-    listaReporteIngresosEgresos: {
-      get() {
-        return JSON.parse(
-          JSON.stringify(this.$store.getters["moduloReporteIngresosEgresos/listaReporteIngresosEgresos"])
-        );
-      },
-      set(v) {
-        return this.$store.commit("moduloReporteIngresosEgresos/establecerListaIngresosEgresosStore", v);
-      },
-    },
+  created() { 
+    this.$store.commit("colocarLayout", "LayoutAdministrador");
+    this.generateYears()
   },
 
   methods: {
-    // Programación PDF
-    async download() {
-        // Instancia de la librería y parametros (PDF en forma horizontal)
-        const doc = new jsPDF('L','mm','A4');
-        //Cabezera 
-        doc.setFontSize(14).setTextColor(50).text(100, 15, 'UNIÓN REGIONAL DE ORGANIZACIONES'); 
-        doc.setFontSize(14).setTextColor(50).text(117, 20, 'CAMPESINAS DEL LITORAL'); 
-        doc.setFontSize(35).setTextColor(50).text(125, 33, 'UROCAL');
-        doc.setFontSize(14).setTextColor(0).text(88, 40, 'REPORTES DE FINCAS UROCAL DE UN PRODUCTOR'); 
-        // Imagen Logo
-        function getDataUri(url){
-            return new Promise(resolve => {
-                var image = new Image();
-                image.setAttribute('crossOrigin', 'anonymous'); 
-                image.onload = function () {
-                    var canvas = document.createElement('canvas');
-                    canvas.width = this.naturalWidth;
-                    canvas.height = this.naturalHeight; 
-                    var ctx = canvas.getContext('2d');
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    canvas.getContext('2d').drawImage(this, 0, 0);
-                    resolve(canvas.toDataURL('image/jpeg'));
-                };
-                image.src = url;
-            })
+
+    generateYears(){
+      const actualYear = new Date().getFullYear();
+      for (let index = actualYear; index > 1950 ; index--) {
+        this.years.push(index);
+      }
+    },
+
+    nuevoReporte(){
+      this.reporte = false
+      this.mesSeleccionado = ''
+      this.fechaDesde = ''
+      this.fechaHasta = ''
+      this.opcionFecha = 0
+      this.pdfGenerado = undefined
+    },
+
+    descargarReporte() {
+      this.pdfGenerado.download()
+    },
+
+    async obtenerIngEgPorMes(){
+      const resultado = await servicioReporteKardexProductos.reportePorMes(
+        {
+          month: parseInt(this.mesSeleccionado.slice(-2)),
+          year: parseInt(this.mesSeleccionado.slice(0,4))
+        })
+      return resultado.data
+    },
+
+    async obtenerIngEgPorAnio(){
+      const resultado = await servicioReporteKardexProductos.reportePorAnio(
+        {
+          year: this.anioSeleccionado
+        })
+      return resultado.data
+    },
+
+    async obtenerIngEgPorRango(){
+      const resultado = await servicioReporteKardexProductos.reportePorRango(
+        {
+          desde: this.fechaDesde,
+          hasta: this.fechaHasta
+        })
+      return resultado.data
+    },
+
+    generateReport(){
+      const errorNoDatos = "No se han encontrado resultados"
+      if(!this.opcionFecha) {
+        this.$toast.error("Debe selecciona los datos necesarios");
+        return;
+      }
+      if(this.opcionFecha == 1) {
+        if(!this.mesSeleccionado) {
+          this.$toast.error("Debe seleccionar un mes");
+          return;
+        };
+        this.obtenerIngEgPorMes().then(ingeg => {
+          if(!ingeg.length) {
+            this.$toast.info(errorNoDatos);
+            return;
+          };
+          this.generarContenidoReporte({ ingeg})
+          this.reporte = true;
+        })
+      } else if (this.opcionFecha == 2) {
+        if(!this.anioSeleccionado) {
+          this.$toast.error("Debe seleccionar un año");
+          return
+        };
+        this.obtenerIngEgPorAnio().then(ingeg => {
+          if(!ingeg.length) {
+            this.$toast.info(errorNoDatos);
+            return;
+          };
+          this.generarContenidoReporte({ ingeg})
+          this.reporte = true;
+        })
+      } else if (this.opcionFecha == 3){
+        if(!this.fechaDesde || !this.fechaHasta) {
+          this.$toast.error("Debe seleccionar el rango de fechas");
+          return;
+        };
+        if(this.fechaHasta < this.fechaDesde) {
+          this.$toast.error("La fecha final debe ser mayor a la inicial");
+          return;
         }
-        // Url del logo urocal
-        var imgUrl = "https://media-exp1.licdn.com/dms/image/C560BAQGdznE__LA4qw/company-logo_200_200/0/1537817603191?e=2159024400&v=beta&t=1Vjf3hh8ZPJaY82aeAtaXVJbM9ayp9Xw90RTfpnpAeU";
-        var logo = await getDataUri(imgUrl);
-        doc.addImage(logo, 'PNG', 25, 6, 40, 40);
-        // Texto IngresosEgresos
-        doc.setFontSize(14).setTextColor(0).text(137, 95, 'Lista de fincas'); // Texto finca
-        // Estructura de la tabla se utilizo la libreria autoTable
-        // Datos de cabezera de la tabla
-        var columns = [
-        {title: "Nombre", dataKey: "finnombrefinca"},
-        {title: "Superfcie total", dataKey: "finsuperficietotal"},
-        {title: "Superfcie cultivada", dataKey: "finsuperficiecultivada"},
-        {title: "Coordenada X", dataKey: "fincoordenadax"},
-        {title: "Coordenada Y", dataKey: "fincoordenaday"},
-        {title: "Fecha primera inspección", dataKey: "finprimerainspeccion"},
-        {title: "Fecha ultima inspección", dataKey: "finultimainspeccion"},
-        {title: "Asociación", dataKey: "asonombre"},
-        {title: "Propietario", dataKey: "propietario"},
-        {title: "Sitio", dataKey: "sitionombre"},
-        {title: "Observación", dataKey: "finobservacion"},
-        ];
-        // Llenado del cuerpo con datos de la BD
-        autoTable(doc, {
-          columns,
-          body: this.listaReporteFincaProductor,
-          theme: 'plain',
-          startY: 100,         
-          styles: { 
-            lineWidth: 0.01,
-            lineColor: 0,
-            fillStyle: 'DF',            
-            halign: 'center',
-            valign: 'middle',
-            cellWidth: 'auto',
-            overflow: 'linebreak'
+        this.obtenerIngEgPorRango().then(ingeg => {
+          if(!ingeg.length) {
+            this.$toast.info(errorNoDatos);
+            return;
+          };
+          this.generarContenidoReporte({ ingeg})
+          this.reporte = true;
+        })
+      }
+    },
+
+    generarContenidoReporte(respuesta){
+      const stringFechaMes = `${this.meses[parseInt(this.mesSeleccionado.slice(-2))]} del ${this.mesSeleccionado.slice(0,4)}`
+      const stringFechaAnio = `Año ${this.anioSeleccionado}`
+      const stringFechaRango = `De ${this.fechaDesde} al ${this.fechaHasta}`
+      const reportInfo = {
+        text: [
+          {text: 'Reporte: ', bold: true},
+          'Kardex de Cacao',
+          {text: '\nFecha: ', bold: true},
+          `${this.opcionFecha == 1 ? stringFechaMes : this.opcionFecha == 2 ? stringFechaAnio : stringFechaRango}`,
+          
+        ],
+        margin: [0, 20]
+      }
+
+      const cabecera = [
+        {text: 'Fecha de Ingreso'}, 
+        {text: '# bultos'},
+        {text: 'Peso T'},
+        {text: 'Centro de acopio'},
+        {text: 'Fecha de Salida'},
+        {text: 'Destino'},
+        {text: 'Tipo'},
+        {text: 'SPP'},
+        {text: '# bultos'},
+        {text: 'Saldo'},
+      ]
+
+      const filas = respuesta.ingeg.map(ingeg => {
+        const fechaing = new Date(ingeg.almfechaingresobodega).toISOString().substr(0, 10)
+        return [fechaing, ingeg.almnumerobultos, ingeg.almpesototalingreso,ingeg.centroacopionombre, ingeg.desfechasalida, ingeg.desdestino, ingeg.organico, ingeg.spp, ingeg.detdesnumerobultos, ingeg.almsaldo]
+      })
+
+      const table = {
+        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto','auto', 'auto', 'auto', 'auto'],
+        headerRows: 1,
+        body: [
+          [...cabecera], 
+          ...filas,
+          ['', '', '', '', '', '','', '', '', '']
+        ]
+      }
+
+      const reportData = [
+        reportInfo,
+        {
+          table,
+          layout: 'headerLineOnly',
+          margin: [0, 10]
+        }
+      ]
+
+      this.generatePdf(reportData)
+    },
+
+    generatePdf(reportContent){
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+      const docDefinition = {
+        pageOrientation: 'landscape',
+        content: [
+          {
+            columns: [
+              {
+                width: 70,
+                image: logo,
+                margin: [0, 20]
+              },
+              {
+                alignment: 'center',
+                width: 'auto',
+                text: [
+                  {text: 'UNIÓN REGIONAL DE ORGANIZACIONES CAMPESINAS DEL LITORAL', fontSize: 12},
+                  {text: '\nUROCAL', fontSize: 32, bold: true},
+                  {text: '\nCARRETERO A ZHUMIRAL OFC. P.B. - AZUAY ESTABLECIMIENTO 003: TARQUI S/N E/.', fontSize: 10},
+                  {text: '\nMATRIZ: CAMILO PONCE ENRÍQUEZ: BARRIO EL CISNE PRINCIPAL S/N', fontSize: 10},
+                  {text: '\nEmail:  urocal@ec.pro.ec - MACHALA - EL ORO - ECUADOR', fontSize: 10},
+                  {text: '\nBOLIVAR Y PICHINCHA - *TELEFAX:* 2961-672 / 075000202 - CEL: 0991853210', fontSize: 10},
+                  {text: '\nCONTRIBUYENTE ESPECIAL MEDIANTE RESOLUCIÓN N° NAC-G-CORCEC09-00570 DEL 07/08/2009', fontSize: 10},
+                ]
+              }
+            ]
           },
-        });
-        // Obtiene el tamaño de la tabla para luego agregar datos que se desee añadir
-        let finalY = doc.previousAutoTable.finalY; // Obtiene el tamaño de la tabla.
-        // Texto Total fincas y emitido por.
-        doc.setFontSize(10).setTextColor(0).text(14, finalY + 10, 'Total de fincas:');  // TEXTO Total fincas:
-        doc.setFontSize(10).setTextColor(100).text(40, finalY + 10, this.totalfincas + " " + "fincas");// TEXTO Celular de la db
-        doc.setFontSize(10).setTextColor(50).text(196, finalY + 10, 'Emitido por:');// TEXTO Emitido
-        doc.setFontSize(10).setTextColor(100).text(218, finalY + 10, JSON.parse(localStorage.getItem("usuario")).rol);// TEXTO Emitido
-        // Agregar número de páginas, la fecha y hora actual en pie de la página
-        const addFooters = doc => {
-          const pageCount = doc.internal.getNumberOfPages()
-          var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-          var diasSemana = new Array("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado");
-          var hoy = new Date();
-          var fecha = diasSemana[hoy.getDay()] + ', ' + hoy.getDate() + ' de ' + meses[(hoy.getMonth())] + ' del ' + hoy.getFullYear();
-          var hora = hoy.getHours() + ':' + hoy.getMinutes();
-          var fechaYHora = fecha + ', ' + hora;
-          doc.setFont('helvetica', 'italic')
-          doc.setFontSize(8)
-          for (var i = 1; i <= pageCount; i++) {
-            doc.setPage(i)
-            doc.text('Página ' + String(i) + ' de ' + String(pageCount), doc.internal.pageSize.width / 2, 205, { // Número de páginas
-              align: 'center'
-            });
-            doc.line(283, 201, 14, 201); // Línea horizontal pie de página
-            doc.text(240, 205, fechaYHora);// TEXTO fecha y hora
+          reportContent,
+          
+        ],
+
+        footer: (currentPage, pageCount) => {
+          return {
+            margin: [40, 0],
+            columns: [
+              `${currentPage.toString()} de ${pageCount}`,
+              { text: [
+                  { text: 'Fecha: ', bold: true },
+                  `${new Date().toJSON().slice(0,10)}`,
+                ], alignment: 'right' 
+              }
+            ],
           }
-        }
-        addFooters(doc);
-        window.open(doc.output('bloburl')); // Visualizar PDF en otra ventana
+        },
+      };
 
+      this.pdfGenerado = pdfMake.createPdf(docDefinition)
+
+      this.pdfGenerado.open()
     },
-
-    // #  MANIPULACIÓN DE DATOS  #
-    // Obtiene todas las fincas de todos los productores
-    async cargarListaIngresoEgreso() {
-      let listaIngresoEgreso = []; // Limpiar la 'lista de datos'
-      let respuesta = await ServicioReporteIngresosEgresos.obtenerTodosIngresosEgresos(); // Obtener respuesta de backend
-      let datosIngresosEgresos = await respuesta.data; // Rescatar datos de la respuesta
-      datosIngresosEgresos.forEach((IngresosEgresos) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaIngresosEgresos.push(IngresosEgresos);
-      });
-      this.listaIngresosEgresosStore = listaIngresosEgresos;
-    },
-
-    // Obtiene la lista de todos los productores para agregar al combobox
-    async cargarListaCentroacopio() {
-      let listaCentroacopio = []; // Limpiar la 'lista de ciudades'
-      let respuesta = await ServicioCentroAcopio.obtenerTodosCentroAcopio(); // Obtener respuesta de backend
-      let datosCentroacopio = await respuesta.data; // Rescatar datos de la respuesta
-      datosCentroacopio.forEach((centroacopio) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaCentroacopio.push(centroacopio);
-      });
-      this.llistaCentroacopioStore = listaCentroacopio;
-    },
-
-    // Busca el ID del productor seleccionado en el combobox
-    async BuscarPropietario() {
-      this.listaCentroacopioStore.forEach(element => {
-        if(this.centroacopio == element.centroacopio){
-          this.centroacopioid = element.centroacopioid;
-          }
-      });
-      this.cargarCentroacopio();
-    },
-
-
-    // Obtiene todas las fincas de un productor en específico 
-    async cargarIngresosEgresos() {
-      let listaIngresosEgresos = []; // Limpiar la 'lista de datos'
-      let respuesta = await ServicioReporteIngresosEgresos.obtenerIngresosEgresos(); // Obtener respuesta de backend
-      let datosFinca = await respuesta.data; // Rescatar datos de la respuesta
-      datosFinca.forEach((IngresosEgresos) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaIngresosEgresos.push(finca);
-      });
-      this.listaReporteIngresosEgresos = listaIngresosEgresos;
-    },
-
-    // #  TIENDA DE VUE  #
-    ...mapMutations("moduloFinca", ["establecerListaPropietarioStore"]),
-    // Vacia el modelo Finca
-    ...mapMutations("moduloFinca", ["vaciarFinca"]),
-  },
-
-  mixins: [autenticacionMixin, myMixin],
-
-  created() {
-    this.$store.commit("colocarLayout", "LayoutAdministrador");
-  },
-};
+  }
+}
 </script>
+
+<style>
+
+</style>
