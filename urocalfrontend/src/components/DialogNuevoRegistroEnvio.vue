@@ -31,7 +31,6 @@
       </v-card-text>
 
       <v-card-actions class="justify-center pb-3">
-        <!-- Botón para agregar nuevo Poda -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
           width="200px"
@@ -40,66 +39,7 @@
           >Registrar</v-btn
         >
       </v-card-actions>
-
-      <!--  
-      <v-card-text style="padding: 0px">
-        <v-container>
-          <v-row no-gutters justify-md="space-around">
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Fecha"
-                readonly
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Tipo"
-                readonly
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row no-gutters justify-md="space-around">
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Lote"
-                readonly
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Destino"
-                readonly
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          
-              <v-card elevation="0">
-                <v-card-title class="primary--text">
-                  <v-col cols="12" md="6">
-                    Detalle
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-autocomplete
-                    :items="listaCodigos"
-                    :filter="filtroCodigos"
-                    item-text="codigo"
-                    label="Buscar" class="custom" dense filled></v-autocomplete>
-                  </v-col>
-                </v-card-title>
-                <v-card-text>
-                  <v-data-table
-                    :headers="cabeceraTablaDetalle"
-                    :items="listaDetalles"
-                    class="elevation-1">
-                  </v-data-table>
-                </v-card-text>
-              </v-card>
-            
-          
-        </v-container>
-      </v-card-text>
--->
+      
     </v-card>
   </v-dialog>
 </template>
@@ -117,54 +57,6 @@ export default {
 
   data() {
     return {
-      //   cabeceraTablaDetalle: [
-      //     {
-      //       text: "Código",
-      //       value: "codigo",
-      //       align: "center",
-      //       class: "grey lighten-3",
-      //     },
-      //     {
-      //       text: "Fecha",
-      //       value: "fecha",
-      //       align: "center",
-      //       class: "grey lighten-3",
-      //     },
-      //     {
-      //       text: "Productor",
-      //       value: "productor",
-      //       align: "center",
-      //       class: "grey lighten-3",
-      //     },
-      //     {
-      //       text: "QQ Entregados",
-      //       value: "qqentregados",
-      //       align: "center",
-      //       class: "grey lighten-3",
-      //     },
-      //     {
-      //       text: "Acciones",
-      //       value: "actions",
-      //       sortable: false,
-      //       align: "center",
-      //       class: "grey lighten-3",
-      //     },
-      //   ],
-      //   listaDetalles: [],
-      //   listaCodigos: [
-      //     {
-      //       codigo: "Uro-054",
-      //       fecha: "07/02/2018",
-      //       productor: "Miguel Gonzales",
-      //       qqentregados: "2,246",
-      //     },
-      //     {
-      //       codigo: "Uro-123",
-      //       fecha: "10/03/2020",
-      //       productor: "Angel Barrezueta",
-      //       qqentregados: "1,372",
-      //     },
-      //   ],
     };
   },
   computed: {
@@ -224,12 +116,36 @@ export default {
     ...mapState("validacionForm", ["reglas"]),
   },
   methods: {
+        ...mapMutations("moduloRegistroEnvio", ["vaciarModeloRegistroEnvioStore"]),
+
     // Filtra cuando se escribe un codigo en la busqueda
     filtroCodigos(item, queryText) {
       const texto = item.codigo.toLowerCase();
       const busqueda = queryText.toLowerCase();
 
       return texto.indexOf(busqueda) > -1;
+    },
+    async agregarRegistroEnvio() {
+      try {
+        let respuesta = await ServicioRegistroEnvio.agregarRegistroEnvio(
+          this.modeloRegistroEnvioStore
+        );
+        this.$toast.success(respuesta.data.message);
+        this.cerrarDialogNuevoRegistroEnvio();
+        this.cargarListaRegistroEnvio();
+        this.vaciarModeloRegistroEnvioStore();
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
+      }
+    },
+    async cargarListaRegistroEnvio() {
+      let listaRegistroEnvio = [];
+      let respuesta = await ServicioRegistroEnvio.obtenerTodosRegistroEnvio();
+      let registrosEnvios = await respuesta.data;
+      registrosEnvios.forEach((f) => {
+        listaRegistroEnvio.push(f);
+      });
+      this.listaRegistroEnvioStore = listaRegistroEnvio;
     },
     // Cierra el dialogo
     cerrarDialogNuevoRegistroEnvio() {

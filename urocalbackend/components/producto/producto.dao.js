@@ -37,5 +37,11 @@ module.exports = {
         let result = await pool.query(query);
 
         return result.rowCount; // Devuelve 1 si borró el producto y 0 sino lo hizo.
-    }
+    },
+    async obtenerDetallesCacao() {
+         let query = `select concat(pronombre,' ',provariedad, ' ',procaracteristica) as tipocacao from producto 
+         where lower(pronombre)='cacao';`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve array de productos
+    },
 }

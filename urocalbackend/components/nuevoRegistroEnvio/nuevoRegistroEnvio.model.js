@@ -8,6 +8,9 @@ module.exports = {
     async getnuevoRegistroEnvio(id){
         return nuevoRegistroEnvioDao.getnuevoRegistroEnvio(id);
     },
+    async getDetalleEnvio(id){
+        return nuevoRegistroEnvioDao.getDetalleEnvio(id);
+    },
 
     async createnuevoRegistroEnvio(nuevoRegistroEnvio){
         return nuevoRegistroEnvioDao.createnuevoRegistroEnvio(nuevoRegistroEnvio);
@@ -22,5 +25,8 @@ module.exports = {
     },
     async getTiposnuevoRegistroEnvio(){
         return nuevoRegistroEnvioDao.getTiposnuevoRegistroEnvio();
+    },
+    async getSeleccionDetalles(){
+        return nuevoRegistroEnvioDao.getSeleccionDetalles();
     },
 }

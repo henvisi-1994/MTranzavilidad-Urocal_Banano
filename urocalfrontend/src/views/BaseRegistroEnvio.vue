@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- Dialog para registrar nueva poda -->
     <DialogNuevoRegistroEnvio
       ref="componentDialogNuevoRegistroEnvio"
     ></DialogNuevoRegistroEnvio>
@@ -74,7 +73,6 @@ import { mapMutations, mapState } from "vuex";
 import DialogMostrarRegistroEnvio from "@/components/DialogMostrarRegistroEnvio";
 import DialogNuevoRegistroEnvio from "@/components/DialogNuevoRegistroEnvio";
 import ServicioRegistroEnvio from "../services/ServicioRegistroEnvio";
-// import ServicioFinca from "../services/ServicioFinca";
 
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
@@ -85,9 +83,9 @@ export default {
     DialogMostrarRegistroEnvio,
     DialogNuevoRegistroEnvio,
   },
-  // mounted() {
-  //   this.cargarListaRegistroEnvio();
-  // },
+  mounted() {
+    this.cargarListaRegistroEnvio();
+  },
 
   computed: {
     // Obtiene y modifica el estado de la variable dialogNuevoRegistroEnvio
@@ -142,6 +140,19 @@ export default {
       set(v) {
         return this.$store.commit(
           "moduloRegistroEnvio/establecerListaRegistroEnvioStore",
+          v
+        );
+      },
+    },
+    listaSeleccionDetallesStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaSeleccionDetallesStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaSeleccionDetallesStore",
           v
         );
       },
@@ -203,16 +214,15 @@ export default {
     abrirMostrarRegistroEnvio(item) {
       this.dialogMostrarRegistroEnvio = !this.dialogMostrarRegistroEnvio; // Abre el dialogMostrarRegistroEnvio
       this.vaciarModeloRegistroEnvioStore();
-      this.$store.commit(
-        "moduloRegistroEnvio/establecerEditarRegistroEnvio",
-        true
-      );
+      this.editarRegistroEnvio = true;
+      // console.log(item);
       this.modeloRegistroEnvioStore = item;
+      this.obtenerSeleccionDetalles();
+      this.obtenerDetalleEnvio(this.modeloRegistroEnvioStore.registroenvioid);
     },
 
     cargarDialogNuevoRegistroEnvio() {
       this.dialogNuevoRegistroEnvio = !this.dialogNuevoRegistroEnvio; // Abre el dialogNuevoRegistroEnvio
-      //this.$refs.componentDialogMostrarRegistroEnvio.$refs.componentFormRegistroEnvio.$refs.formRegistroEnvio.resetValidation();
       this.editarRegistroEnvio = false;
       this.vaciarModeloRegistroEnvioStore();
     },
@@ -225,13 +235,45 @@ export default {
       });
       this.listaRegistroEnvioStore = listaRegistroEnvio;
     },
+    async obtenerSeleccionDetalles() {
+      let resultado = await ServicioRegistroEnvio.obtenerSeleccionDetalles();
+      this.listaSeleccionDetallesStore = await resultado.data;
+    },
+    async obtenerDetalleEnvio(id) {
+      let listaDetalleEnvio = [];
+      let respuesta = await ServicioRegistroEnvio.obtenerDetalleEnvio(id);
+      let detallesEnvio = await respuesta.data;
+      this.modeloRegistroEnvioStore.regdetalle = [];
+      for (let i = 0; i < detallesEnvio.length; i++) {
+        const elemento = detallesEnvio[i];
+        let salir =false;
+        for (let j = 0; j < this.listaSeleccionDetallesStore.length && salir===false; j++) {
+          const elementoLista = this.listaSeleccionDetallesStore[j];
+
+          if (
+            elemento.codigofinca === elementoLista.codigo &&
+            elemento.fecha === elementoLista.fecha &&
+            elemento.productor === elementoLista.productor &&
+            parseFloat(elemento.detenvcantidad) ===
+              parseFloat(elementoLista.entregados)
+          ) {
+            listaDetalleEnvio.push(elementoLista);
+            salir=true;
+          }
+        }
+      }
+      // console.log(listaDetalleEnvio);//son iguales
+      // console.log(detallesEnvio);//con esto hasta aqui funciona
+      // this.modeloRegistroEnvioStore.regdetalle = listaDetalleEnvio;
+      this.$store.commit("moduloRegistroEnvio/establecerRegdetalle",listaDetalleEnvio);
+
+    },
     ...mapMutations("moduloRegistroEnvio", ["vaciarModeloRegistroEnvioStore"]),
   },
 
   mixins: [autenticacionMixin, myMixin],
 
   created() {
-    this.cargarListaRegistroEnvio();
     let usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario.rol === "Administrador")
       this.$store.commit("colocarLayout", "LayoutAdministrador");

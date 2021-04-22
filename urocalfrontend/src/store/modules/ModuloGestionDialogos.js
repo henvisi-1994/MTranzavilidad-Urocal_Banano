@@ -644,7 +644,7 @@ export default {
         // Inspector
         dialogNuevoInspectorPersona: (state) => state.dialogNuevoInspectorPersona,                              // Devuelve la variable dialogEditarUsuarioPersona
         dialogEditarInspectorPersona: (state) => state.dialogEditarInspectorPersona,
-
+        //RegistroEnvio
         dialogMostrarRegistroEnvio: (state) => state.dialogMostrarRegistroEnvio,                                  // Devuelve la variable dialogMostrarRegistroEnvio
         dialogNuevoRegistroEnvio: (state) => state.dialogNuevoRegistroEnvio,                                      // Devuelve la variable dialogNuevoRegistroEnvio
         // Exportador

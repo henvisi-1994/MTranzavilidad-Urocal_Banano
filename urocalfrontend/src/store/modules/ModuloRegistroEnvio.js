@@ -5,10 +5,17 @@ export default {
 
     state: {
         listaRegistroEnvioStore: [],
-        listaCultivoStore: [],
-        modeloRegistroEnvioStore: new RegistroEnvio('', '', '', '', ''), // Modelo RegistroEnvio
+        listaTipoCacaoStore: [],
+        listaSeleccionDetallesStore:[],
+        modeloRegistroEnvioStore: new RegistroEnvio('', '', '', '', '',[]), // Modelo RegistroEnvio
         formRegistroEnvioValido: false, // Indica si el formulario de RegistroEnvio es valido
-        editarRegistroEnvio: false
+        editarRegistroEnvio: false,
+        modeloRegistroEnvioDetalle: {
+            codigo: "0",
+            fecha: "18/04/2021",
+            productor: "Ninguno",
+            entregados: 0,
+        }
     },
 
     mutations: {
@@ -16,14 +23,20 @@ export default {
         establecerModeloRegistroEnvioStore(state, nuevoRegistroEnvio) {
             state.modeloRegistroEnvioStore = nuevoRegistroEnvio
         },
+        establecerRegdetalle(state, nuevoRegdetalle){
+            state.modeloRegistroEnvioStore.regdetalle = nuevoRegdetalle
+        },
 
         establecerListaRegistroEnvioStore(state, newState) {
             state.listaRegistroEnvioStore = newState;
         },
+        establecerListaSeleccionDetallesStore(state, newState) {
+            state.listaSeleccionDetallesStore = newState;
+        },
 
         // Vacia el modelo RegistroEnvio
         vaciarModeloRegistroEnvioStore(state) {
-            state.modeloRegistroEnvioStore = new RegistroEnvio('', '', '', '', '')
+            state.modeloRegistroEnvioStore = new RegistroEnvio('', '', '', '', '',[])
         },
 
         // Cambia  el estado del Formulario RegistroEnvio
@@ -37,12 +50,15 @@ export default {
         nuevoRegistroEnvio(state, nuevoRegistroEnvio) {
             state.modeloRegistroEnvioStore = nuevoRegistroEnvio
         },
-        establecerListaCultivoStore(state, newState) {
-            state.listaCultivoStore = newState;
-        },
 
-        limpiarListaCultivoStore(state) {
-            state.listaCultivoStore = [];
+        establecerListaTipoCacaoStore(state, newState) {
+            state.listaTipoCacaoStore = newState;
+        },
+        limpiarListaTipoCacaoStore(state) {
+            state.listaTipoCacaoStore = [];
+        },
+        establecerModeloRegistroEnvioDetalle(state, nuevoRegistroEnvioDetalle) {
+            state.modeloRegistroEnvioDetalle = nuevoRegistroEnvioDetalle
         },
     },
 
@@ -51,6 +67,8 @@ export default {
         listaRegistroEnvioStore: (state) => state.listaRegistroEnvioStore,
         modeloRegistroEnvioStore: (state) => state.modeloRegistroEnvioStore,
         editarRegistroEnvio: (state) => state.editarRegistroEnvio,
-        listaCultivoStore: (state) => state.listaCultivoStore,
+        listaTipoCacaoStore: (state) => state.listaTipoCacaoStore,
+        modeloRegistroEnvioDetalle: (state) => state.modeloRegistroEnvioDetalle,
+        listaSeleccionDetallesStore: (state) => state.listaSeleccionDetallesStore,
     },
 }

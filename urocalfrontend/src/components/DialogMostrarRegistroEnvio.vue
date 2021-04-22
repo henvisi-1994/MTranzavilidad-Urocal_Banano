@@ -29,71 +29,7 @@
           >
         </v-btn>
       </v-card-title>
-      <!--Inicio Formulario RegistroEnvio -->
-      <!--
-      <v-card-text style="padding: 0px">
-        <v-container>
-          <v-row no-gutters justify-md="space-around">
-            <v-col cols="12" md="6">
-              <v-text-field
-                class="custom px-2"
-                filled
-                dense
-                label="Fecha"
-                readonly
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                class="custom px-2"
-                filled
-                dense
-                label="Tipo"
-                readonly
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row no-gutters justify-md="space-around">
-            <v-col cols="12" md="6">
-              <v-text-field
-                class="custom px-2"
-                filled
-                dense
-                label="Lote"
-                readonly
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                class="custom px-2"
-                filled
-                dense
-                label="Destino"
-                readonly
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row no-gutters justify-md="space-around">
-            <v-col cols="12">
-              <v-card elevation="0">
-                <v-card-title class="primary--text"> Detalle </v-card-title>
-                <v-card-text>
-                  <v-data-table
-                    :headers="cabeceraTablaDetalle"
-                    :items="listaDetalles"
-                    class="elevation-1"
-                  >
-                  </v-data-table>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-      -->
-      <!--Fin Formulario RegistroEnvio -->
-      <!-- Formulario RegistroEnvio -->
+
       <v-card-text style="padding: 0px">
         <v-container>
           <FormRegistroEnvio
@@ -129,39 +65,11 @@ export default {
     FormRegistroEnvio,
   },
   data() {
+
     return {
-      cabeceraTablaDetalle: [
-        {
-          text: "Código",
-          value: "codigo",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Fecha",
-          value: "fecha",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "Productor",
-          value: "productor",
-          align: "center",
-          class: "grey lighten-3",
-        },
-        {
-          text: "QQ Entregados",
-          value: "qqentregados",
-          align: "center",
-          class: "grey lighten-3",
-        },
-      ],
-      listaDetalles: [],
     };
   },
   computed: {
-    // ...mapState("moduloRegistroEnvio", ["modeloRegistroEnvioStore"]),
-
     dialogMostrarRegistroEnvio: {
       get() {
         return this.$store.getters[
@@ -274,6 +182,5 @@ export default {
   },
 };
 </script>
-
 <style>
 </style>

@@ -12,24 +12,57 @@
         <v-container>
           <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
-              <v-text-field
-                class="custom px-2"
-                filled
-                dense
-                label="Fecha"
-                v-model="modeloRegistroEnvioStore.regfecha"
-                readonly
-              ></v-text-field>
+              <v-menu
+                v-model="menuMostrarCalendario"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    :disabled="editarRegistroEnvio"
+                    label="Fecha de Envio"
+                    class="custom px-2"
+                    filled
+                    dense
+                    v-model="modeloRegistroEnvioStore.regfecha"
+                    :rules="[reglas.campoVacio(fecha)]"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="fecha"
+                  @input="menuMostrarCalendario = false"
+                  locale="es-419"
+                ></v-date-picker>
+              </v-menu>
             </v-col>
+
             <v-col cols="12" md="6">
-              <v-text-field
-                class="custom px-2"
-                filled
-                dense
-                label="Tipo"
+              <v-select
+                :disabled="editarRegistroEnvio"
                 v-model="modeloRegistroEnvioStore.regtipo"
-                readonly
-              ></v-text-field>
+                placeholder="Tipo de Producto"
+                class="style-chooser"
+                label="tipocacao"
+                @input="obtenerTodosTipoCacao"
+                :reduce="(listaTipoCacaoStore) => listaTipoCacaoStore.regtipo"
+                :options="listaTipoCacaoStore"
+                :rules="[reglas.campoVacio(modeloRegistroEnvioStore.regtipo)]"
+              >
+                <template v-slot:no-options="{ search, searching }">
+                  <template v-if="searching">
+                    No hay resultados para <em>{{ search }}</em
+                    >.
+                  </template>
+                  <em style="opacity: 0.5" v-else
+                    >Empiece a escribir un tipo</em
+                  >
+                </template>
+              </v-select>
             </v-col>
           </v-row>
           <v-row no-gutters justify-md="space-around">
@@ -40,7 +73,8 @@
                 dense
                 label="Lote"
                 v-model="modeloRegistroEnvioStore.reglote"
-                readonly
+                :disabled="editarRegistroEnvio"
+                :rules="[reglas.campoVacio(modeloRegistroEnvioStore.reglote)]"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -50,7 +84,10 @@
                 dense
                 label="Destino"
                 v-model="modeloRegistroEnvioStore.regdestino"
-                readonly
+                :disabled="editarRegistroEnvio"
+                :rules="[
+                  reglas.campoVacio(modeloRegistroEnvioStore.regdestino),
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -61,22 +98,43 @@
               <v-col cols="12" md="6"> Detalle </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                  :items="listaCodigos"
+                  v-model="modeloRegistroEnvioDetalle"
+                  :items="listaSeleccionDetallesStore"
                   :filter="filtroCodigos"
-                  item-text="codigo"
+                  item-text="datosunidos"
                   label="Buscar"
                   class="custom"
                   dense
                   filled
                 ></v-autocomplete>
+                <!-- boton -->
+                <v-card-actions class="justify-center pb-3">
+                  <v-btn
+                    :block="$vuetify.breakpoint.xs ? true : false"
+                    width="200px"
+                    color="primary"
+                    @click="agregarDetalle()"
+                    >Agregar</v-btn
+                  >
+                </v-card-actions>
               </v-col>
             </v-card-title>
+
             <v-card-text>
               <v-data-table
                 :headers="cabeceraTablaDetalle"
-                :items="listaDetalles"
+                :items="modeloRegistroEnvioStore.regdetalle"
                 class="elevation-1"
               >
+                <template v-slot:item.actions="{ item }">
+                  <v-btn icon>
+                    <v-icon
+                      class="primary--text"
+                      @click="eliminarItemDetalleEnvio(item)"
+                      >mdi-trash-can</v-icon
+                    >
+                  </v-btn>
+                </template>
               </v-data-table>
             </v-card-text>
           </v-card>
@@ -90,10 +148,8 @@
 import { mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import servicioLote from "../services/ServicioLote";
-import servicioFinca from "../services/ServicioFinca";
-import servicioCultivo from "../services/ServicioCultivo";
-
+import servicioProducto from "../services/ServicioProducto";
+import ServicioRegistroEnvio from "../services/ServicioRegistroEnvio";
 export default {
   name: "FormRegistroEnvio",
 
@@ -102,9 +158,8 @@ export default {
   },
 
   mounted() {
-    // this.obtenerTodosFincas();
-    // this.obtenerTodosListaCultivo();
-    // this.obtenerTodosLoteCultivadoDeFinca();
+    this.obtenerTodosTipoCacao();
+    this.obtenerSeleccionDetalles();
   },
 
   data() {
@@ -130,7 +185,7 @@ export default {
         },
         {
           text: "QQ Entregados",
-          value: "qqentregados",
+          value: "entregados",
           align: "center",
           class: "grey lighten-3",
         },
@@ -142,27 +197,7 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaDetalles: [],
-      listaCodigos: [
-        {
-          codigo: "Uro-054",
-          fecha: "07/02/2018",
-          productor: "Miguel Gonzales",
-          qqentregados: "2,246",
-        },
-        {
-          codigo: "Uro-123",
-          fecha: "10/03/2020",
-          productor: "Angel Barrezueta",
-          qqentregados: "1,372",
-        },
-      ],
-
-      listaLote: [],
-      listaFinca: [],
-
-      tipoid: "",
-      listaCultivo: [],
+      modeloRegistroEnvioDetalle: null,
       fecha: null,
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
       fechaActual: new Date().toISOString().substr(0, 10), // Almacena la fecha actual
@@ -215,29 +250,43 @@ export default {
         );
       },
     },
-    ...mapState("moduloFinca", ["listaFincaStore"]),
-    //
-    ...mapState("moduloRegistroEnvio", ["editarRegistroEnvio", "modeloRegistroEnvioStore"]),
+    listaTipoCacaoStore: {
+      get() {
+        return this.$store.getters["moduloRegistroEnvio/listaTipoCacaoStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaTipoCacaoStore",
+          v
+        );
+      },
+    },
+    listaSeleccionDetallesStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaSeleccionDetallesStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaSeleccionDetallesStore",
+          v
+        );
+      },
+    },
+    ...mapState("moduloRegistroEnvio", ["editarRegistroEnvio"]),
     ...mapState("validacionForm", ["reglas"]),
   },
 
   methods: {
-    async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(
-        this.modeloPodaStore.lotecultivadoid
-      );
-      this.listaCultivo = resultado.data;
-    },
-    async obtenerTodosFincas() {
-      let resultado = await servicioFinca.obtenerTodosFincas();
-      this.listaFinca = resultado.data;
+    async obtenerTodosTipoCacao() {
+      let resultado = await servicioProducto.obtenerDetallesCacao();
+      this.listaTipoCacaoStore = resultado.data;
     },
 
-    async obtenerTodosLoteCultivadoDeFinca() {
-      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
-        this.modeloPodaStore.fincaid
-      );
-      this.listaLote = resultado.data;
+    async obtenerSeleccionDetalles() {
+      let resultado = await ServicioRegistroEnvio.obtenerSeleccionDetalles();
+      this.listaSeleccionDetallesStore = resultado.data;
     },
 
     formatDate(fecha) {
@@ -250,8 +299,42 @@ export default {
     filtroCodigos(item, queryText) {
       const texto = item.codigo.toLowerCase();
       const busqueda = queryText.toLowerCase();
-
       return texto.indexOf(busqueda) > -1;
+    },
+    agregarDetalle() {
+      console.log('Modelo envio detalle');
+      console.log(this.modeloRegistroEnvioDetalle);
+      const encontrado = this.listaSeleccionDetallesStore.find(
+        (e) => e.datosunidos === this.modeloRegistroEnvioDetalle
+      );
+      //ver si ya se ha agregado el objeto anterior,mente para no volver a agregarlo
+      let seleccionado = false;
+
+      for (
+        var i = 0;
+        i < this.modeloRegistroEnvioStore.regdetalle.length;
+        i++
+      ) {
+        if (
+          this.modeloRegistroEnvioStore.regdetalle[i].datosunidos ==
+          encontrado.datosunidos
+        ) {
+          alert("El objeto ya se encuentra seleccionado");
+          seleccionado = true;
+        }
+      }
+      if (!seleccionado) {
+        this.modeloRegistroEnvioStore.regdetalle.push(encontrado);
+      }
+      this.modeloRegistroEnvioDetalle = null;
+    },
+    eliminarItemDetalleEnvio(item) {
+      let eliminarElemento=(lista,elemento)=>{
+        return lista.filter(e=>e.datosunidos!==elemento.datosunidos)
+      }
+      let listaDetalle=this.modeloRegistroEnvioStore.regdetalle;
+     listaDetalle=eliminarElemento(listaDetalle,item);
+      this.$store.commit("moduloRegistroEnvio/establecerRegdetalle",listaDetalle);
     },
     // Cierra el dialogo
     cerrarDialogNuevoRegistroEnvio() {

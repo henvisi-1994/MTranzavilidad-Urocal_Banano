@@ -5,32 +5,39 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000/v1/nuevoRegistroEnvio';
 
 class ServicioRegistroEnvio {
-    
-    // INSERT: Agrega un registro
-    agregarRegistroEnvio(formData){
-      return axios.post(`${API_URL}`, formData);
-    }
 
-    // SELECT: Devuelve todos los registros
-    obtenerTodosRegistroEnvio() {
-      
-      return axios.get(`${API_URL}/todos`);
-    }
+  // INSERT: Agrega un registro
+  agregarRegistroEnvio(formData) {
+    return axios.post(`${API_URL}`, formData);
+  }
 
-    // SELECT: Devuelve todos los registros
-    obtenerRegistroEnvio() {
-      return axios.get(`${API_URL}/${id}`);
-    }
+  // SELECT: Devuelve todos los registros
+  obtenerTodosRegistroEnvio() {
+    return axios.get(`${API_URL}/todos`);
+  }
+  //getDetalleEnvio
+  obtenerDetalleEnvio(id) {
+    return axios.get(`${API_URL}/detalleenvio/${id}`);
+  }
 
-    // UPDATE: Actualiza un registro
-    actualizarRegistroEnvio(id, formData) {
-      return axios.put(`${API_URL}/${id}`, formData); 
-    }
+  obtenerSeleccionDetalles() {
+    return axios.get(`${API_URL}/detalles`);
+  }
 
-    // DELETE: Elimina un registro
-    eliminarRegistroEnvio(id) {
-      return axios.delete(`${API_URL}/${id}`);
-    }
+  // SELECT: Devuelve todos los registros
+  obtenerRegistroEnvio() {
+    return axios.get(`${API_URL}/${id}`);
+  }
+
+  // UPDATE: Actualiza un registro
+  actualizarRegistroEnvio(id, formData) {
+    return axios.put(`${API_URL}/${id}`, formData);
+  }
+
+  // DELETE: Elimina un registro
+  eliminarRegistroEnvio(id) {
+    return axios.delete(`${API_URL}/${id}`);
+  }
 }
 
 export default new ServicioRegistroEnvio();
