@@ -240,7 +240,6 @@ export default {
                     { texto: 'Hoja de Acopio/Evaluación de cajas', ruta: '#' },
                     { texto: 'Almacenamiento', ruta: '#' },
                     { texto: 'Despacho', ruta: '#' },
-                    //{ texto: 'Kardex', ruta: '#' },
                     { texto: 'Registro de envío', ruta: '#' },
                     { texto: 'Facturas de exportación', ruta: '/puerto/facturaExportacion' }
                 ]
@@ -310,7 +309,22 @@ export default {
                     { texto: 'Sitios', ruta: '/configuracion/sitio', },
                     { texto: 'Empresas', ruta: '/configuracion/Empresa', },
                     { texto: 'Marcas', ruta: '#', },
-                    { texto: 'Certificaciones', ruta: '/configuracion/Certificaciones', }
+                    { texto: 'Certificaciones', ruta: '/configuracion/Certificaciones', },
+                ]
+            },
+            {
+                icono: 'mdi-folder',
+                texto: 'Reportes',
+                opcionesNivel1: [
+                    { texto: 'Reporte Ventas', ruta: '/reportes/ventas' },
+                    { texto: 'Reporte Compras', ruta: '/reporte/reporteCompra' },
+                    { texto: 'Kardex de Ingresos y Egresos de productos', ruta: '/reporte/reporteKardexProductos' },
+                    { texto: 'Kardex de Ingresos y Egresos de insumos', ruta: '/reporte/reporteKardexIngresosEgresos' },
+                    { texto: 'Reporte de productores', ruta: '#' },
+                    { texto: 'Cantidad de productores por edades', ruta: '#' },
+                    { texto: 'Reporte de Fincas por productor', ruta: '/reporte/fincaproductor' },
+                    { texto: 'Reporte X', ruta: '#' },
+                    
                 ]
             },
         ]
