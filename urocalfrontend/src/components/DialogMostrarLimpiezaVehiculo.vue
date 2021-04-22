@@ -31,6 +31,7 @@
         <v-container>
           <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
+              
               <v-select
                 v-model="modeloLimpiezaVehiculoStoreStore.cultivoproducto.cultivoid"
                 placeholder="Seleccione un cultivo"

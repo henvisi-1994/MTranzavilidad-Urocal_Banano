@@ -9,7 +9,7 @@
       </v-card-title>
       
       <v-card-text>
-         <v-row>
+        <v-row>
           <v-col cols="12">
           <v-select
             v-model="fincaid"
@@ -93,7 +93,7 @@
       <v-card-actions>
         <v-col>
         <!--<v-btn color="error" block @click="dialogNuevoLimpiezaVehiculo = !dialogNuevoLimpiezaVehiculo" >Cancelar</v-btn>-->
-        <v-btn color="primary" large elevation="0" @click="guardarLimpiezaVehiculo()" width="300px" block class="mt-2">Guardar</v-btn>
+        <v-btn color="primary" @click="guardarLimpiezaVehiculo()" large elevation="0" width="300px" block class="mt-2">Guardar</v-btn>
         </v-col>
       </v-card-actions>
     </v-card>
@@ -101,13 +101,12 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import ServicioFinca from '../services/ServicioFinca';
-import ServicioVehiculo from '../services/ServicioVehiculo';
 import ServicioLimpiezaVehiculo from '../services/ServicioLimpiezaVehiculo';
-
+import ServicioVehiculo from '../services/ServicioVehiculo';
+import ServicioFinca from '../services/ServicioFinca';
+import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "DialogNuevoLimpiezaVehiculo",
@@ -119,14 +118,11 @@ export default {
 
   data() {
     return {
-      fincaid:0,
-      listaFinca:[],
-      listaVehiculos:[],
-
       menuMostrarCalendario: "",
+      listaFinca:[],
+      fincaid:0,
       fechaActual: new Date().toISOString().substr(0, 10), // Fecha actual
-      itemsGenero: ['Masculino', 'Femenino'],
-      itemsCiudades: ['Machala', 'Pasaje', 'Santa Rosa'],
+      listaVehiculos:[],
     };
   },
 
@@ -140,14 +136,30 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogNuevoLimpiezaVehiculo", v);
       },
     },
+      modeloLimpiezaVehiculoStore: {
+      get() {
+        return this.$store.getters["moduloLimpiezaVehiculo/limpiezaVehiculo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo", v);
+      },
+      listaLimpiezaVehiculoStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloLimpiezaVehiculo/establecerListaLimpiezaVehiculoStore", v);
+      },
+    },
+    },
+
 
     ...mapState("moduloLimpiezaVehiculo", ["limpieza_vehiculo"]),   // Modulo LimpiezaVehiculo
 
     ...mapState("validacionForm", ["reglas"]),                  // Reglas de validacion
     
   },
-  mounted() {
-    
+    mounted() {
     this.obtenerTodosFincas();
   },
 
@@ -173,47 +185,23 @@ export default {
       this.listaVehiculos = await respuesta.data;     
     },
     async obtenerTodosFincas() {
-      try {
-      let respuesta=null;
-      if(localStorage.getItem('productor')!==null){
-        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
-        respuesta = await ServicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
-
-
-      }else{
-        respuesta = await ServicioFinca.obtenerTodosFincas();
-      }
-        this.listaFinca = respuesta.data;
-     
-        
-      } catch (error) {
-        
-        
-      }
+      let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+      //console.log(usuariosesion.productorid);
+      let resultado = await ServicioFinca.obtenerFincaPropietario(usuariosesion.productorid);
+      this.listaFinca = resultado.data;
     },
     // #  MANIPULACIÓN DE DATOS  #
-    async cargarListaLimpiezaVehiculo () {
-      try {
-        let respuesta=null;
-      if(localStorage.getItem('productor')!==null){
-        let usuariosesion=JSON.parse(localStorage.getItem('productor'));
-        respuesta = await ServicioLimpiezaVehiculo.obtenerProductorLimpiezaVehiculo(usuariosesion.productorid);  // Obtener respuesta de backend
-
-
-      }else{
-        respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();  // Obtener respuesta de backend
-
-      }
-        let datosLimpiezaVehiculo = await respuesta.data;
-        this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);                                    // Rescatar datos de la respuesta
+    async cargarListaLimpiezaVehiculo () { 
+      let usuariosesion=JSON.parse(localStorage.getItem('productor'));
+      //console.log(usuariosesion.productorid);
+      let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo(usuariosesion.productorid);
+      //console.log(respuesta);  // Obtener respuesta de backend
+      let datosLimpiezaVehiculo = await respuesta.data;
+        this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);                                       // Rescatar datos de la respuesta
         datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
         this.$store.commit("moduloLimpiezaVehiculo/addListaLimpiezaVe",LimpiezaVehiculo);
+
       });
-        
-      } catch (error) {
-        
-      } 
-      
       
     },   
   }

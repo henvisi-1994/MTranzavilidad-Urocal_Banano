@@ -67,13 +67,12 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations } from "vuex";
 
 import DialogNuevoLimpiezaVehiculo from "../components/DialogNuevoLimpiezaVehiculo";
 import DialogEditarLimpiezaVehiculo from "../components/DialogEditarLimpiezaVehiculo";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 import ServicioLimpiezaVehiculo from '../services/ServicioLimpiezaVehiculo';
-import ServicioVehiculo from '../services/ServicioVehiculo';
 
 export default {
   name: "BaseLimpiezaVehiculo",
@@ -84,8 +83,8 @@ export default {
   },
 
   data() {
-
     return {
+      listaLimpiezaVehiculos: this.$store.getters["moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"],
       nombre: "Limpieza de Vehículo",
       buscarLimpiezaVehiculo: "", // Guarda el texto de búsqueda
       cabeceraTablaLimpiezaVehiculos: [
@@ -154,13 +153,15 @@ export default {
           class: "grey lighten-3",
         },
       ],
-    listaLimpiezaVehiculos: this.$store.getters["moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"],
+      
     };
   },
+  mounted()
+  {
+    this.cargarListaVehiculo();
 
+  },
   computed: {
-
-//...mapState("moduloLimpiezaVehiculo", ["limpieza_vehiculo"]),   // Modulo LimpiezaVehiculo
     /* Obtiene y establece el estado de la variable dialogNuevoLimpiezaVehiculo
     que muestra u oculta el dialogo*/
     dialogNuevoLimpiezaVehiculo: {
@@ -171,15 +172,24 @@ export default {
         return this.$store.commit("gestionDialogos/toggleDialogNuevoLimpiezaVehiculo", v);
       },
     },
-    listaVehiculoStore: {
+    listaLimpiezaVehiculoStore: {
       get() {
-        return this.$store.getters["moduloLimpiezaVehiculo/listavehiculoStore"];
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloLimpiezaVehiculo/listaLimpiezaVehiculoStore"]));
       },
       set(v) {
-        return this.$store.commit("moduloLimpiezaVehiculo/nuevoListaVehiculoStore", v);
+        return this.$store.commit("moduloLimpiezaVehiculo/establecerListaLimpiezaVehiculoStore", v);
       },
+    
     },
+    limpiezaVehiculo:{
+      get() {
+        return this.$store.getters["moduloLimpiezaVehiculo/limpieza_vehiculo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloLimpiezaVehiculo/nuevoLimpiezaVehiculo", v);
+      },
 
+    },
 
     /* Obtiene y modifica el estado de la variable dialogTabMostrarLote
     que muestra u oculta el dialogo*/
@@ -196,12 +206,6 @@ export default {
     },
   },
 
-     mounted()
-  {
-    this.cargarListaVehiculo();
-
-  },
-
   methods: {
     // Vacia el modelo LimpiezaVehiculo
     ...mapMutations("moduloLimpiezaVehiculo", ["vaciarLimpiezaVehiculo"]),
@@ -211,14 +215,6 @@ export default {
       this.dialogNuevoLimpiezaVehiculo = !this.dialogNuevoLimpiezaVehiculo; // Abre el DialogNuevoLimpiezaVehiculo
       this.vaciarLimpiezaVehiculo();
     },
-    async cargarListaVehiculoPlaca(){
-      let limpiezavehiculo=this.$store.getters["moduloLimpiezaVehiculo/limpieza_vehiculo"];
-            
-      let respuesta = await ServicioVehiculo.obtenerVehiculoFinca(limpiezavehiculo.fincaid);  // Obtener respuesta de backend
-      console.log(respuesta);
-      this.listaVehiculoStore = await respuesta.data;     
-    },
-
     conversion(params){
       let resultado=false;
       if(params=="Si"){
@@ -230,34 +226,17 @@ export default {
     },
     async cargarListaVehiculo()
     {
-      try {
-        
-        let respuesta=null;
-      if(localStorage.getItem('productor')!==null){
         let usuariosesion=JSON.parse(localStorage.getItem('productor'));
-        respuesta = await ServicioLimpiezaVehiculo.obtenerProductorLimpiezaVehiculo(usuariosesion.productorid);  // Obtener respuesta de backend
-
-
-      }else{
-        respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo();  // Obtener respuesta de backend
-
-      }
+        let respuesta = await ServicioLimpiezaVehiculo.obtenerTodosLimpiezaVehiculo(usuariosesion.productorid);  // Obtener respuesta de backend
         let datosLimpiezaVehiculo = await respuesta.data;
         this.$store.commit("moduloLimpiezaVehiculo/vaciarLista",null);                                    // Rescatar datos de la respuesta
         datosLimpiezaVehiculo.forEach((LimpiezaVehiculo) => {                                  // Guardar cada registro en la 'lista de datos' 
         this.$store.commit("moduloLimpiezaVehiculo/addListaLimpiezaVe",LimpiezaVehiculo);
       });
-        
-      } catch (error) {
-        
-      }
-      
-
       
     },
 
     // Dialogo Editar LimpiezaVehiculo
-        // Dialogo Editar LimpiezaVehiculo
     cargarDialogEditarLimpiezaVehiculo(item) {
       this.dialogEditarLimpiezaVehiculo = !this.dialogEditarLimpiezaVehiculo;
       this.vaciarLimpiezaVehiculo();
@@ -273,7 +252,6 @@ export default {
     vehplaca:item.vehplaca,
     fincaid: item.fincaid,
     finnombrefinca: item.finnombrefinca,});
-    this.cargarListaVehiculoPlaca();
     },
   },
 
