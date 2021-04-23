@@ -169,9 +169,8 @@ export default {
           };
           await servicioAlmacenamiento.crearMix(mix);
         });
-
-        this.$toast.success(resultadoServicioAlmacenamiento.data.message);
         this.obtenerTodosAlmacenamiento();
+        this.$toast.success(resultadoServicioAlmacenamiento.data.message);
         this.dialogConfirmacion = true;
       } catch (error) {
         this.$toast.error(error.response.data.message);
@@ -211,12 +210,6 @@ export default {
     // Llena la listaAlmacenamiento con datos del servidor backend
     async obtenerTodosAlmacenamiento() {
       let resultado = await servicioAlmacenamiento.obtenerTodosAlmacenamiento();
-      resultado.data.forEach((almacenamiento) => {
-        almacenamiento.almfechaacopio = this.formatDate(almacenamiento.almfechaacopio);
-        almacenamiento.almfechaingresobodega = this.formatDate(
-          almacenamiento.almfechaingresobodega
-        );
-      });
       this.listaAlmacenamiento = resultado.data;
     },
   },

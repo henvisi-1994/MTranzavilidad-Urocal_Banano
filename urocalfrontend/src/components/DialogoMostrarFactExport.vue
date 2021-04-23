@@ -12,14 +12,24 @@
       <v-card-title class="primary white--text">
         <h5>Actualizar / Eliminar Factura de Exportacion</h5>
         <v-spacer></v-spacer>
-         <v-btn icon >
-          <v-icon class="white--text" @click="bloquearFacturaExport = !bloquearFacturaExport">mdi-pencil</v-icon>
+        <v-btn icon>
+          <v-icon
+            class="white--text"
+            @click="bloquearFacturaExport = !bloquearFacturaExport"
+            >mdi-pencil</v-icon
+          >
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
+          <v-icon class="white--text" @click="eliminarRegistro()"
+            >mdi-trash-can</v-icon
+          >
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogMostrarFacturaExport()">mdi-close</v-icon>
+          <v-icon
+            class="white--text"
+            @click="cerrarDialogMostrarFacturaExport()"
+            >mdi-close</v-icon
+          >
         </v-btn>
       </v-card-title>
 
@@ -47,19 +57,23 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 
- import FormFactExport from "@/components/FormFactExport";
- import SerivicioFactExport from '../services/ServicioFacturaExportacion';
+import FormFactExport from "@/components/FormFactExport";
+import SerivicioFactExport from "../services/ServicioFacturaExportacion";
 
 export default {
   name: "DialogoMostrarFactExport",
 
   components: {
-     FormFactExport,
+    FormFactExport,
   },
 
   computed: {
-    ...mapState("moduloFacturaExport", ["formFactExportValido", "factExportaStore","editarFacturaExport"]),
-    
+    ...mapState("moduloFacturaExport", [
+      "formFactExportValido",
+      "factExportaStore",
+      "editarFacturaExport",
+    ]),
+
     dialogoMostrarFactExport: {
       get() {
         return this.$store.getters["gestionDialogos/dialogoMostrarFactExport"];
@@ -78,7 +92,10 @@ export default {
         return this.$store.getters["moduloFacturaExport/factExportaStore"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/establecerModeloFacturaExportStore", v);
+        return this.$store.commit(
+          "moduloFacturaExport/establecerModeloFacturaExportStore",
+          v
+        );
       },
     },
     editarFacturaExport: {
@@ -86,60 +103,71 @@ export default {
         return this.$store.getters["moduloFacturaExport/editarFacturaExport"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/establecerEditarFacturaExport", v);
+        return this.$store.commit(
+          "moduloFacturaExport/establecerEditarFacturaExport",
+          v
+        );
       },
     },
 
-    listaFacturaExportStore:{
-      get(){
-        return this.$store.getters["moduloFacturaExport/listaFacturaExportStore"];
+    listaFacturaExportStore: {
+      get() {
+        return this.$store.getters[
+          "moduloFacturaExport/listaFacturaExportStore"
+        ];
       },
-      set(v){
-        return this.$store.commit("moduloFacturaExport/asignarListaFacturaExportStore", v);
-      }
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/asignarListaFacturaExportStore",
+          v
+        );
+      },
     },
     bloquearFacturaExport: {
       get() {
         return this.$store.getters["moduloFacturaExport/bloquearFacturaExport"];
       },
       set(v) {
-        return this.$store.commit("moduloFacturaExport/cambiarEstadoBloquearFacturaExport", v);
+        return this.$store.commit(
+          "moduloFacturaExport/cambiarEstadoBloquearFacturaExport",
+          v
+        );
       },
     },
   },
 
   methods: {
-    async actualizarRegistro(){
-      let respuesta = await SerivicioFactExport.actualizarFacturaExport(this.factExportaStore.facturaexportacionid,this.factExportaStore);
-       if(respuesta.status == 200){
-         this.cerrarDialogMostrarFacturaExport();
-         this.cargarListaFactExport();
-         this.vaciarFacturaExport();         
-         this.$toast.success(respuesta.data.message);
-       }
-      
+    async actualizarRegistro() {
+      let respuesta = await SerivicioFactExport.actualizarFacturaExport(
+        this.factExportaStore.facturaexportacionid,
+        this.factExportaStore
+      );
+      if (respuesta.status == 200) {
+        this.cerrarDialogMostrarFacturaExport();
+        this.cargarListaFactExport();
+        this.vaciarFacturaExport();
+        this.$toast.success(respuesta.data.message);
+      }
     },
     cerrarDialogMostrarFacturaExport() {
       this.dialogoMostrarFactExport = !this.dialogoMostrarFactExport;
       this.vaciarFacturaExport();
     },
-    async cargarListaFactExport () {
-       let listaFactExports = [];
-       let respuesta = await SerivicioFactExport.obtenerTodosFacturaExport();
-       let riegos = await respuesta.data;
-       this.$store.commit("moduloFacturaExport/vaciarLista", null);
-       riegos.forEach((f) => {
-         listaFactExports.push(f);
-       });
-       this.listaFactExportStore = listaFactExports;
+    async cargarListaFactExport() {
+      let respuesta = await serivicioFactExport.obtenerTodosFacturaExport();
+      let facturas = await respuesta.data;
+      this.$store.commit("moduloFacturaExport/vaciarLista", null);
+      this.listaFacturaExportStore = facturas;
     },
     async eliminarRegistro() {
-      const respuesta = await SerivicioFactExport.eliminarFacturaExport(this.factExportaStore.facturaexportacionid);
+      const respuesta = await SerivicioFactExport.eliminarFacturaExport(
+        this.factExportaStore.facturaexportacionid
+      );
       if (respuesta.status == 200) {
         this.$toast.warning(respuesta.data.message);
         this.cerrarDialogMostrarFacturaExport();
         this.cargarListaFactExport();
-      } 
+      }
     },
 
     ...mapMutations("moduloFacturaExport", ["vaciarFacturaExport"]),
