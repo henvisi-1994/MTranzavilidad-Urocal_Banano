@@ -315,15 +315,6 @@ export default {
       this.listaFincaStore = listaFinca;
     },
 
-    // async cargarListaCultivos() {
-    //   let listaCultivo = []; // Limpiar la 'lista de ciudades'
-    //   let respuesta = await ServicioLimpiezaHerramienta.obtenerTodosCultivos(); // Obtener respuesta de backend
-    //   let datosCultivo = await respuesta.data; // Rescatar datos de la respuesta
-    //   datosCultivo.forEach((Cultivo) => {
-    //     listaCultivo.push(Cultivo);
-    //   });
-    //   this.listaCultivoStore = listaCultivo;
-    // },
     async obtenerTodosListaCultivo() {
       let resultado = await servicioCultivo.obtenerCultivoDetalles(
         this.modeloLimpiezaHerramientaStore.lotecultivadoid

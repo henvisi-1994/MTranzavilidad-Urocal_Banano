@@ -13,19 +13,19 @@ export default {
          listaTipoStore: [
             {
               tipoid: 1,
-              podatipo: "Poda Formación",
+              podtipo: "Poda Formación",
             },
             {
               tipoid: 2,
-              podatipo: "Poda Mantenimiento",
+              podtipo: "Poda Mantenimiento",
             },
             {
               tipoid: 3,
-              podatipo: "Poda Fitosanitaria",
+              podtipo: "Poda Fitosanitaria",
             },
             {
               tipoid: 4,
-              podatipo: "Poda de Descope",
+              podtipo: "Poda de Descope",
             },
           ],
     },
