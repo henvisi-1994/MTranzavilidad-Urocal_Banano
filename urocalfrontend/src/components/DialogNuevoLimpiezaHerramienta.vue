@@ -97,7 +97,6 @@ export default {
 
     // #  MANIPULACIÓN DE DATOS  #
     async guardarLimpiezaHerramienta() { 
-      //console.log(this.modeloLimpiezaHerramientaStore)
       try {
         let respuesta = await ServicioLimpiezaHerramienta.agregarLimpiezaHerramienta(this.modeloLimpiezaHerramientaStore);  
         this.$toast.success(respuesta.data.message);
@@ -117,7 +116,6 @@ export default {
         listaLimpiezaHerramienta.push(LimpiezaHerramienta);
       });
       this.listaLimpiezaHerramientaStore = listaLimpiezaHerramienta;
-      console.log(this.listaLimpiezaHerramientaStore)
     },
 
     ...mapMutations("moduloLimpiezaHerramienta", ["establecerListaLimpiezaHerramientaStore"]), 

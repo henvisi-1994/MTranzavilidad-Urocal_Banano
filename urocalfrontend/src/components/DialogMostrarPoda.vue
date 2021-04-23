@@ -38,6 +38,7 @@
 
       <v-card-actions class="justify-center pb-3">
         <v-btn
+          :disabled="editarPoda"
           :block="$vuetify.breakpoint.xs ? true : false"
           width="300px"
           large
@@ -67,9 +68,7 @@ export default {
   data() {
     return {};
   },
-  mounted(){
-
-  },
+  mounted() {},
 
   computed: {
     ...mapState("moduloPoda", ["modeloPodaStore"]),
@@ -109,22 +108,16 @@ export default {
         return this.$store.commit("moduloPoda/establecerEditarPoda", v);
       },
     },
-        listaTipoStore: {
+    listaTipoStore: {
       get() {
         return JSON.parse(
-          JSON.stringify(
-            this.$store.getters["moduloPoda/listaTipoStore"]
-          )
+          JSON.stringify(this.$store.getters["moduloPoda/listaTipoStore"])
         );
       },
       set(v) {
-        return this.$store.commit(
-          "moduloPoda/establecerlistaTipoStore",
-          v
-        );
+        return this.$store.commit("moduloPoda/establecerlistaTipoStore", v);
       },
     },
-    
   },
 
   methods: {
