@@ -250,11 +250,6 @@ export default {
   },
 
   watch: {
-    // cultivo(val) {
-    //   //id
-    //   this.modeloLimpiezaHerramientaStore.cultivoproducto.cultivoid = this.cultivo;
-    // },
-
     fecha(val) {
       this.modeloLimpiezaHerramientaStore.limfecha = this.formatDate(
         this.fecha

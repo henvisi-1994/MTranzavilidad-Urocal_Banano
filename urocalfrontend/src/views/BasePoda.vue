@@ -332,16 +332,9 @@ export default {
     // Carga el DialogMostrarPoda
     abrirMostrarPoda(item) {
       this.dialogMostrarPoda = !this.dialogMostrarPoda; // Abre el DialogNuevoPoda
-      // this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
       this.vaciarModeloPodaStore(); // Vacia el modelo poda
       this.editarPoda = true;
-
-      // this.$store.commit(
-      //   "moduloPoda/establecerEditarPoda",
-      //   true
-      // );
       this.modeloPodaStore = item;
-
       this.obtenerTodosListaCultivo();
       this.obtenerTodosLoteCultivadoDeFinca();
     },
