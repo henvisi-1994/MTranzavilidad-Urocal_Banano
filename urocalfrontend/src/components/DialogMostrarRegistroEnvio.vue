@@ -17,12 +17,6 @@
           >
         </v-btn>
 
-        <!-- <v-btn icon>
-          <v-icon class="primary--text" @click="eliminarRegistro()"
-            >mdi-trash-can</v-icon
-          >
-        </v-btn> -->
-
         <v-dialog v-model="dialog" persistent max-width="290">
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon>
@@ -176,7 +170,6 @@ export default {
         this.$toast.success(respuesta.data.message);
         this.cargarListaRegistroEnvio();
         this.cerrarDialogMostrarRegistroEnvio();
-        //Si no funciona bien poner this.listaDetalleEnvioStore=[];
       } catch (error) {
         this.$toast.error(error.response.data.message);
       }

@@ -67,10 +67,6 @@ module.exports = {
     async getTiposPodas() {
         let query = `select distinct podtipo from poda where podtipo is not null`;
         let result = await pool.query(query);
-        // console.log(result.rows); // Devuelve el array de json que contiene a todos los usuarios
-
-        // let query = `SELECT * FROM poda`;
-        // let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
     },
 

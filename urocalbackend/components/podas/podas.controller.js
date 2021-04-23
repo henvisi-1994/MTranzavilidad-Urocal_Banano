@@ -1,5 +1,6 @@
 
 const podasModel = require('./podas.model');
+const validation = require('../../utils/validations');
 
 module.exports = {
     async getPodas(req, res) {
@@ -24,6 +25,12 @@ module.exports = {
 
         const { podfecha, podtipo, podhectareas, podcantidadplantas, podherramienta, podoperario, cultivoid } = req.body;
 
+        if (validation.emptyField(podfecha) || validation.emptyField(podtipo) || validation.emptyField(podhectareas) ||
+            validation.emptyField(podcantidadplantas) || validation.emptyField(podherramienta) ||
+            validation.emptyField(cultivoid)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }
+
         try {
             await podasModel.createPoda({
                 podfecha: podfecha,
@@ -44,6 +51,12 @@ module.exports = {
     async updatePoda(req, res) {
         const { id } = req.params;
         const { podfecha, podtipo, podhectareas, podcantidadplantas, podherramienta, podoperario, cultivoid } = req.body;
+
+        if (validation.emptyField(podfecha) || validation.emptyField(podtipo) || validation.emptyField(podhectareas) ||
+            validation.emptyField(podcantidadplantas) || validation.emptyField(podherramienta) ||
+            validation.emptyField(cultivoid)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }
 
         const rowCount = await podasModel.updatePoda(id, {
             podfecha: podfecha,
