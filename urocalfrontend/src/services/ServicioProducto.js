@@ -9,6 +9,11 @@ class ServicioProducto {
     obtenerTodosProducto() {
         return axios.get(`${API_URL}/producto`);
     }
+    // SELECT: Obtiene todos los productos
+    obtenerDetallesCacao() {
+        return axios.get(`${API_URL}/producto/cacao`);
+    }
+
 
     // INSERT: Agrega un producto
     crearProducto(producto) {

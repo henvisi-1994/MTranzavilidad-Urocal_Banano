@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- Dialog para registrar nueva poda -->
     <DialogNuevoRegistroEnvio
       ref="componentDialogNuevoRegistroEnvio"
     ></DialogNuevoRegistroEnvio>
@@ -9,13 +8,20 @@
       <v-card-title class="py-2">
         <v-row no-gutters justify-md="space-between">
           <v-col cols="12" md="6">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field
               v-model="buscarRegistroEnvio"
               append-icon="mdi-magnify"
-              label="Buscar" class="custom" dense filled
+              label="Buscar"
+              class="custom"
+              dense
+              filled
             ></v-text-field>
           </v-col>
         </v-row>
@@ -26,8 +32,8 @@
         <v-data-table
           :height="tablaResponsiva()"
           :headers="cabeceraTablaRegistroEnvio"
-          sort-by="id_lote"
-          :items="listaRegistroEnvios"
+          sort-by="registroenvioid"
+          :items="listaRegistroEnvioStore"
           :search="buscarRegistroEnvio"
           class="elevation-1"
         >
@@ -39,7 +45,9 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" @click="abrirRegistroEnvio()"> mdi-eye </v-icon>
+            <v-icon color="primary" @click="abrirMostrarRegistroEnvio(item)">
+              mdi-eye
+            </v-icon>
           </template>
         </v-data-table>
       </v-card-text>
@@ -48,7 +56,9 @@
         <!-- Botón para agregar nuevo registro de envio -->
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
+          width="300px"
+          large
+          elevation="0"
           color="primary"
           @click="cargarDialogNuevoRegistroEnvio()"
           >Nuevo</v-btn
@@ -59,8 +69,11 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 import DialogMostrarRegistroEnvio from "@/components/DialogMostrarRegistroEnvio";
 import DialogNuevoRegistroEnvio from "@/components/DialogNuevoRegistroEnvio";
+import ServicioRegistroEnvio from "../services/ServicioRegistroEnvio";
+
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -70,6 +83,9 @@ export default {
     DialogMostrarRegistroEnvio,
     DialogNuevoRegistroEnvio,
   },
+  mounted() {
+    this.cargarListaRegistroEnvio();
+  },
 
   computed: {
     // Obtiene y modifica el estado de la variable dialogNuevoRegistroEnvio
@@ -78,18 +94,91 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoRegistroEnvio"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoRegistroEnvio", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoRegistroEnvio",
+          v
+        );
       },
     },
 
     // Obtiene y modifica el estado de la variable dialogMostrarRegistroEnvio
     dialogMostrarRegistroEnvio: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarRegistroEnvio"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarRegistroEnvio"
+        ];
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarRegistroEnvio", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarRegistroEnvio",
+          v
+        );
+      },
+    },
+    modeloRegistroEnvioStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/modeloRegistroEnvioStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerModeloRegistroEnvioStore",
+          v
+        );
+      },
+    },
+    listaRegistroEnvioStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloRegistroEnvio/listaRegistroEnvioStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaRegistroEnvioStore",
+          v
+        );
+      },
+    },
+    listaSeleccionDetallesStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaSeleccionDetallesStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaSeleccionDetallesStore",
+          v
+        );
+      },
+    },
+    listaDetalleEnvioStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaDetalleEnvioStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaDetalleEnvioStore",
+          v
+        );
+      },
+    },
+    editarRegistroEnvio: {
+      get() {
+        return this.$store.getters["moduloRegistroEnvio/editarRegistroEnvio"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerEditarRegistroEnvio",
+          v
+        );
       },
     },
   },
@@ -102,25 +191,25 @@ export default {
         // Detalla las cabeceras de la tabla
         {
           text: "Fecha",
-          value: "fecha",
+          value: "regfecha",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Tipo",
-          value: "tipo",
+          value: "regtipo",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Lote",
-          value: "lote",
+          value: "reglote",
           align: "center",
           class: "grey lighten-3",
         },
         {
           text: "Destino",
-          value: "destino",
+          value: "regdestino",
           align: "center",
           class: "grey lighten-3",
         },
@@ -132,21 +221,70 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaRegistroEnvios: [{ tipo: "tipo 1" }],
     };
   },
   methods: {
-    abrirRegistroEnvio() {
+    abrirMostrarRegistroEnvio(item) {
       this.dialogMostrarRegistroEnvio = !this.dialogMostrarRegistroEnvio; // Abre el dialogMostrarRegistroEnvio
+      this.vaciarModeloRegistroEnvioStore();
+      this.editarRegistroEnvio = true;
+      this.modeloRegistroEnvioStore = item;
+      this.obtenerSeleccionDetalles();
+      this.obtenerDetalleEnvio(this.modeloRegistroEnvioStore.registroenvioid);
     },
 
     cargarDialogNuevoRegistroEnvio() {
       this.dialogNuevoRegistroEnvio = !this.dialogNuevoRegistroEnvio; // Abre el dialogNuevoRegistroEnvio
+      this.editarRegistroEnvio = false;
+      this.vaciarModeloRegistroEnvioStore();
+      this.listaDetalleEnvioStore=[];
     },
+    async cargarListaRegistroEnvio() {
+      let listaRegistroEnvio = [];
+      let respuesta = await ServicioRegistroEnvio.obtenerTodosRegistroEnvio();
+      let registrosEnvios = await respuesta.data;
+      registrosEnvios.forEach((f) => {
+        listaRegistroEnvio.push(f);
+      });
+      this.listaRegistroEnvioStore = listaRegistroEnvio;
+    },
+    async obtenerSeleccionDetalles() {
+      let resultado = await ServicioRegistroEnvio.obtenerSeleccionDetalles();
+      this.listaSeleccionDetallesStore = await resultado.data;
+    },
+    async obtenerDetalleEnvio(id) {
+      let listaDetalleEnvio = [];
+      let respuesta = await ServicioRegistroEnvio.obtenerDetalleEnvio(id);
+      let detallesEnvio = await respuesta.data;
+      this.listaDetalleEnvioStore = [];
+      for (let i = 0; i < detallesEnvio.length; i++) {
+        const elemento = detallesEnvio[i];
+        let salir = false;
+        for (
+          let j = 0;
+          j < this.listaSeleccionDetallesStore.length && salir === false;
+          j++
+        ) {
+          const elementoLista = this.listaSeleccionDetallesStore[j];
+
+          if (
+            elemento.codigofinca === elementoLista.codigo &&
+            elemento.fecha === elementoLista.fecha &&
+            elemento.productor === elementoLista.productor &&
+            parseFloat(elemento.detenvcantidad) ===
+              parseFloat(elementoLista.entregados)
+          ) {
+            listaDetalleEnvio.push(elementoLista);
+            salir = true;
+          }
+        }
+      }
+      this.listaDetalleEnvioStore = listaDetalleEnvio;
+    },
+    ...mapMutations("moduloRegistroEnvio", ["vaciarModeloRegistroEnvioStore"]),
   },
 
   mixins: [autenticacionMixin, myMixin],
-
   created() {
     let usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario.rol === "Administrador")
