@@ -151,7 +151,7 @@ export default {
         const respuesta = await ServicioPodas.eliminarPoda(
           this.modeloPodaStore.podaid
         );
-        this.$toast.error(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.cargarListaPoda();
         this.cerrarDialogMostrarPoda();
       } catch (error) {

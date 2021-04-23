@@ -417,7 +417,7 @@ export default {
           try {
             let respuesta = await servicioLote.eliminarLote(this.lote.lotecultivadoid);
             console.log("respuesstaaa  "+respuesta);
-            this.$toast.success(respuesta.data.message);
+            this.$toast.warning(respuesta.data.message);
             this.obtenerTodosLote();
             this.bloquearCamposFormLote = false;
             //this.bloqueoBotonCambios();

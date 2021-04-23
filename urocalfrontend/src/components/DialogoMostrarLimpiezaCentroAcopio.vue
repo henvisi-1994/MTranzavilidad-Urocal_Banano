@@ -246,7 +246,7 @@ export default {
       //console.log(this.modeloLimpiezaCentroAcopioStore);
       const respuesta = await ServicioLimpiezaCentroAcopio.eliminarLimpiezaCentroAcopio(this.modeloLimpiezaCentroAcopioStore.limpiezacentroacopioid); 
       try {
-        this.$toast.success(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.cerrarDialogo();
         this.cargarListaLimpiezaCentroAcopio();
       } catch (error) {

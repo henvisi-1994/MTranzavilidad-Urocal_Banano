@@ -108,6 +108,7 @@ export default {
           this.modeloTratamientoStore
         );
         if (respuesta.status == 201) {
+          this.$toast.success(respuesta.data.message);
           this.cerrarDialogNuevoTratamiento();
           this.cargarListaTratamiento();
           this.vaciarModeloTratamientoStore();

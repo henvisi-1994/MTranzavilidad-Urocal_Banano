@@ -176,7 +176,7 @@ export default {
       try {
         //console.log(this.siembra);
         let respuesta = await ServicioCosecha.eliminarCosecha(this.cosecha.cosechaid);
-        this.$toast.success(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.obtenerTodosCosecha();        
         this.closeDialogTabMostrarCosecha();
       } catch (error) {

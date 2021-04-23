@@ -29,7 +29,7 @@ module.exports = {
             });
         } catch (error) {
             console.log(error);
-            return res.status(500).send({ message: "Registro fallido" });
+            return res.status(500).send({ message: "Registro fallido/ Codigo de Cosecha Repetido" });
         }
 
         return res.status(201).send({ message: "Registro exitoso" });

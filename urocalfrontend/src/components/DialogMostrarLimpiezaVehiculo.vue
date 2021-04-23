@@ -257,7 +257,7 @@ export default {
     async eliminarRegistro() {
       try {
           let respuesta = await ServicioLimpiezaHerramienta.eliminarLimpiezaHerramienta(this.modeloLimpiezaHerramientaStore.limpiezaherramientaid);
-          this.$toast.success(respuesta.data.message);
+          this.$toast.warning(respuesta.data.message);
           this.cargarListaLimpiezaHerramienta();
           this.cerrarDialogMostrarLimpiezaHerramienta();
         } catch (error) {

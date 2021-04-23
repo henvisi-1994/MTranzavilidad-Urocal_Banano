@@ -165,7 +165,7 @@ export default {
         let respuesta = await ServicioLimpiezaHerramienta.eliminarLimpiezaHerramienta(
           this.modeloLimpiezaHerramientaStore.limpiezaherramientaid
         );
-        this.$toast.error(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
 
         this.cargarListaLimpiezaHerramienta();
 

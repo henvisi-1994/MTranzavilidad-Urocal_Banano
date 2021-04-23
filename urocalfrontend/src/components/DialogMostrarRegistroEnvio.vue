@@ -189,7 +189,7 @@ export default {
         const respuesta = await ServicioRegistroEnvio.eliminarRegistroEnvio(
           this.modeloRegistroEnvioStore.registroenvioid
         );
-        this.$toast.error(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.cargarListaRegistroEnvio();
         this.cerrarDialogMostrarRegistroEnvio();
       } catch (error) {

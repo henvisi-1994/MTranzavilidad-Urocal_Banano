@@ -166,7 +166,7 @@ export default {
     async eliminar() {
       try {
         let respuesta = await servicioMalezaControl.eliminarMalezaControl(this.maleza.controlmalezaid);
-        this.$toast.success(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.obtenerTodosMalezaControl();
         this.bloquearCamposFormMalezaControl = true;
         this.bloqueoBotonCambios();

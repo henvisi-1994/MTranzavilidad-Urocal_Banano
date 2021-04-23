@@ -136,6 +136,7 @@ export default {
     async eliminarRegistro() {
       const respuesta = await SerivicioFactExport.eliminarFacturaExport(this.factExportaStore.facturaexportacionid);
       if (respuesta.status == 200) {
+        this.$toast.warning(respuesta.data.message);
         this.cerrarDialogMostrarFacturaExport();
         this.cargarListaFactExport();
       } 

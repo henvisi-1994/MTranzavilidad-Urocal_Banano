@@ -104,6 +104,7 @@ export default {
     async actualizarRegistro () {
       const respuesta = await ServicioTratamiento.actualizarTratamiento(this.modeloTratamientoStore);
       if (respuesta.status == 200) {
+        this.$toast.success(respuesta.data.message);
         this.cerrarDialogMostrarTratamiento();
         this.cargarListaTratamiento();
         this.vaciarModeloTratamientoStore();
@@ -124,6 +125,7 @@ export default {
     async eliminarRegistro() {
       const respuesta = await ServicioTratamiento.eliminarTratamiento(this.modeloTratamientoStore.tratamientoid);
       if (respuesta.status == 200) {
+        this.$toast.warning(respuesta.data.message);
         this.cerrarDialogMostrarTratamiento();
         this.cargarListaTratamiento();
       } 
