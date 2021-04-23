@@ -8,13 +8,13 @@
       >
         <v-col cols="12" md="5">
           <v-select
-          :disabled="editarPoda"
+            :disabled="editarPoda"
             v-model="modeloPodaStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
             @input="obtenerTodosLoteCultivadoDeFinca"
-            :reduce="(listaFinca) => listaFinca.fincaid"
+            :reduce="(listaFincaStore) => listaFincaStore.fincaid"
             :options="listaFincaStore"
             :rules="[reglas.campoVacio(modeloPodaStore.fincaid)]"
           >
@@ -30,7 +30,7 @@
 
         <v-col cols="12" md="5">
           <v-select
-          :disabled="editarPoda"
+            :disabled="editarPoda"
             v-model="modeloPodaStore.lotecultivadoid"
             placeholder="Lote"
             class="style-chooser"
@@ -57,7 +57,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
-          :disabled="editarPoda"
+            :disabled="editarPoda"
             v-model="modeloPodaStore.cultivoid"
             placeholder="Cultivo"
             class="style-chooser"
@@ -86,7 +86,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-              :disabled="editarPoda"
+                :disabled="editarPoda"
                 label="Fecha de poda"
                 v-model="modeloPodaStore.podfecha"
                 :rules="[reglas.campoVacio(fecha)]"
@@ -107,13 +107,15 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-select
-          :disabled="editarPoda"
+          
+            :disabled="editarPoda"
             v-model="modeloPodaStore.podtipo"
             placeholder="Tipo de poda"
             class="style-chooser"
-            label="podatipo"
-            :reduce="(listaTipoStore) => listaTipoStore.podatipo"
+            label="podtipo"
+            :reduce="(listaTipoStore) => listaTipoStore.podtipo"
             :options="listaTipoStore"
+            :rules="[reglas.campoVacio(modeloPodaStore.podtipo)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -128,7 +130,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
-          :disabled="editarPoda"
+            :disabled="editarPoda"
             placeholder="Hectáreas"
             v-model="modeloPodaStore.podhectareas"
             :rules="[
@@ -142,7 +144,7 @@
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="5">
           <v-text-field
-          :disabled="editarPoda"
+            :disabled="editarPoda"
             placeholder="Cantidad de plantas"
             v-model="modeloPodaStore.podcantidadplantas"
             :rules="[
@@ -153,7 +155,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <v-text-field
-          :disabled="editarPoda"
+            :disabled="editarPoda"
             placeholder="Herramienta"
             v-model="modeloPodaStore.podherramienta"
             :rules="[reglas.campoVacio(modeloPodaStore.podherramienta)]"
@@ -183,34 +185,12 @@ export default {
 
   mounted() {
     this.obtenerTodosFincas();
-    // this.obtenerTodosListaCultivo();
-    // this.obtenerTodosLoteCultivadoDeFinca();
   },
 
   data() {
     return {
       listaLote: [],
       listaFinca: [],
-      // listaTipo: [
-      //   {
-      //     tipoid: 1,
-      //     podatipo: "Poda Formación",
-      //   },
-      //   {
-      //     tipoid: 2,
-      //     podatipo: "Poda Mantenimiento",
-      //   },
-      //   {
-      //     tipoid: 3,
-      //     podatipo: "Poda Fitosanitaria",
-      //   },
-      //   {
-      //     tipoid: 4,
-      //     podatipo: "Poda de Descope",
-      //   },
-      // ],
-
-
       tipoid: "",
       listaCultivo: [],
       fecha: null,
@@ -250,7 +230,7 @@ export default {
         return this.$store.commit("moduloPoda/establecerListaPodasStore", v);
       },
     },
-        listaCultivoStore: {
+    listaCultivoStore: {
       get() {
         return JSON.parse(
           JSON.stringify(this.$store.getters["moduloPoda/listaCultivoStore"])
@@ -263,62 +243,55 @@ export default {
     listaloteStore: {
       get() {
         return JSON.parse(
-          JSON.stringify(
-            this.$store.getters["moduloPoda/listaloteStore"]
-          )
+          JSON.stringify(this.$store.getters["moduloPoda/listaloteStore"])
         );
       },
       set(v) {
-        return this.$store.commit(
-          "moduloPoda/establecerlistaloteStore",
-          v
-        );
+        return this.$store.commit("moduloPoda/establecerlistaloteStore", v);
       },
     },
-        listaTipoStore: {
+    listaTipoStore: {
       get() {
         return JSON.parse(
-          JSON.stringify(
-            this.$store.getters["moduloPoda/listaTipoStore"]
-          )
+          JSON.stringify(this.$store.getters["moduloPoda/listaTipoStore"])
         );
       },
       set(v) {
-        return this.$store.commit(
-          "moduloPoda/establecerlistaTipoStore",
-          v
-        );
+        return this.$store.commit("moduloPoda/establecerlistaTipoStore", v);
       },
     },
-    // //DC f
-    ...mapState("moduloFinca", ["listaFincaStore"]),
-    ...mapState("moduloPoda", ["editarPoda","modeloPodaStore"]),
+    listaFincaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
+    ...mapState("moduloPoda", ["editarPoda", "modeloPodaStore"]),
     ...mapState("validacionForm", ["reglas"]),
   },
 
   methods: {
     async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloPodaStore.lotecultivadoid);
-      // this.listaCultivo = resultado.data;
-      this.listaCultivoStore=resultado.data;
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.modeloPodaStore.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
     },
     async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
-      this.listaFinca = resultado.data;
+      this.listaFincaStore = resultado.data;
     },
 
     async obtenerTodosLoteCultivadoDeFinca() {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
         this.modeloPodaStore.fincaid
       );
-      // this.listaLote = resultado.data;
-      this.listaloteStore = resultado.data; 
+      this.listaloteStore = resultado.data;
     },
-    // limpiarIds() {
-    //   this.fincaid = "";
-    //   this.loteid = "";
-    //   this.tipoid = "";
-    // },
 
     formatDate(fecha) {
       if (!fecha) return null;
