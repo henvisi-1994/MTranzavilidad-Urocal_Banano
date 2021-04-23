@@ -275,6 +275,21 @@ const routes = [
     name: 'BaseReporteFincaProductor',
     component: () => import('@/views/BaseReporteFincaProductor.vue'),
   },
+  {
+    path: '/reportes/productores',
+    name: 'BaseReporteProductor',
+    component: () => import('@/views/BaseReporteProductor.vue'),
+  },
+  {
+    path: '/reportes/productoresmasculinos',
+    name: 'BaseReporteProductorMasculino',
+    component: () => import('@/views/BaseReporteProductorMasculino.vue'),
+  },
+  {
+    path: '/reportes/productoresfemeninos',
+    name: 'BaseReporteProductorFemenino',
+    component: () => import('@/views/BaseReporteProductorFemenino.vue'),
+  },
 ]
 
 const router = new VueRouter({

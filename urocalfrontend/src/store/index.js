@@ -57,6 +57,7 @@ import ModuloCultivo from './modules/ModuloCultivo';
 import ModuloReporteDatosProductor from './modules/ModuloReporteDatosProductor';
 import ModuloReporteFinca from './modules/ModuloReporteFinca';
 import ModuloReporteFincasProductor from './modules/ModuloReporteFincasProductor';
+import ModuloReporteProductor from './modules/ModuloReporteProductor';
 
 export default new Vuex.Store({
   state: {
@@ -146,6 +147,6 @@ export default new Vuex.Store({
     moduloReporteDatosProductor: ModuloReporteDatosProductor,
     moduloReporteFinca: ModuloReporteFinca,
     moduloReporteFincasProductor: ModuloReporteFincasProductor,
-
+    moduloReporteProductor: ModuloReporteProductor,
   }
 })

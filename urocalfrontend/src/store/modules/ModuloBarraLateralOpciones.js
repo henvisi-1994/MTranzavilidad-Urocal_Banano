@@ -330,11 +330,17 @@ export default {
                     { texto: 'Reporte Compras', ruta: '/reporte/reporteCompra' },
                     { texto: 'Kardex de Ingresos y Egresos de productos', ruta: '/reporte/reporteKardexProductos' },
                     { texto: 'Kardex de Ingresos y Egresos de insumos', ruta: '/reporte/reporteKardexIngresosEgresos' },
-                    { texto: 'Reporte de productores', ruta: '#' },
-                    { texto: 'Cantidad de productores por edades', ruta: '#' },
+                    {
+                        texto: 'Reporte de productores',
+                        opcionesNivel2: [
+                            //productores - Filtros
+                            { texto: 'Todos', ruta: '/reportes/productores' },
+                            { texto: 'Femeninos', ruta: '/reportes/productoresfemeninos' },
+                            { texto: 'Masculinos', ruta: '/reportes/productoresmasculinos' },
+                        ]
+                    },
                     { texto: 'Reporte de Fincas por productor', ruta: '/reporte/fincaproductor' },
                     { texto: 'Reporte X', ruta: '#' },
-                    
                 ]
             },
         ]
