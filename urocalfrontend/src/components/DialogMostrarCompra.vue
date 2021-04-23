@@ -28,10 +28,15 @@
         <v-card-text style="padding: 0px">
           <v-container class="py-0">
             <!-- Formulario para registrar CompraCabecera -->
-            <FormCompraCabecera ref="componentFormCompraCabecera"></FormCompraCabecera>
+            <FormCompraCabecera
+              ref="componentFormCompraCabecera"
+            ></FormCompraCabecera>
           </v-container>
 
-          <v-card-title class="py-0 text-center" style="border-bottom: 1px solid #10949e">
+          <v-card-title
+            class="py-0 text-center"
+            style="border-bottom: 1px solid #10949e"
+          >
             <v-spacer></v-spacer>
             <h5 class="ml-9 primary--text">DETALLE</h5>
             <v-spacer></v-spacer>
@@ -74,7 +79,7 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import compraService from  './../services/ServicioCompra';
+import compraService from "./../services/ServicioCompra";
 import FormCompraCabecera from "@/components/FormCompraCabecera";
 import FormCompraPie from "@/components/FormCompraPie";
 import DatatableDetalleCompra from "@/components/DatatableDetalleCompra";
@@ -106,7 +111,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogMostrarCompra"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarCompra",
+          v
+        );
       },
     },
 
@@ -116,7 +124,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoDetalleCompra"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoDetalleCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoDetalleCompra",
+          v
+        );
       },
     },
 
@@ -126,7 +137,10 @@ export default {
         return this.$store.getters["moduloCompra/bloquearCamposFormCompra"];
       },
       set(v) {
-        return this.$store.commit("moduloCompra/cambiarBloquearCamposFormCompra", v);
+        return this.$store.commit(
+          "moduloCompra/cambiarBloquearCamposFormCompra",
+          v
+        );
       },
     },
 
@@ -136,7 +150,10 @@ export default {
         return this.$store.getters["moduloCompra/estaActualizandoCompra"];
       },
       set(v) {
-        return this.$store.commit("moduloCompra/asignarEstaActualizandoCompra", v);
+        return this.$store.commit(
+          "moduloCompra/asignarEstaActualizandoCompra",
+          v
+        );
       },
     },
 
@@ -150,7 +167,10 @@ export default {
       },
     },
 
-    ...mapState("moduloCompra", ["formCompraValidoCabecera", "formCompraValidoPie"]),
+    ...mapState("moduloCompra", [
+      "formCompraValidoCabecera",
+      "formCompraValidoPie",
+    ]),
   },
 
   methods: {
@@ -189,7 +209,9 @@ export default {
 
     async guardarCambios() {
       try {
-        let respuestaServicioCompra = await servicioCompra.actualizarCompra(this.compra);
+        let respuestaServicioCompra = await servicioCompra.actualizarCompra(
+          this.compra
+        );
 
         this.listaDetalleCompra.forEach(async (detalleCompra) => {
           if (detalleCompra.hasOwnProperty("idAuxiliar")) {
@@ -215,18 +237,14 @@ export default {
     },
 
     deleteCompra() {
-
-      if (!window.confirm('¿Está seguro que desea eliminar esta compra?')) return;
-
-      compraService.deleteCompra(this.compra.compraid).then(res => {
+      compraService.deleteCompra(this.compra.compraid).then((res) => {
         if (res.data) {
           this.obtenerTodosCompra();
-          this.$toast.success('Compra eliminada con éxito');
+          this.$toast.success("Compra eliminada con éxito");
           this.cerrarDialogMostrarCompra();
-
         }
-      })
-    }
+      });
+    },
   },
 
   watch: {
