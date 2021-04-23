@@ -157,6 +157,19 @@ export default {
         );
       },
     },
+    listaDetalleEnvioStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaDetalleEnvioStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaDetalleEnvioStore",
+          v
+        );
+      },
+    },
     editarRegistroEnvio: {
       get() {
         return this.$store.getters["moduloRegistroEnvio/editarRegistroEnvio"];
@@ -215,7 +228,6 @@ export default {
       this.dialogMostrarRegistroEnvio = !this.dialogMostrarRegistroEnvio; // Abre el dialogMostrarRegistroEnvio
       this.vaciarModeloRegistroEnvioStore();
       this.editarRegistroEnvio = true;
-      // console.log(item);
       this.modeloRegistroEnvioStore = item;
       this.obtenerSeleccionDetalles();
       this.obtenerDetalleEnvio(this.modeloRegistroEnvioStore.registroenvioid);
@@ -225,6 +237,7 @@ export default {
       this.dialogNuevoRegistroEnvio = !this.dialogNuevoRegistroEnvio; // Abre el dialogNuevoRegistroEnvio
       this.editarRegistroEnvio = false;
       this.vaciarModeloRegistroEnvioStore();
+      this.listaDetalleEnvioStore=[];
     },
     async cargarListaRegistroEnvio() {
       let listaRegistroEnvio = [];
@@ -243,11 +256,15 @@ export default {
       let listaDetalleEnvio = [];
       let respuesta = await ServicioRegistroEnvio.obtenerDetalleEnvio(id);
       let detallesEnvio = await respuesta.data;
-      this.modeloRegistroEnvioStore.regdetalle = [];
+      this.listaDetalleEnvioStore = [];
       for (let i = 0; i < detallesEnvio.length; i++) {
         const elemento = detallesEnvio[i];
-        let salir =false;
-        for (let j = 0; j < this.listaSeleccionDetallesStore.length && salir===false; j++) {
+        let salir = false;
+        for (
+          let j = 0;
+          j < this.listaSeleccionDetallesStore.length && salir === false;
+          j++
+        ) {
           const elementoLista = this.listaSeleccionDetallesStore[j];
 
           if (
@@ -258,21 +275,16 @@ export default {
               parseFloat(elementoLista.entregados)
           ) {
             listaDetalleEnvio.push(elementoLista);
-            salir=true;
+            salir = true;
           }
         }
       }
-      // console.log(listaDetalleEnvio);//son iguales
-      // console.log(detallesEnvio);//con esto hasta aqui funciona
-      // this.modeloRegistroEnvioStore.regdetalle = listaDetalleEnvio;
-      this.$store.commit("moduloRegistroEnvio/establecerRegdetalle",listaDetalleEnvio);
-
+      this.listaDetalleEnvioStore = listaDetalleEnvio;
     },
     ...mapMutations("moduloRegistroEnvio", ["vaciarModeloRegistroEnvioStore"]),
   },
 
   mixins: [autenticacionMixin, myMixin],
-
   created() {
     let usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario.rol === "Administrador")

@@ -48,10 +48,9 @@
                 placeholder="Tipo de Producto"
                 class="style-chooser"
                 label="tipocacao"
-                @input="obtenerTodosTipoCacao"
-                :reduce="(listaTipoCacaoStore) => listaTipoCacaoStore.regtipo"
+                :reduce="(listaTipoCacaoStore) => listaTipoCacaoStore.tipocacao"
                 :options="listaTipoCacaoStore"
-                :rules="[reglas.campoVacio(modeloRegistroEnvioStore.regtipo)]"
+                :rules="[reglas.campoVacio(modeloRegistroEnvioStore.tipocacao)]"
               >
                 <template v-slot:no-options="{ search, searching }">
                   <template v-if="searching">
@@ -106,10 +105,12 @@
                   class="custom"
                   dense
                   filled
+                  :disabled="editarRegistroEnvio"
                 ></v-autocomplete>
                 <!-- boton -->
                 <v-card-actions class="justify-center pb-3">
                   <v-btn
+                    :disabled="editarRegistroEnvio"
                     :block="$vuetify.breakpoint.xs ? true : false"
                     width="200px"
                     color="primary"
@@ -123,12 +124,13 @@
             <v-card-text>
               <v-data-table
                 :headers="cabeceraTablaDetalle"
-                :items="modeloRegistroEnvioStore.regdetalle"
+                :items="listaDetalleEnvioStore"
                 class="elevation-1"
               >
                 <template v-slot:item.actions="{ item }">
                   <v-btn icon>
                     <v-icon
+                      :disabled="editarRegistroEnvio"
                       class="primary--text"
                       @click="eliminarItemDetalleEnvio(item)"
                       >mdi-trash-can</v-icon
@@ -274,6 +276,19 @@ export default {
         );
       },
     },
+    listaDetalleEnvioStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaDetalleEnvioStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaDetalleEnvioStore",
+          v
+        );
+      },
+    },
     ...mapState("moduloRegistroEnvio", ["editarRegistroEnvio"]),
     ...mapState("validacionForm", ["reglas"]),
   },
@@ -302,39 +317,34 @@ export default {
       return texto.indexOf(busqueda) > -1;
     },
     agregarDetalle() {
-      console.log('Modelo envio detalle');
-      console.log(this.modeloRegistroEnvioDetalle);
+      if (this.modeloRegistroEnvioDetalle === null) {
+        return false; //para que no siga ejecutando la funcion
+      }
       const encontrado = this.listaSeleccionDetallesStore.find(
         (e) => e.datosunidos === this.modeloRegistroEnvioDetalle
       );
       //ver si ya se ha agregado el objeto anterior,mente para no volver a agregarlo
       let seleccionado = false;
 
-      for (
-        var i = 0;
-        i < this.modeloRegistroEnvioStore.regdetalle.length;
-        i++
-      ) {
+      for (var i = 0; i < this.listaDetalleEnvioStore.length; i++) {
         if (
-          this.modeloRegistroEnvioStore.regdetalle[i].datosunidos ==
-          encontrado.datosunidos
+          this.listaDetalleEnvioStore[i].datosunidos == encontrado.datosunidos
         ) {
-          alert("El objeto ya se encuentra seleccionado");
+          this.$toast.error("El Registro ya se encuentra seleccionado");
           seleccionado = true;
         }
       }
       if (!seleccionado) {
-        this.modeloRegistroEnvioStore.regdetalle.push(encontrado);
+        this.listaDetalleEnvioStore.push(encontrado);
       }
       this.modeloRegistroEnvioDetalle = null;
     },
     eliminarItemDetalleEnvio(item) {
-      let eliminarElemento=(lista,elemento)=>{
-        return lista.filter(e=>e.datosunidos!==elemento.datosunidos)
-      }
-      let listaDetalle=this.modeloRegistroEnvioStore.regdetalle;
-     listaDetalle=eliminarElemento(listaDetalle,item);
-      this.$store.commit("moduloRegistroEnvio/establecerRegdetalle",listaDetalle);
+      let eliminarElemento = (lista, elemento) => {
+        return lista.filter((e) => e.datosunidos !== elemento.datosunidos);
+      };
+      let listaDetalle = eliminarElemento(this.listaDetalleEnvioStore, item);
+      this.listaDetalleEnvioStore = listaDetalle;
     },
     // Cierra el dialogo
     cerrarDialogNuevoRegistroEnvio() {

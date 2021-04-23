@@ -39,7 +39,6 @@
           >Registrar</v-btn
         >
       </v-card-actions>
-      
     </v-card>
   </v-dialog>
 </template>
@@ -56,8 +55,7 @@ export default {
   },
 
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     formRegistroEnvioValido: {
@@ -113,10 +111,23 @@ export default {
         );
       },
     },
+    listaDetalleEnvioStore: {
+      get() {
+        return this.$store.getters[
+          "moduloRegistroEnvio/listaDetalleEnvioStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRegistroEnvio/establecerListaDetalleEnvioStore",
+          v
+        );
+      },
+    },
     ...mapState("validacionForm", ["reglas"]),
   },
   methods: {
-        ...mapMutations("moduloRegistroEnvio", ["vaciarModeloRegistroEnvioStore"]),
+    ...mapMutations("moduloRegistroEnvio", ["vaciarModeloRegistroEnvioStore"]),
 
     // Filtra cuando se escribe un codigo en la busqueda
     filtroCodigos(item, queryText) {
@@ -125,8 +136,10 @@ export default {
 
       return texto.indexOf(busqueda) > -1;
     },
+
     async agregarRegistroEnvio() {
       try {
+        this.modeloRegistroEnvioStore.regdetalle=this.listaDetalleEnvioStore;
         let respuesta = await ServicioRegistroEnvio.agregarRegistroEnvio(
           this.modeloRegistroEnvioStore
         );
@@ -134,6 +147,7 @@ export default {
         this.cerrarDialogNuevoRegistroEnvio();
         this.cargarListaRegistroEnvio();
         this.vaciarModeloRegistroEnvioStore();
+        this.listaDetalleEnvioStore=[];
       } catch (error) {
         this.$toast.error(error.response.data.message);
       }
