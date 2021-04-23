@@ -5,7 +5,7 @@ const pool = require('../../services/postgresql/index');
 module.exports = {
     async createincome(income) {
         // Registro en tabla incomeo
-        //console.log("Esto tiene income ...", income)
+        console.log("Esto tiene income ...", income)
         query = `INSERT INTO ingresoinsumo (inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, ingencargado, centroacopioid) VALUES 
                     ('${income.inginsfechaingreso}','${income.inginsproducto}','
                     ${income.inginsfactura}','${income.inginsproveedor}','${income.inginscantidadingreso}','
@@ -20,6 +20,7 @@ module.exports = {
     async getAllincomes() {
         let query = `SELECT * FROM ingresoinsumo`;
         let result = await pool.query(query);
+        //console.log("Esto tiene income ...", result)
         return result.rows; // Devuelve array de incomeos
     },
 

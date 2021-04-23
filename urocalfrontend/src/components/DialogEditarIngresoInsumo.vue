@@ -337,7 +337,7 @@ export default {
         );
         if (respuesta.status == 200) {
           this.cerrarDialogo();
-          this.$toast.warning(respuesta.data.message);
+          this.$toast.success(respuesta.data.message);
           this.cargarListaIngresoInsumo();
         }
       } catch (error) {
