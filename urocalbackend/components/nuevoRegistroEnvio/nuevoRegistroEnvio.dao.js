@@ -20,7 +20,6 @@ module.exports = {
                 productor: e.productor,
                 codigofinca: e.codigo
             }
-            console.log(datosDetalleEnvio);
             query = `INSERT INTO detalleenvio(detenvcantidad, detenvunidades, registroenvioid, guiaremisionid, cosechaid,fecha, productor, codigofinca)
                 VALUES ('${datosDetalleEnvio.detenviocantidad}','0', '${datosDetalleEnvio.registroenvioid}',
                  '${datosDetalleEnvio.guiaremisionid}', '${datosDetalleEnvio.cosechaid}','${datosDetalleEnvio.fecha}',
@@ -51,16 +50,78 @@ module.exports = {
     },
 
     async updatenuevoRegistroEnvio(id, registroenvio) {
-        //console.log(id);
-        //console.log(registroenvio);
 
-        let query = `UPDATE registroenvio SET regfecha = '${registroenvio.regfecha}', reglote = '${registroenvio.reglote}', 
+
+        try {
+            let query = `UPDATE registroenvio SET regfecha = '${registroenvio.regfecha}', reglote = '${registroenvio.reglote}', 
         regdestino = '${registroenvio.regdestino}', regtipo = '${registroenvio.regtipo}', 
         regorganico = '${registroenvio.regorganico}', regspp = '${registroenvio.regspp}'
         WHERE registroenvioid = ${id}`;
-        let result = await pool.query(query);
-        return result.rowCount; // Devuelve 1 si actualizó el registro envio y 0 sino lo hizo.
+            let result = await pool.query(query);
 
+            query = `select detalleenvioid,registroenvioid,detenvcantidad,TO_CHAR(fecha, 'YYYY-MM-DD') as fecha,
+        productor,codigofinca from detalleenvio where registroenvioid=${id}`;
+            let filasBDDetalleEnvio = await pool.query(query);
+            filasBDDetalleEnvio = filasBDDetalleEnvio.rows;
+
+            let DetalleEnvioIdsBd = [];
+            let DetalleEnvioIdsBdConservar = [];
+            let ElementosParaRegistrarBD = []
+            //IDS DE BASE DE DATOS
+            filasBDDetalleEnvio.forEach(f => {
+                DetalleEnvioIdsBd.push(f.detalleenvioid);
+            })
+            registroenvio.regdetalle.forEach(async e => {
+
+                let elementoLista = {
+                    detenviocantidad: e.entregados,
+                    registroenvioid: id,
+                    guiaremisionid: e.guiaremisionid,
+                    cosechaid: e.cosechaid,
+                    fecha: e.fecha,
+                    productor: e.productor,
+                    codigofinca: e.codigo
+                }
+                //verificar si existe en bd
+                let estaEnBD = false;
+                for (let i = 0; i < filasBDDetalleEnvio.length && !estaEnBD; i++) {
+
+                    let elementoBD = filasBDDetalleEnvio[i];
+                    if (
+                        elementoBD.codigofinca === elementoLista.codigofinca &&
+                        elementoBD.fecha === elementoLista.fecha &&
+                        elementoBD.productor === elementoLista.productor &&
+                        parseFloat(elementoBD.detenvcantidad) ===
+                        parseFloat(elementoLista.detenviocantidad)
+                    ) {
+                        estaEnBD = true;
+                        DetalleEnvioIdsBdConservar.push(elementoBD.detalleenvioid);
+                    }
+                }
+                if (!estaEnBD) {
+                    ElementosParaRegistrarBD.push(elementoLista);
+                }
+            });
+
+            let RegistrosEliminar = DetalleEnvioIdsBd.filter(el => !DetalleEnvioIdsBdConservar.includes(el));
+            RegistrosEliminar.forEach(async detalleenvioid => {
+                query = `delete from detalleenvio where detalleenvioid = ${detalleenvioid}`;
+                await pool.query(query);
+            });
+
+            //Agregar nuevos datos
+            ElementosParaRegistrarBD.forEach(async datosDetalleEnvio => {
+                query = `INSERT INTO detalleenvio(detenvcantidad, detenvunidades, registroenvioid, guiaremisionid, cosechaid,fecha, productor, codigofinca)
+                VALUES ('${datosDetalleEnvio.detenviocantidad}','0', '${datosDetalleEnvio.registroenvioid}',
+                 '${datosDetalleEnvio.guiaremisionid}', '${datosDetalleEnvio.cosechaid}','${datosDetalleEnvio.fecha}',
+                 '${datosDetalleEnvio.productor}', '${datosDetalleEnvio.codigofinca}');`;
+                await pool.query(query);
+            });
+
+            return result.rowCount; // Devuelve 1 si actualizó el registro envio y 0 sino lo hizo.
+        } catch (error) {
+            return 'Error al registrar a la BD';
+        }
     },
 
     async deletenuevoRegistroEnvio(id) {

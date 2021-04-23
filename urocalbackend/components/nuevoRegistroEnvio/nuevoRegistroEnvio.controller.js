@@ -1,5 +1,6 @@
 
 const nuevoRegistroEnvioModel = require('./nuevoRegistroEnvio.model');
+const validation = require('../../utils/validations');
 
 module.exports = {
     async getnuevoRegistroEnvios(req, res) {//obtener todos los registros
@@ -23,27 +24,41 @@ module.exports = {
         // Añadir capa de validación
 
         const { regfecha, reglote, regdestino, regtipo, regorganico, regspp, regdetalle } = req.body;
-
-        try {
-            await nuevoRegistroEnvioModel.createnuevoRegistroEnvio({
-                regfecha: regfecha,
-                reglote: reglote,
-                regdestino: regdestino,
-                regtipo: regtipo,
-                regorganico: regorganico,
-                regspp: regspp,
-                regdetalle: regdetalle
-            });
-        } catch (error) {
-            return res.status(500).send({ message: "Registro fallido" });
+        if (validation.emptyField(regfecha) || validation.emptyField(reglote) || validation.emptyField(regdestino) || validation.emptyField(regtipo)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        } else {
+            if (regdetalle.length < 1) {
+                return res.status(400).send({ message: 'Seleccione al menos una opcion de detalle' });
+            }
+            else {
+                try {
+                    await nuevoRegistroEnvioModel.createnuevoRegistroEnvio({
+                        regfecha: regfecha,
+                        reglote: reglote,
+                        regdestino: regdestino,
+                        regtipo: regtipo,
+                        regorganico: regorganico,
+                        regspp: regspp,
+                        regdetalle: regdetalle
+                    });
+                } catch (error) {
+                    return res.status(500).send({ message: "Registro fallido" });
+                }
+                return res.status(201).send({ message: "Registro exitoso" });
+            }
         }
-
-        return res.status(201).send({ message: "Registro exitoso" });
     },
 
     async updatenuevoRegistroEnvio(req, res) {
         const { id } = req.params;
-        const { regfecha, reglote, regdestino, regtipo, regorganico, regspp } = req.body;
+        const { regfecha, reglote, regdestino, regtipo, regorganico, regspp, regdetalle } = req.body;
+
+        if (validation.emptyField(regfecha) || validation.emptyField(reglote) || validation.emptyField(regdestino) || validation.emptyField(regtipo)) {
+            return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
+        }
+        if (regdetalle.length < 1) {
+            return res.status(400).send({ message: 'Seleccione al menos una opcion de detalle' });
+        }
 
         const rowCount = await nuevoRegistroEnvioModel.updatenuevoRegistroEnvio(id, {
             regfecha: regfecha,
@@ -51,10 +66,10 @@ module.exports = {
             regdestino: regdestino,
             regtipo: regtipo,
             regorganico: regorganico,
-            regspp: regspp
+            regspp: regspp,
+            regdetalle: regdetalle
         });
-
-        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
+        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Error al actualizar" });
 
     },
 
@@ -66,7 +81,7 @@ module.exports = {
             return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Eliminado exitosamente", tipo: "error" });
 
         } catch (err) {
-            return res.json({ message: "Error al tratar de eliminar RegistroEnvio", tipo: "error" });
+            return res.json({ message: "Error al eliminar RegistroEnvio, Asegurece que el registro no tenga Detalle", tipo: "error" });
         }
     },
     async getSeleccionDetalles(req, res) {
