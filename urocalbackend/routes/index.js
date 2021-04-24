@@ -59,7 +59,7 @@ const reporteVentas = require("../components/reporteVentas/reporteVentas.routes"
 const productorpersonaReporte = require('../components/productorpersonaReporte/productorreporte.routes');
 const productorpersonaReporteM = require('../components/productorpersonaReporte/productorreporteM.routes');
 const productorpersonaReporteF = require('../components/productorpersonaReporte/productorreporteF.routes');
-
+const reporteCompras= require('../components/reporteCompras/reporteCompras.routes');
 
 
 const VERSION = "/v1";
@@ -118,6 +118,7 @@ router.use(VERSION + '/reportefincaproductor', reportefincaproductor);
 router.use(VERSION + '/productorreporte', productorreporte);
 router.use(VERSION + '/ingegreporte', ingegrreporte);
 router.use(VERSION + "/reporteVentas", reporteVentas);
+router.use(VERSION + "/reporteCompras", reporteCompras);
 router.use(VERSION + '/productorpersonaReporte', productorpersonaReporte);
 router.use(VERSION + '/productorpersonaReporteM', productorpersonaReporteM);
 router.use(VERSION + '/productorpersonaReporteF', productorpersonaReporteF);

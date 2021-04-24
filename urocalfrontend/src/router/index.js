@@ -250,8 +250,8 @@ const routes = [
   // -----------------------------------------------------------------------------------------
 // --------------------------- REPORTES -----------------------------
    {
-    path: '/reporte/reporteCompra',
-    name: 'BaseReporteCompra',
+    path: '/reporte/reporteComprase',
+    name: 'BaseReporteCompras',
     component: () => import('@/views/BaseReporteCompra.vue'),
   },
   {
