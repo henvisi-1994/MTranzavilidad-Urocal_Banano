@@ -10,19 +10,6 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="12" md="5" class="py-0">
-        <v-select
-          :disabled="reporte"
-          :reduce="(listaPropietarioStore) => listaPropietarioStore.propietario"
-          :items="listaPropietarioStore"
-          label="Productor"
-          v-model="prodseleccionado"
-          item-value="productorid"
-          item-text="propietario"
-        >
-        </v-select>
-      </v-col>
-
       <v-col cols="12" md="10" class="py-0">
         <v-select
           :disabled="reporte"
@@ -157,16 +144,12 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 
 import ServicioReporteCompras from "../services/ServicioReporteCompras";
 import logo from "@/assets/logo.js";
-//logo.js contiene el logo en base64
-import ServicioReporteFincaProductor from "../services/ServicioReporteFincaProductor";
-import ServicioFinca from "../services/ServicioFinca";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
   name: "BaseReporteCompras",
 
   mounted() {
-    this.cargarListaPropietario();
   },
 
   data() {
@@ -221,9 +204,7 @@ export default {
   },
 
   watch: {
-    propietarios(val) {
-      this.BuscarPropietario();
-    },
+    
   },
   created() {
     this.$store.commit("colocarLayout", "LayoutAdministrador");
@@ -231,35 +212,7 @@ export default {
   },
 
   computed: {
-    listaPropietarioStore: {
-      get() {
-        return this.$store.getters["moduloFinca/listaPropietarioStore"];
-      },
-      set(v) {
-        return this.$store.commit(
-          "moduloFinca/establecerListaPropietarioStore",
-          v
-        );
-      },
-    },
-
-    listaReporteDatosProductor: {
-      get() {
-        return JSON.parse(
-          JSON.stringify(
-            this.$store.getters[
-              "moduloReporteDatosProductor/listaReporteDatosProductor"
-            ]
-          )
-        );
-      },
-      set(v) {
-        return this.$store.commit(
-          "moduloReporteDatosProductor/establecerListaProductorPersonaStore",
-          v
-        );
-      },
-    },
+    
   },
 
   methods: {
@@ -293,7 +246,6 @@ export default {
       const resultado = await ServicioReporteCompras.reportePorMes({
         month: parseInt(this.mesSeleccionado.slice(-2)),
         year: parseInt(this.mesSeleccionado.slice(0, 4)),
-        productor: this.propietarios,
       });
       return resultado.data;
     },
@@ -301,7 +253,6 @@ export default {
     async obtenerComprasPorAnio() {
       const resultado = await ServicioReporteCompras.reportePorAnio({
         year: this.anioSeleccionado,
-        productor: this.propietarios["productorid"],
       });
       return resultado.data;
     },
@@ -310,14 +261,13 @@ export default {
       const resultado = await ServicioReporteCompras.reportePorRango({
         desde: this.fechaDesde,
         hasta: this.fechaHasta,
-        productor: this.propietarios,
       });
       return resultado.data;
     },
 
     generateReport() {
       const errorNocompras = "No se han encontrado resultados";
-      if (!this.opcionFecha || !this.propietarios) {
+      if (!this.opcionFecha) {
         this.$toast.error("Debe selecciona los datos necesarios");
         return;
       }
@@ -513,42 +463,6 @@ export default {
       this.pdfGenerado = pdfMake.createPdf(docDefinition);
 
       this.pdfGenerado.open();
-    },
-
-    // Obtiene la lista de todos los productores para agregar al combobox
-    async cargarListaPropietario() {
-      let listaPropietario = []; // Limpiar la 'lista de ciudades'
-      let respuesta = await ServicioFinca.obtenerTodosPropietarios(); // Obtener respuesta de backend
-      let datosPropietario = await respuesta.data; // Rescatar datos de la respuesta
-      datosPropietario.forEach((propietario) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaPropietario.push(propietario);
-      });
-      this.listaPropietarioStore = listaPropietario;
-    },
-
-    // Busca el ID del productor seleccionado en el combobox
-    async BuscarPropietario() {
-      this.listaPropietarioStore.forEach((element) => {
-        if (this.propietarios == element.propietario) {
-          this.idproductor = element.productorid;
-        }
-      });
-      this.cargarProductor();
-    },
-
-    // Obtiene todos los datos personales de un productor en específico
-    async cargarProductor() {
-      let listaFinca = []; // Limpiar la 'lista de datos'
-      let respuesta = await ServicioReporteFincaProductor.obtenerProductor(
-        this.idproductor
-      ); // Obtener respuesta de backend
-      let datosFinca = await respuesta.data; // Rescatar datos de la respuesta
-      datosFinca.forEach((finca) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaFinca.push(finca);
-      });
-      this.listaReporteDatosProductor = listaFinca;
     },
 
     // #  TIENDA DE VUE  #
