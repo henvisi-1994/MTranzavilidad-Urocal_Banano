@@ -27,8 +27,6 @@ module.exports = {
         let mixQuery = `DELETE FROM mix WHERE almacenamientoid = ${id}`;
         await pool.query(mixQuery);
 
-        mixQuery = `DELETE FROM mix WHERE almacenamientoid = ${id}`;
-        await pool.query(mixQuery);
 
         query = `DELETE FROM public.revisionhumedad WHERE almacenamientoid = '${id}'`;
     

@@ -168,7 +168,7 @@ export default {
       if (respuesta.status == 200) {
         this.cerrarDialogMostrarFitosanitario();
         this.cargarListaFitosanitario();
-        this.$toast.success("Registro fitosanitario eliminado con éxito");
+        this.$toast.warning("Registro fitosanitario eliminado con éxito");
         this.$emit("delete", true);
       }
     },

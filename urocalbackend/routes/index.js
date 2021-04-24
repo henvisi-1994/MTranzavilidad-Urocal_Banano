@@ -5,6 +5,7 @@ const auth = require('../components/login/auth.routes');
 const users = require('../components/users/users.routes');
 const fert = require('../components/fertilizacion/fertilizaciones.routes');
 const podas = require('../components/podas/podas.routes');
+const nuevoRegistroEnvio = require('../components/nuevoRegistroEnvio/nuevoRegistroEnvio.routes');
 const riegos = require('../components/riegos/riegos.routes');
 const fitosanitarios = require('../components/fitosanitarios/fitosanitarios.routes');
 const loteCultivado = require('../components/loteCultivado/loteCultivado.routes');
@@ -66,6 +67,7 @@ router.use(VERSION + '/', auth);
 router.use(VERSION + '/users', users);                                                      // Usuarios
 router.use(VERSION + '/fertilizacion', fert);                                               // Fertilizacion
 router.use(VERSION + '/podas', podas);                                                      // Podas
+router.use(VERSION + '/nuevoRegistroEnvio', nuevoRegistroEnvio);                            // nuevoRegistroEnvio
 router.use(VERSION + '/riegos', riegos);                                                    // Riegos
 router.use(VERSION + '/fitosanitarios', fitosanitarios);                                    // Fitosanitario
 router.use(VERSION + '/lote', loteCultivado);                                               // LoteCultivado

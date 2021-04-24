@@ -46,7 +46,6 @@
           <v-text-field
             label="Peso Unitario"
             type="Number"
-            @change="CambiaPesoUnitario"
             v-model="detalledespacho.detdespesounitario"
             class="custom px-2"
             filled
@@ -65,7 +64,7 @@
           <v-text-field
             label="Peso Total"
             type="Number"
-            v-model="detalledespacho.detdespesototal"
+            v-model="CambiaPesoUnitario"
             class="custom px-2"
             filled
             dense
@@ -140,7 +139,15 @@ export default {
         return this.$store.commit("moduloDetalleDespacho/cambiarBloquearCamposFormDetalleDespacho", v);
       },
     },
-
+    CambiaPesoUnitario(){
+      
+      let numBultos, pesUnitario;
+      numBultos=this.detalledespacho.detdesnumerobultos;
+      pesUnitario=this.detalledespacho.detdespesounitario;
+      this.detalledespacho.detdespesototal=numBultos*pesUnitario;
+      return this.detalledespacho.detdespesototal;
+      
+    },
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
   },
@@ -154,14 +161,7 @@ export default {
     },
     
     //Calcula Peso total cuando cambia peso unitario
-    CambiaPesoUnitario(event){
-      
-      let numBultos, pesUnitario;
-      numBultos=this.detalledespacho.detdesnumerobultos;
-      pesUnitario=this.detalledespacho.detdespesounitario;
-      this.detalledespacho.detdespesototal=numBultos*pesUnitario;
-      
-    },
+
     // Calcula peso total cuando cambia numero de bultos
     CambiaNumeroBultos(event){
       

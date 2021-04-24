@@ -240,7 +240,7 @@ export default {
       compraService.deleteCompra(this.compra.compraid).then((res) => {
         if (res.data) {
           this.obtenerTodosCompra();
-          this.$toast.success("Compra eliminada con éxito");
+          this.$toast.warning("Compra eliminada con éxito");
           this.cerrarDialogMostrarCompra();
         }
       });

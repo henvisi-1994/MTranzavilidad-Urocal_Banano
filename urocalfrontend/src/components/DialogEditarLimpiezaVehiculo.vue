@@ -283,7 +283,7 @@ export default {
         let respuestaServicioLimpiezaVehiculo = await ServicioLimpiezaVehiculo.eliminarLimpiezaVehiculo(
           this.limpiezaVehiculo.limpiezavehiculoid
         );
-        this.$toast.error(respuestaServicioLimpiezaVehiculo.data.message);
+        this.$toast.warning(respuestaServicioLimpiezaVehiculo.data.message);
         this.cerrarDialogo();
         this.cargarListaLimpiezaVehiculo();
       } catch (error) {

@@ -121,7 +121,7 @@ export default {
          let respuesta = await serivicioFactExport.obtenerTodosFacturaExport();
          let facturas = await respuesta.data;
          this.$store.commit("moduloFacturaExport/vaciarLista", null);
-         this.listaFactExportStore = facturas;
+         this.listaFacturaExportStore = facturas;
     },
 
     cerrarDialogNuevoFactExport() {

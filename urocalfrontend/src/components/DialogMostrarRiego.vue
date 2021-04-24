@@ -153,7 +153,7 @@ export default {
       try{
       const respuesta = await SerivicioRiegos.eliminarRiego(
           this.modeloRiegoStore.riegoid);
-      
+      this.$toast.warning(respuesta.data.message);
         this.cargarListaRiego();
         this.cerrarDialogMostrarRiego();
       }catch(error){

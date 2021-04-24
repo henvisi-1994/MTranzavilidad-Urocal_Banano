@@ -53,6 +53,8 @@ import ModuloGuiaRemision from './modules/ModuloGuiaRemision';
 import ModuloFacturaExport from './modules/ModuloFacturaExport';
 import ModuloEmpresa from './modules/ModuloEmpresa';
 import ModuloCertificacion from './modules/ModuloCertificacion';
+import ModuloRegistroEnvio from './modules/ModuloRegistroEnvio';
+
 import ModuloCultivo from './modules/ModuloCultivo';
 import ModuloReporteDatosProductor from './modules/ModuloReporteDatosProductor';
 import ModuloReporteFinca from './modules/ModuloReporteFinca';
@@ -148,5 +150,6 @@ export default new Vuex.Store({
     moduloReporteFinca: ModuloReporteFinca,
     moduloReporteFincasProductor: ModuloReporteFincasProductor,
     moduloReporteProductor: ModuloReporteProductor,
+    moduloRegistroEnvio: ModuloRegistroEnvio                                // Instancia al ModuloRegistroEnvio
   }
 })

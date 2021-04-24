@@ -56,8 +56,6 @@ module.exports = {
         let query = `DELETE FROM fertilizacion WHERE fertilizacionid = '${id}'`;
         let result = await pool.query(query);
 
-        query = `DELETE FROM fertilizacion WHERE fertilizacionid = '${id}'`;
-        result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
     },
     

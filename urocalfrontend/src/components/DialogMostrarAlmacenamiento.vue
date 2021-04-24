@@ -13,8 +13,8 @@
       <v-card-title class="white primary--text">
         <h5>INFORMACIÓN</h5>
         <v-spacer></v-spacer>
-        <v-btn 
-          icon 
+        <v-btn
+          icon
           v-if="tab == 'tabRevisionHumedad'"
           @click="bloquearCamposFormRevisionHumedad = false"
         >
@@ -22,27 +22,38 @@
         </v-btn>
         <v-btn
           icon
-          v-if="tab !== 'tabRevisionHumedad' && tab != 'tabListaRevisionHumedad'"
+          v-if="
+            tab !== 'tabRevisionHumedad' && tab != 'tabListaRevisionHumedad'
+          "
           @click="bloquearCamposFormAlmacenamiento = false"
         >
           <v-icon class="primary--text">mdi-pencil</v-icon>
         </v-btn>
-       <v-btn
+        <v-btn
           icon
-          v-if="tab !== 'tabRevisionHumedad' && tab != 'tabListaRevisionHumedad'"
+          v-if="
+            tab !== 'tabRevisionHumedad' && tab != 'tabListaRevisionHumedad'
+          "
           @click="eliminaralmacenamiento()"
         >
           <v-icon class="primary--text">mdi-trash-can</v-icon>
         </v-btn>
         <v-btn icon @click="cerrarDialogMostrarAlmacenamiento()">
           <v-icon class="primary--text">mdi-close</v-icon>
-        </v-btn> 
+        </v-btn>
       </v-card-title>
 
       <!-- Formulario Almacenamiento -->
       <v-card-text style="padding: 0px">
         <!-- Tabs -->
-        <v-tabs v-model="tab" show-arrows center-active fixed-tabs ref="componentTab" background-color="white">
+        <v-tabs
+          v-model="tab"
+          show-arrows
+          center-active
+          fixed-tabs
+          ref="componentTab"
+          background-color="white"
+        >
           <v-tab href="#tabAlmacenamiento"> Almacenamiento </v-tab>
           <v-tab href="#tabRevisionHumedad"> Revisión humedad </v-tab>
           <v-tab v-if="$vuetify.breakpoint.xs" href="#tabListaRevisionHumedad">
@@ -54,7 +65,9 @@
         <v-tabs-items v-model="tab" class="mt-6">
           <v-tab-item key="tabAlmacenamiento" value="tabAlmacenamiento" eager>
             <v-container class="pb-0">
-              <FormAlmacenamiento ref="componentFormAlmacenamiento"></FormAlmacenamiento>
+              <FormAlmacenamiento
+                ref="componentFormAlmacenamiento"
+              ></FormAlmacenamiento>
             </v-container>
           </v-tab-item>
 
@@ -64,26 +77,32 @@
                 ref="componentFormRevisionHumedad"
               ></FormRevisionHumedad>
               <v-card-actions class="justify-center pb-3">
-<v-btn
-          :block="$vuetify.breakpoint.xs ? true : false"
-          :hidden="tab == 'tabListaRevisionHumedad'"
-          width="300px"
-          color="primary"
-          :disabled="validarBotonCambios()"
-          @click="guardarItem"
-          >Guardar cambios</v-btn
-        >
+                <v-btn
+                  :block="$vuetify.breakpoint.xs ? true : false"
+                  :hidden="tab == 'tabListaRevisionHumedad'"
+                  width="300px"
+                  color="primary"
+                  :disabled="validarBotonCambios()"
+                  @click="guardarItem"
+                  >Guardar cambios</v-btn
+                >
               </v-card-actions>
-                 
+
               <div v-if="!$vuetify.breakpoint.xs">
                 <v-divider></v-divider>
 
-                <DatatableRevisionHumedad class="py-0"></DatatableRevisionHumedad>
+                <DatatableRevisionHumedad
+                  class="py-0"
+                ></DatatableRevisionHumedad>
               </div>
             </v-container>
           </v-tab-item>
 
-          <v-tab-item key="tabListaRevisionHumedad" value="tabListaRevisionHumedad" eager>
+          <v-tab-item
+            key="tabListaRevisionHumedad"
+            value="tabListaRevisionHumedad"
+            eager
+          >
             <v-container class="py-0">
               <DatatableRevisionHumedad class="py-0"></DatatableRevisionHumedad>
             </v-container>
@@ -137,43 +156,59 @@ export default {
     // Obtiene la variable formAlmacenamientoValido
     ...mapState("moduloAlmacenamiento", [
       "formAlmacenamientoValido",
-      "almacenamiento",
-      "cosecha",
     ]),
-      revisionHumedad: {
+    revisionHumedad: {
       get() {
         return this.$store.getters["moduloRevisionHumedad/revisionHumedad"];
       },
       set(v) {
-        return this.$store.commit("moduloRevisionHumedad/nuevoRevisionHumedad", v);
+        return this.$store.commit(
+          "moduloRevisionHumedad/nuevoRevisionHumedad",
+          v
+        );
       },
     },
     // Obtiene la listaRevisionHumedad
     listaRevisionHumedad: {
       get() {
-        return this.$store.getters["moduloRevisionHumedad/listaRevisionHumedad"];
+        return this.$store.getters[
+          "moduloRevisionHumedad/listaRevisionHumedad"
+        ];
       },
       set(v) {
-        return this.$store.commit("moduloRevisionHumedad/asignarListaRevisionHumedad", v);
+        return this.$store.commit(
+          "moduloRevisionHumedad/asignarListaRevisionHumedad",
+          v
+        );
       },
     },
     // Obtiene y modifica el estado de la variable dialogMostrarAlmacenamiento
     dialogMostrarAlmacenamiento: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarAlmacenamiento"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarAlmacenamiento"
+        ];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarAlmacenamiento", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarAlmacenamiento",
+          v
+        );
       },
     },
 
     // Obtiene y modifica el estado de la variable dialogNuevoRevisionHumedad
     dialogNuevoRevisionHumedad: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogNuevoRevisionHumedad"];
+        return this.$store.getters[
+          "gestionDialogos/dialogNuevoRevisionHumedad"
+        ];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoRevisionHumedad", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogNuevoRevisionHumedad",
+          v
+        );
       },
     },
 
@@ -191,16 +226,19 @@ export default {
         );
       },
     },
-        // Obtiene y modifica la variable listaAlmacenamiento
+    // Obtiene y modifica la variable listaAlmacenamiento
     listaAlmacenamiento: {
       get() {
         return this.$store.getters["moduloAlmacenamiento/listaAlmacenamiento"];
       },
       set(v) {
-        return this.$store.commit("moduloAlmacenamiento/asignarListaAlmacenamiento", v);
+        return this.$store.commit(
+          "moduloAlmacenamiento/asignarListaAlmacenamiento",
+          v
+        );
       },
     },
-     bloquearCamposFormRevisionHumedad: {
+    bloquearCamposFormRevisionHumedad: {
       get() {
         return this.$store.getters[
           "moduloRevisionHumedad/bloquearCamposFormRevisionHumedad"
@@ -213,7 +251,17 @@ export default {
         );
       },
     },
-
+    almacenamiento: {
+      get() {
+        return this.$store.getters["moduloAlmacenamiento/almacenamiento"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloAlmacenamiento/nuevoAlmacenamiento",
+          v
+        );
+      },
+    },
     // Obtiene la lista cosecha
     cosecha: {
       get() {
@@ -234,8 +282,6 @@ export default {
       this.va;
     },
 
- 
-
     validarBotonCambios() {
       switch (this.tab) {
         case "tabAlmacenamiento":
@@ -251,28 +297,26 @@ export default {
           break;
 
         case "tabRevisionHumedad":
-          return !this.bloquearCamposFormRevisionHumedad
-          ? false
-            : true;
+          return !this.bloquearCamposFormRevisionHumedad ? false : true;
           break;
       }
     },
-    async eliminaralmacenamiento(){
-      try{
-        let resultadoServicioAlmacenamiento = await servicioAlmacenamiento.eliminarAlmacenamiento(id);
-        this.$toast.success(resultadoServicioAlmacenamiento.data.message);
+    async eliminaralmacenamiento() {
+      try {
+        let resultadoServicioAlmacenamiento = await servicioAlmacenamiento.eliminarAlmacenamiento(
+          this.almacenamiento.almacenamientoid
+        );
+        this.$toast.warning(resultadoServicioAlmacenamiento.data.message);
         this.obtenerTodosAlmacenamiento();
         this.cerrarDialogMostrarAlmacenamiento();
-      }catch (error) {
-         //console.log('err', error);
-         this.cerrarDialogMostrarAlmacenamiento();
+      } catch (error) {
+        this.$toast.warning("Error:" + error);
       }
     },
-    guardarItem(){
+    guardarItem() {
       this.revisionHumedad.almacenamientoid = this.almacenamiento.almacenamientoid;
       this.listaRevisionHumedad.push(this.revisionHumedad);
       this.vaciarRevisionHumedad();
-
     },
     async guardarCambios() {
       switch (this.tab) {
@@ -290,14 +334,14 @@ export default {
           break;
 
         case "tabRevisionHumedad":
-          try{
+          try {
             let resultadoServicioRevisionHumedad = await servicioRevisionHumedad.actualizarRevisionHumedad(
               this.listaRevisionHumedad
-              );
-              this.$toast.success(resultadoServicioRevisionHumedad.data.message);
-              this.bloquearCamposFormRevisionHumedad = true;
-              this.obtenerTodosAlmacenamiento();
-          } catch (errror){
+            );
+            this.$toast.success(resultadoServicioRevisionHumedad.data.message);
+            this.bloquearCamposFormRevisionHumedad = true;
+            this.obtenerTodosAlmacenamiento();
+          } catch (errror) {
             this.$toast.error(error.response.data.message);
           }
           break;
@@ -308,14 +352,16 @@ export default {
     async obtenerTodosAlmacenamiento() {
       let resultado = await servicioAlmacenamiento.obtenerTodosAlmacenamiento();
       resultado.data.forEach((almacenamiento) => {
-        almacenamiento.almfechaacopio = this.formatDate(almacenamiento.almfechaacopio);
+        almacenamiento.almfechaacopio = this.formatDate(
+          almacenamiento.almfechaacopio
+        );
         almacenamiento.almfechaingresobodega = this.formatDate(
           almacenamiento.almfechaingresobodega
         );
       });
       this.listaAlmacenamiento = resultado.data;
     },
-       ...mapMutations("moduloRevisionHumedad", ["vaciarRevisionHumedad"]),
+    ...mapMutations("moduloRevisionHumedad", ["vaciarRevisionHumedad"]),
   },
 
   mixins: [myMixin],

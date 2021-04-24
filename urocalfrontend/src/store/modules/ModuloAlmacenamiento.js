@@ -52,5 +52,6 @@ export default {
         bloquearCamposFormAlmacenamiento: (state) => state.bloquearCamposFormAlmacenamiento,    // Devuelve bloquearCamposFormAlmacenamiento
         listaAlmacenamiento: (state) => state.listaAlmacenamiento,    // Devuelve listaAlmacenamiento
         cosecha: (state) => state.cosecha,    // Devuelve listaAlmacenamiento
+        almacenamiento: (state) => state.almacenamiento,
     },
 }

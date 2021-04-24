@@ -121,7 +121,7 @@ export default {
       let respuesta = await ServicioGuiaRemision.eliminarGuiaRemision(
         this.modeloGuiaRemisionStore.guiaremisionid
       );
-      this.$toast.error('se ha eliminado una guia de remision');
+      this.$toast.warning('Se ha eliminado una guia de remision');
       this.cerrarDialogMostrarGuiaRemision();
       this.cargarListaGuiaRemision();
     },

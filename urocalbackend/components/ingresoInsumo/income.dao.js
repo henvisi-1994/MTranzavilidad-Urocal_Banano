@@ -5,7 +5,7 @@ const pool = require('../../services/postgresql/index');
 module.exports = {
     async createincome(income) {
         // Registro en tabla incomeo
-        //console.log("Esto tiene income ...", income)
+        console.log("Esto tiene income ...", income)
         query = `INSERT INTO ingresoinsumo (inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, ingencargado, centroacopioid) VALUES 
                     ('${income.inginsfechaingreso}','${income.inginsproducto}','
                     ${income.inginsfactura}','${income.inginsproveedor}','${income.inginscantidadingreso}','
@@ -18,13 +18,15 @@ module.exports = {
     },
 
     async getAllincomes() {
-        let query = `SELECT * FROM ingresoinsumo`;
+        let query = `SELECT ingresoinsumosid, TO_CHAR(inginsfechaingreso, 'YYYY-MM-DD') as inginsfechaingreso, inginsproducto,inginsfactura,inginsproveedor,inginscantidadingreso, inginsunidad, inginssaldo, ingencargado,centroacopioid FROM ingresoinsumo`;
         let result = await pool.query(query);
+        //console.log("Esto tiene income ...", result)
         return result.rows; // Devuelve array de incomeos
     },
 
     async getincome(id) {
-        let query = `SELECT * FROM ingresoinsumo WHERE ingresoinsumosid = ${id}`;
+        let query = `SELECT ingresoinsumosid, TO_CHAR(inginsfechaingreso, 'YYYY-MM-DD') as inginsfechaingreso, inginsproducto,inginsfactura,inginsproveedor,inginscantidadingreso, inginsunidad, inginssaldo, ingencargado,centroacopioid FROM ingresoinsumo
+        WHERE ingresoinsumosid = ${id}`;
         let result = await pool.query(query);
         return result.rows[0]; // Devuelve objeto de incomeo
     },

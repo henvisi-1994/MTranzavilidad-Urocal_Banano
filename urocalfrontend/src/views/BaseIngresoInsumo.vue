@@ -1,9 +1,7 @@
 <template>
   <v-container fluid>
     <!-- Dialog para registrar nuevo usuario -->
-    <DialogNuevoIngresoInsumo
-      ref="DialogNuevoIngresoInsumo"
-    ></DialogNuevoIngresoInsumo>
+    <DialogNuevoIngresoInsumo ref="DialogNuevoIngresoInsumo"></DialogNuevoIngresoInsumo>
 
     <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
     <v-card elevation="0" class="mt-5">
@@ -32,7 +30,7 @@
       <v-card-text>
         <v-data-table
           :headers="cabeceraTablaIngresoInsumo"
-          :items="listaIngresoInsumo"
+          :items="listaIngresoInsumoStore"
           :search="buscarIngresoInsumo"
           sort-by="id_lote"
           :height="tablaResponsiva()"
@@ -45,9 +43,7 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon
-              color="primary"
-              @click="cargarDialogEditarIngresoInsumo(item)"
+            <v-icon color="primary" @click="cargarDialogEditarIngresoInsumo(item)"
               >mdi-eye</v-icon
             >
           </template>
@@ -74,6 +70,7 @@ import DialogNuevoIngresoInsumo from "../components/DialogNuevoIngresoInsumo"; /
 import DialogEditarIngresoInsumo from "../components/DialogEditarIngresoInsumo"; // Dialogo para editar usuario
 import ServicioIngresoInsumo from "../services/ServicioIngresoInsumo"; // Interactuar con el Backend
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+
 export default {
   name: "BaseIngresoInsumo",
 
@@ -88,8 +85,9 @@ export default {
 
   mounted() {
     this.cargarListaIngresoInsumo();
-    //  this.cargarInsumoAcopios();
+    this.cargarInsumoAcopios();
     this.cargarListaFinca();
+    this.cargarInsumoAcopios();
   },
 
   data() {
@@ -154,7 +152,7 @@ export default {
         },
         {
           text: "Encargado",
-          value: "inginsencargado",
+          value: "ingencargado",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -167,36 +165,10 @@ export default {
           class: "grey lighten-3",
         },
       ],
-      listaIngresoInsumoStoreSOLID: [
-        {
-          ingresoinsumoid: "2221",
-          inginsfechaingreso: "2020-02-01",
-          inginsproducto: "200",
-          inginsfactura: "300",
-          inginsproveedor: "305",
-          inginscantidadingreso: "200.90",
-          inginsunidad: "2",
-          inginssaldo: "300",
-          inginsencargado: "Juan Perez",
-          centroacopioid: "Mark´s Scan",
-        },
-        {
-          ingresoinsumoid: "555",
-          inginsfechaingreso: "2020-04-01",
-          inginsproducto: "200",
-          inginsfactura: "300",
-          inginsproveedor: "305",
-          inginscantidadingreso: "200.90",
-          inginsunidad: "2",
-          inginssaldo: "300",
-          inginsencargado: "Juan Perez",
-          centroacopioid: "Mark´s Scan",
-        },
-      ],
+
       listaIngresoInsumo: [], // Almacena una lista de IngresoInsumo con llave foranea ingresoinsumoid, la misma se muestra en tabla
-      listaCentroAcopios: [
-        { centroacopioind: "1", centroacopionombre: "centro1" },
-      ],
+      //listaCentroAcopios: [{ centroacopioind: "1", centroacopionombre: "centro1" }],
+      //listaCentroAcopios: [],
     };
   },
 
@@ -220,15 +192,12 @@ export default {
       },
     },
 
-    listaCentroAcopiosx: {
+    listaCentroAcopios: {
       get() {
         return this.$store.getters["moduloIngresoInsumo/listaCentroAcopios"];
       },
       set(v) {
-        return this.$store.commit(
-          "moduloIngresoInsumo/establecerListaCentroAcopios",
-          v
-        );
+        return this.$store.commit("moduloIngresoInsumo/establecerListaCentroAcopios", v);
       },
     },
     listaFincaStore: {
@@ -236,10 +205,7 @@ export default {
         return this.$store.getters["moduloIngresoInsumo/listaFincaStore"];
       },
       set(v) {
-        return this.$store.commit(
-          "moduloIngresoInsumo/establecerListaFincaStore",
-          v
-        );
+        return this.$store.commit("moduloIngresoInsumo/establecerListaFincaStore", v);
       },
     },
     // ##############
@@ -250,10 +216,7 @@ export default {
         return this.$store.getters["gestionDialogos/dialogNuevoIngresoInsumo"];
       },
       set(v) {
-        return this.$store.commit(
-          "gestionDialogos/toggleDialogNuevoIngresoInsumo",
-          v
-        );
+        return this.$store.commit("gestionDialogos/toggleDialogNuevoIngresoInsumo", v);
       },
     },
 
@@ -262,10 +225,7 @@ export default {
         return this.$store.getters["gestionDialogos/dialogEditarIngresoInsumo"];
       },
       set(v) {
-        return this.$store.commit(
-          "gestionDialogos/toggleDialogEditarIngresoInsumo",
-          v
-        );
+        return this.$store.commit("gestionDialogos/toggleDialogEditarIngresoInsumo", v);
       },
     },
 
@@ -274,9 +234,7 @@ export default {
     // #############
     modeloIngresoInsumoStore: {
       get() {
-        return this.$store.getters[
-          "moduloIngresoInsumo/modeloIngresoInsumoStore"
-        ];
+        return this.$store.getters["moduloIngresoInsumo/modeloIngresoInsumoStore"];
       },
       set(v) {
         return this.$store.commit(
@@ -292,15 +250,15 @@ export default {
     // #  MANIPULACIÓN DE DATOS  #
     // ###########################
     async cargarListaIngresoInsumo() {
-      this.listaIngresoInsumo = []; // Limpiar la 'lista de datos'
+      let listaIngresoInsumo = []; // Limpiar la 'lista de datos'
       let respuesta = await ServicioIngresoInsumo.obtenerTodosIngresoInsumo(); // Obtener respuesta de backend
       let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
       datosUsuario.forEach((ingresoinsumo) => {
         // Guardar cada registro en la 'lista de datos'
-        this.listaIngresoInsumo.push(ingresoinsumo);
+        listaIngresoInsumo.push(ingresoinsumo);
       });
-      this.listaIngresoInsumoStore = this.listaIngresoInsumo;
-      //console.log(this.listaIngresoInsumoStore);
+      this.listaIngresoInsumoStore = listaIngresoInsumo;
+      console.log(this.listaIngresoInsumoStore);
     },
 
     async cargarInsumoAcopios() {

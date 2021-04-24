@@ -167,7 +167,7 @@ export default {
       try {
         //console.log(this.siembra);
         let respuesta = await servicioSiembra.eliminarSiembra(this.siembra.siembraid);
-        this.$toast.success(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.obtenerTodosSiembra();
         this.bloquearCamposFormSiembra = true;
         this.bloqueoBotonCambios();
