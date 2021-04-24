@@ -255,7 +255,24 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6"
+          ><v-textarea
+            class="custom px-2"
+            filled
+            dense
+            label="Observaciones"
+            rows="2"
+            v-model="modeloFincaStore.finobservacion"
+            :rules="[reglas.campoVacio(modeloFincaStore.finobservacion)]"
+          ></v-textarea>
+        </v-col>
+      </v-row>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="2"> Certificación</v-col>
+      </v-row>
+      <br>
+      <v-row no-gutters justify-md="space-around">
+        <v-col cols="12" md="7">
           <v-select
             placeholder="Seleccione una Certificacion"
             v-model="detalle.certificacionid"
@@ -277,33 +294,20 @@
             </template>
           </v-select>
         </v-col>
-      </v-row>
-
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6"
-          ><v-textarea
-            class="custom px-2"
-            filled
-            dense
-            label="Observaciones"
-            rows="2"
-            v-model="modeloFincaStore.finobservacion"
-            :rules="[reglas.campoVacio(modeloFincaStore.finobservacion)]"
-          ></v-textarea>
+        <v-col cols="12" md="5">
+          <v-card-actions class="justify-center pb-3">
+            <v-btn
+              :block="$vuetify.breakpoint.xs ? true : false"
+              width="300px"
+              large
+              elevation="0"
+              @click="agregarCertificacion()"
+              color="primary"
+              >{{ textoboton }}</v-btn
+            >
+          </v-card-actions>
         </v-col>
-        <v-col cols="12" md="6"></v-col>
       </v-row>
-      <v-card-actions class="justify-center pb-3">
-        <v-btn
-          :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px"
-          large
-          elevation="0"
-          @click="agregarCertificacion()"
-          color="primary"
-          >{{ textoboton }}</v-btn
-        >
-      </v-card-actions>
       <v-card-text>
         <v-data-table
           :headers="cabeceraTablaCertificacion"
