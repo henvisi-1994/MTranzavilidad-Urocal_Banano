@@ -347,7 +347,7 @@ export default {
       ];
 
       const filas = respuesta.compras.map((compra) => {
-        const fechacompra = new Date(compra.facfecha)
+        const fechacompra = new Date(compra.comfechaemision)
           .toISOString()
           .substr(0, 10);
         return [
