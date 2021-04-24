@@ -7,9 +7,9 @@ module.exports = {
         // Registro en tabla incomeo
         console.log("Esto tiene income ...", income)
         query = `INSERT INTO ingresoinsumo (inginsfechaingreso, inginsproducto, inginsfactura, inginsproveedor, inginscantidadingreso, inginsunidad, inginssaldo, ingencargado, centroacopioid) VALUES 
-                    ('${income.inginsfechaingreso}','${income.inginsproducto}','
-                    ${income.inginsfactura}','${income.inginsproveedor}','${income.inginscantidadingreso}','
-                    ${income.inginsunidad}','${income.inginssaldo}','${income.ingencargado}', '${income.centroacopioid}')`;
+                    ('${income.inginsfechaingreso}','${income.inginsproducto}',
+                    '${income.inginsfactura}','${income.inginsproveedor}','${income.inginscantidadingreso}',
+                    '${income.inginsunidad}','${income.inginssaldo}','${income.ingencargado}', '${income.centroacopioid}')`;
                     //console.log("Esto tiene query ...", query)
                     result = await pool.query(query);
 
