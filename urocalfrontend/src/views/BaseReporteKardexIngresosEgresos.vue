@@ -1,188 +1,475 @@
 <template>
-  <v-container fluid>
-    <!-- Dialog para registrar nuevo Pais -->
-    
-
-    <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
-    <v-card elevation="0" class="mt-5">
-      <v-card-title class="py-2">
-        <v-row no-gutters justify-md="space-between">
-          <v-col cols="12" md="12">
-            <div :class="[`text-h4`, `mb-4`]" class="transition-swing primary--text" v-text="nombre"></div>            
-          </v-col>
-          
-        </v-row>
-      </v-card-title>
-
-      <v-card-text>
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-            <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field class="custom px-2" dense filled
-                  label="Fecha Inicial" 
-                  readonly
-                  v-bind="attrs"
-                  v-on="on">
-                </v-text-field>
-              </template>
-              <v-date-picker  @input="menuMostrarCalendario = false" :show-current="fechaActual" locale="es-419" ></v-date-picker>
-            </v-menu>
-        </v-col>
-      </v-row>
-
-      <v-row no-gutters justify-md="space-around">
-        <v-col cols="12" md="6">
-            <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field class="custom px-2" dense filled
-                  label="Fecha Final" 
-                  readonly
-                  v-bind="attrs"
-                  v-on="on">
-                </v-text-field>
-              </template>
-              <v-date-picker  @input="menuMostrarCalendario = false" :show-current="fechaActual" locale="es-419" ></v-date-picker>
-            </v-menu>
-        </v-col>
-      </v-row>
-
-     <v-row no-gutters justify-md="space-around">
-        <v-col  cols="12" sm="6">
-          <v-select :items="itemsProducto"  label="Producto"  Producto></v-select>
-        </v-col>
-      </v-row>
-
-      <v-row no-gutters justify-md="space-around">
-        <v-col  cols="12" sm="6">
-          <v-select :items="itemsProveedor"  label="Proveedor"  Poveedor></v-select>
-        </v-col>
-      </v-row>
-      
-      <v-row no-gutters justify-md="space-around">
-        <v-col  cols="12" sm="6">
-          <v-select :items="itemsEncargado"  label="Encargado"  Encargado></v-select>
-        </v-col>
-      </v-row>
-        
-      </v-card-text>
-
-      <v-card-actions class="justify-center">
-        <!-- Botón para descargar PDF -->
-        <v-btn
-          :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" large elevation="0"
-          color="primary"
-          @click="cargarDialogNuevoPais()"
-          >Generar PDF</v-btn
+  <v-container fluid class="pa-3 justify-center" fill-height>
+    <v-row>
+      <v-col class="d-flex py-3" cols="12">
+        <div
+          :class="[`text-h4`, `mb-4`]"
+          class="transition-swing primary--text"
+          v-text="'Kardex de Ingresos y Egresos de insumos'"
+        ></div>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
+      <v-col cols="12" md="10" class="py-0">
+        <v-select
+          :disabled="reporte"
+          :items="opcionesFecha"
+          v-model="opcionFecha"
+          item-value="id"
+          item-text="tipo"
+          label="Selecciona filtro de fecha"
+        ></v-select>
+      </v-col>
+      <v-col cols="12" md="10" v-if="opcionFecha == 1" class="py-0">
+        <v-menu
+          :disabled="reporte"
+          v-model="menuMes"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
         >
-      </v-card-actions>
-    </v-card>
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="mesSeleccionado"
+              label="Escoja un mes"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="mesSeleccionado"
+            @input="menuMes = false"
+            :show-current="fechaActual"
+            type="month"
+            locale="es-419"
+          ></v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col cols="12" md="10" v-if="opcionFecha == 2" class="py-0">
+        <v-select
+          :disabled="reporte"
+          :items="years"
+          label="Seleccione un año"
+          v-model="anioSeleccionado"
+        ></v-select>
+      </v-col>
+      <v-col cols="12" md="10" v-if="opcionFecha === 3" class="py-0">
+        <v-menu
+          :disabled="reporte"
+          v-model="menuFechaDesde"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="fechaDesde"
+              label="Desde"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="fechaDesde"
+            @input="menuFechaDesde = false"
+            :show-current="fechaActual"
+            locale="es-419"
+          ></v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col cols="12" md="10" v-if="opcionFecha === 3" class="py-0">
+        <v-menu
+          :disabled="reporte"
+          v-model="menuFechaHasta"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="fechaHasta"
+              label="Hasta"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="fechaHasta"
+            @input="menuFechaHasta = false"
+            :show-current="fechaActual"
+            locale="es-419"
+          ></v-date-picker>
+        </v-menu>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
+      <v-col cols="12" md="5" v-if="!reporte">
+        <v-btn
+          :disabled="reporte"
+          color="primary ml-auto"
+          @click="generateReport"
+          block
+        >
+          <v-icon class="pr-2">mdi-file-document</v-icon>
+          Generar Reporte
+        </v-btn>
+      </v-col>
+      <v-col cols="12" md="5" v-if="reporte">
+        <v-btn color="success ml-auto" @click="descargarReporte" block>
+          <v-icon class="pr-2">mdi-download</v-icon>
+          Descargar Reporte
+        </v-btn>
+      </v-col>
+      <v-col cols="12" md="5" v-if="reporte">
+        <v-btn color="info ml-auto" @click="nuevoReporte" block>
+          <v-icon class="pr-2">mdi-text-box-plus</v-icon>
+          Nuevo Reporte
+        </v-btn>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
+
 <script>
-import { mapMutations } from "vuex";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
-//import FormReporteCompra from "../components/FormReporteCompra";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+import servicioReporteKardexIngresosEgresos from "../services/ServicioReporteKardexIngresosEgresos";
 
+import logo from "@/assets/logo.js";
+//logo.js contiene el logo en base64
 export default {
   name: "BaseReporteKardexIngresosEgresos",
-
-  components: {
-    //FormReporteCompra,
-  },
-
-  mounted() {
-    //this.cargarListaPais();
-  },
-
   data() {
     return {
-      nombre: "Gestión de Reporte Kardex de Insumos",
-      itemsProducto: ['Cacao Nacional', 'Ramilla'],
-      itemsProveedor: ['Proveedor 1', 'Proveedor 2', 'Proveedor 3', 'Proveedor 4'],
-      itemsEncargado: ['José Ortiz', 'Enma Pardo', 'Cristhian Espinoza'],
-      
+      reporte: false,
+      pdfGenerado: undefined,
+      menuFechaDesde: false,
+      menuFechaHasta: false,
+      menuMes: false,
+      menuAnio: false,
+      fechaDesde: "",
+      fechaHasta: "",
+      mesSeleccionado: "",
+      anioSeleccionado: "",
+      exportadorSeleccionado: "",
+      loteSeleccionado: "",
+      opcionFecha: 0,
+      fechaActual: new Date().toISOString().substr(0, 10),
+      opcionesFecha: [
+        {
+          id: 1,
+          tipo: "Mes",
+        },
+        {
+          id: 2,
+          tipo: "Año",
+        },
+        {
+          id: 3,
+          tipo: "Rango de fecha",
+        },
+      ],
+      meses: {
+        1: "Enero",
+        2: "Febrero",
+        3: "Marzo",
+        4: "Abril",
+        5: "Mayo",
+        6: "Junio",
+        7: "Julio",
+        8: "Agosto",
+        9: "Septiembre",
+        10: "Octubre",
+        11: "Noviembre",
+        12: "Diciembre",
+      },
+      years: [],
     };
   },
 
-  computed: {
-
-    listaPaisStore: {
-      get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloPais/listaPaisStore"]));
-      },
-      set(v) {
-        return this.$store.commit("moduloPais/establecerListaPaisStore", v);
-      },
-    },
-
-    // Obtiene y modifica el estado de la variable dialogNuevoPais
-    dialogNuevoPais: {
-      get() {
-        return this.$store.getters["gestionDialogos/dialogNuevoPais"];
-      },
-      set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogNuevoPais", v);
-      },
-    },
-
-    // Obtiene y modifica el estado de la variable dialogMostrarPais
-    dialogMostrarPais: {
-      get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarPais"];
-      },
-      set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarPais", v);
-      },
-    },
-
-    modeloPaisStore: {
-      get() {
-        return this.$store.getters["moduloPais/pais"];
-      },
-      set(v) {
-        return this.$store.commit("moduloPais/nuevoPais", v);
-      },
-    },
+  created() {
+    this.$store.commit("colocarLayout", "LayoutAdministrador");
+    this.generateYears();
   },
 
   methods: {
+    generateYears() {
+      const actualYear = new Date().getFullYear();
+      for (let index = actualYear; index > 1950; index--) {
+        this.years.push(index);
+      }
+    },
 
-    // #  MANIPULACIÓN DE DATOS  #
-    async cargarListaPais () { 
-      let listaPais = [];                                               // Limpiar la 'lista de datos'
-      let respuesta = await ServicioPais.obtenerTodosPaises();  // Obtener respuesta de backend
-      let datosPais = await respuesta.data;                                    // Rescatar datos de la respuesta
-      datosPais.forEach((pais) => {                                  // Guardar cada registro en la 'lista de datos' 
-        listaPais.push(pais);
+    nuevoReporte() {
+      this.reporte = false;
+      this.mesSeleccionado = "";
+      this.fechaDesde = "";
+      this.fechaHasta = "";
+      this.opcionFecha = 0;
+      this.pdfGenerado = undefined;
+    },
+
+    descargarReporte() {
+      this.pdfGenerado.download();
+    },
+
+    async obtenerIngEgPorMes() {
+      const resultado = await servicioReporteKardexIngresosEgresos.reportePorMes(
+        {
+          month: parseInt(this.mesSeleccionado.slice(-2)),
+          year: parseInt(this.mesSeleccionado.slice(0, 4)),
+        }
+      );
+      return resultado.data;
+    },
+
+    async obtenerIngEgPorAnio() {
+      const resultado = await servicioReporteKardexIngresosEgresos.reportePorAnio(
+        {
+          year: this.anioSeleccionado,
+        }
+      );
+      return resultado.data;
+    },
+
+    async obtenerIngEgPorRango() {
+      const resultado = await servicioReporteKardexIngresosEgresos.reportePorRango(
+        {
+          desde: this.fechaDesde,
+          hasta: this.fechaHasta,
+        }
+      );
+      return resultado.data;
+    },
+
+    generateReport() {
+      const errorNoDatos = "No se han encontrado resultados";
+      if (!this.opcionFecha) {
+        this.$toast.error("Debe selecciona los datos necesarios");
+        return;
+      }
+      if (this.opcionFecha == 1) {
+        if (!this.mesSeleccionado) {
+          this.$toast.error("Debe seleccionar un mes");
+          return;
+        }
+        this.obtenerIngEgPorMes().then((ingeg) => {
+          if (!ingeg.length) {
+            this.$toast.info(errorNoDatos);
+            return;
+          }
+          this.generarContenidoReporte({ ingeg });
+          this.reporte = true;
+        });
+      } else if (this.opcionFecha == 2) {
+        if (!this.anioSeleccionado) {
+          this.$toast.error("Debe seleccionar un año");
+          return;
+        }
+        this.obtenerIngEgPorAnio().then((ingeg) => {
+          if (!ingeg.length) {
+            this.$toast.info(errorNoDatos);
+            return;
+          }
+          this.generarContenidoReporte({ ingeg });
+          this.reporte = true;
+        });
+      } else if (this.opcionFecha == 3) {
+        if (!this.fechaDesde || !this.fechaHasta) {
+          this.$toast.error("Debe seleccionar el rango de fechas");
+          return;
+        }
+        if (this.fechaHasta < this.fechaDesde) {
+          this.$toast.error("La fecha final debe ser mayor a la inicial");
+          return;
+        }
+        this.obtenerIngEgPorRango().then((ingeg) => {
+          if (!ingeg.length) {
+            this.$toast.info(errorNoDatos);
+            return;
+          }
+          this.generarContenidoReporte({ ingeg });
+          this.reporte = true;
+        });
+      }
+    },
+
+    generarContenidoReporte(respuesta) {
+      const stringFechaMes = `${
+        this.meses[parseInt(this.mesSeleccionado.slice(-2))]
+      } del ${this.mesSeleccionado.slice(0, 4)}`;
+      const stringFechaAnio = `Año ${this.anioSeleccionado}`;
+      const stringFechaRango = `De ${this.fechaDesde} al ${this.fechaHasta}`;
+      const reportInfo = {
+        text: [
+          { text: "Reporte: ", bold: true },
+          "Kardex de Ingresos y Egresos de Insumos",
+          { text: "\nFecha: ", bold: true },
+          `${
+            this.opcionFecha == 1
+              ? stringFechaMes
+              : this.opcionFecha == 2
+              ? stringFechaAnio
+              : stringFechaRango
+          }`,
+        ],
+        margin: [0, 20],
+      };
+
+      const cabecera = [
+        { text: "Producto" },
+        { text: "Cantidad Ingresada" },
+        { text: "Cantidad Entregada" },
+        { text: "Total Insumo" },
+        { text: "Dosis" },
+        { text: "Finca" },
+        { text: "Encargado" },
+        { text: "Centro Acopio" },
+        { text: "Proveedor" },
+        { text: "Fecha de Ingreso" },
+        { text: "Fecha de Engreso" },
+      ];
+
+      const filas = respuesta.ingeg.map((ingeg) => {
+        const fechaeng = new Date(ingeg.egrinsfechaegreso)
+          .toISOString()
+          .substr(0, 10);
+        var totalInsumo =
+          ingeg.inginscantidadingreso - ingeg.egrinscantidadentregada;
+        return [
+          ingeg.inginsproducto,
+          ingeg.inginscantidadingreso,
+          ingeg.egrinscantidadentregada,
+          totalInsumo,
+          ingeg.egrinsdosis,
+          ingeg.finnombrefinca,
+          ingeg.egrencargado,
+          ingeg.centroacopionombre,
+          ingeg.inginsproveedor,
+          ingeg.inginsfechaingreso.substr(0, 10),
+          fechaeng,
+        ];
+        //return [fechaeng, ingeg.egrencargado, ingeg.egrinscantidadentregada,ingeg.egrinsdosis, ingeg.inginscantidadingreso, ingeg.inginsfechaingreso.substr(0, 10), ingeg.inginsproducto, ingeg.inginsproveedor, ingeg.centroacopionombre, ingeg.finnombrefinca]
       });
-      this.listaPaisStore = listaPais;
+      const table = {
+        widths: [
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+
+        ],
+        headerRows: 1,
+        body: [
+          [...cabecera],
+          ...filas,
+          ["", "", "", "", "", "", "", "", "", "", ""],
+        ],
+      };
+
+      const reportData = [
+        reportInfo,
+        {
+          table,
+          layout: "headerLineOnly",
+          margin: [0, 10],
+        },
+      ];
+      this.generatePdf(reportData);
     },
 
-    // Vacia el modelo Pais
-    ...mapMutations("moduloPais", ["vaciarPais"]),
+    generatePdf(reportContent) {
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      const docDefinition = {
+        pageOrientation: "landscape",
+        content: [
+          {
+            columns: [
+              {
+                width: 70,
+                image: logo,
+                margin: [0, 20],
+              },
+              {
+                alignment: "center",
+                width: "auto",
+                text: [
+                  {
+                    text:
+                      "UNIÓN REGIONAL DE ORGANIZACIONES CAMPESINAS DEL LITORAL",
+                    fontSize: 12,
+                  },
+                  { text: "\nUROCAL", fontSize: 32, bold: true },
+                  {
+                    text:
+                      "\nCARRETERO A ZHUMIRAL OFC. P.B. - AZUAY ESTABLECIMIENTO 003: TARQUI S/N E/.",
+                    fontSize: 10,
+                  },
+                  {
+                    text:
+                      "\nMATRIZ: CAMILO PONCE ENRÍQUEZ: BARRIO EL CISNE PRINCIPAL S/N",
+                    fontSize: 10,
+                  },
+                  {
+                    text:
+                      "\nEmail:  urocal@ec.pro.ec - MACHALA - EL ORO - ECUADOR",
+                    fontSize: 10,
+                  },
+                  {
+                    text:
+                      "\nBOLIVAR Y PICHINCHA - *TELEFAX:* 2961-672 / 075000202 - CEL: 0991853210",
+                    fontSize: 10,
+                  },
+                  {
+                    text:
+                      "\nCONTRIBUYENTE ESPECIAL MEDIANTE RESOLUCIÓN N° NAC-G-CORCEC09-00570 DEL 07/08/2009",
+                    fontSize: 10,
+                  },
+                ],
+              },
+            ],
+          },
+          reportContent,
+        ],
 
-    // Carga el DialogNuevoPais
-    cargarDialogNuevoPais() {
-      this.dialogNuevoPais = !this.dialogNuevoPais; // Abre el dialogNuevoPais
-      this.$refs.DialogNuevoPais.$refs.componentFormPais.$refs.formPais.resetValidation(); // Reinicia las validaciones de formPais
-      this.vaciarPais(); // Vacia el modelo Pais
+        footer: (currentPage, pageCount) => {
+          return {
+            margin: [40, 0],
+            columns: [
+              `${currentPage.toString()} de ${pageCount}`,
+              {
+                text: [
+                  { text: "Fecha: ", bold: true },
+                  `${new Date().toJSON().slice(0, 10)}`,
+                ],
+                alignment: "right",
+              },
+            ],
+          };
+        },
+      };
+
+      this.pdfGenerado = pdfMake.createPdf(docDefinition);
+
+      this.pdfGenerado.open();
     },
-
-    abrirMostrarPais(item) {
-      this.dialogMostrarPais = !this.dialogMostrarPais;
-      this.vaciarPais(); // Vacia el modelo Pais
-      const indiceEditar = this.listaPaisStore.indexOf(item);
-      this.modeloPaisStore = item;
-    },
-  },
-
-  mixins: [autenticacionMixin, myMixin],
-
-  created() {
-    this.$store.commit("colocarLayout", "LayoutAdministrador");
   },
 };
 </script>
+
+<style>
+</style>
