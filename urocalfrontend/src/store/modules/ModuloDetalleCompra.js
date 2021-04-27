@@ -42,6 +42,7 @@ export default {
 
         eliminarListaDetalleCompra(state, detalleCompraID) {
             let indice = state.listaDetalleCompra.findIndex(detalle => detalle.detallecompraid === detalleCompraID); // Obtiene la posicion del elemento
+            console.log(indice);
             state.listaDetalleCompra.splice(indice, 1); // Elimina el elemento
         },
 

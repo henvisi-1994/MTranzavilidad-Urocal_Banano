@@ -9,6 +9,7 @@ router.get('/detalle/:id', controller.getDetalleTreatment);                     
 router.get('/:id', controller.getTreatment);                                 // Documento (singular)        
 router.post('/', controller.createTreatment);                                // crea un tratamiento
 router.put('/:id', controller.updateTreatment);                             //acualiza un tratamiento
-router.delete('/:id', controller.deleteTreatment);                          //elimina un tratamiento
+router.delete('/:id', controller.deleteTreatment);  
+router.delete('/detalle/:id', controller.deleteDetalleTreatment);                           //elimina un tratamiento
 
 module.exports = router;

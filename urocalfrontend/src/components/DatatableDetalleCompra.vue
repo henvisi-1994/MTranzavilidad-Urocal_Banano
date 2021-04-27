@@ -188,9 +188,9 @@ export default {
           respuestaServicioDetalleCompra.data.detestado = this.establecerEstadoID(
             respuestaServicioDetalleCompra.data
           );
-
           this.detCompra = respuestaServicioDetalleCompra.data;
         } catch (error) {
+          console.log(error);
           this.$toast.error(error.response.data.message);
         }
         this.dialogMostrarDetalleCompra = true;

@@ -1,7 +1,7 @@
 export default class DetalleCompra {
     constructor(detallecompraid, detporcentajefermentacion, detporcentajehumedad, detporcentajeimpurezas, detmoho, detpizarra, detvioleta,
         detsemivioleta, detoptimio, detpenalidad, detestimulo, dettara, detestado, detunidad,
-        detpreciounidad, detcantidadunidades, detpreciototal, compraid) {
+        detpreciounidad, detcantidadunidades, detpreciototal, compraid, index) {
         this.detallecompraid = detallecompraid;
         this.detporcentajefermentacion = detporcentajefermentacion;
         this.detporcentajehumedad = detporcentajehumedad;
@@ -20,5 +20,6 @@ export default class DetalleCompra {
         this.detcantidadunidades = detcantidadunidades;
         this.detpreciototal = detpreciototal;
         this.compraid = compraid;
+        this.index= index;
     }
 }

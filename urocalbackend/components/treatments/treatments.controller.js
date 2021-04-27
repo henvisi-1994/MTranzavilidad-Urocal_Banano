@@ -85,6 +85,17 @@ module.exports = {
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar el tratamiento", tipo: "error" });
         }
+    },
+    async deleteDetalleTreatment(req, res) {
+        const { id } = req.params;
+
+        try {
+            let rowCount = await treatmentsModel.deleteDetalleTreatment(id);
+            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Tratamiento no registrado", tipo: "error" });
+            
+        } catch (err) {
+            return res.json({ message: "Error al tratar de eliminar el tratamiento", tipo: "error" });
+        }
     }
 
 }

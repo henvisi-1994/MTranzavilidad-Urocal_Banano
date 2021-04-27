@@ -70,7 +70,10 @@ module.exports = {
         result = await pool.query(query);
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró el tratamiento y 0 sino lo hizo.
     },
-
+    async deleteDetalleTreatment(id){
+        let detdelete = `DELETE FROM public.detalletratamiento where dtraid=${id}`
+        pool.query(detdelete)
+    },
     async updateTreatment(id, treatment) {
         //(traobservacion, traubicacion, trafecha, cultivoid, productorid, fincaid)
         let query = `UPDATE tratamiento SET traobservacion = '${treatment.traobservacion}',  traubicacion = '${treatment.traubicacion}', 
@@ -83,29 +86,13 @@ module.exports = {
         let resultd = await pool.query(queryd);
         let actualizar = ''; 
         if (resultd.rows) {
-            treatment.detalle.map(async dt  =>  {
-
-                      
+            treatment.detalle.map(async dt  =>  {       
                 if (typeof dt.dtraid === 'undefined') {
                 actualizar = `Insert into public.detalletratamiento (dtratipo,dtraunidad,dtracantidad,dtrafechainicio,dtrafechafin,tratamientoid) values ('${dt.dtratipo}','${dt.dtraunidad}',${dt.dtracantidad},'${dt.dtrafechainicio}','${dt.dtrafechafin}',${id})`
                 }else{
                 actualizar = `UPDATE public.detalletratamiento SET dtratipo='${dt.dtratipo}', dtraunidad='${dt.dtraunidad}', dtracantidad=${dt.dtracantidad}, dtrafechainicio='${dt.dtrafechainicio}', dtrafechafin='${dt.dtrafechafin}', tratamientoid=${id} WHERE dtraid=${dt.dtraid}`
-                
-                resultd.rows.forEach(function(x){
-                   
-                    if(x.dtraid!=dt.dtraid && dt.dtraid!= 'undefined'){
-                    
-                    let detdelete = `DELETE FROM public.detalletratamiento where dtraid=${x.dtraid}`
-                    console.log(detdelete)
-                    pool.query(detdelete)
-                    }
-                })
-
                 }
-
-                console.log(actualizar)
-                pool.query(actualizar)
-                
+                pool.query(actualizar) 
             })
         }
         return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó y 0 sino lo hizo.

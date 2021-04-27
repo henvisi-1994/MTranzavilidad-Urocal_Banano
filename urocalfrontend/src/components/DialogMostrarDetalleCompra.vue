@@ -17,10 +17,14 @@
           <v-icon class="white--text">mdi-pencil</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text">mdi-trash-can</v-icon>
+          <v-icon class="white--text" @click="eliminarDetalleCompra()"
+            >mdi-trash-can</v-icon
+          >
         </v-btn>
         <v-btn icon>
-          <v-icon class="white--text" @click="cerrarDialogMostrarDetalleCompra()"
+          <v-icon
+            class="white--text"
+            @click="cerrarDialogMostrarDetalleCompra()"
             >mdi-close</v-icon
           >
         </v-btn>
@@ -29,7 +33,9 @@
       <!-- Formulario DetalleCompraa -->
       <v-card-text style="padding: 0px">
         <v-container class="pb-0">
-          <FormDetalleCompra ref="componentFormDetalleCompra"></FormDetalleCompra>
+          <FormDetalleCompra
+            ref="componentFormDetalleCompra"
+          ></FormDetalleCompra>
         </v-container>
       </v-card-text>
 
@@ -70,11 +76,16 @@ export default {
     // Obtiene y modifica el estado de la variable dialogMostrarDetalleCompra
     dialogMostrarDetalleCompra: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogMostrarDetalleCompra"];
+        return this.$store.getters[
+          "gestionDialogos/dialogMostrarDetalleCompra"
+        ];
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarDetalleCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarDetalleCompra",
+          v
+        );
       },
     },
 
@@ -84,7 +95,10 @@ export default {
         return this.$store.getters["gestionDialogos/dialogMostrarCompra"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarCompra", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarCompra",
+          v
+        );
       },
     },
 
@@ -94,7 +108,10 @@ export default {
         return this.$store.getters["moduloCompra/estaActualizandoCompra"];
       },
       set(v) {
-        return this.$store.commit("moduloCompra/asignarEstaActualizandoCompra", v);
+        return this.$store.commit(
+          "moduloCompra/asignarEstaActualizandoCompra",
+          v
+        );
       },
     },
 
@@ -111,7 +128,9 @@ export default {
     // Obtiene la variable bloquearCamposFormDetalleCompra
     bloquearCamposFormDetalleCompra: {
       get() {
-        return this.$store.getters["moduloDetalleCompra/bloquearCamposFormDetalleCompra"];
+        return this.$store.getters[
+          "moduloDetalleCompra/bloquearCamposFormDetalleCompra"
+        ];
       },
       set(v) {
         return this.$store.commit(
@@ -119,11 +138,21 @@ export default {
           v
         );
       },
+      listaDetalleCompra: {
+        get() {
+          return this.$store.getters["moduloDetalleCompra/listaDetalleCompra"];
+        },
+        set(v) {
+          return this.$store.commit(
+            "moduloDetalleCompra/agregarListaDetalleCompra",
+            v
+          );
+        },
+      },
     },
 
     ...mapState("moduloDetalleCompra", [
       "detCompra",
-      "listaDetalleCompra",
       "formDetalleCompraValido",
       "fermentacion",
     ]),
@@ -211,13 +240,16 @@ export default {
       switch (this.detCompra.detestado) {
         case "1":
           this.detCompra.detestado = "Seco";
-          if (this.detCompra.detunidad === "1") this.detCompra.detunidad = "Libras";
-          if (this.detCompra.detunidad === "2") this.detCompra.detunidad = "Quintales";
+          if (this.detCompra.detunidad === "1")
+            this.detCompra.detunidad = "Libras";
+          if (this.detCompra.detunidad === "2")
+            this.detCompra.detunidad = "Quintales";
           break;
 
         case "2":
           this.detCompra.detestado = "En baba";
-          if (this.detCompra.detunidad === "1") this.detCompra.detunidad = "Tachos";
+          if (this.detCompra.detunidad === "1")
+            this.detCompra.detunidad = "Tachos";
           break;
       }
     },
@@ -236,6 +268,10 @@ export default {
     async obtenerTodosCompra() {
       let resultado = await servicioCompra.obtenerTodosCompra();
       this.listaCompra = resultado.data;
+    },
+    eliminarDetalleCompra() {
+     let id =  this.detCompra.detallecompraid;
+     this.$store.commit("moduloDetalleCompra/eliminarListaDetalleCompra", id);
     },
   },
 

@@ -198,6 +198,7 @@
             dense
             v-model="detalle.dtracantidad"
             :disabled="editarTratamiento"
+             :rules="[reglas.campoVacio(detalle.dtracantidad)]"
             label="Cantidad"
           ></v-text-field>
         </v-col>
@@ -294,13 +295,6 @@
               >
                 mdi-trash-can
               </v-icon>
-              <v-icon
-                color="primary"
-                :disabled="editarTratamiento"
-                @click="editarDetalleTra(item)"
-              >
-                mdi-eye
-              </v-icon>
             </template>
           </v-data-table>
         </v-col>
@@ -318,6 +312,7 @@ import servicioLote from "../services/ServicioLote";
 import servicioFinca from "../services/ServicioFinca";
 import servicioCultivo from "../services/ServicioCultivo";
 import servicioProductorPersona from "../services/ServicioProductorPersona";
+import ServicioTratamiento from '../services/ServicioTratamiento';
 import TheBarraNavegacionVue from "./TheBarraNavegacion.vue";
 import ServicioProductorPersona from "../services/ServicioProductorPersona";
 
@@ -538,9 +533,13 @@ export default {
         this.visible = true;
       }
     },
-    eliminarDetalleTra(item) {
+    async eliminarDetalleTra(item) {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
       this.modeloTratamientoStore.detalle.splice(index, 1);
+      console.log(item);
+      if(typeof item.dtraid){
+        await ServicioTratamiento.eliminarDetalleTratamiento(item.dtraid)
+      }
     },
     editarDetalleTra(item) {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
