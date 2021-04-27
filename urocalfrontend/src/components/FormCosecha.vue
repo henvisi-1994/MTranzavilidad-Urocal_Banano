@@ -90,6 +90,7 @@
             <v-date-picker
               v-model="cosecha.cosfecha"
               @input="menuMostrarCalendario = false"
+              @change="obtenerCodigoCosecha()"
               :show-current="fechaActual"
               locale="es-419"
             ></v-date-picker>
@@ -99,7 +100,7 @@
           <v-text-field
             v-model="cosecha.coscantidad"
             type="Number"
-            @change="obtenerCodigoCosecha()"
+            
             label="Cantidad"
             class="custom px-2"
             dense
