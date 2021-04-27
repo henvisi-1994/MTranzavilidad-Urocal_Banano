@@ -76,7 +76,9 @@
             :disabled="bloquearCamposFormFertilizante"
             placeholder="Ciclo"
             v-model="modeloFertilizanteStore.ferciclo"
-            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferciclo)]"
+            :rules="[
+                      reglas.soloNumerosPositivos(modeloFertilizanteStore.ferciclo),
+                      reglas.campoVacio(modeloFertilizanteStore.ferciclo)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -133,7 +135,10 @@
             :disabled="bloquearCamposFormFertilizante"
             placeholder="Concentración: (%)"
             v-model="modeloFertilizanteStore.ferconcentracion"
-            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
+            :rules="[
+                    reglas.soloNumerosPositivos(modeloFertilizanteStore.ferconcentracion),
+                    reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
+                   
           ></v-text-field
         ></v-col>
       </v-row>
