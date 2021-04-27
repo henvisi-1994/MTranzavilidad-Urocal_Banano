@@ -6,6 +6,7 @@
           type="Number"
           label="Subtotal"
           v-model="precioSubtotal"
+          :rules="[reglas.soloNumerosPositivos(precioSubtotal)]"
           class="custom px-2"
           dense
           filled
@@ -52,6 +53,7 @@
           type="Number"
           label="Total"
           v-model="precioTotal"
+          :rules="[reglas.soloNumerosPositivos(precioTotal)]"
           class="custom px-2"
           dense
           filled

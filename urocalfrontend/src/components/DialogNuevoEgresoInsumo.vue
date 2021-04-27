@@ -89,14 +89,14 @@
           <v-text-field class="custom px-2" filled dense
             label="Control de egreso"
             v-model="modeloEgresoInsumoStore.egrinsparacontrolar"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsparacontrolar)]"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsparacontrolar), reglas.soloLetras(modeloEgresoInsumoStore.egrinsparacontrolar)]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field class="custom px-2" filled dense
             label="Dosis"
             v-model="modeloEgresoInsumoStore.egrinsdosis"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsdosis)]"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsdosis), reglas.soloLetras(modeloEgresoInsumoStore.egrinsdosis)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -107,14 +107,14 @@
             label="Cantidad entregada"
             type="number"
             v-model="modeloEgresoInsumoStore.egrinscantidadentregada"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinscantidadentregada)]"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinscantidadentregada), reglas.soloNumerosPositivos(modeloEgresoInsumoStore.egrinscantidadentregada)]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field class="custom px-2" filled dense
             label="Encargado"
-            v-model="modeloEgresoInsumoStore.egrinsencargado"
-            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsencargado)]"
+            v-model="modeloEgresoInsumoStore.egrencargado"
+            :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrencargado), reglas.soloLetras(modeloEgresoInsumoStore.egrencargado)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -265,14 +265,21 @@ export default {
     // INSERT: Agrega un usuario
     async guardarEgresoInsumo() {
       console.log("dataper:", this.modeloEgresoInsumoStore);
-      let respuesta = await ServicioEgresoInsumo.agregarEgresoInsumo(
+      try {
+        let respuesta = await ServicioEgresoInsumo.agregarEgresoInsumo(
         this.modeloEgresoInsumoStore
-      );
-      if (respuesta.status == 201) {
-        this.cerrarDialogo();
-        this.cargarListaEgresoInsumo();
-        this.vaciarModeloEgresoInsumo();
+      );        
+        if (respuesta.status == 201) {        
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaEgresoInsumo();
+          this.vaciarModeloEgresoInsumo();
+        }             
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!");    
+         
       }
+      
     },
 
     // SELECT: Carga todos los usuarios registrados

@@ -76,10 +76,14 @@
 <script>
 import { mapMutations } from "vuex";
 
+import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 import DialogNuevoLimpiezaHerramienta from "../components/DialogNuevoLimpiezaHerramienta";
 import DialogMostrarLimpiezaHerramienta from "../components/DialogMostrarLimpiezaHerramienta";
 import ServicioLimpiezaHerramienta from "../services/ServicioLimpiezaHerramienta";
-import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
+
+import ServicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioLote from "../services/ServicioLote";
 
 export default {
   name: "BaseLimpiezaHerramienta",
@@ -91,7 +95,7 @@ export default {
 
   mounted() {
     this.cargarListaLimpiezaHerramienta();
-    this.cargarListaCultivos();
+    // this.cargarListaCultivos();
   },
 
   data() {
@@ -102,7 +106,7 @@ export default {
         // Detalla las cabeceras de la tabla
         {
           text: "Cultivo",
-          value: "cultivoproducto.pronombre",
+          value: "cultivo",
           align: "center",
           class: "grey lighten-3",
         },
@@ -234,6 +238,16 @@ export default {
         );
       },
     },
+    listaFincaStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
 
     listaCultivoStore: {
       get() {
@@ -244,6 +258,21 @@ export default {
       set(v) {
         return this.$store.commit(
           "moduloLimpiezaHerramienta/establecerListaCultivoStore",
+          v
+        );
+      },
+    },
+    listaloteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloLimpiezaHerramienta/listaloteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerlistaloteStore",
           v
         );
       },
@@ -276,16 +305,27 @@ export default {
       });
       this.listaLimpiezaHerramientaStore = listaLimpiezaHerramienta;
     },
-
-    async cargarListaCultivos() {
-      let listaCultivo = []; // Limpiar la 'lista de ciudades'
-      let respuesta = await ServicioLimpiezaHerramienta.obtenerTodosCultivos(); // Obtener respuesta de backend
-      let datosCultivo = await respuesta.data; // Rescatar datos de la respuesta
-      datosCultivo.forEach((Cultivo) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaCultivo.push(Cultivo);
+    async cargarListaFinca() {
+      let listaFinca = [];
+      let respuesta = await ServicioFinca.obtenerTodosFincas();
+      let datosFinca = await respuesta.data;
+      datosFinca.forEach((finca) => {
+        listaFinca.push(finca);
       });
-      this.listaCultivoStore = listaCultivo;
+      this.listaFincaStore = listaFinca;
+    },
+
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.modeloLimpiezaHerramientaStore.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloLimpiezaHerramientaStore.fincaid
+      );
+      this.listaloteStore = resultado.data;
     },
 
     ...mapMutations("moduloLimpiezaHerramienta", [
@@ -300,7 +340,7 @@ export default {
         .dialogNuevoLimpiezaHerramienta; // Abre el DialogNuevoLimpiezaHerramienta
       this.$refs.DialogNuevoLimpiezaHerramienta.$refs.componentFormLimpiezaHerramienta.$refs.formLimpiezaHerramienta.resetValidation(); // Reinicia las validaciones de formLimpiezaHerramienta
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
-      this.editarLimpiezaHerramienta=false;
+      this.editarLimpiezaHerramienta = false;
       // this.$store.commit("moduloPoda/establecerEditarLimpiezaHerramienta", false);
     },
 
@@ -308,19 +348,23 @@ export default {
       this.dialogMostrarLimpiezaHerramienta = !this
         .dialogMostrarLimpiezaHerramienta;
       this.vaciarLimpiezaHerramienta(); // Vacia el modelo LimpiezaHerramienta
-      // const indiceEditar = this.listaLimpiezaHerramientaStore.indexOf(item);
       this.$store.commit(
         "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
         true
       );
-
       this.modeloLimpiezaHerramientaStore = item;
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
+
     },
   },
 
   mixins: [autenticacionMixin, myMixin],
 
   created() {
+    // this.cargarListaCultivos();
+    this.cargarListaFinca();
+
     let usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario.rol === "Administrador")
       this.$store.commit("colocarLayout", "LayoutAdministrador");

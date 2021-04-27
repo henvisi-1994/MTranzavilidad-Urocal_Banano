@@ -6,9 +6,28 @@ export default {
     state: {
         listaPodasStore: [],
         listaCultivoStore: [],
+        listaloteStore: [],
         modeloPodaStore: new Poda('', '', '', '', '', '', '', ''), // Modelo Poda
         formPodaValido: false, // Indica si el formulario de Poda es valido
-        // editarPoda: false
+         editarPoda: false,
+         listaTipoStore: [
+            {
+              tipoid: 1,
+              podtipo: "Poda Formación",
+            },
+            {
+              tipoid: 2,
+              podtipo: "Poda Mantenimiento",
+            },
+            {
+              tipoid: 3,
+              podtipo: "Poda Fitosanitaria",
+            },
+            {
+              tipoid: 4,
+              podtipo: "Poda de Descope",
+            },
+          ],
     },
 
     mutations: {
@@ -33,12 +52,17 @@ export default {
         establecerEditarPoda(state, newState) {
             state.editarPoda = newState;
         },
-
+        establecerlistaloteStore(state, newState) {
+            state.listaloteStore = newState;
+        },
         nuevoPoda(state, nuevoPoda) {
             state.modeloPodaStore = nuevoPoda
         },
         establecerListaCultivoStore(state, newState) {
             state.listaCultivoStore = newState;
+        },
+        establecerlistaTipoStore(state, newState) {
+            state.listaTipoStore = newState;
         },
 
         limpiarListaCultivoStore(state) {
@@ -52,5 +76,7 @@ export default {
         modeloPodaStore: (state) => state.modeloPodaStore,
         editarPoda: (state) => state.editarPoda,
         listaCultivoStore: (state) => state.listaCultivoStore,
+        listaloteStore: (state) => state.listaloteStore,
+        listaTipoStore:(state) => state.listaTipoStore,
     },
 }

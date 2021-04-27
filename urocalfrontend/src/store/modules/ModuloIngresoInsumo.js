@@ -6,7 +6,7 @@ export default {
         listaCentroAcopios: [],
         listaFincaStore: [],
         listaIngresoInsumoStore: [],
-        modeloIngresoInsumoStore: new ModeloIngresoInsumo('', '', '', '', '', '', ''), 
+        modeloIngresoInsumoStore: new ModeloIngresoInsumo('', '', '', '', '', '', '', '', '', ''), 
         formIngresoInsumoValido: false, // Indica si el formulario de lote es valido
     },
 
@@ -34,7 +34,7 @@ export default {
 
         // CLEANERS
         vaciarModeloIngresoInsumo(state) {
-            state.modeloIngresoInsumoStore = new ModeloIngresoInsumo('', '', '', '', '', '', '')
+            state.modeloIngresoInsumoStore = new ModeloIngresoInsumo('', '', '', '', '', '', '', '', '', '')
         },
 
         limpiarListaCentroAcopios(state) {

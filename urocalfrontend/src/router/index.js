@@ -217,7 +217,79 @@ const routes = [
     name: 'BaseRegistroEnvio',
     component: () => import('@/views/BaseRegistroEnvio.vue'),
   },
+  {
+    path: '/puerto/facturaExportacion',
+    name: 'BaseFactExport',
+    component: () => import('@/views/BaseFactExport.vue'),
+  },
+    /// Empresa
+    {
+      path: '/configuracion/Empresa',
+      name: 'BaseEmpresa',
+      component: () => import('@/views/BaseEmpresa.vue'),
+    },
+      /// Certificaciones
+  {
+    path: '/configuracion/Certificaciones',
+    name: 'BaseEmpresa',
+    component: () => import('@/views/BaseCertificaciones.vue'),
+  },
+     // ------------------------------------- REPORTES ----------------------------------------
+  // -------------------------------- INGRESO INSUMO ------------------------------------
+  // -------------------------------- EGRESO INSUMO -------------------------------------
+  {
+    path: '/reportes/ingreso-insumo',
+    name: 'BaseIngresoInsumo',
+    component: () => import('@/views/BaseReporteIngresoInsumo.vue'),
+  },
+  {
+    path: '/reportes/egreso-insumo',
+    name: 'BaseEgresoInsumo',
+    component: () => import('@/views/BaseReporteEgresoInsumo.vue'),
+  },
   // -----------------------------------------------------------------------------------------
+// --------------------------- REPORTES -----------------------------
+   {
+    path: '/reporte/reporteCompra',
+    name: 'BaseReporteCompras',
+    component: () => import('@/views/BaseReporteCompras.vue'),
+  },
+  {
+    path: '/reporte/reporteKardexProductos',
+    name: 'BaseReporteKardexProductos',
+    component: () => import('@/views/BaseReporteKardexProductos.vue'),
+  },
+
+  {
+    path: '/reporte/reporteKardexIngresosEgresos',
+    name: 'BaseReporteKardexIngresosEgresos',
+    component: () => import('@/views/BaseReporteKardexIngresosEgresos.vue'),
+  },
+  {
+    path: "/reportes/ventas",
+    name: "BaseReporteVentas",
+    component: () => import("@/views/BaseReporteVentas.vue"),
+  },
+  {
+    path: '/reporte/fincaproductor',
+    name: 'BaseReporteFincaProductor',
+    component: () => import('@/views/BaseReporteFincaProductor.vue'),
+  },
+  {
+    path: '/reportes/productores',
+    name: 'BaseReporteProductor',
+    component: () => import('@/views/BaseReporteProductor.vue'),
+  },
+  {
+    path: '/reportes/productoresmasculinos',
+    name: 'BaseReporteProductorMasculino',
+    component: () => import('@/views/BaseReporteProductorMasculino.vue'),
+  },
+  {
+    path: '/reportes/productoresfemeninos',
+    name: 'BaseReporteProductorFemenino',
+    component: () => import('@/views/BaseReporteProductorFemenino.vue'),
+  },
 ]
 
 const router = new VueRouter({

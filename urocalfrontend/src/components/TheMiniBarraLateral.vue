@@ -124,6 +124,7 @@
                 v-for="(opcionNivel2, i) in opcionNivel1.opcionesNivel2"
                 :key="i"
                 style="padding-left: 50px"
+                :to="opcionNivel2.ruta"
               >
                 <v-list-item-icon>
                   <v-icon>mdi-menu-right</v-icon>

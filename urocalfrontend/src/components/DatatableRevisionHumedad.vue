@@ -37,10 +37,18 @@
           </template>-->
 
         <template v-slot:item.actions="{ item }">
-          <v-icon color="info" @click="cargarRevisionHumedadEditar(item)">
+          <v-icon
+            color="info"
+            :disabled="bloquearCamposFormRevisionHumedad"
+            @click="cargarRevisionHumedadEditar(item)"
+          >
             mdi-pencil
           </v-icon>
-          <v-icon color="error" @click="eliminarRevisionHumedadEditar(item)">
+          <v-icon
+            color="error"
+            :disabled="bloquearCamposFormRevisionHumedad"
+            @click="eliminarRevisionHumedadEditar(item)"
+          >
             mdi-trash-can
           </v-icon>
         </template>
@@ -65,13 +73,6 @@ export default {
 
       // Detalla las cabeceras de la tabla
       cabeceraTablaRevisionHumedad: [
-        {
-          text: "Almacenamiento",
-          value: "almacenamientoid",
-          align: "center",
-          class: "grey lighten-3",
-          width: "1%",
-        },
         {
           text: "Porcentaje de humedad",
           value: "revporcentajehumedad",
@@ -128,11 +129,26 @@ export default {
     // Obtiene y modifica el estado de la variable textoBotonRevisionHumedad
     textoBotonRevisionHumedad: {
       get() {
-        return this.$store.getters["moduloRevisionHumedad/textoBotonRevisionHumedad"];
+        return this.$store.getters[
+          "moduloRevisionHumedad/textoBotonRevisionHumedad"
+        ];
       },
       set(v) {
         return this.$store.commit(
           "moduloRevisionHumedad/cambiarTextoBotonRevisionHumedad",
+          v
+        );
+      },
+    },
+    bloquearCamposFormRevisionHumedad: {
+      get() {
+        return this.$store.getters[
+          "moduloRevisionHumedad/bloquearCamposFormRevisionHumedad"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloRevisionHumedad/cambiarBloquearCamposFormRevisionHumedad",
           v
         );
       },
@@ -144,17 +160,25 @@ export default {
         return this.$store.getters["moduloRevisionHumedad/revisionHumedad"];
       },
       set(v) {
-        return this.$store.commit("moduloRevisionHumedad/nuevoRevisionHumedad", v);
+        return this.$store.commit(
+          "moduloRevisionHumedad/nuevoRevisionHumedad",
+          v
+        );
       },
     },
 
     // Obtiene la listaRevisionHumedad
     listaRevisionHumedad: {
       get() {
-        return this.$store.getters["moduloRevisionHumedad/listaRevisionHumedad"];
+        return this.$store.getters[
+          "moduloRevisionHumedad/listaRevisionHumedad"
+        ];
       },
       set(v) {
-        return this.$store.commit("moduloRevisionHumedad/asignarListaRevisionHumedad", v);
+        return this.$store.commit(
+          "moduloRevisionHumedad/asignarListaRevisionHumedad",
+          v
+        );
       },
     },
   },
@@ -169,11 +193,18 @@ export default {
 
     async eliminarRevisionHumedadEditar(item) {
       try {
-        let respuestaServicioRevisionHumedad = await servicioRevisionHumedad.eliminarRevisionHumedad(
-          item.revisionhumedadid
-        );
-        this.$toast.error(respuestaServicioRevisionHumedad.data.message);
-        this.obtenerRevisionHumedadPorAlmacenamiento();
+        if (
+          item.revisionhumedadid != 0 &&
+          typeof item.revisionhumedadid != "undefined"
+        ) {
+          let respuestaServicioRevisionHumedad = await servicioRevisionHumedad.eliminarRevisionHumedad(
+            item.revisionhumedadid
+          );
+          this.$toast.error(respuestaServicioRevisionHumedad.data.message);
+        } else {
+          const index = this.listaRevisionHumedad.indexOf(item);
+          this.listaRevisionHumedad.splice(index, 1);
+        }
       } catch (error) {
         this.$toast.error(error.response.data.message);
       }

@@ -35,8 +35,8 @@
             class="style-chooser"
             label="lotnumero"
             @input="obtenerTodosListaCultivo" 
-            :reduce="(listaLote) => listaLote.lotecultivadoid"
-            :options="listaLote"
+            :reduce="(listaloteStore) => listaloteStore.lotecultivadoid"
+            :options="listaloteStore"
 
           >
             <template v-slot:no-options="{ search, searching }">
@@ -58,8 +58,8 @@
             placeholder="Cultivo"
             class="style-chooser"
             label="detalles"
-            :reduce="(listaCultivo) => listaCultivo.cultivoid"
-            :options="listaCultivo"
+            :reduce="(listacultivoStore) => listacultivoStore.cultivoid"
+            :options="listacultivoStore"
             :rules="[reglas.campoVacio(modeloFertilizanteStore.cultivoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
@@ -76,7 +76,9 @@
             :disabled="bloquearCamposFormFertilizante"
             placeholder="Ciclo"
             v-model="modeloFertilizanteStore.ferciclo"
-            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferciclo)]"
+            :rules="[
+                      reglas.soloNumerosPositivos(modeloFertilizanteStore.ferciclo),
+                      reglas.campoVacio(modeloFertilizanteStore.ferciclo)]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -133,7 +135,10 @@
             :disabled="bloquearCamposFormFertilizante"
             placeholder="Concentración: (%)"
             v-model="modeloFertilizanteStore.ferconcentracion"
-            :rules="[reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
+            :rules="[
+                    reglas.soloNumerosPositivos(modeloFertilizanteStore.ferconcentracion),
+                    reglas.campoVacio(modeloFertilizanteStore.ferconcentracion)]"
+                   
           ></v-text-field
         ></v-col>
       </v-row>
@@ -145,7 +150,7 @@
             placeholder="Área aplicada (HA)"
             v-model="modeloFertilizanteStore.ferareaaplicada"
             :rules="[
-                      reglas.soloNumeros(modeloFertilizanteStore.ferareaaplicada),
+                      //reglas.soloNumeros(modeloFertilizanteStore.ferareaaplicada),
                       reglas.soloNumerosPositivos(modeloFertilizanteStore.ferareaaplicada),
                       reglas.campoVacio(modeloFertilizanteStore.ferareaaplicada),
                       ]"
@@ -158,7 +163,7 @@
             placeholder="Cantidad aplicada"
             v-model="modeloFertilizanteStore.fercantidadaplicada"
             :rules="[
-                      reglas.soloNumeros(modeloFertilizanteStore.fercantidadaplicada),
+                      //reglas.soloNumeros(modeloFertilizanteStore.fercantidadaplicada),
                       reglas.soloNumerosPositivos(modeloFertilizanteStore.fercantidadaplicada),
                       reglas.campoVacio(modeloFertilizanteStore.fercantidadaplicada),
                       ]"
@@ -212,7 +217,6 @@
 <script>
 import { mapState } from "vuex";
 import servicioCultivo from "../services/ServicioCultivo";
-import servicioFertilizantes from "../services/ServicioFertilizantes";
 import servicioLote from "../services/ServicioLote";
 import servicioFinca from "../services/ServicioFinca";
 import vSelect from "vue-select";
@@ -227,9 +231,7 @@ export default {
   },
   mounted() {
     this.obtenerTodosFincas();
-    this.obtenerTodosListaCultivo();
-    this.obtenerTodosLoteCultivadoDeFinca();
-
+    
   },
   data() {
     return {
@@ -264,6 +266,27 @@ export default {
       },
     },
 
+
+    listacultivoStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listacultivoStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerlistacultivoStore", v);
+      },
+    },
+
+    listaloteStore: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloFertilizante/listaloteStore"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloFertilizante/establecerlistaloteStore", v);
+      },
+    },
+
+
+
   bloquearCamposFormFertilizante: {
       get() {
         return this.$store.getters["moduloFertilizante/bloquearCamposFormFertilizante"];
@@ -280,17 +303,15 @@ export default {
   methods: {
       async obtenerTodosListaCultivo() {
       let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloFertilizanteStore.lotecultivadoid);
-      this.listaCultivo = resultado.data; 
-
+      this.listacultivoStore = resultado.data; 
     },
-    
       async obtenerTodosFincas() {
       let resultado = await servicioFinca.obtenerTodosFincas();
       this.listaFinca = resultado.data; 
     },
       async obtenerTodosLoteCultivadoDeFinca() {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(this.modeloFertilizanteStore.fincaid);
-      this.listaLote = resultado.data; 
+      this.listaloteStore = resultado.data; 
       
     },
       

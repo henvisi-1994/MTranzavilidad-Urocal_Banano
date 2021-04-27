@@ -50,8 +50,16 @@ import ModuloDetalleDespacho from './modules/ModuloDetalleDespacho';
 import ModuloInspectorPersona from './modules/ModuloInspectorPersona';
 import ModuloExportadorPersona from './modules/ModuloExportadorPersona';
 import ModuloGuiaRemision from './modules/ModuloGuiaRemision';
+import ModuloFacturaExport from './modules/ModuloFacturaExport';
+import ModuloEmpresa from './modules/ModuloEmpresa';
+import ModuloCertificacion from './modules/ModuloCertificacion';
+import ModuloRegistroEnvio from './modules/ModuloRegistroEnvio';
 
 import ModuloCultivo from './modules/ModuloCultivo';
+import ModuloReporteDatosProductor from './modules/ModuloReporteDatosProductor';
+import ModuloReporteFinca from './modules/ModuloReporteFinca';
+import ModuloReporteFincasProductor from './modules/ModuloReporteFincasProductor';
+import ModuloReporteProductor from './modules/ModuloReporteProductor';
 
 export default new Vuex.Store({
   state: {
@@ -134,6 +142,14 @@ export default new Vuex.Store({
     moduloInspectorPersona: ModuloInspectorPersona,                         // Instancia al ModuloInspectorPersona
     moduloCultivo: ModuloCultivo,                                           // Instancia al ModuloCultivo
     moduloExportadorPersona: ModuloExportadorPersona,                       // Instancia al ModuloExportadorPersona
-    moduloGuiaRemision: ModuloGuiaRemision
+    moduloGuiaRemision: ModuloGuiaRemision,
+    moduloFacturaExport: ModuloFacturaExport,
+    moduloEmpresa: ModuloEmpresa, 
+    moduloCertificaciones: ModuloCertificacion,
+    moduloReporteDatosProductor: ModuloReporteDatosProductor,
+    moduloReporteFinca: ModuloReporteFinca,
+    moduloReporteFincasProductor: ModuloReporteFincasProductor,
+    moduloReporteProductor: ModuloReporteProductor,
+    moduloRegistroEnvio: ModuloRegistroEnvio                                // Instancia al ModuloRegistroEnvio
   }
 })

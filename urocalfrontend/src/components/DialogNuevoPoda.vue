@@ -44,7 +44,6 @@
 import { mapMutations, mapState } from "vuex";
 
 import FormPoda from "@/components/FormPoda";
-
 import ServicioPodas from "../services/ServicioPodas";
 
 export default {
@@ -125,7 +124,7 @@ export default {
 
     cerrarDialogNuevoPoda() {
       this.dialogNuevoPoda = !this.dialogNuevoPoda; // Cierra el dialogNuevoPoda
-      this.$refs.componentFormPoda.limpiarIds();
+      // this.$refs.componentFormPoda.limpiarIds();
       this.vaciarModeloPodaStore();
     },
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),

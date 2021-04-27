@@ -104,6 +104,7 @@ export default {
     async actualizarRegistro () {
       const respuesta = await ServicioTratamiento.actualizarTratamiento(this.modeloTratamientoStore);
       if (respuesta.status == 200) {
+        this.$toast.success(respuesta.data.message);
         this.cerrarDialogMostrarTratamiento();
         this.cargarListaTratamiento();
         this.vaciarModeloTratamientoStore();
@@ -112,8 +113,9 @@ export default {
 
     async cargarListaTratamiento () {
       let listaTratamientos = [];
-      let respuesta = await ServicioTratamiento.obtenerTodosTratamientos();
+      let respuesta = await ServicioTratamiento.obtenerTodosTratamiento();
       let riegos = await respuesta.data;
+      this.$store.commit("moduloTratamiento/vaciarLista", null);
       riegos.forEach((f) => {
         listaTratamientos.push(f);
       });
@@ -123,6 +125,7 @@ export default {
     async eliminarRegistro() {
       const respuesta = await ServicioTratamiento.eliminarTratamiento(this.modeloTratamientoStore.tratamientoid);
       if (respuesta.status == 200) {
+        this.$toast.warning(respuesta.data.message);
         this.cerrarDialogMostrarTratamiento();
         this.cargarListaTratamiento();
       } 

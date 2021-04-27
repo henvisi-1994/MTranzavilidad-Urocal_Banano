@@ -68,10 +68,14 @@ module.exports = {
     // Elimina un lote cultivado
     async eliminarLoteCultivado(req, res) {
         const { id } = req.params;
-
         try {
-            let rowCount = await modeloLoteCultivado.eliminarLoteCultivado(id);
-            if (rowCount == 1) {
+            let rowCount1 = await modeloLoteCultivado.eliminarLoteCultivadodeCultivo(id);
+            let rowCount2 = await modeloLoteCultivado.eliminarLoteCultivadodemedioambiente(id);
+            let rowCount3 = await modeloLoteCultivado.eliminarLoteCultivadodesuelo(id);
+            
+            let rowCount4 = await modeloLoteCultivado.eliminarLoteCultivado(id);
+            
+            if (rowCount1 == 1 || rowCount2==1 || rowCount3 ==1 || rowCount4 || 1) {
                 return res.status(200).send({ message: "Eliminado exitosamente" });
             } else {
                 return res.status(400).send({ message: "Lote cultivado no registrado" });

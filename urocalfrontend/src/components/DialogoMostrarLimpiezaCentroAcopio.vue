@@ -36,7 +36,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field :disabled="noeditar" v-model="modeloLimpiezaCentroAcopioStore.limcenareas" label="Áreas" class="custom px-2" dense filled     
-                :rules="[reglas.campoVacio(modeloLimpiezaCentroAcopioStore.limcenareas)]"
+                :rules="[reglas.campoVacio(modeloLimpiezaCentroAcopioStore.limcenareas),
+                         reglas.soloNumerosPositivos(modeloLimpiezaCentroAcopioStore.limcenareas),
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -244,7 +246,7 @@ export default {
       //console.log(this.modeloLimpiezaCentroAcopioStore);
       const respuesta = await ServicioLimpiezaCentroAcopio.eliminarLimpiezaCentroAcopio(this.modeloLimpiezaCentroAcopioStore.limpiezacentroacopioid); 
       try {
-        this.$toast.success(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
         this.cerrarDialogo();
         this.cargarListaLimpiezaCentroAcopio();
       } catch (error) {

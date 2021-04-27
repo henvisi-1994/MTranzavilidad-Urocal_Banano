@@ -22,5 +22,9 @@ module.exports = {
 
     async eliminarProducto(id) {
         return productoDao.eliminarProducto(id);
+    },
+    async obtenerDetallesCacao() {
+        return  productoDao.obtenerDetallesCacao();
     }
+
 }

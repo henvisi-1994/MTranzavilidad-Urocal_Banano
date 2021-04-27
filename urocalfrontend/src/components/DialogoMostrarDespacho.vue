@@ -215,6 +215,7 @@ export default {
             this.obtenerTodosDespacho();
             this.bloquearCamposFormDespacho = true;
             this.bloqueoBotonCambios();
+            this.cerrarDialogoMostrarDespacho();
           } catch (error) {
             this.$toast.error(error.response.data.message);
           }
@@ -263,6 +264,7 @@ export default {
             let respuesta = await servicioDespacho.eliminarDespacho(this.despacho.despachoid);
             this.$toast.success(respuesta.data.message);
             this.obtenerTodosDespacho();
+            this.cerrarDialogoMostrarDespacho();
           } catch (error) {
             this.$toast.error(error.response.data.message);
           }

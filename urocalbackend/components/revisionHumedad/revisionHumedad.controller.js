@@ -58,18 +58,9 @@ module.exports = {
     // Actualiza informacion de una revision humedad
     async updateRevisionHumedad(req, res) {
         const { id } = req.params;
-        const { revisionhumedadid, revporcentajehumedad, revfechaingresosecadora, revhoraingresosecadora,
-            revfechasalidasecadora, revhorasalidasecadora, almacenamientoid } = req.body;
+        let detalle =  req.body;
         try {
-            const rowCount = await revisionHumedadModel.updateRevisionHumedad(id, {
-                revisionhumedadid: revisionhumedadid,
-                revporcentajehumedad: revporcentajehumedad,
-                revfechaingresosecadora: revfechaingresosecadora,
-                revhoraingresosecadora: revhoraingresosecadora,
-                revfechasalidasecadora: revfechasalidasecadora,
-                revhorasalidasecadora: revhorasalidasecadora,
-                almacenamientoid: almacenamientoid,
-            });
+            const rowCount = await revisionHumedadModel.updateRevisionHumedad(detalle);
             return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
         } catch (error) {
             return res.status(500).send({ message: "Registro fallido" });

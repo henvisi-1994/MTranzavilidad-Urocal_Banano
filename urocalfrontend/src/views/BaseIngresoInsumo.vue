@@ -85,8 +85,9 @@ export default {
 
   mounted() {
     this.cargarListaIngresoInsumo();
-    //  this.cargarInsumoAcopios();
+    this.cargarInsumoAcopios();
     this.cargarListaFinca();
+    this.cargarInsumoAcopios();
   },
 
   data() {
@@ -151,7 +152,7 @@ export default {
         },
         {
           text: "Encargado",
-          value: "inginsencargado",
+          value: "ingencargado",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -166,7 +167,8 @@ export default {
       ],
 
       listaIngresoInsumo: [], // Almacena una lista de IngresoInsumo con llave foranea ingresoinsumoid, la misma se muestra en tabla
-      listaCentroAcopios: [{ centroacopioind: "1", centroacopionombre: "centro1" }],
+      //listaCentroAcopios: [{ centroacopioind: "1", centroacopionombre: "centro1" }],
+      //listaCentroAcopios: [],
     };
   },
 
@@ -190,7 +192,7 @@ export default {
       },
     },
 
-    listaCentroAcopiosx: {
+    listaCentroAcopios: {
       get() {
         return this.$store.getters["moduloIngresoInsumo/listaCentroAcopios"];
       },
@@ -256,7 +258,7 @@ export default {
         listaIngresoInsumo.push(ingresoinsumo);
       });
       this.listaIngresoInsumoStore = listaIngresoInsumo;
-      //console.log(this.listaIngresoInsumoStore);
+      console.log(this.listaIngresoInsumoStore);
     },
 
     async cargarInsumoAcopios() {

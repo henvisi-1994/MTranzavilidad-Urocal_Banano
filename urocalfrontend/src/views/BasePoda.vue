@@ -75,6 +75,8 @@ import DialogNuevoPoda from "@/components/DialogNuevoPoda";
 import DialogMostrarPoda from "@/components/DialogMostrarPoda";
 import ServicioPodas from "../services/ServicioPodas";
 import ServicioFinca from "../services/ServicioFinca";
+import servicioCultivo from "../services/ServicioCultivo";
+import servicioLote from "../services/ServicioLote";
 
 export default {
   name: "BasePoda",
@@ -110,7 +112,7 @@ export default {
         },
         {
           text: "Cultivo",
-          value: "cultivoid",
+          value: "cultivo",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -182,6 +184,46 @@ export default {
       },
       set(v) {
         return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
+      },
+    },
+    listaCultivoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloPoda/listaCultivoStore"])
+        );
+      },
+      set(v) {
+        return this.$store.commit("moduloPoda/establecerListaCultivoStore", v);
+      },
+    },
+    listaloteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaloteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaloteStore",
+          v
+        );
+      },
+    },
+    listaTipoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloPoda/listaTipoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloPoda/establecerlistaTipoStore",
+          v
+        );
       },
     },
 
@@ -290,17 +332,27 @@ export default {
     // Carga el DialogMostrarPoda
     abrirMostrarPoda(item) {
       this.dialogMostrarPoda = !this.dialogMostrarPoda; // Abre el DialogNuevoPoda
-      // this.$refs.componentDialogMostrarPoda.$refs.componentFormPoda.$refs.formPoda.resetValidation();
       this.vaciarModeloPodaStore(); // Vacia el modelo poda
-      this.$store.commit(
-        "moduloPoda/establecerEditarPoda",
-        true
-      );
+      this.editarPoda = true;
       this.modeloPodaStore = item;
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
     },
 
     // Vacia el modelo
     ...mapMutations("moduloPoda", ["vaciarModeloPodaStore"]),
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.modeloPodaStore.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloPodaStore.fincaid
+      );
+      this.listaloteStore = resultado.data;
+    },
 
     // Carga el DialogNuevoPoda
     cargarDialogNuevoPoda() {
@@ -315,9 +367,8 @@ export default {
 
   created() {
     this.cargarListaPoda();
-    this.cargarListaFinca();
+    // this.cargarListaFinca();
     this.$store.commit("colocarLayout", "LayoutProductor");
-    
   },
 };
 </script>

@@ -269,7 +269,7 @@ export default {
     async eliminarRegistro() {
       try {
           const respuesta = await ServicioMonitoreoRoedorFinca.eliminarMonitoreoRoedorFinca(this.modeloMonitoreoRoedorFincaStore.monitoreoroedorid);
-          this.$toast.success(respuesta.data.message);
+          this.$toast.warning(respuesta.data.message);
           this.cargarListaMonitoreoRoedorFinca();
           this.cerrarDialogMostrarMonitoreoRoedorFinca();
         } catch (error) {

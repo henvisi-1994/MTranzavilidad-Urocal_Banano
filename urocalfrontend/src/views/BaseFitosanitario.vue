@@ -76,6 +76,8 @@ import { mapMutations } from "vuex";
 import DialogNuevoFitosanitario from "@/components/DialogNuevoFitosanitario";
 import DialogMostrarFitosanitario from "@/components/DialogMostrarFitosanitario";
 import ServicioFitosanitarios from "../services/ServicioFitosanitarios";
+import servicioLote from "../services/ServicioLote";
+import servicioCultivo from "../services/ServicioCultivo";
 
 export default {
   name: "BaseFitosanitario",
@@ -234,6 +236,57 @@ export default {
         );
       },
     },
+
+    listaCultivoStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/listaCultivoStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/establecerListaCultivoStore",
+          v
+        );
+      },
+    },
+
+    listaLoteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFitosanitario/listaLoteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/establecerListaLoteStore",
+          v
+        );
+      },
+    },
+
+    bloquearFitosanitarioStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters[
+              "moduloFitosanitario/bloquearFitosanitarioStore"
+            ]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFitosanitario/cambiarbloquearFitosanitarioStore",
+          v
+        );
+      },
+    },
+
     // Obtiene y modifica el estado de la variable dialogNuevoFitosanitario
     dialogNuevoFitosanitario: {
       get() {
@@ -284,7 +337,10 @@ export default {
       let fitosanitarios = await respuesta.data;
       this.$store.commit("moduloFitosanitario/vaciarLista", null);
       fitosanitarios.forEach((f) => {
-        this.$store.commit("moduloFitosanitario/updateListaFitosanitariosStore",f);
+        this.$store.commit(
+          "moduloFitosanitario/updateListaFitosanitariosStore",
+          f
+        );
       });
     },
     /*
@@ -339,6 +395,9 @@ export default {
       this.$refs.componentDialogMostrarFitosanitario.$refs.componentFormFitosanitario.$refs.formFitosanitario.resetValidation();
       this.vaciarModeloFitosanitarioStore();
       this.modeloFitosanitarioStore = item;
+      this.obtenerTodosListaCultivo();
+      this.obtenerTodosLoteCultivadoDeFinca();
+      this.bloquearFitosanitarioStore= true;
     },
 
     // Vacia el modelo Fitosanitario
@@ -350,10 +409,22 @@ export default {
       this.$refs.componentDialogNuevoFitosanitario.$refs.componentFormFitosanitario.$refs.formFitosanitario.resetValidation();
       this.vaciarModeloFitosanitarioStore();
     },
-    convertirFecha(fecha){
+    convertirFecha(fecha) {
       let fechaC = fecha.split("T")[0];
       return fechaC;
-    }
+    },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.modeloFitosanitarioStore.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.modeloFitosanitarioStore.fincaid
+      );
+      this.listaLoteStore = resultado.data;
+    },
   },
 
   created() {

@@ -31,6 +31,7 @@
         <v-container>
           <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
+              
               <v-select
                 v-model="modeloLimpiezaVehiculoStoreStore.cultivoproducto.cultivoid"
                 placeholder="Seleccione un cultivo"
@@ -256,7 +257,7 @@ export default {
     async eliminarRegistro() {
       try {
           let respuesta = await ServicioLimpiezaHerramienta.eliminarLimpiezaHerramienta(this.modeloLimpiezaHerramientaStore.limpiezaherramientaid);
-          this.$toast.success(respuesta.data.message);
+          this.$toast.warning(respuesta.data.message);
           this.cargarListaLimpiezaHerramienta();
           this.cerrarDialogMostrarLimpiezaHerramienta();
         } catch (error) {

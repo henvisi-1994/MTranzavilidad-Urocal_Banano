@@ -57,7 +57,7 @@ export default {
   components: {
     FormFertilizante,
   },
-
+      
   data() {
     return {};
   },
@@ -99,6 +99,7 @@ export default {
     async actualizarRegistro () {
       const respuesta = await ServicioFertilizantes.actualizarFertilizante(this.modeloFertilizanteStore.fertilizacionid, this.modeloFertilizanteStore);
       if (respuesta.status == 200) {
+        this.$toast.success(respuesta.data.message);
         this.cerrarDialogMostrarFertilizante();
         this.cargarListaFertilizante();
         this.vaciarModeloFertilizanteStore();
@@ -108,15 +109,17 @@ export default {
     async cargarListaFertilizante () {
       let respuesta = await ServicioFertilizantes.obtenerTodosFertilizantes();
       let fertilizantes = await respuesta.data;
+      console.log(fertilizantes);
       this.$store.commit("moduloFertilizante/vaciarLista",null);
         fertilizantes.forEach((f) => {
           this.$store.commit("moduloFertilizante/updateListaFertilizacion",f);
-      });
+        });
     },
 
     async eliminarRegistro() {
       const respuesta = await ServicioFertilizantes.eliminarFertilizante(this.modeloFertilizanteStore.fertilizacionid);
       if (respuesta.status == 200) {
+        this.$toast.warning(respuesta.data.message);
         this.cerrarDialogMostrarFertilizante();
         this.cargarListaFertilizante();
       } 
@@ -128,6 +131,9 @@ export default {
     desbloquear() {
       this.$store.commit("moduloFertilizante/cambiarBloquearCamposFormFertilizante", false);
     },
+
+
+
 
     ...mapMutations("moduloFertilizante", ["vaciarModeloFertilizanteStore"]),
   },

@@ -60,7 +60,8 @@
         <v-btn
           large
           :block="$vuetify.breakpoint.xs ? true : false"
-          width="300px" elevation="0"
+          width="300px"
+          elevation="0"
           color="primary"
           @click="cargarDialogoNuevaMaleza()"
           >Nuevo</v-btn
@@ -77,6 +78,8 @@ import DialogoMostrarMalezaControl from "../components/DialogoMostrarMalezaContr
 import servicioMalezaControl from "../services/ServicioMalezaControl";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 import ServicioFinca from "../services/ServicioFinca";
+import servicioLote from "../services/ServicioLote";
+import servicioCultivo from "../services/ServicioCultivo";
 
 export default {
   name: "BaseMaleza",
@@ -92,7 +95,12 @@ export default {
       buscarMaleza: "", // Guarda el texto de búsqueda
       // Detalla los cabezales de la tabla
       cabeceraTablaMaleza: [
-        { text: "Fecha", value: "confecha", align: "center", class: "grey lighten-3" },
+        {
+          text: "Fecha",
+          value: "confecha",
+          align: "center",
+          class: "grey lighten-3",
+        },
         {
           text: "Hectareas",
           value: "conhectareas",
@@ -116,7 +124,7 @@ export default {
         },
         {
           text: "Cultivo",
-          value: "pronombre",
+          value: "cultivo",
           sortable: false,
           align: "center",
           class: "grey lighten-3",
@@ -146,36 +154,59 @@ export default {
   },
 
   computed: {
-
     listaFincaStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"]));
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"])
+        );
       },
       set(v) {
         return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
       },
     },
+     listaLoteStore: {
+      get() {
+        return this.$store.getters["moduloMaleza/listaLoteStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloMaleza/asignarListaLoteStore", v);
+      },
+    },
+    listaCultivoStore: {
+      get() {
+        return this.$store.getters["moduloMaleza/listaCultivoStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloMaleza/asignarListaCultivoStore", v);
+      },
+    },
+
     // Obtiene y modifica el estado de la variable dialogoNuevaMaleza
     dialogoNuevaMaleza: {
       get() {
         return this.$store.getters["gestionDialogos/dialogoNuevaMaleza"];
       },
       set(v) {
-        return this.$store.commit("gestionDialogos/toggleDialogoNuevaMaleza", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogoNuevaMaleza",
+          v
+        );
       },
     },
-
-     
-
 
     // Obtiene y modifica el estado de la variable dialogoMostrarMalezaControl
     dialogoMostrarMalezaControl: {
       get() {
-        return this.$store.getters["gestionDialogos/dialogoMostrarMalezaControl"];
+        return this.$store.getters[
+          "gestionDialogos/dialogoMostrarMalezaControl"
+        ];
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogoMostrarMalezaControl", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogoMostrarMalezaControl",
+          v
+        );
       },
     },
 
@@ -208,14 +239,31 @@ export default {
       });
       this.listaFincaStore = listaFinca;
     },
+    async obtenerTodosListaCultivo() {
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(
+        this.maleza.lotecultivadoid
+      );
+      this.listaCultivoStore = resultado.data;
+    },
+    async obtenerTodosLoteCultivadoDeFinca() {
+      let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
+        this.maleza.fincaid
+      );
+      this.listaLoteStore = resultado.data;
+    },
 
     // Carga el TabMostrarLote
     async abrirTabsMostrarMalezaControl(controlmalezaid) {
       try {
         // Obtener datos de maleza
-        let maleza = await servicioMalezaControl.obtenerMalezaControl(controlmalezaid);
+        let maleza = await servicioMalezaControl.obtenerMalezaControl(
+          controlmalezaid
+        );
         // Se asignan los datos a los modelos
         this.maleza = maleza.data;
+        this.obtenerTodosListaCultivo() ;
+        this.obtenerTodosLoteCultivadoDeFinca();
+        //console.log(this.maleza);
       } catch (error) {
         this.$store.error(error.response.data.message);
       }

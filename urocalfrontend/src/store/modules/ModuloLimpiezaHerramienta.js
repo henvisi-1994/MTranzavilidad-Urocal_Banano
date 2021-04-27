@@ -6,6 +6,7 @@ export default {
     state: {
         listaLimpiezaHerramientaStore: [],
         listaCultivoStore: [],
+        listaloteStore: [],
         limpiezaHerramienta: new LimpiezaHerramienta('', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo LimpiezaHerramienta
         formLimpiezaHerramientaValido: false, // Indica si el formulario de LimpiezaHerramienta es valido
         editarLimpiezaHerramienta: false
@@ -30,6 +31,9 @@ export default {
         establecerListaCultivoStore(state, newState) {
             state.listaCultivoStore = newState;
         },
+        establecerlistaloteStore(state, newState) {
+            state.listaloteStore = newState;
+        },
 
         limpiarListaCultivoStore(state) {
             state.listaCultivoStore = [];
@@ -49,6 +53,7 @@ export default {
         limpiezaHerramienta: (state) => state.limpiezaHerramienta,
         listaLimpiezaHerramientaStore: (state) => state.listaLimpiezaHerramientaStore,
         listaCultivoStore: (state) => state.listaCultivoStore,
+        listaloteStore: (state) => state.listaloteStore,
         editarLimpiezaHerramienta: (state) => state.editarLimpiezaHerramienta,
     },
 }

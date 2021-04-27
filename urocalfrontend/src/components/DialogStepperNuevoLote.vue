@@ -122,6 +122,41 @@ export default {
       },
     },
 
+
+     // Obtiene la variable bloquearCamposFormLote
+    bloquearCamposFormLote: {
+      get() {
+        return this.$store.getters["moduloLote/bloquearCamposFormLote"];
+      },
+      set(v) {
+        return this.$store.commit("moduloLote/cambiarBloquearCamposFormLote", v);
+      },
+    },
+
+    // Obtiene la variable bloquearCamposFormCultivo
+    bloquearCamposFormCultivo: {
+      get() {
+        return this.$store.getters["moduloCultivo/bloquearCamposFormCultivo"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCultivo/cambiarBloquearCamposFormCultivo", v);
+      },
+    },
+
+    // Obtiene la variable bloquearCamposFormMedioAmbiente
+    bloquearCamposFormMedioAmbiente: {
+      get() {
+        return this.$store.getters["moduloMedioAmbiente/bloquearCamposFormMedioAmbiente"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloMedioAmbiente/cambiarBloquearCamposFormMedioAmbiente",
+          v
+        );
+      },
+    },
+    
+
     // Obtiene es estado de la variable validFormLot y el modelo lot
     ...mapState("moduloLote", ["formLoteValido", "lote", "listaLotes"]),
 
@@ -177,6 +212,7 @@ export default {
                 lotecultivadoid: respuestaServicioLote.data.lotecultivadoid,
                 productoid: productoID,
               };
+              console.log(cultivo);
               await servicioCultivo.crearCultivo(cultivo);
             });
 
@@ -263,6 +299,12 @@ export default {
           this.$refs.componentFormLote.$refs.formLote.resetValidation();
           this.$refs.componentFormMedioAmbiente.$refs.formMedioAmbiente.resetValidation();
           this.$refs.componentFormSuelo.$refs.formSuelo.resetValidation();
+
+          this.bloquearCamposFormLote = false;
+          this.bloquearCamposFormCultivo = false;
+          this.bloquearCamposFormMedioAmbiente = false;
+          this.bloquearCamposFormSuelo = false;
+
 
           this.n_step = 1;
           this.btn_nombre_step = "Siguiente";

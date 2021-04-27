@@ -44,6 +44,7 @@
       <v-card-actions class="justify-center pb-3">
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
+          :disabled="editarLimpiezaHerramienta"
           width="300px"
           large
           elevation="0"
@@ -116,12 +117,24 @@ export default {
         );
       },
     },
+        listaLimpiezaHerramientaStore: {
+      get() {
+        return this.$store.getters[
+          "moduloLimpiezaHerramienta/listaLimpiezaHerramientaStore"
+        ];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerListaLimpiezaHerramientaStore",
+          v
+        );
+      },
+    },
   },
 
   methods: {
     // UPDATE: Actualiza un registro
     async actualizarRegistro() {
-      //console.log(this.modeloFincaStore)
       try {
         let respuesta = await ServicioLimpiezaHerramienta.actualizarLimpiezaHerramienta(
           this.modeloLimpiezaHerramientaStore.limpiezaherramientaid,
@@ -145,7 +158,6 @@ export default {
         listaLimpiezaHerramienta.push(LimpiezaHerramienta);
       });
       this.listaLimpiezaHerramientaStore = listaLimpiezaHerramienta;
-      //console.log(this.listaLimpiezaHerramientaStore)
     },
 
     async eliminarRegistro() {
@@ -153,8 +165,11 @@ export default {
         let respuesta = await ServicioLimpiezaHerramienta.eliminarLimpiezaHerramienta(
           this.modeloLimpiezaHerramientaStore.limpiezaherramientaid
         );
-        this.$toast.error(respuesta.data.message);
+        this.$toast.warning(respuesta.data.message);
+
         this.cargarListaLimpiezaHerramienta();
+
+
         this.cerrarDialogMostrarLimpiezaHerramienta();
       } catch (error) {
         this.$toast.error(error.response.data.message);
@@ -172,7 +187,6 @@ export default {
     },
 
     cambiarEstadoEditar() {
-      console.log(this.editarLimpiezaHerramienta);
       this.$store.commit(
         "moduloLimpiezaHerramienta/establecerEditarimpiezaHerramienta",
         false

@@ -10,9 +10,13 @@ module.exports = {
                     '${producto.procaracteristica}', '${producto.procodigo}')`;
         result = await pool.query(query);
     },
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async obtenerTodosProducto() {
-        let query = `SELECT * FROM producto`;
+        //let query = `SELECT * FROM producto`;
+        let query = `Select pr.productoid,concat(pr.pronombre,' ',pr.provariedad) as pronombre,pr.procaracteristica, pr.procodigo 
+        FROM producto pr;`;
+       
+        
         let result = await pool.query(query);
         return result.rows; // Devuelve array de productos
     },
@@ -37,5 +41,11 @@ module.exports = {
         let result = await pool.query(query);
 
         return result.rowCount; // Devuelve 1 si borró el producto y 0 sino lo hizo.
-    }
+    },
+    async obtenerDetallesCacao() {
+         let query = `select concat(pronombre,' ',provariedad, ' ',procaracteristica) as tipocacao from producto 
+         where lower(pronombre)='cacao';`;
+        let result = await pool.query(query);
+        return result.rows; // Devuelve array de productos
+    },
 }

@@ -37,15 +37,16 @@
                 class="style-chooser"
                 label="centroacopionombre"
                 :disabled="noeditar"
-                :reduce="(listaAcopioStore) => listaAcopioStore.centroacopioid"
-                :options="listaAcopioStore"
+                @input="obtenerTodosCentroAcopio" 
+                :reduce="(listaCentroAcopio) => listaCentroAcopio.centroacopioid"
+                :options="listaCentroAcopio"
               >
                 <template v-slot:no-options="{ search, searching }">
                   <template v-if="searching">
                     No hay resultados para <em>{{ search }}</em
                     >.
                   </template>
-                  <em style="opacity: 0.5" v-else>Empiece a escribir un  centro de acopio</em>
+                  <em style="opacity: 0.5" v-else>Empiece a escribir un  centro de aBBBcopio</em>
                 </template>
               </v-select>
             </v-col>
@@ -174,6 +175,7 @@ import "vue-select/dist/vue-select.css";
 
 import FormMonitoreoRoedorCentroAcopio from "@/components/FormMonitoreoRoedorCentroAcopio";
 import ServicioMonitoreoRoedorCentroAcopio from '../services/ServicioMonitoreoRoedorCentroAcopio';
+import servicioCentroAcopio from '../services/ServicioCentroAcopio';
 
 export default {
   name: "MostrarMonitoreoRoedorCentroAcopio",
@@ -181,6 +183,10 @@ export default {
   components: {
     FormMonitoreoRoedorCentroAcopio,
     vSelect
+  },
+
+  mounted() {
+    this.obtenerTodosCentroAcopio();
   },
 
   watch: {
@@ -191,6 +197,7 @@ export default {
 
   data() {
     return {
+      listaCentroAcopio: [],
       noeditar: true,
       tab: "formMonitoreoRoedorFinca",
       menuMostrarCalendario: "", // Variable de referencia para el menú de fecha toma muestra
@@ -199,6 +206,9 @@ export default {
   },
 
   computed: {
+        // Obtiene el modelo MonitoreoRoedorCentroAcopio
+    ...mapState("moduloMonitoreoRoedorCentroAcopio", ["monitoreoRoedorCentroAcopio"], ["listaAcopioStore"]),
+
     // Obtiene y modifica el estado de la variable dialogMostrarMonitoreoRoedorCentroAcopio
     dialogMostrarMonitoreoRoedorCentroAcopio: {
       get() {
@@ -298,6 +308,16 @@ export default {
         const [year, month, day] = fecha.split('-')
         return `${day}/${month}/${year}`
     },
+    
+    //Obtiene el centro de acopio
+      async obtenerTodosCentroAcopio() {
+      let resultado = await servicioCentroAcopio.obtenerTodosCentroAcopio();
+      this.listaCentroAcopio = resultado.data; 
+      
+    },
+    limpiarIds(){
+      this.centroacopioid = '';
+    }
   },
 };
 </script>

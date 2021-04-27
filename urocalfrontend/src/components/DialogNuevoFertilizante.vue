@@ -95,6 +95,7 @@ export default {
     async agregarFertilizante() {
       let respuesta = await ServicioFertilizantes.agregarFertilizante(this.modeloFertilizanteStore);
       if (respuesta.status == 201) {
+        this.$toast.success(respuesta.data.message);
         this.cerrarDialogNuevoFertilizante();
         this.cargarListaFertilizante();
         this.vaciarModeloFertilizanteStore();

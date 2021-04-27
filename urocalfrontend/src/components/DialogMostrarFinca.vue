@@ -14,10 +14,20 @@
         <h5>Actualizar/eliminar</h5>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon :disabled="!noeditar" class="primary--text" @click="cambiarEstadoEditar()">mdi-pencil</v-icon>
+          <v-icon
+            :disabled="!noeditar"
+            class="primary--text"
+            @click="cambiarEstadoEditar()"
+            >mdi-pencil</v-icon
+          >
         </v-btn>
         <v-btn icon>
-          <v-icon :disabled="!noeditar" class="primary--text" @click="eliminarRegistro()">mdi-trash-can</v-icon>
+          <v-icon
+            :disabled="!noeditar"
+            class="primary--text"
+            @click="eliminarRegistro()"
+            >mdi-trash-can</v-icon
+          >
         </v-btn>
         <v-btn icon>
           <v-icon class="primary--text" @click="cerrarDialogMostrarFinca()"
@@ -31,7 +41,10 @@
         <v-container>
           <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Código"
                 :disabled="noeditar"
                 v-model="modeloFincaStore.fincodigo"
@@ -39,7 +52,10 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Nombre"
                 :disabled="noeditar"
                 v-model="modeloFincaStore.finnombrefinca"
@@ -50,46 +66,70 @@
 
           <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Superficie total"
                 :disabled="noeditar"
                 type="Number"
                 v-model="modeloFincaStore.finsuperficietotal"
-                :rules="[reglas.campoVacio(modeloFincaStore.finsuperficietotal),
-                reglas.soloNumerosPositivos(modeloFincaStore.finsuperficietotal)]"
+                :rules="[
+                  reglas.campoVacio(modeloFincaStore.finsuperficietotal),
+                  reglas.soloNumerosPositivos(
+                    modeloFincaStore.finsuperficietotal
+                  ),
+                ]"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Superficie cultivada"
                 :disabled="noeditar"
                 type="Number"
                 v-model="modeloFincaStore.finsuperficiecultivada"
-                :rules="[reglas.campoVacio(modeloFincaStore.finsuperficiecultivada),
-                reglas.soloNumerosPositivos(modeloFincaStore.finsuperficiecultivada)]"
+                :rules="[
+                  reglas.campoVacio(modeloFincaStore.finsuperficiecultivada),
+                  reglas.soloNumerosPositivos(
+                    modeloFincaStore.finsuperficiecultivada
+                  ),
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Coordenada X"
                 :disabled="noeditar"
                 type="Number"
                 v-model="modeloFincaStore.fincoordenadax"
-                :rules="[reglas.campoVacio(modeloFincaStore.fincoordenadax),
-                reglas.soloNumerosPositivos(modeloFincaStore.fincoordenadax)]"
+                :rules="[
+                  reglas.campoVacio(modeloFincaStore.fincoordenadax),
+                  reglas.soloNumerosPositivos(modeloFincaStore.fincoordenadax),
+                ]"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Coordenada Y"
                 :disabled="noeditar"
                 type="Number"
                 v-model="modeloFincaStore.fincoordenaday"
-                :rules="[reglas.campoVacio(modeloFincaStore.fincoordenaday),
-                reglas.soloNumerosPositivos(modeloFincaStore.fincoordenaday)]"
+                :rules="[
+                  reglas.campoVacio(modeloFincaStore.fincoordenaday),
+                  reglas.soloNumerosPositivos(modeloFincaStore.fincoordenaday),
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -104,7 +144,10 @@
                 min-width="290px"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-text-field class="custom px-2" filled dense
+                  <v-text-field
+                    class="custom px-2"
+                    filled
+                    dense
                     label="Fecha de productos prohibidos"
                     :disabled="noeditar"
                     v-model="modeloFincaStore.finproductosprohibidos"
@@ -131,7 +174,10 @@
                 min-width="290px"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-text-field class="custom px-2" filled dense
+                  <v-text-field
+                    class="custom px-2"
+                    filled
+                    dense
                     label="Fecha de primera inspección"
                     :disabled="noeditar"
                     v-model="modeloFincaStore.finprimerainspeccion"
@@ -160,7 +206,10 @@
                 min-width="290px"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-text-field class="custom px-2" filled dense
+                  <v-text-field
+                    class="custom px-2"
+                    filled
+                    dense
                     label="Fecha de ultima inspección"
                     :disabled="noeditar"
                     v-model="modeloFincaStore.finultimainspeccion"
@@ -178,43 +227,21 @@
               </v-menu>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
+              <v-text-field
+                class="custom px-2"
+                filled
+                dense
                 label="Conformidades"
                 :disabled="noeditar"
                 v-model="modeloFincaStore.finnoconformidades"
-                :rules="[reglas.campoVacio(modeloFincaStore.finnoconformidades)]"
+                :rules="[
+                  reglas.campoVacio(modeloFincaStore.finnoconformidades),
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row no-gutters justify-md="space-around">
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Certificación EU"
-                :disabled="noeditar"
-                v-model="modeloFincaStore.fincertificacioneu"
-                :rules="[reglas.campoVacio(modeloFincaStore.fincertificacioneu)]"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Certificación NOP"
-                :disabled="noeditar"
-                v-model="modeloFincaStore.fincertificacionnop"
-                :rules="[reglas.campoVacio(modeloFincaStore.fincertificacionnop)]"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-
-          <v-row no-gutters justify-md="space-around">
-            <v-col cols="12" md="6">
-              <v-text-field class="custom px-2" filled dense
-                label="Certificación JAS"
-                :disabled="noeditar"
-                v-model="modeloFincaStore.fincertificacionjas"
-                :rules="[reglas.campoVacio(modeloFincaStore.fincertificacionjas)]"
-              ></v-text-field>
-            </v-col>
             <v-col cols="12" md="6">
               <v-select
                 v-model="modeloFincaStore.asociacionfinca.asociacionid"
@@ -222,7 +249,9 @@
                 placeholder="Seleccione una Asociación"
                 class="style-chooser"
                 label="asonombre"
-                :reduce="(listaAsociacionStore) => listaAsociacionStore.asociacionid"
+                :reduce="
+                  (listaAsociacionStore) => listaAsociacionStore.asociacionid
+                "
                 :options="listaAsociacionStore"
               >
                 <template v-slot:no-options="{ search, searching }">
@@ -230,21 +259,22 @@
                     No hay resultados para <em>{{ search }}</em
                     >.
                   </template>
-                  <em style="opacity: 0.5" v-else>Empiece a escribir una asociación</em>
+                  <em style="opacity: 0.5" v-else
+                    >Empiece a escribir una asociación</em
+                  >
                 </template>
               </v-select>
             </v-col>
-          </v-row>
-
-          <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
               <v-select
-                v-model="modeloFincaStore.fincapropietario.productorid"
+                v-model="modeloFincaStore.fincapropietario.propietarioid"
                 :disabled="noeditar"
                 placeholder="Seleccione un Propietario"
                 class="style-chooser"
                 label="propietario"
-                :reduce="(listaPropietarioStore) => listaPropietarioStore.productorid"
+                :reduce="
+                  (listaPropietarioStore) => listaPropietarioStore.productorid
+                "
                 :options="listaPropietarioStore"
               >
                 <template v-slot:no-options="{ search, searching }">
@@ -252,10 +282,15 @@
                     No hay resultados para <em>{{ search }}</em
                     >.
                   </template>
-                  <em style="opacity: 0.5" v-else>Empiece a escribir un propietario</em>
+                  <em style="opacity: 0.5" v-else
+                    >Empiece a escribir un propietario</em
+                  >
                 </template>
               </v-select>
             </v-col>
+          </v-row>
+
+          <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6">
               <v-select
                 v-model="modeloFincaStore.sitiofinca.sitioid"
@@ -271,15 +306,17 @@
                     No hay resultados para <em>{{ search }}</em
                     >.
                   </template>
-                  <em style="opacity: 0.5" v-else>Empiece a escribir un sitio</em>
+                  <em style="opacity: 0.5" v-else
+                    >Empiece a escribir un sitio</em
+                  >
                 </template>
               </v-select>
             </v-col>
-          </v-row>
-
-          <v-row no-gutters justify-md="space-around">
             <v-col cols="12" md="6"
-              ><v-textarea class="custom px-2" filled dense
+              ><v-textarea
+                class="custom px-2"
+                filled
+                dense
                 label="Observaciones"
                 :disabled="noeditar"
                 rows="2"
@@ -287,8 +324,70 @@
                 :rules="[reglas.campoVacio(modeloFincaStore.finobservacion)]"
               ></v-textarea>
             </v-col>
-            <v-col cols="12" md="6"></v-col>
           </v-row>
+          <v-row no-gutters justify-md="space-around">
+            <v-col cols="12" md="2"> Certificación</v-col>
+          </v-row>
+          <br />
+          <v-row no-gutters justify-md="space-around">
+            <v-col cols="12" md="7">
+              <v-select
+                placeholder="Seleccione una Certificacion"
+                class="style-chooser"
+                v-model="detalle.certificacionid"
+                label="certificacionnombre"
+                :disabled="noeditar"
+                :reduce="
+                  (listaCertificaciones) => listaCertificaciones.certificacionid
+                "
+                :options="listaCertificaciones"
+              >
+                <template v-slot:no-options="{ search, searching }">
+                  <template v-if="searching">
+                    No hay resultados para <em>{{ search }}</em
+                    >.
+                  </template>
+                  <em style="opacity: 0.5" v-else
+                    >Empiece a escribir una certificacion</em
+                  >
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="12" md="5">
+              <v-card-actions class="justify-center pb-3">
+                <v-btn
+                  :block="$vuetify.breakpoint.xs ? true : false"
+                  width="300px"
+                  large
+                  :disabled="noeditar"
+                  elevation="0"
+                  @click="agregarCertificacion()"
+                  color="primary"
+                  >Agregar</v-btn
+                >
+              </v-card-actions>
+            </v-col>
+          </v-row>
+
+          <v-card-text>
+            <v-data-table
+              :headers="cabeceraTablaCertificacion"
+              sort-by="certificacionid"
+              :items="modeloFincaStore.detalle"
+              class="elevation-1"
+            >
+              <template v-slot:item.actions="{ item }">
+                <!-- <v-icon color="primary"> mdi-eye </v-icon> -->
+                <v-icon
+                  color="error"
+                  @click="eliminarItem(item)"
+                  :disabled="noeditar"
+                >
+                  mdi-trash-can
+                </v-icon>
+              </template>
+            </v-data-table>
+          </v-card-text>
         </v-container>
       </v-card-text>
 
@@ -297,12 +396,14 @@
         <v-btn
           :block="$vuetify.breakpoint.xs ? true : false"
           :disabled="noeditar"
-          width="300px" large elevation="0"
+          width="300px"
+          large
+          elevation="0"
           color="primary"
           @click="actualizarRegistro()"
-          >Guardar Cambios</v-btn>
+          >Guardar Cambios</v-btn
+        >
       </v-card-actions>
-
     </v-card>
   </v-dialog>
 </template>
@@ -313,16 +414,19 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
 import FormFinca from "@/components/FormFinca";
-import ServicioFinca from '../services/ServicioFinca';
+import ServicioFinca from "../services/ServicioFinca";
+import servicioCertificaciones from "../services/ServicioCertificaciones";
 
 export default {
   name: "MostrarFinca",
 
   components: {
     FormFinca,
-    vSelect
+    vSelect,
   },
-
+  mounted() {
+    this.obtenerTodosCertificaciones();
+  },
   data() {
     return {
       sitio: null,
@@ -333,6 +437,34 @@ export default {
       fechapp: null,
       noeditar: true,
       tab: "formFinca",
+      cabeceraTablaCertificacion: [
+        // Detalla las cabeceras de la tabla
+        {
+          text: "Nombre",
+          value: "certificacionnombre",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Certificacion",
+          value: "certificacion",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Detalles",
+          value: "actions",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+      ],
+      detalle: {
+        certificacionid: "",
+        certificacionnombre: "",
+        certificacion: "",
+      },
+      listaCertificaciones: [],
 
       menuMostrarCalendarioAsociacion: "", // Variable de referencia para el menú de fecha toma muestra
       menuMostrarCalendarioPropietario: "", // Variable de referencia para el menú de fecha toma muestra
@@ -342,24 +474,27 @@ export default {
   },
 
   watch: {
-    fechapp (val) {
-      this.modeloFincaStore.finproductosprohibidos = this.formatDate(this.fechapp);
+    fechapp(val) {
+      this.modeloFincaStore.finproductosprohibidos = this.formatDate(
+        this.fechapp
+      );
     },
 
-    fechap (val) {
+    fechap(val) {
       this.modeloFincaStore.finprimerainspeccion = this.formatDate(this.fechap);
     },
 
-    fechau (val) {
+    fechau(val) {
       this.modeloFincaStore.finultimainspeccion = this.formatDate(this.fechau);
     },
   },
 
   computed: {
-
     listaSitioStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaSitioStore"]));
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaSitioStore"])
+        );
       },
       set(v) {
         return this.$store.commit("moduloFinca/establecerListaSitioStore", v);
@@ -368,19 +503,33 @@ export default {
 
     listaAsociacionStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaAsociacionStore"]));
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFinca/listaAsociacionStore"]
+          )
+        );
       },
       set(v) {
-        return this.$store.commit("moduloFinca/establecerListaAsociacionStore", v);
+        return this.$store.commit(
+          "moduloFinca/establecerListaAsociacionStore",
+          v
+        );
       },
     },
 
-    listaPropietarioStore: {
+     listaPropietarioStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaPropietarioStore"]));
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloFinca/listaPropietarioStore"]
+          )
+        );
       },
       set(v) {
-        return this.$store.commit("moduloFinca/establecerListaPropietarioStore", v);
+        return this.$store.commit(
+          "moduloFinca/establecerListaPropietarioStore",
+          v
+        );
       },
     },
 
@@ -391,7 +540,10 @@ export default {
       },
       set(v) {
         this.n_step = 1;
-        return this.$store.commit("gestionDialogos/toggleDialogMostrarFinca", v);
+        return this.$store.commit(
+          "gestionDialogos/toggleDialogMostrarFinca",
+          v
+        );
       },
     },
 
@@ -406,7 +558,9 @@ export default {
 
     listaFincaStore: {
       get() {
-        return JSON.parse(JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"]));
+        return JSON.parse(
+          JSON.stringify(this.$store.getters["moduloFinca/listaFincaStore"])
+        );
       },
       set(v) {
         return this.$store.commit("moduloFinca/establecerListaFincaStore", v);
@@ -418,39 +572,85 @@ export default {
   },
 
   methods: {
-
+    async obtenerTodosCertificaciones() {
+      let resultado = await servicioCertificaciones.obtenerTodosCertificaciones();
+      this.listaCertificaciones = resultado.data;
+    },
     // UPDATE: Actualiza un registro
-    async actualizarRegistro () { 
+    async actualizarRegistro() {
       try {
-          const respuesta = await ServicioFinca.actualizarFinca(this.modeloFincaStore.fincaid, this.modeloFincaStore);
-          this.$toast.success(respuesta.data.message);
-          this.cargarListaFinca();
-          this.cerrarDialogMostrarFinca();
-        } catch (error) {
-          this.$toast.error(error.response.data.message);
-      } 
+        const respuesta = await ServicioFinca.actualizarFinca(
+          this.modeloFincaStore.fincaid,
+          this.modeloFincaStore
+        );
+        this.$toast.success(respuesta.data.message);
+        this.cargarListaFinca();
+        this.cerrarDialogMostrarFinca();
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
+      }
     },
 
     // #  MANIPULACIÓN DE DATOS  #
-    async cargarListaFinca () { 
-      let listaFinca = [];                                               // Limpiar la 'lista de datos'
-      let respuesta = await ServicioFinca.obtenerTodosFincas();  // Obtener respuesta de backend
-      let datosFinca = await respuesta.data;                                    // Rescatar datos de la respuesta
-      datosFinca.forEach((finca) => {                                  // Guardar cada registro en la 'lista de datos' 
+    async cargarListaFinca() {
+      let listaFinca = []; // Limpiar la 'lista de datos'
+      let respuesta = await ServicioFinca.obtenerTodosFincas(); // Obtener respuesta de backend
+      let datosFinca = await respuesta.data; // Rescatar datos de la respuesta
+      datosFinca.forEach((finca) => {
+        // Guardar cada registro en la 'lista de datos'
         listaFinca.push(finca);
       });
       this.listaFincaStore = listaFinca;
     },
-
+    agregarCertificacion() {
+      let validacion = this.modeloFincaStore.detalle.find(
+        (certificacion) =>
+          certificacion.certificacionid === this.detalle.certificacionid
+      );
+      if (typeof validacion == "undefined") {
+        let certificacion = this.listaCertificaciones.find(
+          (certificacion) =>
+            certificacion.certificacionid === this.detalle.certificacionid
+        );
+        this.detalle.certificacionnombre = certificacion.certificacionnombre;
+        this.detalle.certificacion = certificacion.certificacion;
+        this.modeloFincaStore.detalle.push(this.detalle);
+        this.limpiarDetalle();
+      } else {
+        this.$toast.error(
+          "La certificacion seleccionada ya existe porfavor eliga otra"
+        );
+      }
+    },
     async eliminarRegistro() {
       try {
-          const respuesta = await ServicioFinca.eliminarFinca(this.modeloFincaStore.fincaid);
-          this.$toast.success(respuesta.data.message);
-          this.cargarListaFinca();
-          this.cerrarDialogMostrarFinca();
-       } catch (error) {
-          this.$toast.error(error.response.data.message);
-      } 
+        const respuesta = await ServicioFinca.eliminarFinca(
+          this.modeloFincaStore.fincaid
+        );
+        this.$toast.success(respuesta.data.message);
+        this.cargarListaFinca();
+        this.cerrarDialogMostrarFinca();
+      } catch (error) {
+        this.$toast.error(error.response.data.message);
+      }
+    },
+    limpiarDetalle() {
+      this.detalle = JSON.parse(
+        JSON.stringify({
+          certificacionid: "",
+          certificacionnombre: "",
+          certificacion: "",
+        })
+      );
+    },
+    async eliminarItem(item) {
+      const index = this.modeloFincaStore.detalle.indexOf(item);
+      if (typeof item.fincerid === "undefined") {
+        this.modeloFincaStore.detalle.splice(index, 1);
+      } else {
+        await ServicioFinca.eliminarDetalleFinca(item.fincerid);
+        this.modeloFincaStore.detalle.splice(index, 1);
+      }
     },
 
     // Vacia el modelo Finca
@@ -463,15 +663,15 @@ export default {
       this.noeditar = true;
     },
 
-    cambiarEstadoEditar () { 
+    cambiarEstadoEditar() {
       this.noeditar = !this.noeditar;
     },
-        // FORMATO: Modifica el formato de la fecha a dd/mm/aaaa
-    formatDate (fecha) {
-        if (!fecha) return null
+    // FORMATO: Modifica el formato de la fecha a dd/mm/aaaa
+    formatDate(fecha) {
+      if (!fecha) return null;
 
-        const [year, month, day] = fecha.split('-')
-        return `${day}/${month}/${year}`
+      const [year, month, day] = fecha.split("-");
+      return `${day}/${month}/${year}`;
     },
   },
 };

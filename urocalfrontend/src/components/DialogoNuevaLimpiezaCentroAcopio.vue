@@ -36,7 +36,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field v-model="modeloLimpiezaCentroAcopioStore.limcenareas" label="Áreas" class="custom px-2" dense filled     
-                :rules="[reglas.campoVacio(modeloLimpiezaCentroAcopioStore.limcenareas)]"
+                :rules="[reglas.campoVacio(modeloLimpiezaCentroAcopioStore.limcenareas),
+                        reglas.soloNumerosPositivos(modeloLimpiezaCentroAcopioStore.limcenareas),
+                ]"
               ></v-text-field>
             </v-col>
           </v-row>

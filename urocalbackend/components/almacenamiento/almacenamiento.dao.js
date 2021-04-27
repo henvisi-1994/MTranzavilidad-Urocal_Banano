@@ -6,7 +6,7 @@ module.exports = {
     async getAlmacenamiento() {
         let query = `SELECT a.almacenamientoid, a.almcontrato, a.almnumerobultos, a.almpesobulto, a.almpesototalingreso, 
                         a.almsaldo, a.almobservaciones, TO_CHAR(a.almfechaacopio, 'YYYY-MM-DD') as almfechaacopio, 
-                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid , t.traoperario, 
+                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid , 
                         c.centroacopioid , c.centroacopionombre 
                      FROM almacenamiento a, tratamiento t, centroacopio c
                      WHERE a.tratamientoid = t.tratamientoid and a.centroacopioid = c.centroacopioid`;
@@ -16,7 +16,7 @@ module.exports = {
     async getAlmacenamientos(id) {
         let query = `SELECT a.almacenamientoid, a.almcontrato, a.almnumerobultos, a.almpesobulto, a.almpesototalingreso, 
                         a.almsaldo, a.almobservaciones, TO_CHAR(a.almfechaacopio, 'YYYY-MM-DD') as almfechaacopio, 
-                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid , t.traoperario, 
+                        TO_CHAR(a.almfechaingresobodega, 'YYYY-MM-DD') as almfechaingresobodega, t.tratamientoid ,  
                         c.centroacopioid , c.centroacopionombre 
                     FROM almacenamiento a, tratamiento t, centroacopio c
                     WHERE a.tratamientoid = t.tratamientoid and a.centroacopioid = c.centroacopioid and almacenamientoid = '${id}'`;
@@ -24,10 +24,20 @@ module.exports = {
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },
     async deleteAlmacenamiento(id) {
-        query = `DELETE FROM public.almacenamiento WHERE almacenamientoid = '${id}'`;
-        result = await pool.query(query);
-        return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
+        let mixQuery = `DELETE FROM mix WHERE almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
 
+
+        query = `DELETE FROM public.revisionhumedad WHERE almacenamientoid = '${id}'`;
+    
+        result = await pool.query(query);
+
+        mixQuery = `DELETE FROM detalledespacho where almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
+
+        mixQuery = `DELETE FROM almacenamiento where almacenamientoid = ${id}`;
+        await pool.query(mixQuery);
+        return result.rowCount; // Devuelve la cantidad de filas afectadas. Devuelve 1 si borró al usuario y 0 sino lo hizo.
     },
     async createAlmacenamiento(almacenamiento) {
         /*//buscando la id de la centroacopio

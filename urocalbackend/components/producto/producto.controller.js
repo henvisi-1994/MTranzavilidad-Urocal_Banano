@@ -87,5 +87,10 @@ module.exports = {
                 return res.status(400).send({ message: "Error al eliminar producto" });
             }
         }
-    }
+    },
+    // Obtener todos los productos cacao con sus detalles
+    async obtenerDetallesCacao(req, res) {
+        const result = await modeloProducto.obtenerDetallesCacao()
+        return res.status(200).send(result);
+    },
 }

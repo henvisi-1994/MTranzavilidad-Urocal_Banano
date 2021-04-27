@@ -5,14 +5,14 @@
         <v-col cols="12" md="6">
           <v-select
             :disabled="editarLimpiezaHerramienta"
-            v-model="fincaid"
+            v-model="modeloLimpiezaHerramientaStore.fincaid"
             placeholder="Finca"
             class="style-chooser"
             label="findescripcionfinca"
             @input="obtenerTodosLoteCultivadoDeFinca"
-            :reduce="(listaFinca) => listaFinca.fincaid"
+            :reduce="(listaFincaStore) => listaFincaStore.fincaid"
             :options="listaFincaStore"
-            :rules="[reglas.campoVacio(fincaid)]"
+            :rules="[reglas.campoVacio(modeloLimpiezaHerramientaStore.fincaid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -27,14 +27,14 @@
         <v-col cols="12" md="6">
           <v-select
             :disabled="editarLimpiezaHerramienta"
-            v-model="loteid"
+            v-model="modeloLimpiezaHerramientaStore.lotecultivadoid"
             placeholder="Lote"
             class="style-chooser"
             label="lotnumero"
             @input="obtenerTodosListaCultivo"
-            :reduce="(listaLote) => listaLote.lotecultivadoid"
-            :options="listaLote"
-            :rules="[reglas.campoVacio(loteid)]"
+            :reduce="(listaloteStore) => listaloteStore.lotecultivadoid"
+            :options="listaloteStore"
+            :rules="[reglas.campoVacio(modeloLimpiezaHerramientaStore.lotecultivadoid)]"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -58,8 +58,8 @@
             placeholder="Cultivo"
             class="style-chooser"
             label="detalles"
-            :reduce="(listaCultivo) => listaCultivo.cultivoid"
-            :options="listaCultivo"
+            :reduce="(listaCultivoStore) => listaCultivoStore.cultivoid"
+            :options="listaCultivoStore"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -232,9 +232,7 @@ export default {
     vSelect,
   },
   mounted() {
-
     this.obtenerTodosFincas();
-    
   },
 
   data() {
@@ -252,11 +250,6 @@ export default {
   },
 
   watch: {
-    // cultivo(val) {
-    //   //id
-    //   this.modeloLimpiezaHerramientaStore.cultivoproducto.cultivoid = this.cultivo;
-    // },
-
     fecha(val) {
       this.modeloLimpiezaHerramientaStore.limfecha = this.formatDate(
         this.fecha
@@ -270,7 +263,7 @@ export default {
       "limpiezaHerramienta",
       "editarLimpiezaHerramienta",
     ]),
-    
+
     ...mapState("moduloFinca", ["listaFincaStore"]),
 
     // Obtiene la variable que indica si el formulario es valido
@@ -303,6 +296,21 @@ export default {
         );
       },
     },
+    listaloteStore: {
+      get() {
+        return JSON.parse(
+          JSON.stringify(
+            this.$store.getters["moduloLimpiezaHerramienta/listaloteStore"]
+          )
+        );
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloLimpiezaHerramienta/establecerlistaloteStore",
+          v
+        );
+      },
+    },
 
     // Descomentar cuando el modulo cultivos este finalizado
     // listaCultivoStore: {
@@ -328,11 +336,10 @@ export default {
       },
     },
 
-    // Obtiene el modelo 
+    // Obtiene el modelo
 
     //Parece redundanyte
     ...mapState("moduloLimpiezaHerramienta", ["limpiezaHerramienta"]),
-
 
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
@@ -348,8 +355,9 @@ export default {
     },
 
     async obtenerTodosListaCultivo() {
-      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.loteid);
-      this.listaCultivo = resultado.data;
+      let resultado = await servicioCultivo.obtenerCultivoDetalles(this.modeloLimpiezaHerramientaStore.lotecultivadoid);
+      // this.listaCultivo = resultado.data;
+      this.listaCultivoStore = resultado.data;
     },
 
     async obtenerTodosFincas() {
@@ -359,9 +367,10 @@ export default {
 
     async obtenerTodosLoteCultivadoDeFinca() {
       let resultado = await servicioLote.obtenerTodosLoteCultivadoDeFinca(
-        this.fincaid
+        this.modeloLimpiezaHerramientaStore.fincaid
       );
-      this.listaLote = resultado.data;
+      // this.listaLote = resultado.data;
+      this.listaloteStore = resultado.data;
     },
 
     limpiarIds() {

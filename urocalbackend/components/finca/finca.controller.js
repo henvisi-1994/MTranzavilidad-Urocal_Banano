@@ -13,9 +13,9 @@ module.exports = {
 
         // Añadir capa de validación
 
-        const { fincodigo, finnombrefinca, finsuperficietotal, finsuperficiecultivada, fincoordenadax, fincoordenaday, finproductosprohibidos, finprimerainspeccion, finultimainspeccion, finnoconformidades, fincertificacioneu, fincertificacionnop, fincertificacionjas, finobservacion, asociacionfinca, productorid, sitiofinca } = req.body;
+        const { fincodigo, finnombrefinca, finsuperficietotal, finsuperficiecultivada, fincoordenadax, fincoordenaday, finproductosprohibidos, finprimerainspeccion, finultimainspeccion, finnoconformidades, fincertificacioneu, fincertificacionnop, fincertificacionjas, finobservacion, asociacionfinca, productorid, sitiofinca , detalle } = req.body;
         if(validation.emptyField(fincodigo) || validation.emptyField(finnombrefinca) || validation.emptyField(finsuperficietotal) || validation.emptyField(finsuperficiecultivada) || validation.emptyField(fincoordenadax) || validation.emptyField(fincoordenaday) || validation.emptyField(finproductosprohibidos) || validation.emptyField(finprimerainspeccion) || 
-        validation.emptyField(finultimainspeccion) || validation.emptyField(finnoconformidades) || validation.emptyField(fincertificacioneu) || validation.emptyField(fincertificacionnop) || validation.emptyField(fincertificacionjas) || validation.emptyField(finobservacion) || validation.emptyField(asociacionfinca.asociacionid) || validation.emptyField(productorid) || validation.emptyField(sitiofinca.sitioid)){
+        validation.emptyField(finultimainspeccion) || validation.emptyField(finnoconformidades) || validation.emptyField(finobservacion) || validation.emptyField(asociacionfinca.asociacionid) || validation.emptyField(productorid) || validation.emptyField(sitiofinca.sitioid)){
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         }else{
             try {
@@ -36,7 +36,9 @@ module.exports = {
                     finobservacion: finobservacion,
                     asociacionid: asociacionfinca.asociacionid,
                     propietarioid: productorid,
-                    sitioid: sitiofinca.sitioid})
+                    sitioid: sitiofinca.sitioid,
+                    detalle:detalle}
+                    )
                 return res.status(201).send({ message: 'Finca registrada', fincaid: result.fincaid });
             } catch (error) {
                 console.log(error)
@@ -61,13 +63,17 @@ module.exports = {
         const propietario = await fincaModel.obtenerPropietario()
         return res.status(200).send((propietario)); //<--
     },
-
+    async obtenerDetalleFinca(req,res){
+        const { id } = req.params;
+        const detalle = await fincaModel.obtenerDetalleFinca(id)
+        return res.status(200).send(detalle); //<--
+    },
     // Actualiza informacion de un registro de finca
     async actualizarFinca(req, res) {
         const { id } = req.params;
-        const { fincodigo, finnombrefinca, finsuperficietotal, finsuperficiecultivada, fincoordenadax, fincoordenaday, finproductosprohibidos, finprimerainspeccion, finultimainspeccion, finnoconformidades, fincertificacioneu, fincertificacionnop, fincertificacionjas, finobservacion, asociacionfinca, fincapropietario, sitiofinca } = req.body;
+        const { fincodigo, finnombrefinca, finsuperficietotal, finsuperficiecultivada, fincoordenadax, fincoordenaday, finproductosprohibidos, finprimerainspeccion, finultimainspeccion, finnoconformidades, fincertificacioneu, fincertificacionnop, fincertificacionjas, finobservacion, asociacionfinca, fincapropietario, sitiofinca, detalle } = req.body;
         if(validation.emptyField(fincodigo) || validation.emptyField(finnombrefinca) || validation.emptyField(finsuperficietotal) || validation.emptyField(finsuperficiecultivada) || validation.emptyField(fincoordenadax) || validation.emptyField(fincoordenaday) || validation.emptyField(finproductosprohibidos) || validation.emptyField(finprimerainspeccion) || 
-            validation.emptyField(finultimainspeccion) || validation.emptyField(finnoconformidades) || validation.emptyField(fincertificacioneu) || validation.emptyField(fincertificacionnop) || validation.emptyField(fincertificacionjas) || validation.emptyField(finobservacion) || validation.emptyField(asociacionfinca.asociacionid) || validation.emptyField(fincapropietario.productorid) || validation.emptyField(sitiofinca.sitioid)){
+        validation.emptyField(finultimainspeccion) || validation.emptyField(finnoconformidades) || validation.emptyField(finobservacion) || validation.emptyField(asociacionfinca.asociacionid) || validation.emptyField(sitiofinca.sitioid)){
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         }else{
             const rowCount = await fincaModel.actualizarFinca(id, {
@@ -86,12 +92,26 @@ module.exports = {
                 fincertificacionjas: fincertificacionjas,
                 finobservacion: finobservacion,
                 asociacionid: asociacionfinca.asociacionid,
-                propietarioid: fincapropietario.productorid,
-                sitioid: sitiofinca.sitioid})
+                propietarioid: fincapropietario.propietarioid,
+                sitioid: sitiofinca.sitioid,
+                detalle:detalle})
             return rowCount == 1 ? res.status(200).send({ message: "Finca actualizado" }) : res.status(400).send({ message: "Error al actualizar finca" });
         }
     },
 
+    async eliminarDetalle(req, res) {
+        const { id } = req.params;
+        try {
+            let rowCount = await fincaModel.eliminarDetalle(id);
+            if (rowCount == 1) {
+                return res.status(200).send({ message: "Eliminado exitosamente" });
+            } else {
+                return res.status(400).send({ message: "Certificacion no registrada" });
+            }   
+        }catch(error) {
+            console.log(error);
+        }
+    },
     // Elimina un registro de finca
     async eliminarFinca(req, res) {
         const { id } = req.params;

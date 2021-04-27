@@ -3,7 +3,6 @@
 // *Pendiente: Añadir capa de validación a todos los controladores
 
 const cleaningToolModel = require('./cleaning-tool.model');
-const cleaningToolDto = require('./cleaning-tool.dto');
 const validation = require('../../utils/validations');
 
 module.exports = {
@@ -41,13 +40,14 @@ module.exports = {
     // Obtener todos los registros de limpieza herramienta
     async getCleaningTools(req, res) {
         const cleaningTool = await cleaningToolModel.getCleaningTools()
-        return res.status(200).send(cleaningToolDto.multipleLimHerr(cleaningTool)); //<--
+        // return res.status(200).send(cleaningToolDto.multipleLimHerr(cleaningTool)); //<--
+        return res.status(200).send(cleaningTool); //<--
     },
 
     //  Obtener registro de limpieza herramienta por id
     async getProduct(req, res) {
         const { id } = req.params;
-        const cleaningTool = await cleaningToolModel.getProduct();
+        const cleaningTool = await cleaningToolModel.getProduct(id);
         return res.status(200).send((cleaningTool)); //<-
     },
 

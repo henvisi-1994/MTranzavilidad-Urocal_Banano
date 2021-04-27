@@ -5,6 +5,7 @@ const auth = require('../components/login/auth.routes');
 const users = require('../components/users/users.routes');
 const fert = require('../components/fertilizacion/fertilizaciones.routes');
 const podas = require('../components/podas/podas.routes');
+const nuevoRegistroEnvio = require('../components/nuevoRegistroEnvio/nuevoRegistroEnvio.routes');
 const riegos = require('../components/riegos/riegos.routes');
 const fitosanitarios = require('../components/fitosanitarios/fitosanitarios.routes');
 const loteCultivado = require('../components/loteCultivado/loteCultivado.routes');
@@ -48,12 +49,26 @@ const egreso = require('../components/egresoIsumo/egress.routes');
 const vehiculo = require('../components/vehiculo/vehiculo.routes');
 const guiaremision = require('../components/guiaremision/guiaremision.routes');
 const carga = require('../components/carga/carga.routes');
+const facturaExportacion = require('../components/facturaExportacion/FacturaExport.routes');
+const empresa = require('../components/empresa/empresa.routes');
+const certificacion = require('../components/certificaciones/certificaciones.routes')
+const reportefincaproductor = require('../components/reportefincaproductor/reportefincaproductor.routes');
+const productorreporte = require('../components/productorreporte/productorreporte.routes');
+const ingegrreporte = require('../components/reporte-kardex-prods/reporteIngeg.routes');
+const kardexingegrreporte = require('../components/reporte-kardex-ingegre/reporteIngeg.routes');
+const reporteVentas = require("../components/reporteVentas/reporteVentas.routes");
+const productorpersonaReporte = require('../components/productorpersonaReporte/productorreporte.routes');
+const productorpersonaReporteM = require('../components/productorpersonaReporte/productorreporteM.routes');
+const productorpersonaReporteF = require('../components/productorpersonaReporte/productorreporteF.routes');
+const reporteCompras= require('../components/reporteCompras/reporteCompras.routes');
+
 
 const VERSION = "/v1";
 router.use(VERSION + '/', auth);
 router.use(VERSION + '/users', users);                                                      // Usuarios
 router.use(VERSION + '/fertilizacion', fert);                                               // Fertilizacion
 router.use(VERSION + '/podas', podas);                                                      // Podas
+router.use(VERSION + '/nuevoRegistroEnvio', nuevoRegistroEnvio);                            // nuevoRegistroEnvio
 router.use(VERSION + '/riegos', riegos);                                                    // Riegos
 router.use(VERSION + '/fitosanitarios', fitosanitarios);                                    // Fitosanitario
 router.use(VERSION + '/lote', loteCultivado);                                               // LoteCultivado
@@ -97,5 +112,17 @@ router.use(VERSION + '/egreso_insumo', egreso);                                 
 router.use(VERSION + '/guiaremision', guiaremision);
 router.use(VERSION + '/carga', carga);
 router.use(VERSION + '/vehiculo', vehiculo);
+router.use(VERSION + '/facturaExport',facturaExportacion);
+router.use(VERSION + '/empresa',empresa);
+router.use(VERSION + '/certificacion', certificacion)
+router.use(VERSION + '/reportefincaproductor', reportefincaproductor);
+router.use(VERSION + '/productorreporte', productorreporte);
+router.use(VERSION + '/ingegreporte', ingegrreporte);
+router.use(VERSION + '/kardexingegreporte', kardexingegrreporte);
+router.use(VERSION + "/reporteVentas", reporteVentas);
+router.use(VERSION + "/reporteCompras", reporteCompras);
+router.use(VERSION + '/productorpersonaReporte', productorpersonaReporte);
+router.use(VERSION + '/productorpersonaReporteM', productorpersonaReporteM);
+router.use(VERSION + '/productorpersonaReporteF', productorpersonaReporteF);
 
 module.exports = router;

@@ -8,7 +8,8 @@ export default {
         listaAsociacionStore: [],
         listaSitioStore: [],
         listaPropietarioStore: [],
-        finca: new Finca('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''), // Modelo Finca
+        detalleCertificaciones: [],
+        finca: new Finca('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',[]), // Modelo Finca
         formFincaValido: false, // Indica si el formulario de Finca es valido
     },
 
@@ -20,7 +21,7 @@ export default {
 
         // Vacia el modelo Finca
         vaciarFinca(state) {
-            state.finca = new Finca('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
+            state.finca = new Finca('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',[])
         },
 
         // Cambia  el estado del Formulario Finca
@@ -38,6 +39,9 @@ export default {
 
         establecerListaAsociacionStore(state, newState) {
             state.listaAsociacionStore = newState;
+        },
+        establecerDetalleCertificaciones(state, newState) {
+            state.detalleCertificaciones = newState;
         },
 
         limpiarListaAsociacionStore(state) {
@@ -64,5 +68,6 @@ export default {
         listaSitioStore: (state) => state.listaSitioStore,
         listaAsociacionStore: (state) => state.listaAsociacionStore,
         listaPropietarioStore: (state) => state.listaPropietarioStore,
+        detalleCertificaciones:(state) => state.detalleCertificaciones,
     },
 }
