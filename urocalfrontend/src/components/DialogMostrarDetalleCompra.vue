@@ -269,9 +269,12 @@ export default {
       let resultado = await servicioCompra.obtenerTodosCompra();
       this.listaCompra = resultado.data;
     },
-    eliminarDetalleCompra() {
+   async eliminarDetalleCompra() {
      let id =  this.detCompra.detallecompraid;
      this.$store.commit("moduloDetalleCompra/eliminarListaDetalleCompra", id);
+     await servicioDetalleCompra.eliminarDetalleCompra(id);
+     this.dialogMostrarDetalleCompra = false;
+     this.asignarFermentacion([]);
     },
   },
 
