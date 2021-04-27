@@ -7,7 +7,7 @@
     transition="dialog-transition"
     eager
   >
-    <v-card class="rounded-0" height="530px">
+    <v-card class="rounded-0" height="700px">
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
         <h5>
