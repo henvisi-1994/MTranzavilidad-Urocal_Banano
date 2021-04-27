@@ -1,560 +1,277 @@
 <template>
-  <v-container fluid class="pa-3 justify-center" fill-height>
-    <v-row>
-      <v-col class="d-flex py-3" cols="12">
-        <div
-          :class="[`text-h4`, `mb-4`]"
-          class="transition-swing primary--text"
-          v-text="'Reporte de compras'"
-        ></div>
-      </v-col>
-    </v-row>
-    <v-row class="justify-center">
-      <v-col cols="12" md="5" class="py-0">
-        <v-select
-          :disabled="reporte"
-          :reduce="(listaPropietarioStore) => listaPropietarioStore.propietario"
-          :items="listaPropietarioStore"
-          label="Productor"
-          v-model="prodseleccionado"
-          item-value="productorid"
-          item-text="propietario"
-        >
-        </v-select>
-      </v-col>
+  <v-container fluid>
+    <!-- Dialog para registrar nuevo Compra -->
+    <DialogNuevoCompra ref="DialogNuevoCompra"></DialogNuevoCompra>
 
-      <v-col cols="12" md="10" class="py-0">
-        <v-select
-          :disabled="reporte"
-          :items="opcionesFecha"
-          v-model="opcionFecha"
-          item-value="id"
-          item-text="tipo"
-          label="Selecciona filtro de fecha"
-        ></v-select>
-      </v-col>
-      <v-col cols="12" md="10" v-if="opcionFecha == 1" class="py-0">
-        <v-menu
-          :disabled="reporte"
-          v-model="menuMes"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on, attrs }">
+    <!-- Tarjeta que contiene la caja de búsqueda, tabla y botón de agregar -->
+    <v-card elevation="0" class="mt-5">
+      <v-card-title class="py-2">
+        <v-row no-gutters justify-md="space-between">
+          <v-col cols="12" md="6">
+            <div
+              :class="[`text-h4`, `mb-4`]"
+              class="transition-swing primary--text"
+              v-text="nombre"
+            ></div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <!-- Caja de búsqueda -->
             <v-text-field
-              v-model="mesSeleccionado"
-              label="Escoga un mes"
-              readonly
-              v-bind="attrs"
-              v-on="on"
+              v-model="buscarCompra"
+              class="custom"
+              dense
+              filled
+              append-icon="mdi-magnify"
+              label="Buscar"
+              hide-details="false"
             ></v-text-field>
-          </template>
-          <v-date-picker
-            v-model="mesSeleccionado"
-            @input="menuMes = false"
-            :show-current="fechaActual"
-            type="month"
-            locale="es-419"
-          ></v-date-picker>
-        </v-menu>
-      </v-col>
-      <v-col cols="12" md="10" v-if="opcionFecha == 2" class="py-0">
-        <v-select
-          :disabled="reporte"
-          :items="years"
-          label="Seleccione un año"
-          v-model="anioSeleccionado"
-        ></v-select>
-      </v-col>
-      <v-col cols="12" md="10" v-if="opcionFecha === 3" class="py-0">
-        <v-menu
-          :disabled="reporte"
-          v-model="menuFechaDesde"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
+          </v-col>
+        </v-row>
+      </v-card-title>
+
+      <v-card-text>
+        <!-- Tabla que muestra lista de compras -->
+        <v-data-table
+          :height="tablaResponsiva()"
+          :headers="cabeceraTablaCompra"
+          sort-by="id_farm"
+          :items="listaCompra"
+          :search="buscarCompra"
+          class="elevation-1"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="fechaDesde"
-              label="Desde"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
+          <template v-slot:top>
+            <!-- Tabs que muestra la informacion detallada de cada compra -->
+            <DialogMostrarCompra
+              ref="DialogMostrarCompra"
+            ></DialogMostrarCompra>
           </template>
-          <v-date-picker
-            v-model="fechaDesde"
-            @input="menuFechaDesde = false"
-            :show-current="fechaActual"
-            locale="es-419"
-          ></v-date-picker>
-        </v-menu>
-      </v-col>
-      <v-col cols="12" md="10" v-if="opcionFecha === 3" class="py-0">
-        <v-menu
-          :disabled="reporte"
-          v-model="menuFechaHasta"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="fechaHasta"
-              label="Hasta"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
+
+          <template v-slot:item.actions="{ item }">
+            <v-icon color="primary" @click="abrirMostrarCompra(item.compraid)">
+              mdi-eye
+            </v-icon>
           </template>
-          <v-date-picker
-            v-model="fechaHasta"
-            @input="menuFechaHasta = false"
-            :show-current="fechaActual"
-            locale="es-419"
-          ></v-date-picker>
-        </v-menu>
-      </v-col>
-    </v-row>
-    <v-row class="justify-center">
-      <v-col cols="12" md="5" v-if="!reporte">
+        </v-data-table>
+      </v-card-text>
+
+      <v-card-actions class="justify-center">
+        <!-- Botón para agregar nueva compra -->
         <v-btn
-          :disabled="reporte"
-          color="primary ml-auto"
-          @click="generateReport"
-          block
+          :block="$vuetify.breakpoint.xs ? true : false"
+          width="300px"
+          large
+          elevation="0"
+          color="primary"
+          @click="abrirDialogCompraNuevo()"
+          >Nuevo</v-btn
         >
-          <v-icon class="pr-2">mdi-file-document</v-icon>
-          Generar Reporte
-        </v-btn>
-      </v-col>
-      <v-col cols="12" md="5" v-if="reporte">
-        <v-btn color="success ml-auto" @click="descargarReporte" block>
-          <v-icon class="pr-2">mdi-download</v-icon>
-          Descargar Reporte
-        </v-btn>
-      </v-col>
-      <v-col cols="12" md="5" v-if="reporte">
-        <v-btn color="info ml-auto" @click="nuevoReporte" block>
-          <v-icon class="pr-2">mdi-text-box-plus</v-icon>
-          Nuevo Reporte
-        </v-btn>
-      </v-col>
-    </v-row>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 <script>
-import { mapMutations } from "vuex";
-import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import { mapState, mapMutations } from "vuex";
 
-import ServicioReporteCompras from "../services/ServicioReporteCompras";
-import logo from "@/assets/logo.js";
-//logo.js contiene el logo en base64
-import ServicioReporteFincaProductor from "../services/ServicioReporteFincaProductor";
-import ServicioFinca from "../services/ServicioFinca";
+import DialogNuevoCompra from "@/components/DialogNuevoCompra";
+import DialogMostrarCompra from "@/components/DialogMostrarCompra";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
-export default {
-  name: "BaseReporteCompras",
+import servicioGuiaRemision from "../services/ServicioGuiaRemision";
+import servicioCompra from "../services/ServicioCompra";
+import servicioDetalleCompra from "../services/ServicioDetalleCompra";
 
-  mounted() {
-    this.cargarListaPropietario();
+export default {
+  name: "BaseCompra",
+
+  components: {
+    DialogNuevoCompra,
+    DialogMostrarCompra,
   },
 
   data() {
     return {
-      reporte: false,
-      pdfGenerado: undefined,
-      menuFechaDesde: false,
-      menuFechaHasta: false,
-      menuMes: false,
-      menuAnio: false,
-      fechaDesde: "",
-      fechaHasta: "",
-      mesSeleccionado: "",
-      anioSeleccionado: "",
-      opcionFecha: 0,
-      fechaActual: new Date().toISOString().substr(0, 10),
-      prodseleccionado:"",
-      propietarios: [
-        { productorid: 0, propietario: "Elisa" },
-        { productorid: 2, propietario: "Carlos Dota" },
+      nombre: "Gestión de Compras",
+      buscarCompra: "", // Guarda el texto de búsqueda
+
+      // Detalla las cabeceras de la tabla
+      cabeceraTablaCompra: [
+        {
+          text: "Número",
+          value: "comnumero",
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Fecha de emisión",
+          value: "comfechaemision",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Subtotal",
+          value: "comsubtotal",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Descuentos",
+          value: "comdescuentos",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Otros valores",
+          value: "comotrosvalores",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Total",
+          value: "comtotal",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
+        {
+          text: "Más detalles",
+          value: "actions",
+          sortable: false,
+          align: "center",
+          class: "grey lighten-3",
+        },
       ],
-      opcionesFecha: [
-        {
-          id: 1,
-          tipo: "Mes",
-        },
-        {
-          id: 2,
-          tipo: "Año",
-        },
-        {
-          id: 3,
-          tipo: "Rango de fecha",
-        },
-      ],
-      meses: {
-        1: "Enero",
-        2: "Febrero",
-        3: "Marzo",
-        4: "Abril",
-        5: "Mayo",
-        6: "Junio",
-        7: "Julio",
-        8: "Agosto",
-        9: "Septiembre",
-        10: "Octubre",
-        11: "Noviembre",
-        12: "Diciembre",
-      },
-      years: [],
     };
   },
 
-  watch: {
-    propietarios(val) {
-      this.BuscarPropietario();
-    },
-  },
-  created() {
-    this.$store.commit("colocarLayout", "LayoutAdministrador");
-    this.generateYears();
-  },
-
   computed: {
-    listaPropietarioStore: {
+    // Obtiene y modifica el estado de la variable dialogNuevoCompra
+    dialogNuevoCompra: {
       get() {
-        return this.$store.getters["moduloFinca/listaPropietarioStore"];
+        return this.$store.getters["gestionDialogos/dialogNuevoCompra"];
       },
       set(v) {
+        return this.$store.commit("gestionDialogos/toggleDialogNuevoCompra", v);
+      },
+    },
+
+    // Obtiene y modifica el estado de la variable dialogMostrarCompra
+    dialogMostrarCompra: {
+      get() {
+        return this.$store.getters["gestionDialogos/dialogMostrarCompra"];
+      },
+      set(v) {
+        this.n_step = 1;
         return this.$store.commit(
-          "moduloFinca/establecerListaPropietarioStore",
+          "gestionDialogos/toggleDialogMostrarCompra",
           v
         );
       },
     },
 
-    listaReporteDatosProductor: {
+    // Obtiene y modifica la variable listaCompra
+    listaCompra: {
       get() {
-        return JSON.parse(
-          JSON.stringify(
-            this.$store.getters[
-              "moduloReporteDatosProductor/listaReporteDatosProductor"
-            ]
-          )
-        );
+        return this.$store.getters["moduloCompra/listaCompra"];
       },
       set(v) {
-        return this.$store.commit(
-          "moduloReporteDatosProductor/establecerListaProductorPersonaStore",
-          v
-        );
+        return this.$store.commit("moduloCompra/asignarListaCompra", v);
       },
     },
+    listaGuiaRemisionStore: {
+      get() {
+        return this.$store.getters["moduloCompra/listaGuiaRemisionStore"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCompra/asignarListaGuiaRemision", v);
+      },
+    },
+
+    // Obtiene y modifica el modelo compra
+    compra: {
+      get() {
+        return this.$store.getters["moduloCompra/compra"];
+      },
+      set(v) {
+        return this.$store.commit("moduloCompra/nuevoCompra", v);
+      },
+    },
+
+    // Obtiene la listaDetalleCompra
+    ...mapState("moduloDetalleCompra", ["listaDetalleCompra"]),
   },
 
   methods: {
-    // Programación PDF
-    changeState(valor) {
-      this.selecionado = this.items[valor - 1].text2;
+    // Vacia el ModeloCompra
+    ...mapMutations("moduloCompra", ["vaciarCompra"]),
+
+    // Obtiene el metodo para vaciarListaDetalleCompra
+    ...mapMutations("moduloDetalleCompra", [
+      "vaciarListaDetalleCompra",
+      "asignarListaDetalleCompra",
+    ]),
+
+    // Carga el DialogNuevoCompra
+    abrirDialogCompraNuevo() {
+      this.dialogNuevoCompra = true;
+      this.vaciarCompra();
+      this.vaciarListaDetalleCompra();
     },
 
-    generateYears() {
-      const actualYear = new Date().getFullYear();
-      for (let index = actualYear; index > 1950; index--) {
-        this.years.push(index);
+    // Abre el dialogMostrarCompra
+    async abrirMostrarCompra(compraid) {
+      try {
+        let respuestaServicioCompra = await servicioCompra.obtenerCompra(
+          compraid
+        );
+        this.compra = respuestaServicioCompra.data;
+        this.obtenerDetalleCompra(compraid);
+        this.getGuiaRemision();
+      } catch (error) {
+        this.$store.error(error.response.data.message);
       }
+      this.dialogMostrarCompra = true;
     },
 
-    nuevoReporte() {
-      this.reporte = false;
-      this.mesSeleccionado = "";
-      this.fechaDesde = "";
-      this.fechaHasta = "";
-      this.opcionFecha = 0;
-      this.pdfGenerado = undefined;
-      this.propietarios = "";
+    // Llena la listaCompra con datos del servidor backend
+    async obtenerTodosCompra() {
+      let resultado = await servicioCompra.obtenerTodosCompra();
+      this.listaCompra = resultado.data;
     },
-
-    descargarReporte() {
-      this.pdfGenerado.download();
-    },
-
-    async obtenerComprasPorMes() {
-      const resultado = await ServicioReporteCompras.reportePorMes({
-        month: parseInt(this.mesSeleccionado.slice(-2)),
-        year: parseInt(this.mesSeleccionado.slice(0, 4)),
-        productor: this.propietarios,
+    getGuiaRemision() {
+      servicioGuiaRemision.obtenerTodosGuiaRemision().then((res) => {
+        let guia = res.data.filter(
+          (guiaRemision) => guiaRemision.vehiculoid == this.compra.vehiculoid
+        );
+        this.listaGuiaRemisionStore = guia;
       });
-      return resultado.data;
     },
-
-    async obtenerComprasPorAnio() {
-      const resultado = await ServicioReporteCompras.reportePorAnio({
-        year: this.anioSeleccionado,
-        productor: this.propietarios["productorid"],
-      });
-      return resultado.data;
-    },
-
-    async obtenerComprasPorRango() {
-      const resultado = await ServicioReporteCompras.reportePorRango({
-        desde: this.fechaDesde,
-        hasta: this.fechaHasta,
-        productor: this.propietarios,
-      });
-      return resultado.data;
-    },
-
-    generateReport() {
-      const errorNocompras = "No se han encontrado resultados";
-      if (!this.opcionFecha || !this.propietarios) {
-        this.$toast.error("Debe selecciona los datos necesarios");
-        return;
-      }
-      if (this.opcionFecha == 1) {
-        if (!this.mesSeleccionado) {
-          this.$toast.error("Debe seleccionar un mes");
-          return;
-        }
-        this.obtenerComprasPorMes().then((compras) => {
-          if (!compras.length) {
-            this.$toast.info(errorNocompras);
-            return;
-          }
-          this.generarContenidoReporte({ propietario: "Elisa", compras });
-          this.reporte = true;
-        });
-      } else if (this.opcionFecha == 2) {
-        if (!this.anioSeleccionado) {
-          this.$toast.error("Debe seleccionar un año");
-          return;
-        }
-        this.obtenerComprasPorAnio().then((compras) => {
-          if (!compras.length) {
-            this.$toast.info(errorNocompras);
-            return;
-          }
-          this.generarContenidoReporte({ propietario: "Elisa", compras });
-          this.reporte = true;
-        });
-      } else if (this.opcionFecha == 3) {
-        if (!this.fechaDesde || !this.fechaHasta) {
-          this.$toast.error("Debe seleccionar el rango de fechas");
-          return;
-        }
-        if (this.fechaHasta < this.fechaDesde) {
-          this.$toast.error("La fecha final debe ser mayor a la inicial");
-          return;
-        }
-        this.obtenerComprasPorRango().then((compras) => {
-          if (!compras.length) {
-            this.$toast.info(errorNocompras);
-            return;
-          }
-          this.generarContenidoReporte({ propietario: "Elisa", compras });
-          this.reporte = true;
-        });
-      }
-    },
-
-    generarContenidoReporte(respuesta) {
-      const stringFechaMes = `${
-        this.meses[parseInt(this.mesSeleccionado.slice(-2))]
-      } del ${this.mesSeleccionado.slice(0, 4)}`;
-      const stringFechaAnio = `Año ${this.anioSeleccionado}`;
-      const stringFechaRango = `De ${this.fechaDesde} al ${this.fechaHasta}`;
-      const reportInfo = {
-        text: [
-          { text: "Reporte: ", bold: true },
-          "Compra de Cacao",
-          { text: "\nFecha: ", bold: true },
-          `${
-            this.opcionFecha == 1
-              ? stringFechaMes
-              : this.opcionFecha == 2
-              ? stringFechaAnio
-              : stringFechaRango
-          }`,
-        ],
-        margin: [0, 20],
-      };
-
-      const cabecera = [
-        { text: "Fecha/Emision" },
-        { text: "# Factura" },
-        { text: "Productor" },
-        { text: "Total", alignment: "right" },
-      ];
-
-      const filas = respuesta.compras.map((compra) => {
-        const fechacompra = new Date(compra.facfecha)
-          .toISOString()
-          .substr(0, 10);
-        return [
-          fechacompra,
-          compra.comfechaemision,
-          compra.productor,
-          {
-            text: parseFloat(parseFloat(compra.comtotal).toFixed(2)),
-            alignment: "right",
-          },
-        ];
-      });
-
-      const facturaTotal = respuesta.compras.reduce(
-        (acc, compra) =>
-          acc + parseFloat(parseFloat(compra.comtotal).toFixed(2)),
-        0
+    async obtenerDetalleCompra(compraid) {
+      let respuestaServicioDetalleCompra = await servicioDetalleCompra.obtenerDetalleCompra(
+        compraid
       );
-
-      const table = {
-        widths: ["*", "*", "*", "*"],
-        headerRows: 1,
-        body: [
-          [...cabecera],
-          ...filas,
-          ["", "", "", { text: facturaTotal, alignment: "right", bold: true }],
-        ],
-      };
-
-      const reportData = [
-        reportInfo,
-        {
-          table,
-          layout: "headerLineOnly",
-          margin: [0, 20],
-        },
-      ];
-
-      this.generatePdf(reportData);
-    },
-
-    generatePdf(reportContent) {
-      pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-      const docDefinition = {
-        content: [
-          {
-            columns: [
-              {
-                width: 70,
-                image: logo,
-                margin: [0, 20],
-              },
-              {
-                alignment: "center",
-                width: "auto",
-                text: [
-                  {
-                    text:
-                      "UNIÓN REGIONAL DE ORGANIZACIONES CAMPESINAS DEL LITORAL",
-                    fontSize: 12,
-                  },
-                  { text: "\nUROCAL", fontSize: 32, bold: true },
-                  {
-                    text:
-                      "\nCARRETERO A ZHUMIRAL OFC. P.B. - AZUAY ESTABLECIMIENTO 003: TARQUI S/N E/.",
-                    fontSize: 10,
-                  },
-                  {
-                    text:
-                      "\nMATRIZ: CAMILO PONCE ENRÍQUEZ: BARRIO EL CISNE PRINCIPAL S/N",
-                    fontSize: 10,
-                  },
-                  {
-                    text:
-                      "\nEmail:  urocal@ec.pro.ec - MACHALA - EL ORO - ECUADOR",
-                    fontSize: 10,
-                  },
-                  {
-                    text:
-                      "\nBOLIVAR Y PICHINCHA - *TELEFAX:* 2961-672 / 075000202 - CEL: 0991853210",
-                    fontSize: 10,
-                  },
-                  {
-                    text:
-                      "\nCONTRIBUYENTE ESPECIAL MEDIANTE RESOLUCIÓN N° NAC-G-CORCEC09-00570 DEL 07/08/2009",
-                    fontSize: 10,
-                  },
-                ],
-              },
-            ],
-          },
-          reportContent,
-        ],
-
-        footer: (currentPage, pageCount) => {
-          return {
-            margin: [40, 0],
-            columns: [
-              `${currentPage.toString()} de ${pageCount}`,
-              {
-                text: [
-                  { text: "Fecha: ", bold: true },
-                  `${new Date().toJSON().slice(0, 10)}`,
-                ],
-                alignment: "right",
-              },
-            ],
-          };
-        },
-      };
-
-      this.pdfGenerado = pdfMake.createPdf(docDefinition);
-
-      this.pdfGenerado.open();
-    },
-
-    // Obtiene la lista de todos los productores para agregar al combobox
-    async cargarListaPropietario() {
-      let listaPropietario = []; // Limpiar la 'lista de ciudades'
-      let respuesta = await ServicioFinca.obtenerTodosPropietarios(); // Obtener respuesta de backend
-      let datosPropietario = await respuesta.data; // Rescatar datos de la respuesta
-      datosPropietario.forEach((propietario) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaPropietario.push(propietario);
+      respuestaServicioDetalleCompra.data.forEach((detalle) => {
+        detalle.detarticulo = `Cacao _______ ${detalle.detestado}`;
       });
-      this.listaPropietarioStore = listaPropietario;
+      this.asignarListaDetalleCompra(respuestaServicioDetalleCompra.data);
     },
-
-    // Busca el ID del productor seleccionado en el combobox
-    async BuscarPropietario() {
-      this.listaPropietarioStore.forEach((element) => {
-        if (this.propietarios == element.propietario) {
-          this.idproductor = element.productorid;
-        }
-      });
-      this.cargarProductor();
-    },
-
-    // Obtiene todos los datos personales de un productor en específico
-    async cargarProductor() {
-      let listaFinca = []; // Limpiar la 'lista de datos'
-      let respuesta = await ServicioReporteFincaProductor.obtenerProductor(
-        this.idproductor
-      ); // Obtener respuesta de backend
-      let datosFinca = await respuesta.data; // Rescatar datos de la respuesta
-      datosFinca.forEach((finca) => {
-        // Guardar cada registro en la 'lista de datos'
-        listaFinca.push(finca);
-      });
-      this.listaReporteDatosProductor = listaFinca;
-    },
-
-    // #  TIENDA DE VUE  #
-    ...mapMutations("moduloFinca", ["establecerListaPropietarioStore"]),
   },
 
   mixins: [autenticacionMixin, myMixin],
+
+  created() {
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario.rol === "Administrador")
+      this.$store.commit("colocarLayout", "LayoutAdministrador");
+    if (usuario.rol === "Responsable Centro Acopio")
+      this.$store.commit("colocarLayout", "LayoutCentroAcopio");
+  },
+
+  mounted() {
+    this.obtenerTodosCompra();
+  },
 };
 </script>
