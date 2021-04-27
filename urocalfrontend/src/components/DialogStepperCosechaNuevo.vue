@@ -11,7 +11,7 @@
       <!-- Barra de titulo -->
       <v-card-title class="primary white--text">
         <h5>
-          Registrar nuevo cosecha
+          Registrar nueva cosecha
         </h5>
         <v-spacer></v-spacer>
         <div v-if="n_step > 1">
