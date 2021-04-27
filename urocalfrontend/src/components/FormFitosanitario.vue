@@ -184,7 +184,6 @@
             v-model="modeloFitosanitarioStore.fitcantidadtotal"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitcantidadtotal),
-              reglas.soloNumeros(modeloFitosanitarioStore.fitcantidadtotal),
               reglas.soloNumerosPositivos(
                 modeloFitosanitarioStore.fitcantidadtotal
               ),
@@ -199,9 +198,8 @@
             v-model="modeloFitosanitarioStore.fitareaaplicada"
             :rules="[
               reglas.campoVacio(modeloFitosanitarioStore.fitareaaplicada),
-              reglas.soloNumeros(modeloFitosanitarioStore.fitareaplicada),
               reglas.soloNumerosPositivos(
-                modeloFitosanitarioStore.fitareaplicada
+                modeloFitosanitarioStore.fitareaaplicada
               ),
             ]"
           ></v-text-field
@@ -248,25 +246,14 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="5">
-          <v-select
-            v-model="modeloFitosanitarioStore.fitoperario"
-            :disabled="bloquearFitosanitarioStore"
+          <v-text-field
             placeholder="Operario"
-            class="style-chooser"
-            label="operario"
-            :reduce="(listaOperario) => listaOperario.personaid"
-            :options="listaOperario"
-          >
-            <template v-slot:no-options="{ search, searching }">
-              <template v-if="searching">
-                No hay resultados para <em>{{ search }}</em
-                >.
-              </template>
-              <em style="opacity: 0.5" v-else
-                >Empiece a escribir un operario</em
-              >
-            </template>
-          </v-select>
+            :disabled="bloquearFitosanitarioStore"
+            v-model="modeloFitosanitarioStore.fitoperario"
+            :rules="[
+              reglas.campoVacio(modeloFitosanitarioStore.fitoperario),
+            ]"
+          ></v-text-field>
         </v-col>
       </v-row>
     </v-container>
@@ -335,7 +322,7 @@ export default {
         );
       },
     },
-        listaCultivoStore: {
+    listaCultivoStore: {
       get() {
         return JSON.parse(
           JSON.stringify(
@@ -370,7 +357,9 @@ export default {
       get() {
         return JSON.parse(
           JSON.stringify(
-            this.$store.getters["moduloFitosanitario/bloquearFitosanitarioStore"]
+            this.$store.getters[
+              "moduloFitosanitario/bloquearFitosanitarioStore"
+            ]
           )
         );
       },
@@ -381,7 +370,6 @@ export default {
         );
       },
     },
-
 
     // Obtiene las reglas de validacion
     ...mapState("validacionForm", ["reglas"]),
