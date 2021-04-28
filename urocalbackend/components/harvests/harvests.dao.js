@@ -22,7 +22,7 @@ module.exports = {
 
     async getHarvests() {
         let query = `SELECT co.cosechaid, cu.cultivoid, TO_CHAR(cosfecha, 'YYYY-MM-DD') as cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cu.lotecultivadoid, lo.fincaid, CONCAT(pronombre, ' ',provariedad) AS cultivo
-        FROM cosecha co INNER JOIN cultivo cu ON cu.cultivoid=co.cultivoid INNER JOIN lotecultivado lo ON lo.lotecultivadoid = cu.cultivoid INNER JOIN producto pr ON pr.productoid = cu.productoid;`;
+        FROM cosecha co INNER JOIN cultivo cu ON cu.cultivoid=co.cultivoid INNER JOIN lotecultivado lo ON lo.lotecultivadoid = cu.lotecultivadoid INNER JOIN producto pr ON pr.productoid = cu.productoid;`;
 
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todas las cosechas
@@ -45,7 +45,7 @@ module.exports = {
 
     async getHarvest(id) {
         let query = `SELECT co.cosechaid, cu.cultivoid, TO_CHAR(cosfecha, 'YYYY-MM-DD') as cosfecha, coscantidad, cosunidad, cospesototal, cosobservacion, coscodigo, cu.lotecultivadoid, lo.fincaid, CONCAT(pronombre, ' ',provariedad) AS cultivo
-        FROM cosecha co INNER JOIN cultivo cu ON cu.cultivoid=co.cultivoid INNER JOIN lotecultivado lo ON lo.lotecultivadoid = cu.cultivoid INNER JOIN producto pr ON pr.productoid = cu.productoid WHERE co.cosechaid = ${id}`;
+        FROM cosecha co INNER JOIN cultivo cu ON cu.cultivoid=co.cultivoid INNER JOIN lotecultivado lo ON lo.lotecultivadoid = cu.lotecultivadoid INNER JOIN producto pr ON pr.productoid = cu.productoid WHERE co.cosechaid = ${id}`;
        /* let query = `SELECT cosechaid, TO_CHAR(cosfecha, 'YYYY-MM-DD') as cosfecha, coscantidad, cosunidad, 
         cospesototal, cosobservacion, coscodigo, tratamientoid, cultivoid FROM cosecha WHERE cosechaid = ${id}`;*/
         let result = await pool.query(query);
