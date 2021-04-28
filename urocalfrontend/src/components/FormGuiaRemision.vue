@@ -375,7 +375,6 @@
             <v-icon :disabled="editarGuiaRemision" color="primary" @click="eliminarBien(item)"> mdi-trash-can </v-icon>
           </template>
         </v-data-table>
-
         </v-col>
       </v-row>
     </v-container>
@@ -388,6 +387,7 @@ import ServicioVehiculo from "../services/ServicioVehiculo";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import ServicioCosecha from "../services/ServicioCosecha";
+import ServicioGuiaRemision from '../services/ServicioGuiaRemision';
 
 export default {
   name: 'FormGuiaRemision',
@@ -408,11 +408,11 @@ export default {
       indexOfBien: '',
       editandoBien: false,
       bien:{
-        carcantidad: '',
-        carunidad: '',
-        cardescripcion: '',
-        carestado: '',
-        cosechaid: '',
+        carcantidad: "",
+        carunidad: "",
+        cardescripcion: "",
+        cosechaid: "",
+        carestado: "",
       },
       listaVehiculos:[],
       listaCosechas:[],
@@ -543,6 +543,11 @@ export default {
     this.listaCosecha();
   },
   methods: {
+
+     async actualizarCargBien(){
+      let respuesta = await ServicioGuiaRemision.obtenerCargas(this.modeloGuiaRemisionStore.guiaremisionid);
+      this.modeloGuiaRemisionStore.carga = respuesta.data;
+    },
     agregarBien() {
       this.modeloGuiaRemisionStore.carga.push(this.bien);
       this.$refs.formGuiaRemision.resetValidation();
@@ -599,10 +604,14 @@ export default {
       let respuesta= await ServicioCosecha.obtenerTodosCosecha();
       this.listaCosechas= respuesta.data;
     },
-
-    eliminarBien(item){
+    
+    async eliminarBien(item){
       const index = this.modeloGuiaRemisionStore.carga.indexOf(item);
       this.modeloGuiaRemisionStore.carga.splice(index, 1);
+      if(typeof item.cargaid != 'undefined'){
+        let respuesta = await ServicioGuiaRemision.eliminarCargas(item.cargaid);
+        this.actualizarCargBien();
+      }
     },
 
     vaciarBien() {

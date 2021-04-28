@@ -20,4 +20,7 @@ module.exports = {
     async deleteGuiaRemision(id){
         return guiaremisionDao.deleteGuiaRemision(id);
     },
+    async deleteCarga(id){
+        return guiaremisionDao.deleteCarga(id);
+    },
 }

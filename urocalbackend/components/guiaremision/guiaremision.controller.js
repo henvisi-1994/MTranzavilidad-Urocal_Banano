@@ -42,7 +42,6 @@ module.exports = {
             });
         } catch (error) {
             
-            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 
@@ -88,5 +87,18 @@ module.exports = {
         } catch (err) {
             return res.json({ message: "Error al tratar de eliminar guia remisiom", tipo: "error" });
         }
+    },
+
+    async deleteCarga(req, res){
+        const { id } = req.params;
+
+        try {
+            let rowCount = await guiaremisionModel.deleteCarga(id);
+            return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "GuiaRemision no registrado", tipo: "error" });
+            
+        } catch (err) {
+            return res.json({ message: "Error al tratar de eliminar guia remisiom", tipo: "error" });
+        }
+
     },
 }

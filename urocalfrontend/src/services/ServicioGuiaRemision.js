@@ -34,6 +34,9 @@ class ServicioGuiaRemision {
     obtenerCargas(id) {
         return axios.get(`${API_URL}/v1/carga/${id}`);
     }
+    eliminarCargas(id) {
+        return axios.delete(`${API_URL}/v1/guiaremision/carga/${id}`);
+    }
 }
 
 export default new ServicioGuiaRemision();

@@ -58,28 +58,14 @@ module.exports = {
         let actualizar = ''; 
         if (resultd.rows) {
             //console.log(guiaremision.carga.length);
-            if(guiaremision.carga.length == 0){
-                resultd.rows.map(gr =>{
-                    let detdelete = `DELETE FROM public.carga where cargaid=${gr.cargaid}`
-                    pool.query(detdelete)
-                })
-            }
             guiaremision.carga.map(async dt  =>  {
-
                 
                 if (typeof dt.cargaid === 'undefined') {
+                
                 actualizar = `Insert into public.carga (carcantidad, carunidad, carestado, cosechaid, guiaremisionid, cardescripcion) values (${dt.carcantidad},'${dt.carunidad}','${dt.carestado}',${dt.cosechaid},${id},'${dt.cardescripcion}')`
                 }else{
                 actualizar = `UPDATE public.carga SET carcantidad=${dt.carcantidad}, carunidad='${dt.carunidad}', carestado='${dt.carestado}', cosechaid=${dt.cosechaid}, guiaremisionid=${id}, cardescripcion='${dt.cardescripcion}' WHERE cargaid =${dt.cargaid}`
                 
-                resultd.rows.forEach(function(x){
-                   
-                    if(x.cargaid!=dt.cargaid && dt.cargaid!= 'undefined'){
-                    
-                    let detdelete = `DELETE FROM public.carga where cargaid=${x.cargaid}`
-                    pool.query(detdelete)
-                    }
-                })
                 }
                 pool.query(actualizar)
                 
@@ -96,6 +82,13 @@ module.exports = {
         query = `DELETE FROM guiaremision WHERE guiaremisionid = '${id}'`;
         result = await pool.query(query);
         return result.rowCount;
+    },
+
+    async deleteCarga(id) {
+        let queryc = `DELETE FROM carga WHERE cargaid = '${id}'`;
+        await pool.query(queryc);
+        
+        
     },
     
 }
