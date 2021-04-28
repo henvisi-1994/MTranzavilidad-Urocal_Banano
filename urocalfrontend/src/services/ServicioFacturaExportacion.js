@@ -25,8 +25,6 @@ obtenerFacturaExport(id) {
 
 // UPDATE: Actualiza un registro
 actualizarFacturaExport(id, formData) {
-    console.log(id);
-    console.log(formData);
     return axios.put(`${API_URL}/v1/facturaExport/${id}`, formData); 
 }
 

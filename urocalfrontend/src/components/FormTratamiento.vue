@@ -537,7 +537,7 @@ export default {
       const index = this.modeloTratamientoStore.detalle.indexOf(item);
       this.modeloTratamientoStore.detalle.splice(index, 1);
       console.log(item);
-      if(typeof item.dtraid){
+      if(typeof item.dtraid != 'undefined'){
         await ServicioTratamiento.eliminarDetalleTratamiento(item.dtraid)
       }
     },

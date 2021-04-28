@@ -5,6 +5,8 @@ export default {
 
     state: {
         listaFacturaExportStore: [],
+        listaCompradoresStore:[],
+        listaVendedoresStore:[],
         factExportaStore: new FacturaExportacion(0, ' ', 0, 0, '', ' ', ' ', ' ', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, ' ', 0, ' ', ' ', 0.0, 0.0, ' ', ' ', 0, ' ', ' ', ' ', []),
         formFacturaExportValido: false, // Indica si el formulario de Finca es valido
         bloquearFacturaExport: false,
@@ -44,6 +46,17 @@ export default {
         establecerListaFacturaExportStore(state, newState) {
             state.listaFacturaExportStore = newState;
         },
+
+        establecerListaCompradoresStore(state, newState) {
+            state.listaCompradoresStore = newState;
+        },
+        establecerListaVendedoresStore(state, newState) {
+            state.listaVendedoresStore = newState;
+        },
+
+
+
+
         asignarListaFacturaExportStore(state, nuevaListaFacturaExport) {
             state.listaFacturaExportStore = nuevaListaFacturaExport;
         },
@@ -56,6 +69,8 @@ export default {
         formFacturaExportValido: (state) => state.formFacturaExportValido, // Devuelve la variable validarFormularioFinca
         factExportaStore: (state) => state.factExportaStore,
         listaFacturaExportStore: (state) => state.listaFacturaExportStore,
+        listaCompradoresStore: (state) => state.listaCompradoresStore,
+        listaVendedoresStore: (state) => state.listaVendedoresStore,
         bloquearFacturaExport: (state) => state.bloquearFacturaExport,
         editarFacturaExport:(state)=>state.editarFacturaExport,
     },

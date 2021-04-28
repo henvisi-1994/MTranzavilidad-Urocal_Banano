@@ -10,7 +10,10 @@
             dense
             label="Numero"
             v-model="factExportaStore.facnumero"
-            :rules="[reglas.campoVacio(factExportaStore.facnumero),reglas.soloNumerosPositivos(factExportaStore.facnumero)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facnumero),
+              reglas.soloNumerosPositivos(factExportaStore.facnumero),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -33,8 +36,9 @@
             placeholder="Comprador"
             class="style-chooser"
             label="emprazonsocial"
-            :reduce="(empresas) => empresas.empresaid"
-            :options="empresas"
+            @input="obtenerVendedores()"
+            :reduce="(listaCompradoresStore) => listaCompradoresStore.empresaid"
+            :options="listaCompradoresStore"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -54,8 +58,8 @@
             placeholder="Vendedor"
             class="style-chooser"
             label="emprazonsocial"
-            :reduce="(empresas) => empresas.empresaid"
-            :options="empresas"
+            :reduce="(listaVendedoresStore) => listaVendedoresStore.empresaid"
+            :options="listaVendedoresStore"
           >
             <template v-slot:no-options="{ search, searching }">
               <template v-if="searching">
@@ -166,7 +170,10 @@
             filled
             dense
             v-model="detalle.detcodigoprincipal"
-            :rules="[reglas.campoVacio(detalle.detcodigoprincipal),reglas.soloNumerosPositivos(detalle.detcodigoprincipal)]"
+            :rules="[
+              reglas.campoVacio(detalle.detcodigoprincipal),
+              reglas.soloNumerosPositivos(detalle.detcodigoprincipal),
+            ]"
             :disabled="bloquearFacturaExport"
             label="Código Principal"
           >
@@ -178,7 +185,10 @@
             filled
             dense
             v-model="detalle.detcantidad"
-            :rules="[reglas.campoVacio(detalle.detcantidad),reglas.soloNumerosPositivos(detalle.detcantidad)]"
+            :rules="[
+              reglas.campoVacio(detalle.detcantidad),
+              reglas.soloNumerosPositivos(detalle.detcantidad),
+            ]"
             :disabled="bloquearFacturaExport"
             label="Cantidad"
           >
@@ -203,7 +213,10 @@
             filled
             dense
             v-model="detalle.detpreciounitario"
-            :rules="[reglas.campoVacio(detalle.detpreciounitario),reglas.soloNumerosPositivos(detalle.detpreciounitario)]"
+            :rules="[
+              reglas.campoVacio(detalle.detpreciounitario),
+              reglas.soloNumerosPositivos(detalle.detpreciounitario),
+            ]"
             :disabled="bloquearFacturaExport"
             label="Precio Unitario"
           ></v-text-field>
@@ -216,7 +229,10 @@
             filled
             dense
             v-model="detalle.detporcentajedesc"
-            :rules="[reglas.campoVacio(detalle.detporcentajedesc),reglas.soloNumerosPositivos(detalle.detporcentajedesc)]"
+            :rules="[
+              reglas.campoVacio(detalle.detporcentajedesc),
+              reglas.soloNumerosPositivos(detalle.detporcentajedesc),
+            ]"
             :disabled="bloquearFacturaExport"
             label="Porcentaje Descuento"
           >
@@ -296,7 +312,10 @@
             dense
             label="Descuentos"
             v-model="factExportaStore.factotaldesc"
-            :rules="[reglas.campoVacio(factExportaStore.factotaldesc),reglas.soloNumerosPositivos(factExportaStore.factotaldesc)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.factotaldesc),
+              reglas.soloNumerosPositivos(factExportaStore.factotaldesc),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -309,7 +328,10 @@
             dense
             label="Subtotal 12%"
             v-model="factExportaStore.facsubtotal12"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotal12),reglas.soloNumerosPositivos(factExportaStore.facsubtotal12)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facsubtotal12),
+              reglas.soloNumerosPositivos(factExportaStore.facsubtotal12),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -320,7 +342,10 @@
             dense
             label="Subtotal 0%"
             v-model="calcularTotal"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotal0),reglas.soloNumerosPositivos(factExportaStore.facsubtotal0)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facsubtotal0),
+              reglas.soloNumerosPositivos(factExportaStore.facsubtotal0),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -333,7 +358,10 @@
             dense
             label="Subtotal sin IVA"
             v-model="factExportaStore.facsubtotalsiniva"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotalsiniva),reglas.soloNumerosPositivos(factExportaStore.facsubtotalsiniva)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facsubtotalsiniva),
+              reglas.soloNumerosPositivos(factExportaStore.facsubtotalsiniva),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -344,7 +372,10 @@
             dense
             label="Subtotal execento de IVA"
             v-model="factExportaStore.facsubtotalivaexcento"
-            :rules="[reglas.campoVacio(factExportaStore.facsubtotalivaexcento),reglas.soloNumerosPositivos(factExportaStore.facsubtotalsiniva)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facsubtotalivaexcento),
+              reglas.soloNumerosPositivos(factExportaStore.facsubtotalsiniva),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -357,7 +388,10 @@
             dense
             label="ICE"
             v-model="factExportaStore.facice"
-            :rules="[reglas.campoVacio(factExportaStore.facice),reglas.soloNumerosPositivos(factExportaStore.facice)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facice),
+              reglas.soloNumerosPositivos(factExportaStore.facice),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -368,7 +402,10 @@
             dense
             label="IVA 12%"
             v-model="factExportaStore.faciva12"
-            :rules="[reglas.campoVacio(factExportaStore.faciva12),reglas.soloNumerosPositivos(factExportaStore.faciva12)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.faciva12),
+              reglas.soloNumerosPositivos(factExportaStore.faciva12),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -381,7 +418,10 @@
             dense
             label="IRBPN"
             v-model="factExportaStore.facirbpn"
-            :rules="[reglas.campoVacio(factExportaStore.facirbpn),reglas.soloNumerosPositivos(factExportaStore.facirbpn)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facirbpn),
+              reglas.soloNumerosPositivos(factExportaStore.facirbpn),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -392,7 +432,10 @@
             dense
             label="Total"
             v-model="factExportaStore.facvalortotal"
-            :rules="[reglas.campoVacio(factExportaStore.facvalortotal),reglas.soloNumerosPositivos(factExportaStore.facvalortotal)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facvalortotal),
+              reglas.soloNumerosPositivos(factExportaStore.facvalortotal),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -405,7 +448,10 @@
             dense
             label="Plazo"
             v-model="factExportaStore.facplazo"
-            :rules="[reglas.campoVacio(factExportaStore.facplazo),reglas.soloNumerosPositivos(factExportaStore.facplazo)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facplazo),
+              reglas.soloNumerosPositivos(factExportaStore.facplazo),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -439,11 +485,13 @@
             dense
             label="Tiempo"
             v-model="factExportaStore.factiempo"
-            :rules="[reglas.campoVacio(factExportaStore.factiempo),reglas.soloLetras(factExportaStore.factiempo)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.factiempo),
+              reglas.soloLetras(factExportaStore.factiempo),
+            ]"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-        </v-col>
+        <v-col cols="12" md="6"> </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
         <v-col cols="12" md="3"> Informacion Adicional </v-col>
@@ -468,7 +516,10 @@
             dense
             label="Peso Neto"
             v-model="factExportaStore.facpesoneto"
-            :rules="[reglas.campoVacio(factExportaStore.facpesoneto),reglas.soloNumerosPositivos(factExportaStore.facpesoneto)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facpesoneto),
+              reglas.soloNumerosPositivos(factExportaStore.facpesoneto),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -481,7 +532,10 @@
             dense
             label="Peso Bruto"
             v-model="factExportaStore.facpesobruto"
-            :rules="[reglas.campoVacio(factExportaStore.facpesobruto),reglas.soloNumerosPositivos(factExportaStore.facpesobruto)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facpesobruto),
+              reglas.soloNumerosPositivos(factExportaStore.facpesobruto),
+            ]"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -497,7 +551,7 @@
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
-         <v-col cols="12" md="6">
+        <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
             :disabled="bloquearFacturaExport"
@@ -516,12 +570,15 @@
             dense
             label="Semana"
             v-model="factExportaStore.facsemana"
-            :rules="[reglas.campoVacio(factExportaStore.facsemana),reglas.soloNumerosPositivos(factExportaStore.facsemana)]"
+            :rules="[
+              reglas.campoVacio(factExportaStore.facsemana),
+              reglas.soloNumerosPositivos(factExportaStore.facsemana),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
       <v-row no-gutters justify-md="space-around">
-          <v-col cols="12" md="6">
+        <v-col cols="12" md="6">
           <v-text-field
             class="custom px-2"
             :disabled="bloquearFacturaExport"
@@ -580,7 +637,6 @@ export default {
         { nombre: "Tarjeta Prepago", descripcion: "Tarjeta Prepago" },
         { nombre: "Tarjeta de Crédito", descripcion: "Tarjeta de Crédito" },
       ],
-      empresas: [],
       listaFacturasExport: [],
       detalle: {
         detcodigoprincipal: "",
@@ -687,6 +743,28 @@ export default {
         );
       },
     },
+    listaCompradoresStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/listaCompradoresStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerListaCompradoresStore",
+          v
+        );
+      },
+    },
+    listaVendedoresStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/listaVendedoresStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerListaVendedoresStore",
+          v
+        );
+      },
+    },
     calcularTotalDetalle() {
       let total = this.detalle.detpreciounitario * this.detalle.detcantidad;
       this.detalle.detpreciototal = total;
@@ -717,7 +795,7 @@ export default {
     },
     async getEmpresas() {
       let resultado = await servicioEmpresa.obtenerTodosEmpresa();
-      this.empresas = resultado.data;
+      this.listaCompradoresStore = resultado.data;
     },
     async obtenerTodosFacturaExport() {
       let resultado = await ServicioFacturaExportacion.obtenerTodosFacturaExport();
@@ -742,10 +820,16 @@ export default {
     async eliminarDetalleFctura(item) {
       const index = this.factExportaStore.detalle.indexOf(item);
       this.factExportaStore.detalle.splice(index, 1);
-      if(typeof item.detallefacturaexportacion){
-        await ServicioFacturaExportacion.eliminarDetalleFacturaExport(item.detallefacturaexportacion);
+      if (typeof item.detallefacturaexportacion != "undefined") {
+        await ServicioFacturaExportacion.eliminarDetalleFacturaExport(
+          item.detallefacturaexportacion
+        );
       }
-     
+    },
+    obtenerVendedores() {
+      this.listaVendedoresStore = this.listaCompradoresStore.filter(
+        (empresa) => empresa.empresaid !== this.factExportaStore.compradorid
+      );
     },
     editarDetalleFactura(item) {
       const index = this.factExportaStore.detalle.indexOf(item);

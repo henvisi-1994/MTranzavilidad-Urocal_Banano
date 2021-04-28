@@ -236,6 +236,28 @@ export default {
         return this.$store.commit("moduloFacturaExport/nuevaFacturaExport", v);
       },
     },
+        listaCompradoresStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/listaCompradoresStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerListaCompradoresStore",
+          v
+        );
+      },
+    },
+    listaVendedoresStore: {
+      get() {
+        return this.$store.getters["moduloFacturaExport/listaVendedoresStore"];
+      },
+      set(v) {
+        return this.$store.commit(
+          "moduloFacturaExport/establecerListaVendedoresStore",
+          v
+        );
+      },
+    },
     // editarFactExport: {
     //   get() {
     //     return this.$store.getters["moduloFactExport/editarFactExport"];
@@ -301,6 +323,7 @@ export default {
       };
       this.$store.commit("moduloFacturaExport/establecerEditarFacturaExport", true);
       this.cargarListaFactExport();
+      this.obtenerVendedores();
       //this.factExportaStore = resultado.data[0];
       // this.$store.commit("moduloFactExport/establecerEditarFactExport", true);
       //his.editarFactExport = true;
@@ -363,6 +386,11 @@ export default {
         default:
           return "auto";
       }
+    },
+     obtenerVendedores() {
+      this.listaVendedoresStore = this.listaCompradoresStore.filter(
+        (empresa) => empresa.empresaid !== this.factExportaStore.compradorid
+      );
     },
 
   },

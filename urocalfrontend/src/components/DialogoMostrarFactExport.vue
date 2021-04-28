@@ -154,7 +154,7 @@ export default {
       this.vaciarFacturaExport();
     },
     async cargarListaFactExport() {
-      let respuesta = await serivicioFactExport.obtenerTodosFacturaExport();
+      let respuesta = await SerivicioFactExport .obtenerTodosFacturaExport();
       let facturas = await respuesta.data;
       this.$store.commit("moduloFacturaExport/vaciarLista", null);
       this.listaFacturaExportStore = facturas;
