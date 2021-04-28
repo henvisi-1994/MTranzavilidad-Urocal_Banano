@@ -739,9 +739,13 @@ export default {
         })
       );
     },
-    eliminarDetalleFctura(item) {
+    async eliminarDetalleFctura(item) {
       const index = this.factExportaStore.detalle.indexOf(item);
       this.factExportaStore.detalle.splice(index, 1);
+      if(typeof item.detallefacturaexportacion){
+        await ServicioFacturaExportacion.eliminarDetalleFacturaExport(item.detallefacturaexportacion);
+      }
+     
     },
     editarDetalleFactura(item) {
       const index = this.factExportaStore.detalle.indexOf(item);

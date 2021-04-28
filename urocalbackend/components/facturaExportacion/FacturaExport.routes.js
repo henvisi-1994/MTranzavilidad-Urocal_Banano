@@ -9,5 +9,6 @@ router.get('/:id', controlador.obtenerFacturaExportacion);                      
 router.post('/', controlador.crearFacturaExport);                                  
 router.put('/:id', controlador.actualizarFacturaExport);        
 router.delete('/:id', controlador.eliminarFacturaExport); 
+router.delete('/detalle/:id', controlador.eliminarDetalleFacturaExport); 
 
 module.exports = router;
