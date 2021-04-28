@@ -204,7 +204,7 @@ export default {
         },
         {
           text: "Operario",
-          value: "operario",
+          value: "fitoperario",
           sortable: false,
           align: "center",
           class: "grey lighten-3",

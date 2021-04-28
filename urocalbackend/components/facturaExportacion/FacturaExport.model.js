@@ -29,4 +29,7 @@ module.exports = {
     async eliminarFacturaExport(id) {
         return facturaExportDao.eliminarFacturaExport(id);
     },
+    async eliminarDetalleFacturaExport(id) {
+        return facturaExportDao.eliminarDetalleFacturaExport(id);
+    },
 }

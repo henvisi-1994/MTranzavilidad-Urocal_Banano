@@ -98,5 +98,14 @@ module.exports = {
         }
 
     },
+    async deleteDetalleCompra(req, res) {
+        try {
+        const { id } = req.params;
+        const rowCount = await detalleCompraModel.deleteDetalleCompra(id);
+        return rowCount == 1 ? res.status(200).send({ message: "Eliminado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
+        }catch(error){
+            return res.status(500).send({ message: "Eliminacion fallido" });
+        }
+    }
 
 }

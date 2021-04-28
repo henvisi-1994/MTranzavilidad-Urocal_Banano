@@ -31,4 +31,7 @@ module.exports = {
     async deleteTreatment(id){
         return treatmentDao.deleteTreatment(id);
     },
+    async deleteDetalleTreatment(id){
+        return treatmentDao.deleteDetalleTreatment(id);
+    },
 }

@@ -24,5 +24,9 @@ module.exports = {
     async updateDetalleCompra(id, detalleCompra) {
         return detalleCompraDao.updateDetalleCompra(id, detalleCompra);
     },
+    async deleteDetalleCompra(id) {
+        return detalleCompraDao.deleteDetalleCompra(id);
+    },
+
 
 }

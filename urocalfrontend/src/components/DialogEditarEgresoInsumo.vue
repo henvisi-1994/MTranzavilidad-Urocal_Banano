@@ -76,6 +76,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
+                :disabled="noeditar"
                 label="Fecha de egreso"
                 v-model="modeloEgresoInsumoStore.egrinsfechaegreso"
                 :rules="[reglas.campoVacio(modeloEgresoInsumoStore.egrinsfechaegreso)]"

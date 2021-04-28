@@ -29,6 +29,10 @@ class ServicioDetalleCompra {
     actualizarDetalleCompra(detalleCompra) {
         return axios.put(`${API_URL}/detalleCompra/${detalleCompra.detallecompraid}`, detalleCompra);
     }
+    eliminarDetalleCompra(detallecompraid) {
+        return axios.delete(`${API_URL}/detalleCompra/${detallecompraid}`);
+
+    }
 
     /*// DELETE: Eliminar un lote
     eliminarLote(lotecultivadoid) {

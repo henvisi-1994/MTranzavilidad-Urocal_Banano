@@ -121,4 +121,16 @@ module.exports = {
             return res.json({ message: "Error al tratar de eliminar la factura", tipo: "error" });
         }
     },
+        // DELETE: Elimina un registro
+        async eliminarDetalleFacturaExport(req, res) {
+            const { id } = req.params;
+    
+            try {
+                let rowCount = await modeloFacturaExport.eliminarDetalleFacturaExport(id);
+                return res.json(rowCount == 1 ? { message: "Eliminado exitosamente", tipo: "exito" } : { message: "Factura no registrada", tipo: "error" });
+            } catch (err) {
+                console.log(err);
+                return res.json({ message: "Error al tratar de eliminar la factura", tipo: "error" });
+            }
+        },
 }

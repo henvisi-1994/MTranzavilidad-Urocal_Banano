@@ -34,5 +34,8 @@ actualizarFacturaExport(id, formData) {
 eliminarFacturaExport(id) {
     return axios.delete(`${API_URL}/v1/facturaExport/${id}`);
 }
+eliminarDetalleFacturaExport(id) {
+    return axios.delete(`${API_URL}/v1/facturaExport/detalle/${id}`);
+}
 }
 export default new ServicioFacturaExportacion();

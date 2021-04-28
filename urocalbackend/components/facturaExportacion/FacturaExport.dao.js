@@ -122,31 +122,25 @@ module.exports = {
         if (resultd.rows) {
             factexport.detalle.map(async dt => {
                 if (typeof dt.detallefacturaexportacion === 'undefined') {
-                    actualizar = `Insert into public.detallefacturaexportacion (detcodigoprincipal, detcantidad, detdescripcion, detpreciounitario, detporcentajedesc, detpreciototal, facturaexportacionid) values ('${dt.detcodigoprincipal}','${dt.detcantidad}',${dt.detdescripcion},'${dt.detpreciounitario}','${dt.detporcentajedesc}', '${dt.detpreciototal}', ${id})`
+                    actualizar = `Insert into public.detallefacturaexportacion (detcodigoprincipal, detcantidad, detdescripcion, detpreciounitario, detporcentajedesc, detpreciototal, facturaexportacionid) values ('${dt.detcodigoprincipal}','${dt.detcantidad}','${dt.detdescripcion}','${dt.detpreciounitario}','${dt.detporcentajedesc}', '${dt.detpreciototal}', ${id})`
                 } else {
                     actualizar = `UPDATE public.detallefacturaexportacion SET detcodigoprincipal='${dt.detcodigoprincipal}', detcantidad='${dt.detcantidad}', detdescripcion='${dt.detdescripcion}', detpreciounitario='${dt.detpreciounitario}', detporcentajedesc='${dt.detporcentajedesc}', detpreciototal=${dt.detpreciototal},facturaexportacionid=${id} WHERE detallefacturaexportacion=${dt.detallefacturaexportacion}`
-                    resultd.rows.forEach(function (x) {
-                        if (x.detallefacturaexportacion != dt.detallefacturaexportacion && dt.detallefacturaexportacion != 'undefined') {
-                            let detdelete = `DELETE FROM detallefacturaexportacion WHERE detallefacturaexportacion=${x.detallefacturaexportacion}`
-                            pool.query(detdelete)
-                        }
-                    })
                 }
                 pool.query(actualizar)
             })
         }
         return result.rowCount;                 // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó al usuario y 0 sino lo hizo.
     },
-
-
     // DELETE: Elimina un registro
     async eliminarFacturaExport(id) {
         queryd = `DELETE FROM detallefacturaexportacion WHERE facturaexportacionid = '${id}'`
         query = `DELETE FROM facturaexportacion WHERE facturaexportacionid = '${id}'`;
         resultd = await pool.query(queryd);
         result = await pool.query(query);
-        return result.rowCount;
-
-        //return result.rowCount;                 // Devuelve la cantidad de filas afectadas.
+        return result.rowCount;            // Devuelve la cantidad de filas afectadas.
     },
+    async eliminarDetalleFacturaExport(id){
+        let detdelete = `DELETE FROM detallefacturaexportacion WHERE detallefacturaexportacion=${id}`
+        pool.query(detdelete)
+    }
 }

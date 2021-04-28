@@ -26,6 +26,9 @@ class ServicioTratamiento {
     eliminarTratamiento(tratamientoid) {
         return axios.delete(`${API_URL}/treatments/${tratamientoid}`);
     }
+    eliminarDetalleTratamiento(tratamientoid) {
+        return axios.delete(`${API_URL}/treatments/detalle/${tratamientoid}`);
+    }
     /*// SELECT: Devuelve un lote
     obtenerLote(id) {
         return axios.get(`${API_URL}/lote/${id}`);
