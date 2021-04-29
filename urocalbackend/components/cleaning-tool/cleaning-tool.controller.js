@@ -20,7 +20,7 @@ module.exports = {
         } else {
             try {
                 let result = await cleaningToolModel.createCleaningTool({
-                    limfecha: limfecha,
+                    limfecha: validation.validarFecha(limfecha),
                     limproducto: limproducto,
                     limequipos: limequipos,
                     limmaquinaria: limmaquinaria,
@@ -32,6 +32,7 @@ module.exports = {
                 })
                 return res.status(201).send({ message: 'Limpieza Herramienta registrado', limpiezaherramientaid: result.limpiezaherramientaid });
             } catch (error) {
+                console.log(error);
                 return res.status(500).send({ message: "Error al registrar limpieza herramienta" });
             }
         }
@@ -61,7 +62,7 @@ module.exports = {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         } else {
             const rowCount = await cleaningToolModel.updateCleaningTool(id, {
-                limfecha: limfecha,
+                limfecha: validation.validarFecha(limfecha),
                 limproducto: limproducto,
                 limequipos: limequipos,
                 limmaquinaria: limmaquinaria,
@@ -93,5 +94,10 @@ module.exports = {
             }
         }
     }
+}
+
+function validarFecha(fecha) {     
+      const [day, month, year] = fecha.split("/");
+      return `${year}-${month}-${day}`;
 }
 

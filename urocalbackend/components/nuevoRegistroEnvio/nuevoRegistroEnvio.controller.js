@@ -33,7 +33,7 @@ module.exports = {
             else {
                 try {
                     await nuevoRegistroEnvioModel.createnuevoRegistroEnvio({
-                        regfecha: regfecha,
+                        regfecha: validation.validarFecha(regfecha),
                         reglote: reglote,
                         regdestino: regdestino,
                         regtipo: regtipo,
@@ -42,6 +42,7 @@ module.exports = {
                         regdetalle: regdetalle
                     });
                 } catch (error) {
+                    console.log(error);
                     return res.status(500).send({ message: "Registro fallido" });
                 }
                 return res.status(201).send({ message: "Registro exitoso" });
@@ -88,4 +89,9 @@ module.exports = {
         const detalles = await nuevoRegistroEnvioModel.getSeleccionDetalles();
         return res.status(200).send(detalles);
     },
+}
+
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    return `${year}-${month}-${day}`;
 }

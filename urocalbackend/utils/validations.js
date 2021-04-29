@@ -5,5 +5,16 @@ module.exports = {
             return true;
         }
         return false;
+    },
+    validarFecha(fecha) {     
+        const [day, month, year] = fecha.split("/");
+        if(typeof(day) != 'undefined' && typeof(month) != 'undefined') {
+            return `${year}-${month}-${day}`;
+        }
+        else {
+            return fecha;
+        }
     }
 }
+
+//const validation = require('../../utils/validations');

@@ -1,5 +1,6 @@
 
 const guiaremisionModel = require('./guiaremision.model');
+const validation = require('../../utils/validations');
 
 module.exports = {
     async getGuiaRemisiones(req, res) {
@@ -41,7 +42,7 @@ module.exports = {
                 carga: carga
             });
         } catch (error) {
-            
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 

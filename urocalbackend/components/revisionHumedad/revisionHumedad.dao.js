@@ -1,6 +1,7 @@
 // Data Access Object
 // Se comunica con la base de datos
 const pool = require('../../services/postgresql/index');
+const validation = require('../../utils/validations');
 
 module.exports = {
     async getRevisionHumedadByAlmacenamientoID(almacenamientoid) {
@@ -51,15 +52,15 @@ module.exports = {
                     let queryI = `INSERT INTO public.revisionhumedad(revporcentajehumedad, 
                         revfechaingresosecadora, revhoraingresosecadora, revfechasalidasecadora, revhorasalidasecadora, 
                         almacenamientoid) VALUES
-                        (${revHumedad.revporcentajehumedad},'${revHumedad.revfechaingresosecadora}','
-                        ${revHumedad.revhoraingresosecadora}','${revHumedad.revfechasalidasecadora}',
+                        (${revHumedad.revporcentajehumedad},'${validation.validarFecha(revHumedad.revfechaingresosecadora)}','
+                        ${revHumedad.revhoraingresosecadora}','${validation.validarFecha(revHumedad.revfechasalidasecadora)}',
                         '${revHumedad.revhorasalidasecadora}', ${revHumedad.almacenamientoid});`;
                      result = pool.query(queryI);
                  } else{
                     let query = `UPDATE public.revisionhumedad SET revporcentajehumedad = ${revHumedad.revporcentajehumedad}, 
-                    revfechaingresosecadora = '${revHumedad.revfechaingresosecadora}' , 
+                    revfechaingresosecadora = '${validation.validarFecha(revHumedad.revfechaingresosecadora)}' , 
                     revhoraingresosecadora = '${revHumedad.revhoraingresosecadora}',
-                    revfechasalidasecadora = '${revHumedad.revfechasalidasecadora}',
+                    revfechasalidasecadora = '${validation.validarFecha(revHumedad.revfechasalidasecadora)}',
                     revhorasalidasecadora = '${revHumedad.revhorasalidasecadora}' 
                  WHERE revisionhumedadid = ${revHumedad.revisionhumedadid}`;
                  result = pool.query(query);
@@ -69,4 +70,9 @@ module.exports = {
         });
         return 1; // Devuelve la cantidad de filas afectadas. Devuelve 1 si actualizó al usuario y 0 sino lo hizo.
     }
+}
+
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    return `${year}-${month}-${day}`;
 }

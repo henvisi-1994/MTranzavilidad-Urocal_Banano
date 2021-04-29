@@ -20,7 +20,7 @@ module.exports = {
         }else{
             try {
                 let result = await rodentMonitoringGatheringCenterModel.createRodentMonitoringGatheringCenter({
-                    monfechatrampeo: monfechatrampeo,
+                    monfechatrampeo: validation.validarFecha(monfechatrampeo),
                     montipotrampa: montipotrampa,
                     monnumerotrampas: monnumerotrampas,
                     monceboutilizado: monceboutilizado,
@@ -60,7 +60,7 @@ module.exports = {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         }else{
             const rowCount = await rodentMonitoringGatheringCenterModel.updateRodentMonitoringGatheringCenter(id, {
-                monfechatrampeo: monfechatrampeo,
+                monfechatrampeo: validation.validarFecha(monfechatrampeo),
                 montipotrampa: montipotrampa,
                 monnumerotrampas: monnumerotrampas,
                 monceboutilizado: monceboutilizado,

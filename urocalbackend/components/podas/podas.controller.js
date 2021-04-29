@@ -33,7 +33,7 @@ module.exports = {
 
         try {
             await podasModel.createPoda({
-                podfecha: podfecha,
+                podfecha: validation.validarFecha(podfecha),
                 podtipo: podtipo,
                 podhectareas: podhectareas,
                 podcantidadplantas: podcantidadplantas,
@@ -59,7 +59,7 @@ module.exports = {
         }
 
         const rowCount = await podasModel.updatePoda(id, {
-            podfecha: podfecha,
+            podfecha: validation.validarFecha(podfecha),
             podtipo: podtipo,
             podhectareas: podhectareas,
             podcantidadplantas: podcantidadplantas,
@@ -83,4 +83,9 @@ module.exports = {
             return res.json({ message: "Error al tratar de eliminar poda", tipo: "error" });
         }
     },
+}
+
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    return `${year}-${month}-${day}`;
 }

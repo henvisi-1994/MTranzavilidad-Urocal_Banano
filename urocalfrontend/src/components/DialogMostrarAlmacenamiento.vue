@@ -341,8 +341,9 @@ export default {
             this.$toast.success(resultadoServicioRevisionHumedad.data.message);
             this.bloquearCamposFormRevisionHumedad = true;
             this.obtenerTodosAlmacenamiento();
-          } catch (errror) {
+          } catch (error) {
             this.$toast.error(error.response.data.message);
+            console.log(error);
           }
           break;
       }

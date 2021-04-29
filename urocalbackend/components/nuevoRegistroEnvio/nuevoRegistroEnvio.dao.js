@@ -1,5 +1,6 @@
 
 const pool = require('../../services/postgresql/index');
+const validacion = require('../../utils/validations');
 
 module.exports = {
     async createnuevoRegistroEnvio(registroenvio) {
@@ -120,6 +121,7 @@ module.exports = {
 
             return result.rowCount; // Devuelve 1 si actualizó el registro envio y 0 sino lo hizo.
         } catch (error) {
+            console.log(error);
             return 'Error al registrar a la BD';
         }
     },
@@ -155,3 +157,14 @@ module.exports = {
     },
 
 }
+
+/*
+function validarFecha(fecha) {     
+    console.log(fecha);
+    const [day, month, year] = fecha.split("/");
+    console.log(day);
+    console.log(month);
+    console.log(year);
+    return `${year}-${month}-${day}`;
+}
+*/

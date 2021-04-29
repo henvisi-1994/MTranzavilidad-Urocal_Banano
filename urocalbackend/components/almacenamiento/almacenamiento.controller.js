@@ -2,6 +2,7 @@
 // Se comunica con el modelo
 // *Pendiente: Añadir capa de validación a todos los controladores
 const AlmacenamientoModel = require('./almacenamiento.model');
+const validation = require('../../utils/validations');
 
 
 module.exports = {
@@ -38,8 +39,8 @@ module.exports = {
         try {
             let resultado = await AlmacenamientoModel.createAlmacenamiento({
                 almcontrato: almcontrato,
-                almfechaacopio: almfechaacopio,
-                almfechaingresobodega: almfechaingresobodega,
+                almfechaacopio: validation.validarFecha(almfechaacopio),
+                almfechaingresobodega: validation.validarFecha(almfechaingresobodega),
                 almnumerobultos: almnumerobultos,
                 almpesobulto: almpesobulto,
                 almpesototalingreso: almpesototalingreso,
@@ -66,8 +67,8 @@ module.exports = {
             const rowCount = await AlmacenamientoModel.updateAlmacenamiento(id, {
                 almacenamientoid: almacenamientoid,
                 almcontrato: almcontrato,
-                almfechaacopio: almfechaacopio,
-                almfechaingresobodega: almfechaingresobodega,
+                almfechaacopio: validarFecha(almfechaacopio),
+                almfechaingresobodega: validarFecha(almfechaingresobodega),
                 almnumerobultos: almnumerobultos,
                 almpesobulto: almpesobulto,
                 almpesototalingreso: almpesototalingreso,
@@ -83,4 +84,9 @@ module.exports = {
 
     },
 
+}
+
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    return `${year}-${month}-${day}`;
 }

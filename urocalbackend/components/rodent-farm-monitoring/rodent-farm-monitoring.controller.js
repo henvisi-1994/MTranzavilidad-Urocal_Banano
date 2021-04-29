@@ -21,7 +21,7 @@ module.exports = {
         }else{
             try {
                 let result =  await rodentFarmMonitoringModel.createRodentFarmMonitoring({
-                    monfechatrampeo: monfechatrampeo,
+                    monfechatrampeo: validarFecha(monfechatrampeo),
                     montipotrampa: montipotrampa,
                     monnumerotrampas: monnumerotrampas,
                     monceboutilizado: monceboutilizado,
@@ -32,6 +32,7 @@ module.exports = {
                     fincaid: fincaid})
                 return res.status(201).send({ message: 'Monitoreo roedor registrado', monitoreoroedorid: result.monitoreoroedorid });
             } catch (error) {
+                console.log(error);
                 return res.status(500).send({ message: "Error al registrar monitoreo roedor" });
             }
         }
@@ -60,7 +61,7 @@ module.exports = {
             return res.status(400).send({ message: 'Llene todos los campos del formulario!' });
         }else{
             const rowCount = await rodentFarmMonitoringModel.updateRodentFarmMonitoring(id, {
-                monfechatrampeo: monfechatrampeo,
+                monfechatrampeo: validarFecha(monfechatrampeo),
                 montipotrampa: montipotrampa,
                 monnumerotrampas: monnumerotrampas,
                 monceboutilizado: monceboutilizado,
@@ -94,3 +95,12 @@ module.exports = {
     }
 }
 
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    if(typeof(day) != 'undefined' && typeof(month) != 'undefined') {
+        return `${year}-${month}-${day}`;
+    }
+    else {
+        return fecha;
+    }
+}

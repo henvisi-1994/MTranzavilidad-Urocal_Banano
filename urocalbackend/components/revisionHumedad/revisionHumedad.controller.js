@@ -4,6 +4,7 @@
 
 const nodemailer = require("nodemailer");
 const revisionHumedadModel = require('./revisionHumedad.model');
+const validation = require('../../utils/validations');
 
 
 module.exports = {
@@ -42,9 +43,9 @@ module.exports = {
             await revisionHumedadModel.createRevisionHumedad({
                 revisionhumedadid: revisionhumedadid,
                 revporcentajehumedad: revporcentajehumedad,
-                revfechaingresosecadora: revfechaingresosecadora,
+                revfechaingresosecadora: validation.validarFecha(revfechaingresosecadora),
                 revhoraingresosecadora: revhoraingresosecadora,
-                revfechasalidasecadora: revfechasalidasecadora,
+                revfechasalidasecadora: validation.validarFecha(revfechasalidasecadora),
                 revhorasalidasecadora: revhorasalidasecadora,
                 almacenamientoid: almacenamientoid,
             });
@@ -63,9 +64,15 @@ module.exports = {
             const rowCount = await revisionHumedadModel.updateRevisionHumedad(detalle);
             return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
 
     },
 
+}
+
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    return `${year}-${month}-${day}`;
 }

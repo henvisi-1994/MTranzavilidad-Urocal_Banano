@@ -16,7 +16,7 @@ module.exports = {
 
         try {
             await rodentMonitoringModel.createRodentMonitoring({
-                monfechatrampeo: monfechatrampeo,
+                monfechatrampeo: validarFecha(monfechatrampeo),
                 montipotrampa: montipotrampa,
                 monnumerotrampas: monnumerotrampas,
                 monceboutilizado: monceboutilizado,
@@ -26,6 +26,7 @@ module.exports = {
                 moninspector: moninspector
             });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
          }
 
@@ -51,7 +52,7 @@ module.exports = {
         const { monfechatrampeo, montipotrampa, monnumerotrampas, monceboutilizado, monroedoresmuertos, monaccionestomadas, monoperario, moninspector } = req.body;
 
         const rowCount = await rodentMonitoringModel.updateRodentMonitoring(id, {
-            monfechatrampeo: monfechatrampeo,
+            monfechatrampeo: validarFecha(monfechatrampeo),
             montipotrampa: montipotrampa,
             monnumerotrampas: monnumerotrampas,
             monceboutilizado: monceboutilizado,
@@ -79,3 +80,7 @@ module.exports = {
     }
 }
 
+function validarFecha(fecha) {     
+    const [day, month, year] = fecha.split("/");
+    return `${year}-${month}-${day}`;
+}
