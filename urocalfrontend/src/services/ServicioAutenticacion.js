@@ -1,7 +1,8 @@
 import axios from 'axios';
 import ServicioProductorPersona from '@/services/ServicioProductorPersona';
 // Ruta del servidor backend
-const URL_API = 'http://localhost:3000/v1';
+export const RUTA_SERVIDOR = process.env.VUE_APP_RUTA_API;
+const API_URL = RUTA_SERVIDOR;
 
 class ServicioAutenticacion {
     /* Envia solicitud POST a la ruta /login para iniciar sesion
