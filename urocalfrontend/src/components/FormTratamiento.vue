@@ -198,7 +198,7 @@
             dense
             v-model="detalle.dtracantidad"
             :disabled="editarTratamiento"
-             :rules="[reglas.campoVacio(detalle.dtracantidad)]"
+             :rules="[reglas.campoVacio(detalle.dtracantidad),reglas.soloNumerosPositivos(detalle.dtracantidad)]"
             label="Cantidad"
           ></v-text-field>
         </v-col>

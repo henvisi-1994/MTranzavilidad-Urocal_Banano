@@ -33,6 +33,7 @@ class ServicioAutenticacion {
     }
 
     cerrarSesion() {
+        localStorage.removeItem('productor');
         localStorage.removeItem('usuario');
     }
 }

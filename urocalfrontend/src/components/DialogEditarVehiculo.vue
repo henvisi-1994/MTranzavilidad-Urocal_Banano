@@ -47,7 +47,7 @@
               color="success"
               hide-details
             ></v-checkbox>
-            <v-text-field class="custom px-2" v-model="modeloVehiculoStore.vehpuerta" :disabled="noeditar" filled dense label="Puerta"></v-text-field>
+            <v-text-field class="custom px-2" v-model="modeloVehiculoStore.vehpuerta" :disabled="noeditar" :rules="[reglas.campoVacio(modeloVehiculoStore.vehpuerta),reglas.soloNumerosPositivos(modeloVehiculoStore.vehpuerta)]" filled dense label="Puerta"></v-text-field>
             <v-select
             v-model="modeloVehiculoStore.fincaid"
             :disabled="noeditar"
