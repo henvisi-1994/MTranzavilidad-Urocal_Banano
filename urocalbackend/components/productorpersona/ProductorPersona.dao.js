@@ -26,9 +26,10 @@ module.exports = {
                     ('${user.percedula}','${user.perapellidos}','${user.pernombres}','${user.pergenero}','${user.perfechanacimiento}','${user.perdireccion}', '${user.pertelefono}', '${user.perwhatsapp}', '${user.peremail}', '${user.ciudadnacimientoid}')
                     RETURNING personaid;`;
         result = await pool.query(query);
+        console.log(result);
 
         // Registro en tabla usuario
-        query = `INSERT INTO productor (productorid, productoridioma) VALUES (${result.rows[0].personaid}, ${user.productoridioma});`;
+        query = `INSERT INTO productor (productorid, productoridioma) VALUES (${result.rows[0].personaid}, '${user.productoridioma}');`;
         result = await pool.query(query);
 
         return user;

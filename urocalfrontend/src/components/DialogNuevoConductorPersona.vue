@@ -11,7 +11,14 @@
 
         <v-row no-gutters>
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.percedula" label="Cédula/RUC" class="custom px-2" dense filled></v-text-field>
+            <v-text-field 
+              v-model="modeloConductorPersonaStore.percedula"
+              :rules="[reglas.campoVacio(modeloConductorPersonaStore.percedula),
+                       reglas.soloNumerosPositivos(modeloConductorPersonaStore.percedula)]" 
+              label="Cédula/RUC" 
+              class="custom px-2" 
+              dense filled>
+            </v-text-field>
           </v-col>
           <v-col cols="12" md="6">
             <v-menu v-model="menuMostrarCalendario" transition="scale-transition" offset-y max-width="290px" min-width="290px">
@@ -35,20 +42,37 @@
 
         <v-row no-gutters>
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.pernombres" label="Nombres" class="custom px-2" dense filled></v-text-field>
+            <v-text-field 
+            v-model="modeloConductorPersonaStore.pernombres" 
+            :rules="[reglas.campoVacio(modeloConductorPersonaStore.pernombres)]"
+            label="Nombres" 
+            class="custom px-2" 
+            dense filled></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.perapellidos" label="Apellidos" class="custom px-2" dense filled></v-text-field>
+            <v-text-field 
+            v-model="modeloConductorPersonaStore.perapellidos" 
+            :rules="[reglas.campoVacio(modeloConductorPersonaStore.perapellidos)]"
+            label="Apellidos" 
+            class="custom px-2" 
+            dense filled></v-text-field>
           </v-col>
         </v-row>
 
         <v-row no-gutters> 
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.pertelefono" label="Teléfono" class="custom px-2" dense filled></v-text-field>
+            <v-text-field 
+            v-model="modeloConductorPersonaStore.pertelefono" 
+            :rules="[reglas.campoVacio(modeloConductorPersonaStore.pertelefono),
+                    reglas.soloNumerosPositivos(modeloConductorPersonaStore.pertelefono)]" 
+            label="Teléfono" 
+            class="custom px-2" 
+            dense filled></v-text-field>
           </v-col>
           <v-col cols="12" md="6">   
             <v-select
               v-model="ciudad" 
+              :rules="[reglas.campoVacio(ciudad)]"
               placeholder="Seleccione una ciudad"
               class="style-chooser custom px-2"
               label="ciudadnombre" 
@@ -67,7 +91,13 @@
 
         <v-row no-gutters>
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.perwhatsapp" label="Whatsapp" class="custom px-2" dense filled></v-text-field>
+            <v-text-field 
+            v-model="modeloConductorPersonaStore.perwhatsapp" 
+            :rules="[reglas.campoVacio(modeloConductorPersonaStore.perwhatsapp),
+                    reglas.soloNumerosPositivos(modeloConductorPersonaStore.perwhatsapp)]" 
+            label="Whatsapp" 
+            class="custom px-2" 
+            dense filled></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
             <v-select 
@@ -90,17 +120,27 @@
           
         <v-row no-gutters> 
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.perdireccion" label="Dirección" class="custom px-2" dense filled></v-text-field>
+            <v-text-field 
+            v-model="modeloConductorPersonaStore.perdireccion" 
+            :rules="[reglas.campoVacio(modeloConductorPersonaStore.perdireccion)]"   
+            label="Dirección" class="custom px-2" 
+            dense filled></v-text-field>
           </v-col>
             
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.conductorlicencia" label="Licencia" class="custom px-2" dense filled></v-text-field>
+            <v-text-field v-model="modeloConductorPersonaStore.conductorlicencia" 
+            :rules="[reglas.campoVacio(modeloConductorPersonaStore.conductorlicencia),
+                    reglas.soloNumerosPositivos(modeloConductorPersonaStore.conductorlicencia)]" 
+            label="Licencia" class="custom px-2" dense filled></v-text-field>
           </v-col>
         </v-row>
             
         <v-row no-gutters>
           <v-col cols="12" md="6">
-            <v-text-field v-model="modeloConductorPersonaStore.peremail" label="Email" class="custom px-2" dense filled></v-text-field>
+            <v-text-field v-model="modeloConductorPersonaStore.peremail" label="Email"
+             :rules="[reglas.campoVacio(modeloConductorPersonaStore.peremail),
+                    reglas.correo(modeloConductorPersonaStore.peremail)]" 
+            class="custom px-2" dense filled></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
           </v-col>
@@ -225,14 +265,19 @@ export default {
     
     // INSERT: Agrega un usuario
     async guardarConductorPersona () { 
-
-      //console.log(this.modeloConductorPersonaStore);
-      let respuesta = await ServicioConductorPersona.agregarConductorPersona(this.modeloConductorPersonaStore);
-      if (respuesta.status == 201) {
-        this.cerrarDialogo();
-        this.cargarListaConductorPersona();
-        this.vaciarModeloConductorPersonaStore();
+      try{
+        //console.log(this.modeloConductorPersonaStore);
+        let respuesta = await ServicioConductorPersona.agregarConductorPersona(this.modeloConductorPersonaStore);
+        if (respuesta.status == 201) {
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaConductorPersona();
+          this.vaciarModeloConductorPersonaStore();
+        }
+      } catch (error) {
+          this.$toast.error("Llene todos los campos del formulario!"); 
       }
+      
     },
 
     // SELECT: Carga todos los usuarios registrados

@@ -1,5 +1,6 @@
 const modeloProductor = require('./ProductorPersona.model');
 const productorDto = require('./ProductorPersona.dto');
+const validation = require('../../utils/validations');
 
 // CRUD: Create (Insert) - Read (Select) - Update (Update) - Delete (Delete)
 module.exports = {
@@ -20,12 +21,13 @@ module.exports = {
                 perwhatsapp: perwhatsapp,
                 peremail: peremail,
                 pergenero: pergenero,
-                perfechanacimiento: perfechanacimiento,
+                perfechanacimiento: validation.validarFecha(perfechanacimiento),
                 productoridioma: productoridioma,
                 ciudadnacimientoid: ciudadnacimiento.ciudadid,
             });
             return res.status(201).send({ message: "Registro exitoso" });
         } catch (error) {
+            console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
         }
     },
@@ -57,7 +59,7 @@ module.exports = {
             perwhatsapp: perwhatsapp,
             peremail: peremail,
             pergenero: pergenero,
-            perfechanacimiento: perfechanacimiento,
+            perfechanacimiento: validation.validarFecha(perfechanacimiento),
             productoridioma: productoridioma,
             ciudadnacimientoid: ciudadnacimiento.ciudadid,
         });

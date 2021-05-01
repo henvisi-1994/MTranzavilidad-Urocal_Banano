@@ -1,5 +1,6 @@
 const modeloConductor = require('./ConductorPersona.model');
 const conductorDto = require('./ConductorPersona.dto');
+const validation = require('../../utils/validations');
 
 // CRUD: Create (Insert) - Read (Select) - Update (Update) - Delete (Delete)
 module.exports = {
@@ -20,7 +21,7 @@ module.exports = {
                 perwhatsapp: perwhatsapp,
                 peremail: peremail,
                 pergenero: pergenero,
-                perfechanacimiento: perfechanacimiento,
+                perfechanacimiento: validation.validarFecha(perfechanacimiento),
                 ciudadnacimientoid: ciudadnacimiento.ciudadid,
                 conductorlicencia: parseInt(conductorlicencia)
             });
@@ -42,20 +43,24 @@ module.exports = {
     async actualizarConductor(req, res) {
         const { id } = req.params;
         const { perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimiento, conductorlicencia } = req.body;
-
-        const rowCount = await modeloConductor.actualizarConductor(id, {
-            perapellidos: perapellidos,
-            pernombres: pernombres,
-            perdireccion: perdireccion,
-            pertelefono: pertelefono,
-            perwhatsapp: perwhatsapp,
-            peremail: peremail,
-            pergenero: pergenero,
-            perfechanacimiento: perfechanacimiento,
-            ciudadnacimientoid: ciudadnacimiento.ciudadid,
-            conductorlicencia: conductorlicencia
-        });
-        return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
+        try {
+            const rowCount = await modeloConductor.actualizarConductor(id, {
+                perapellidos: perapellidos,
+                pernombres: pernombres,
+                perdireccion: perdireccion,
+                pertelefono: pertelefono,
+                perwhatsapp: perwhatsapp,
+                peremail: peremail,
+                pergenero: pergenero,
+                perfechanacimiento: validation.validarFecha(perfechanacimiento),
+                ciudadnacimientoid: ciudadnacimiento.ciudadid,
+                conductorlicencia: conductorlicencia
+            });
+            return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
+        } catch (error) {
+            return res.status(500).send({ message: "Registro fallido" });
+        }
+        
     },
 
 

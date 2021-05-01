@@ -318,7 +318,6 @@ export default {
                     { texto: 'Ciudades', ruta: '/configuracion/ciudad' },
                     { texto: 'Sitios', ruta: '/configuracion/sitio', },
                     { texto: 'Empresas', ruta: '/configuracion/Empresa', },
-                    { texto: 'Marcas', ruta: '#', },
                     { texto: 'Certificaciones', ruta: '/configuracion/Certificaciones', },
                 ]
             },

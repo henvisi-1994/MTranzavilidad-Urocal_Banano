@@ -2,14 +2,14 @@ import axios from 'axios';
 import ServicioProductorPersona from '@/services/ServicioProductorPersona';
 // Ruta del servidor backend
 export const RUTA_SERVIDOR = process.env.VUE_APP_RUTA_API;
-const API_URL = RUTA_SERVIDOR;
+const API_URL = RUTA_SERVIDOR + '/v1';
 
 class ServicioAutenticacion {
     /* Envia solicitud POST a la ruta /login para iniciar sesion
         envia un objeto {percedula, usuaclave}
     */
     login(usuario) {
-        return axios.post(`${URL_API}/login`, {
+        return axios.post(`${API_URL}/login`, {
             percedula: usuario.percedula,
             usuclave: usuario.usuclave
         }).then(respuesta => {

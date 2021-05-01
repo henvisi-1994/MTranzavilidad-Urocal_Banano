@@ -1,5 +1,6 @@
 const modeloInspector = require('./InspectorPersona.model');
 const inspectorDto = require('./InspectorPersona.dto');
+const validation = require('../../utils/validations');
 
 // CRUD: Create (Insert) - Read (Select) - Update (Update) - Delete (Delete)
 module.exports = {
@@ -20,7 +21,7 @@ module.exports = {
                 perwhatsapp: perwhatsapp,
                 peremail: peremail,
                 pergenero: pergenero,
-                perfechanacimiento: perfechanacimiento,
+                perfechanacimiento: validation.validarFecha(perfechanacimiento),
                 ciudadnacimientoid: ciudadnacimiento.ciudadid,
             });
             return res.status(201).send({ message: "Registro exitoso" });
@@ -50,7 +51,7 @@ module.exports = {
             perwhatsapp: perwhatsapp,
             peremail: peremail,
             pergenero: pergenero,
-            perfechanacimiento: perfechanacimiento,
+            perfechanacimiento: validation.validarFecha(perfechanacimiento),
             ciudadnacimientoid: ciudadnacimiento.ciudadid,
         });
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });
