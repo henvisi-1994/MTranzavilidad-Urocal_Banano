@@ -18,7 +18,7 @@ module.exports = {
     },
 
     async createResponsiblecollection(responsiblecollection){
-        return responsiblecollectionDao.createCollectioncenter(responsiblecollection);
+        return responsiblecollectionDao.createResponsiblecollection(responsiblecollection);
     },
 
     async updateResponsiblecollection(id, responsiblecollection){

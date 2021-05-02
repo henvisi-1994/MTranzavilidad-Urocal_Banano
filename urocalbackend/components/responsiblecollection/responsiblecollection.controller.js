@@ -4,6 +4,8 @@
 // collectioncenterDto = require('./collectioncenter.dao.js');
 const responsiblecollectionModel = require('./responsiblecollection.model');
 const config = require('config');
+const validation = require('../../utils/validations');
+const resacopioDto = require('./responsiblecollection.dto');
 const { getResponsiblecollection, getResponsiblecollections, updateResponsiblecollection, deleteResponsiblecollection } = require('./responsiblecollection.dao');
 
 
@@ -14,13 +16,23 @@ module.exports = {
 
         // Añadir capa de validación
         //  ResponsableAcopioId" Integer
-        const { responsableacopioid } = req.body;
+        const { percedula, perapellidos, pernombres, perdireccion, pertelefono, perwhatsapp, peremail, pergenero, perfechanacimiento, ciudadnacimiento } = req.body;
 
         try {
             await responsiblecollectionModel.createResponsiblecollection({
-                responsableacopioid: responsableacopioid
+                percedula: percedula,
+                perapellidos: perapellidos,
+                pernombres: pernombres,
+                perdireccion: perdireccion,
+                pertelefono: pertelefono,
+                perwhatsapp: perwhatsapp,
+                peremail: peremail,
+                pergenero: pergenero,
+                perfechanacimiento: validation.validarFecha(perfechanacimiento),
+                ciudadnacimientoid: ciudadnacimiento.ciudadid,
             });
         } catch (error) {
+            //console.log(error);
             return res.status(500).send({ message: "Registro fallido" });
          }
 
@@ -31,8 +43,8 @@ module.exports = {
     // Obtener todos los centros de acopio
     async getResponsiblecollections(req, res) {
         const responsiblecollections = await responsiblecollectionModel.getResponsiblecollections()
-        //return res.status(200).send(userDto.multiple(users, req.user)); //<--
-        return res.status(200).send(responsiblecollections); // <--
+        return res.status(200).send(resacopioDto.multipleRespacopio(responsiblecollections)); //<--
+        //return res.status(200).send(responsiblecollections); // <--
     },
 
     //  Obtener centro de acopio por id
@@ -45,10 +57,18 @@ module.exports = {
     // Actualiza informacion de un usuario
     async updateResponsiblecollection(req, res) {
         const { id } = req.params;
-        const { responsableacopioid} = req.body;
+        const { perapellidos, pernombres, pergenero, perfechanacimiento, perdireccion, pertelefono, perwhatsapp, peremail, ciudadnacimiento } = req.body;
 
         const rowCount = await responsiblecollectionModel.updateResponsiblecollection(id, {
-            responsableacopioid: responsableacopioid
+            perapellidos: perapellidos,
+            pernombres: pernombres,
+            perdireccion: perdireccion,
+            pertelefono: pertelefono,
+            perwhatsapp: perwhatsapp,
+            peremail: peremail,
+            pergenero: pergenero,
+            perfechanacimiento: validation.validarFecha(perfechanacimiento),
+            ciudadnacimientoid: ciudadnacimiento.ciudadid,
         });
         
         return rowCount == 1 ? res.status(200).send({ message: "Actualizado con éxito" }) : res.status(404).send({ message: "Registro no encontrado" });

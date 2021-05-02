@@ -8,14 +8,16 @@ module.exports = {
         //centroacopioid, centroacopionombre, responsableacopioid
         let query, result;
 
+        /*
         // Validacion centro_acopio
         query = `SELECT centroacopioid FROM centroacopio WHERE centroacopioid = '${collectioncenter.centroacopioid}'`;
         result = await pool.query(query);
         if (result.rowCount > 0) return { message: "Este id ya está siendo utilizado.", tipo: 'error' };
+        */
         // Registro en tabla centroacopio
         query = `INSERT INTO centroacopio
-                    (centroacopioid, centroacopionombre, responsableacopioid) VALUES 
-                    ('${collectioncenter.centroacopioid}','${collectioncenter.centroacopionombre}','${collectioncenter.responsableacopioid}')
+                    (centroacopionombre, responsableacopioid) VALUES 
+                    ('${collectioncenter.centroacopionombre}','${collectioncenter.responsableacopioid}')
                     RETURNING centroacopioid;`;
         result = await pool.query(query);
         //sendEmail(PerEmail, temporal);        // No eliminar esta linea

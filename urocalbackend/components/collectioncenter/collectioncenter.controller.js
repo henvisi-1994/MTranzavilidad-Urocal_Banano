@@ -14,11 +14,10 @@ module.exports = {
 
         // Añadir capa de validación
  //  "CentroAcopioId" Integer,  "CentroAcopioNombre" Text,  "ResponsableAcopioId" Integer
-        const { centroacopioid, centroacopionombre, responsableacopioid } = req.body;
+        const { centroacopionombre, responsableacopioid } = req.body;
 
         try {
             await collectioncenterModel.createCollectioncenter({
-                centroacopioid: centroacopioid,
                 centroacopionombre: centroacopionombre,
                 responsableacopioid: responsableacopioid
             });
