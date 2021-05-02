@@ -2,7 +2,9 @@ import axios from 'axios';
 import autenticacionEncabezado from './AutenticacionEncabezado';
 
 // Ruta al servidor backend
-const API_URL = 'http://localhost:3000/v1';
+//const API_URL = 'http://localhost:3000/v1';
+export const RUTA_SERVIDOR = process.env.VUE_APP_RUTA_API;
+const API_URL = RUTA_SERVIDOR + '/v1';
 
 class ServicioLote {
 
