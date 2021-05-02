@@ -41,7 +41,7 @@ module.exports = {
     async getResponsiblecollections() {
 
         //let query = `SELECT * FROM responsableacopio`;
-        let query = `SELECT p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre FROM persona p, ciudad c, responsableacopio r WHERE p.ciudadnacimientoid = c.ciudadid AND p.personaid = r.responsableacopioid;`;
+        let query = `SELECT r.responsableacopioid, concat(p.perapellidos, ' ' , p.pernombres) as responsable, p.personaid, p.percedula, p.perapellidos, p.pernombres, p.perdireccion, p.pertelefono, p.perwhatsapp, p.peremail, p.pergenero, p.perfechanacimiento, c.ciudadid, c.ciudadnombre FROM persona p, ciudad c, responsableacopio r WHERE p.ciudadnacimientoid = c.ciudadid AND p.personaid = r.responsableacopioid;`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todos los responsables de acopio
     },

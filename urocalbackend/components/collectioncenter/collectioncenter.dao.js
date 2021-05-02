@@ -6,6 +6,7 @@ const pool = require('../../services/postgresql/index');
 module.exports = {
     async createCollectioncenter(collectioncenter) {
         //centroacopioid, centroacopionombre, responsableacopioid
+
         let query, result;
 
         /*
@@ -21,17 +22,18 @@ module.exports = {
                     RETURNING centroacopioid;`;
         result = await pool.query(query);
         //sendEmail(PerEmail, temporal);        // No eliminar esta linea
+        
         return collectioncenter;
     },
 
     async getCollectioncenters() {
-        let query = `SELECT * FROM centroacopio`;
+        let query = `SELECT c.centroacopioid, c.centroacopionombre, r.responsableacopioid, concat(p.perapellidos, ' ' , p.pernombres) as responsable from persona p, centroacopio c, responsableacopio r where p.personaid = r.responsableacopioid and c.responsableacopioid = r.responsableacopioid;`;
         let result = await pool.query(query);
         return result.rows; // Devuelve el array de json que contiene a todos los usuarios
     },
 
     async getCollectioncenter(id) {
-        let query = `SELECT * FROM centroacopio WHERE centroacopioid = ${id}`;
+        let query = `SELECT c.centroacopioid, c.centroacopionombre, r.responsableacopioid, concat(p.perapellidos, ' ' , p.pernombres) as responsable from persona p, centroacopio c, responsableacopio r where p.personaid = r.responsableacopioid and c.responsableacopioid = r.responsableacopioid and centroacopioid = ${id}`;
         let result = await pool.query(query);
         return result.rows[0]; // Devuelve el json del usuario encontrado
     },

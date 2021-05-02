@@ -19,7 +19,7 @@
         </v-row>
   -->
   <v-dialog v-model="dialogEditarCentroacopio" scrollable max-width="700px" transition="dialog-transition" :fullscreen="$vuetify.breakpoint.xs ? true : false">
-    <v-card tile>
+    <v-card height="350px" tile>
 
       <v-card-title class="primary--text">
         <h5 class="pl-3">Información del centro de acopio</h5>
@@ -30,19 +30,31 @@
       </v-card-title>
       
       <v-card-text>
-        <v-row no-gutters>
-          <v-col cols="12" md="6">
-            <v-text-field :disabled="noeditar" v-model="modeloCentroacopio.centroacopioid" label="Id" class="custom px-2" dense filled></v-text-field>
-          </v-col>
-        </v-row>
 
         <v-row no-gutters>
           <v-col cols="12" md="6">
             <v-text-field :disabled="noeditar" v-model="modeloCentroacopio.centroacopionombre" label="Nombre" class="custom px-2" dense filled></v-text-field>
           </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field :disabled="noeditar" v-model="modeloCentroacopio.responsableacopioid" label="Responsable" class="custom px-2" dense filled></v-text-field>
+         
+          <v-col cols="12" md="6">   
+            <v-select
+              :disabled="noeditar"
+              v-model="modeloCentroacopio.responsableacopioid" 
+              placeholder="Seleccione un Responsable de Acopio"
+              class="style-chooser custom px-2"
+              label="responsable" 
+              filled
+              :reduce="(listaRespAcopio) => listaRespAcopio.responsableacopioid"
+              :options="listaRespAcopio">
+              <template v-slot:no-options="{ search, searching }">
+                <template v-if="searching">
+                  No hay resultados para <em>{{ search }}</em>
+                </template>
+                <em style="opacity: 0.5" v-else>Empiece a escribir una finca</em>
+              </template>
+            </v-select>                   
           </v-col>
+
         </v-row>
       </v-card-text>
 
@@ -93,6 +105,15 @@ export default {
       },
       set(v) {
         return this.$store.commit("moduloCentroacopio/establecerListaCentroacopio", v);
+      },
+    },
+
+    listaRespAcopio: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloCentroacopio/listaRespAcopio"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloCentroacopio/establecerlistaRespAcopio", v);
       },
     },
 
@@ -149,22 +170,34 @@ export default {
     // UPDATE: Actualiza un registro
     async actualizarRegistro () { 
       //console.log(this.modeloCentroacopio);
-      const respuesta = await ServicioCentroacopio.actualizarCentroAcopio(this.modeloCentroacopio);
-      if (respuesta.status == 200) {
-        this.cerrarDialogo();
-        this.cargarListaCentroacopio();
-        this.vaciarCentroacopio();        
+      try {
+        const respuesta = await ServicioCentroacopio.actualizarCentroAcopio(this.modeloCentroacopio);
+        if (respuesta.status == 200) {
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaCentroacopio();
+          this.vaciarCentroacopio();        
+        }
+      } catch (error) {
+        this.$toast.error("Llene todos los campos del formulario!");
       }
+
     },
 
     // DELETE: Elimina un registro
     async eliminarRegistro() {
       //console.log(this.modeloConductorPersonaStore);
-      const respuesta = await ServicioCentroacopio.eliminarCentroAcopio(this.modeloCentroacopio.centroacopioid);
-      if (respuesta.status == 200) {
-        this.cerrarDialogo();
-        this.cargarListaCentroacopio();
-      } 
+      try {
+        const respuesta = await ServicioCentroacopio.eliminarCentroAcopio(this.modeloCentroacopio.centroacopioid);
+        if (respuesta.status == 200) {
+          this.cerrarDialogo();
+          this.$toast.warning(respuesta.data.message);
+          this.cargarListaCentroacopio();
+        } 
+      } catch (error) {
+        this.$toast.error("Error al eliminar!");   
+      }
+      
     },
 
     

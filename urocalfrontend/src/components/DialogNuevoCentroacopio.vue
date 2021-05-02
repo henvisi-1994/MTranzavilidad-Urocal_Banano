@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialogNuevoCentroacopio" scrollable max-width="800px" transition="dialog-transition" :fullscreen="$vuetify.breakpoint.xs ? true : false">
-    <v-card tile>
+    <v-card height="350px" tile>
       <v-card-title class="justify-center primary--text">
         <h5 class="pl-3">Nuevo centro de acopio</h5>
         <v-spacer></v-spacer>
@@ -8,19 +8,27 @@
       </v-card-title>
       
       <v-card-text>
-
-        <v-row no-gutters>
-          <v-col cols="12" md="6">
-            <v-text-field v-model="modeloCentroacopio.centroacopioid" label="Id" class="custom px-2" dense filled></v-text-field>
-          </v-col>
-        </v-row>
-
         <v-row no-gutters>
           <v-col cols="12" md="6">
             <v-text-field v-model="modeloCentroacopio.centroacopionombre" label="Nombre" class="custom px-2" dense filled></v-text-field>
           </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field v-model="modeloCentroacopio.responsableacopioid" label="Responsable-Acopio" class="custom px-2" dense filled></v-text-field>
+
+          <v-col cols="12" md="6">   
+            <v-select
+              v-model="modeloCentroacopio.responsableacopioid" 
+              placeholder="Seleccione un Responsable de Acopio"
+              class="style-chooser custom px-2"
+              label="responsable" 
+              filled
+              :reduce="(listaRespAcopio) => listaRespAcopio.responsableacopioid"
+              :options="listaRespAcopio">
+              <template v-slot:no-options="{ search, searching }">
+                <template v-if="searching">
+                  No hay resultados para <em>{{ search }}</em>
+                </template>
+                <em style="opacity: 0.5" v-else>Empiece a escribir una finca</em>
+              </template>
+            </v-select>                   
           </v-col>
         </v-row>
       </v-card-text>
@@ -82,6 +90,15 @@ export default {
       },
     },
 
+    listaRespAcopio: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloCentroacopio/listaRespAcopio"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloCentroacopio/establecerlistaRespAcopio", v);
+      },
+    },
+
     // ##############
     // #  DIALOGOS  #
     // ##############
@@ -122,12 +139,18 @@ export default {
     async guardarCentroacopio () { 
 
       //console.log(this.modeloCentroacopio);
-      let respuesta = await ServicioCentroacopio.crearCentroAcopio(this.modeloCentroacopio);
-      if (respuesta.status == 201) {
-        this.cerrarDialogo();
-        this.cargarListaCentroacopio();
-        this.vaciarCentroacopio();
+      try {
+        let respuesta = await ServicioCentroacopio.crearCentroAcopio(this.modeloCentroacopio);
+        if (respuesta.status == 201) {
+          this.cerrarDialogo();
+          this.$toast.success(respuesta.data.message);
+          this.cargarListaCentroacopio();
+          this.vaciarCentroacopio();
+        }
+      } catch (error) {
+        this.$toast.error("Llene todos los campos del formulario!");
       }
+      
     },
 
     // SELECT: Carga todos los usuarios registrados

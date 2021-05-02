@@ -6,6 +6,7 @@ export default {
     state: {
         modeloCentroacopio: new ModeloCentroacopio('', '', ''), // Modelo Centroacopio
         listaCentroacopio: [],
+        listaRespAcopio: [],
         formCentroacopioValido: false, // Indica si el formulario de Centroacopio es valido
     },
 
@@ -17,6 +18,10 @@ export default {
 
         establecerListaCentroacopio(state, newState) {
             state.listaCentroacopio = newState;
+        },
+
+        establecerlistaRespAcopio(state, newState) {
+            state.listaRespAcopio = newState;
         },
 
         establecerModeloCentroacopio(state, newState) {
@@ -47,6 +52,6 @@ export default {
         formCentroacopioValido: (state) => state.formCentroacopioValido, // Devuelve la variable formCentroacopioValidomodeloConductorPersonaStore: (state) => state.modeloConductorPersonaStore,
         listaCentroacopio: (state) => state.listaCentroacopio,   
         modeloCentroacopio:(state)=> state.modeloCentroacopio,
-    
+        listaRespAcopio: (state) => state.listaRespAcopio,
     },
 }

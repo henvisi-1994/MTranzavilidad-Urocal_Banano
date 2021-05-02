@@ -48,6 +48,7 @@ import { mapMutations, mapState } from "vuex";                                  
 import DialogNuevoCentroacopio from "../components/DialogNuevoCentroacopio";    // Dialogo para agregar usuario
 import DialogEditarCentroacopio from "../components/DialogEditarCentroacopio";  // Dialogo para editar usuario
 import ServicioCentroacopio from "../services/ServicioCentroAcopio";            // Interactuar con el Backend
+import ServicioResCentroAcopio from "../services/ServicioResCentroAcopio";
 import { autenticacionMixin, myMixin } from "@/mixins/MyMixin"; // Instancia al mixin de autenticacion
 
 export default {
@@ -64,6 +65,7 @@ export default {
 
   mounted() {
     this.cargarListaCentroacopio();
+    this.cargarlistaRespAcopio();
   },
 
   data() {
@@ -71,9 +73,8 @@ export default {
       nombre: "Gestión de Centro de acopio",
       buscarCentroacopio: "",   // Guarda el texto de búsqueda
       cabeceraTablaUsuarios: [    // Cabeceras de la tabla (Los campos más relevantes)
-        {text: "Id",value: "centroacopioid", sortable: false, align: "center", class: "grey lighten-3", },
         {text: "Nombre",value: "centroacopionombre", align: "center", sortable: false, class: "grey lighten-3",},
-        {text: "Responsable",value: "responsableacopioid", sortable: false, align: "center", class: "grey lighten-3",},
+        {text: "Responsable",value: "responsable", sortable: false, align: "center", class: "grey lighten-3",},
         {text: "Detalles",value: "actions", sortable: false, align: "center", class: "grey lighten-3",},
       ],                  
     };
@@ -94,6 +95,14 @@ export default {
       },
     },
 
+    listaRespAcopio: {
+      get() {
+        return JSON.parse(JSON.stringify(this.$store.getters["moduloCentroacopio/listaRespAcopio"]));
+      },
+      set(v) {
+        return this.$store.commit("moduloCentroacopio/establecerlistaRespAcopio", v);
+      },
+    },
 
     // ##############
     // #  DIALOGOS  #
@@ -145,6 +154,17 @@ export default {
       });
       this.listaCentroacopio = listaCentroacopio;
       //console.log(this.listaCentroacopio);
+    },
+
+    async cargarlistaRespAcopio() {
+      let listaRespacopio = []; // Limpiar la 'lista de datos'
+      let respuesta = await ServicioResCentroAcopio.obtenerTodosResCentroAcopio(); // Obtener respuesta de backend
+      let datosUsuario = await respuesta.data; // Rescatar datos de la respuesta
+      datosUsuario.forEach((dd) => {
+        // Guardar cada registro en la 'lista de datos'
+        listaRespacopio.push(dd);
+      });
+      this.listaRespAcopio = listaRespacopio;
     },
 
     // ##############

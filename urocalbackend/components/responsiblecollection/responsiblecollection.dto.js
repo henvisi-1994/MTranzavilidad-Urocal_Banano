@@ -2,6 +2,7 @@
 
 // Seccion de Unicos
 const unicoRespacopio = (recurso) => ({
+    responsableacopioid: recurso.responsableacopioid,
     personaid : recurso.personaid, 
     percedula : recurso.percedula, 
     perapellidos : recurso.perapellidos, 
@@ -16,6 +17,7 @@ const unicoRespacopio = (recurso) => ({
         ciudadid: recurso.ciudadid,
         ciudadnombre: recurso.ciudadnombre
     },
+    responsable: recurso.responsable,
 });
 
 const multipleRespacopio = (recurso) => recurso.map((recurso) => unicoRespacopio(recurso));  
