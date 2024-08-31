@@ -1,9 +1,19 @@
 # Vista previa del funcionamiento del programa
 
+## Ingreso al Sistema
+Usuario incorrecto
+<img width="1440" alt="Ingreso al sistema" src="https://github.com/user-attachments/assets/8533b882-a942-404c-acbb-f89719b469a6">
+
+Usuario correcto
+<img width="1440" alt="Ingreso de un usuario correcto" src="https://github.com/user-attachments/assets/bb3b718f-eb37-4d23-b41a-7fbf798ef5ab">
+
 ## Gestión de Usuarios
-<img width="1440" alt="Captura de pantalla 2024-08-17 a la(s) 2 50 48 p  m" src="https://github.com/user-attachments/assets/b13f528f-49bc-4a07-adb9-261a9ef2db2a">
-Editar y Eliminar un usuario
-<img width="1440" alt="Captura de pantalla 2024-08-17 a la(s) 2 51 59 p  m" src="https://github.com/user-attachments/assets/2eae8e0d-da50-432c-beb0-d246d964a708">
+
+<img width="1440" alt="Gestión de usuarios" src="https://github.com/user-attachments/assets/c712c9c9-6d9b-4714-a17b-d6cf53955654">
+
+Detalles de un usuario
+<img width="1440" alt="Captura de pantalla 2024-08-31 a la(s) 12 38 40 p  m" src="https://github.com/user-attachments/assets/557360b6-1655-4978-a63e-bd976910f6b4">
+
 
 ## Gestión de Fermentación y Secado de Cacao
 ![Gestión de FS](https://github.com/user-attachments/assets/4854a728-40a0-4760-bcc0-7a1b6cc95083)
